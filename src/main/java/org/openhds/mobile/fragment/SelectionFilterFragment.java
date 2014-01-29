@@ -23,6 +23,8 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
         void onSeeListHierarchy3(String hierarchyExtId);
 
         void onSeeListHierarchy4(String subregion);
+        
+        void onSeeListHierarchy5(String subregion);
 
         void onSeeListLocation(String village);
 
@@ -35,10 +37,11 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
     private String hierarchy2 = "";
     private String hierarchy3 = "";
     private String hierarchy4 = "";
+    private String hierarchy5 = "";
     private String location = "";
 
-    private Button hierarchy1Btn, hierarchy2Btn, hierarchy3Btn, hierarchy4Btn, locationBtn;
-    private TextView hierarchy1Txt, hierarchy2Txt, hierarchy3Txt, hierarchy4Txt, locationTxt, firstNameTxt,
+    private Button hierarchy1Btn, hierarchy2Btn, hierarchy3Btn, hierarchy4Btn, hierarchy5Btn, locationBtn;
+    private TextView hierarchy1Txt, hierarchy2Txt, hierarchy3Txt, hierarchy4Txt, hierarchy5Txt, locationTxt, firstNameTxt,
             lastNameTxt;
     private RadioButton maleBtn, femaleBtn;
     private Button clearBtn, searchBtn;
@@ -59,6 +62,9 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
 
         hierarchy4Btn = (Button) view.findViewById(R.id.hierarchy4_see_list);
         hierarchy4Btn.setOnClickListener(this);
+        
+        hierarchy5Btn = (Button) view.findViewById(R.id.hierarchy5_see_list);
+        hierarchy5Btn.setOnClickListener(this);
 
         locationBtn = (Button) view.findViewById(R.id.location_see_list);
         locationBtn.setOnClickListener(this);
@@ -74,6 +80,7 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
         hierarchy2Txt = (TextView) view.findViewById(R.id.hierarchy2Txt);
         hierarchy3Txt = (TextView) view.findViewById(R.id.hierarchy3Txt);
         hierarchy4Txt = (TextView) view.findViewById(R.id.hierarchy4Txt);
+        hierarchy5Txt = (TextView) view.findViewById(R.id.hierarchy5Txt);
         locationTxt = (TextView) view.findViewById(R.id.locationTxt);
         firstNameTxt = (TextView) view.findViewById(R.id.firstNameTxt);
         lastNameTxt = (TextView) view.findViewById(R.id.lastNameTxt);
@@ -109,8 +116,11 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
         case R.id.hierarchy4_see_list:
             listener.onSeeListHierarchy4(hierarchy3Txt.getText().toString());
             break;
+        case R.id.hierarchy5_see_list:
+            listener.onSeeListHierarchy5(hierarchy4Txt.getText().toString());
+            break;
         case R.id.location_see_list:
-            listener.onSeeListLocation(hierarchy4Txt.getText().toString());
+            listener.onSeeListLocation(hierarchy5Txt.getText().toString());
             break;
         case R.id.searchFilterBtn:
             String gender = "";
@@ -133,6 +143,7 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
         hierarchy2Txt.setText(hierarchy2);
         hierarchy3Txt.setText(hierarchy3);
         hierarchy4Txt.setText(hierarchy4);
+        hierarchy4Txt.setText(hierarchy5);
         locationTxt.setText(location);
 
         firstNameTxt.setText("");
@@ -160,6 +171,11 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
         this.hierarchy4 = village;
         updateHierarchy4Text(village);
     }
+    
+    public void setHierarchy5(String floor) {
+        this.hierarchy5 = floor;
+        updateHierarchy5Text(floor);
+    }
 
     public void setLocation(String location) {
         this.location = location;
@@ -180,6 +196,10 @@ public class SelectionFilterFragment extends Fragment implements OnClickListener
     
     public void updateHierarchy4Text(String text) {
         hierarchy4Txt.setText(text);
+    }
+    
+    public void updateHierarchy5Text(String text) {
+        hierarchy5Txt.setText(text);
     }
 
     public void updateLocationText(String text) {

@@ -39,6 +39,7 @@ public class FilterVisitActivity extends Activity implements ValueListener, Sele
         LocationHierarchy hierarchy2 = (LocationHierarchy) getIntent().getExtras().getSerializable("hierarchy2");
         LocationHierarchy hierarchy3 = (LocationHierarchy) getIntent().getExtras().getSerializable("hierarchy3");
         LocationHierarchy hierarchy4 = (LocationHierarchy) getIntent().getExtras().getSerializable("hierarchy4");
+        LocationHierarchy hierarchy5 = (LocationHierarchy) getIntent().getExtras().getSerializable("hierarchy5");
         
         Location location = (Location) getIntent().getExtras().getSerializable("location");
         requireGender = getIntent().getExtras().getString("requireGender");
@@ -47,6 +48,7 @@ public class FilterVisitActivity extends Activity implements ValueListener, Sele
         selectionFilterFragment.setHierarchy2(hierarchy2.getExtId());
         selectionFilterFragment.setHierarchy3(hierarchy3.getExtId());
         selectionFilterFragment.setHierarchy4(hierarchy4.getExtId());
+        selectionFilterFragment.setHierarchy5(hierarchy5.getExtId());
         selectionFilterFragment.setLocation(location.getExtId());
     }
 
@@ -77,6 +79,10 @@ public class FilterVisitActivity extends Activity implements ValueListener, Sele
     public void onHierarchy4Selected(LocationHierarchy hierarchy) {
         selectionFilterFragment.updateHierarchy4Text(hierarchy.getExtId());
     }
+    
+    public void onHierarchy5Selected(LocationHierarchy hierarchy) {
+        selectionFilterFragment.updateHierarchy5Text(hierarchy.getExtId());
+    }
 
     public void onRoundSelected(Round round) {
         // not implemented
@@ -85,9 +91,6 @@ public class FilterVisitActivity extends Activity implements ValueListener, Sele
     public void onLocationSelected(Location location) {
         selectionFilterFragment.updateLocationText(location.getExtId());
     }
-
-
-
 
     public void onSearch(String location, String firstName, String lastName, String gender) {
         valueFragment.loadFilteredIndividuals2(location, firstName, lastName, gender);
@@ -108,9 +111,13 @@ public class FilterVisitActivity extends Activity implements ValueListener, Sele
     public void onSeeListHierarchy4(String subregion) {
         valueFragment.loadHierarchy4(subregion);
     }
+    
+    public void onSeeListHierarchy5(String village) {
+        valueFragment.loadHierarchy5(village);
+    }
 
-    public void onSeeListLocation(String village) {
-        valueFragment.loadLocations(village);
+    public void onSeeListLocation(String floor) {
+        valueFragment.loadLocations(floor);
     }
 
 }

@@ -65,7 +65,7 @@ public class ValueFragment extends ListFragment implements LoaderCallbacks<Curso
     private ValueListener listener;
 
     private enum Displayed {
-        HIERARCHY_1, HIERARCHY_2, HIERARCHY_3, HIERARCHY_4, ROUND, LOCATION, INDIVIDUAL;
+        HIERARCHY_1, HIERARCHY_2, HIERARCHY_3, HIERARCHY_4, HIERARCHY_5, ROUND, LOCATION, INDIVIDUAL;
     }
 
     public interface ValueListener {
@@ -76,6 +76,8 @@ public class ValueFragment extends ListFragment implements LoaderCallbacks<Curso
         void onHierarchy3Selected(LocationHierarchy hierarchy);
         
         void onHierarchy4Selected(LocationHierarchy village);
+        
+        void onHierarchy5Selected(LocationHierarchy floor);
 
         void onRoundSelected(Round round);
 
@@ -119,6 +121,10 @@ public class ValueFragment extends ListFragment implements LoaderCallbacks<Curso
         case HIERARCHY_4:
             LocationHierarchy village = Converter.convertToHierarchy(cursor);
             listener.onHierarchy4Selected(village);
+            break;
+        case HIERARCHY_5:
+            LocationHierarchy floor = Converter.convertToHierarchy(cursor);
+            listener.onHierarchy5Selected(floor);
             break;
         case ROUND:
             Round round = Converter.convertToRound(cursor);
@@ -166,6 +172,11 @@ public class ValueFragment extends ListFragment implements LoaderCallbacks<Curso
      */
     public void loadHierarchy4(String parentExtId) {
         listCurrentlyDisplayed = Displayed.HIERARCHY_4;
+        loadHierarchyItemsFromParent(parentExtId);
+    }
+    
+    public void loadHierarchy5(String parentExtId) {
+        listCurrentlyDisplayed = Displayed.HIERARCHY_5;
         loadHierarchyItemsFromParent(parentExtId);
     }
 

@@ -30,26 +30,29 @@ public class SelectionFragment extends Fragment implements OnClickListener {
         void onHierarchy3();
 
         void onHierarchy4();
+        
+        void onHierarchy5();
 
         void onLocation();
 
         void onRound();
 
         void onIndividual();
-        
+
         void onFilterLocation();
     }
 
     private Listener listener;
     private LocationVisit locationVisit;
 
-    private Button hierarchy1Btn, hierarchy2Btn, hierarchy3Btn, hierarchy4Btn, locationBtn, roundBtn, individualBtn, searchlBtn;
+    private Button hierarchy1Btn, hierarchy2Btn, hierarchy3Btn, hierarchy4Btn, hierarchy5Btn, locationBtn, roundBtn,
+            individualBtn, searchlBtn;
 
     private TextView loginGreetingText, hierarchy1NameText, hierarchy1ExtIdText, hierarchy2NameText,
             hierarchy2ExtIdText, hierarchy3NameText, hierarchy3ExtIdText, hierarchy4NameText, hierarchy4ExtIdText,
-            roundNumberText, roundStartDateText, roundEndDateText, locationNameText, locationExtIdText,
-            locationLatitudeText, locationLongitudeText, individualFirstNameText, individualLastNameText,
-            individualExtIdText, individualDobText;
+            hierarchy5NameText, hierarchy5ExtIdText, roundNumberText, roundStartDateText, roundEndDateText,
+            locationNameText, locationExtIdText, locationLatitudeText, locationLongitudeText, individualFirstNameText,
+            individualLastNameText, individualExtIdText, individualDobText;
 
     @Override
     public void onAttach(Activity activity) {
@@ -86,13 +89,18 @@ public class SelectionFragment extends Fragment implements OnClickListener {
         hierarchy4Btn.setOnClickListener(this);
         hierarchy4NameText = (TextView) view.findViewById(R.id.hierarchy4Name);
         hierarchy4ExtIdText = (TextView) view.findViewById(R.id.hierarchy4ExtId);
+        
+        hierarchy5Btn = (Button) view.findViewById(R.id.hierarchy5Btn);
+        hierarchy5Btn.setOnClickListener(this);
+        hierarchy5NameText = (TextView) view.findViewById(R.id.hierarchy5Name);
+        hierarchy5ExtIdText = (TextView) view.findViewById(R.id.hierarchy5ExtId);
 
         locationBtn = (Button) view.findViewById(R.id.locationBtn);
         locationBtn.setOnClickListener(this);
-        
+
         searchlBtn = (Button) view.findViewById(R.id.searchlBtn);
         searchlBtn.setOnClickListener(this);
-        
+
         locationNameText = (TextView) view.findViewById(R.id.locationNameText);
         locationExtIdText = (TextView) view.findViewById(R.id.locationExtIdText);
         locationLatitudeText = (TextView) view.findViewById(R.id.locationLatitudeText);
@@ -151,6 +159,16 @@ public class SelectionFragment extends Fragment implements OnClickListener {
         hierarchy4NameText.setText(village.getName());
         hierarchy4ExtIdText.setText(village.getExtId());
     }
+    
+    private void setHierarchy5() {
+        LocationHierarchy floor = locationVisit.getHierarchy5();
+        if (floor == null) {
+            floor = LocationHierarchy.emptyHierarchy();
+        }
+
+        hierarchy5NameText.setText(floor.getName());
+        hierarchy5ExtIdText.setText(floor.getExtId());
+    }
 
     private void setRound() {
         Round round = locationVisit.getRound();
@@ -176,6 +194,9 @@ public class SelectionFragment extends Fragment implements OnClickListener {
             break;
         case R.id.hierarchy4Btn:
             listener.onHierarchy4();
+            break;
+        case R.id.hierarchy5Btn:
+            listener.onHierarchy5();
             break;
         case R.id.locationBtn:
             listener.onLocation();
@@ -203,6 +224,7 @@ public class SelectionFragment extends Fragment implements OnClickListener {
         registerHierarchy2Listener(stateMachine);
         registerHierarchy3Listener(stateMachine);
         registerHierarchy4Listener(stateMachine);
+        registerHierarchy5Listener(stateMachine);
         registerRoundListener(stateMachine);
         registerLocationListener(stateMachine);
         registerVisitListener(stateMachine);
@@ -221,6 +243,7 @@ public class SelectionFragment extends Fragment implements OnClickListener {
                 hierarchy2Btn.setEnabled(true);
                 hierarchy3Btn.setEnabled(true);
                 hierarchy4Btn.setEnabled(true);
+                hierarchy5Btn.setEnabled(true);
                 roundBtn.setEnabled(true);
                 searchlBtn.setVisibility(8);
             }
@@ -248,6 +271,7 @@ public class SelectionFragment extends Fragment implements OnClickListener {
                 hierarchy2Btn.setEnabled(false);
                 hierarchy3Btn.setEnabled(false);
                 hierarchy4Btn.setEnabled(false);
+                hierarchy5Btn.setEnabled(false);
                 roundBtn.setEnabled(false);
                 locationBtn.setEnabled(false);
                 searchlBtn.setVisibility(8);
@@ -286,7 +310,7 @@ public class SelectionFragment extends Fragment implements OnClickListener {
     private void registerRoundListener(StateMachine stateMachine) {
         stateMachine.registerListener(State.SELECT_ROUND, new StateListener() {
             public void onEnterState() {
-                resetToDefaultState(4, false);
+                resetToDefaultState(6, false);
                 roundBtn.setEnabled(true);
 
             }
@@ -319,6 +343,19 @@ public class SelectionFragment extends Fragment implements OnClickListener {
 
             public void onLeaveState() {
                 setHierarchy4();
+            }
+        });
+    }
+    
+    private void registerHierarchy5Listener(StateMachine stateMachine) {
+        stateMachine.registerListener(State.SELECT_HIERARCHY_5, new StateListener() {
+            public void onEnterState() {
+                resetToDefaultState(4, false);
+                hierarchy5Btn.setEnabled(true);
+            }
+
+            public void onLeaveState() {
+                setHierarchy5();
             }
         });
     }
@@ -365,13 +402,16 @@ public class SelectionFragment extends Fragment implements OnClickListener {
             hierarchy4Btn.setEnabled(enabled);
             setHierarchy4();
         case 4:
+            hierarchy5Btn.setEnabled(enabled);
+            setHierarchy5();
+        case 5:
             roundBtn.setEnabled(enabled);
             setRound();
-        case 5:
+        case 6:
             locationBtn.setEnabled(enabled);
             searchlBtn.setVisibility(1);
             setLocation();
-        case 6:
+        case 7:
             individualBtn.setEnabled(enabled);
             searchlBtn.setVisibility(8);
             setIndividual();

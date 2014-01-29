@@ -595,9 +595,13 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
     private void loadHierarchy4ValueData() {
         vf.loadHierarchy4(locationVisit.getHierarchy3().getExtId());
     }
+    
+    private void loadHierarchy5ValueData() {
+        vf.loadHierarchy5(locationVisit.getHierarchy4().getExtId());
+    }
 
     private void loadLocationValueData() {
-        vf.loadLocations(locationVisit.getHierarchy4().getExtId());
+        vf.loadLocations(locationVisit.getHierarchy5().getExtId());
     }
 
     private void loadRoundValueData() {
@@ -1106,21 +1110,27 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
         stateMachine.transitionTo(State.SELECT_HIERARCHY_4);
         loadHierarchy4ValueData();
     }
+    
+    public void onHierarchy5() {
+        locationVisit.clearLevelsBelow(4);
+        stateMachine.transitionTo(State.SELECT_HIERARCHY_5);
+        loadHierarchy5ValueData();
+    }
 
     public void onLocation() {
-        locationVisit.clearLevelsBelow(5);
+        locationVisit.clearLevelsBelow(6);
         stateMachine.transitionTo(State.SELECT_LOCATION);
         loadLocationValueData();
     }
 
     public void onRound() {
-        locationVisit.clearLevelsBelow(4);
+        locationVisit.clearLevelsBelow(5);
         stateMachine.transitionTo(State.SELECT_ROUND);
         loadRoundValueData();
     }
 
     public void onIndividual() {
-        locationVisit.clearLevelsBelow(6);
+        locationVisit.clearLevelsBelow(7);
         loadIndividualValueData();
     }
 
@@ -1147,6 +1157,11 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
 
     public void onHierarchy4Selected(LocationHierarchy village) {
         locationVisit.setHierarchy4(village);
+        stateMachine.transitionTo(State.SELECT_HIERARCHY_5);
+    }
+    
+    public void onHierarchy5Selected(LocationHierarchy floor) {
+        locationVisit.setHierarchy5(floor);
         stateMachine.transitionTo(State.SELECT_ROUND);
     }
 

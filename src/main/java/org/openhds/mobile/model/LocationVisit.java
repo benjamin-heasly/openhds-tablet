@@ -36,6 +36,7 @@ public class LocationVisit implements Serializable {
     private LocationHierarchy hierarchy2;
     private LocationHierarchy hierarchy3;
     private LocationHierarchy hierarchy4;
+    private LocationHierarchy hierarchy5;
     private Round round;
 
     private Location location;
@@ -50,6 +51,7 @@ public class LocationVisit implements Serializable {
         visit.hierarchy2 = hierarchy2;
         visit.hierarchy3 = hierarchy3;
         visit.hierarchy4 = hierarchy4;
+        visit.hierarchy5 = hierarchy5;
         visit.round = round;
 
         return visit;
@@ -77,6 +79,10 @@ public class LocationVisit implements Serializable {
 
     public LocationHierarchy getHierarchy4() {
         return hierarchy4;
+    }
+    
+    public LocationHierarchy getHierarchy5() {
+        return hierarchy5;
     }
 
     public Round getRound() {
@@ -107,10 +113,12 @@ public class LocationVisit implements Serializable {
         case 3:
             hierarchy4 = null;
         case 4:
-            round = null;
+            hierarchy5 = null;
         case 5:
-            location = null;
+            round = null;
         case 6:
+            location = null;
+        case 7:
             selectedIndividual = null;
         }
     }
@@ -129,10 +137,15 @@ public class LocationVisit implements Serializable {
         this.hierarchy4 = village;
         clearLevelsBelow(4);
     }
+    
+    public void setHierarchy5(LocationHierarchy floor) {
+        this.hierarchy5 = floor;
+        clearLevelsBelow(5);
+    }
 
     public void setRound(Round round) {
         this.round = round;
-        clearLevelsBelow(5);
+        clearLevelsBelow(6);
     }
 
     public Location getLocation() {
@@ -172,20 +185,20 @@ public class LocationVisit implements Serializable {
 
         location = new Location();
         location.setExtId(locationId);
-        location.setHierarchy(hierarchy4.getExtId());
+        location.setHierarchy(hierarchy5.getExtId());
     }
 
     private String generateLocationId(ContentResolver resolver) {
         Cursor cursor = resolver.query(OpenHDS.Locations.CONTENT_ID_URI_BASE,
                 new String[] { OpenHDS.Locations.COLUMN_LOCATION_EXTID }, OpenHDS.Locations.COLUMN_LOCATION_EXTID
-                        + " LIKE ?", new String[] { hierarchy4.getExtId() + "%" }, OpenHDS.Locations.COLUMN_LOCATION_EXTID
+                        + " LIKE ?", new String[] { hierarchy5.getExtId() + "%" }, OpenHDS.Locations.COLUMN_LOCATION_EXTID
                         + " DESC");
 
         String generatedId = null;
         if (cursor.moveToFirst()) {
             generatedId = generateLocationIdFrom(cursor.getString(0));
         } else {
-            generatedId = hierarchy4.getExtId() + "000001";
+            generatedId = hierarchy5.getExtId() + "000001";
         }
 
         cursor.close();
