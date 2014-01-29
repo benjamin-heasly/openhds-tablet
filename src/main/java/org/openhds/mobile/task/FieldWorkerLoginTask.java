@@ -31,6 +31,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -55,10 +56,12 @@ public class FieldWorkerLoginTask extends AsyncTask<Boolean, Void, Result> {
 	
 	private List<FieldWorker> list;
     private ContentResolver resolver;
+    private Activity callingActivity;
 		
-	public FieldWorkerLoginTask(Context context, SharedPreferences settings, RetrieveFieldWorkersListener listener, 
+	public FieldWorkerLoginTask(Activity callingActivity, SharedPreferences settings, RetrieveFieldWorkersListener listener, 
 			ProgressDialog dialog, String extId, String password, boolean isRegistering) {
-		this.resolver = context.getContentResolver();
+	    this.callingActivity = callingActivity;
+		this.resolver = callingActivity.getContentResolver();
 		this.settings = settings;
 		this.listener = listener;
 		this.dialog = dialog;
@@ -106,9 +109,9 @@ public class FieldWorkerLoginTask extends AsyncTask<Boolean, Void, Result> {
 	
 	private void invokeWebService() throws AuthenticationException, ClientProtocolException, IOException, XmlPullParserException {
 		
-		String username = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_USERNAME, ((FieldWorkerLoginActivity) listener).getString(R.string.username));
-	    String password = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_PASSWORD, ((FieldWorkerLoginActivity) listener).getString(R.string.password));
-	    String url = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_SERVER, ((FieldWorkerLoginActivity) listener).getString(R.string.default_openhdsserver));
+		String username = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_USERNAME, "");
+	    String password = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_PASSWORD, "");
+	    String url = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_SERVER, "");
 		
 		creds = new UsernamePasswordCredentials(username, password);
 		 
@@ -149,7 +152,7 @@ public class FieldWorkerLoginTask extends AsyncTask<Boolean, Void, Result> {
                         
                     if (name.equalsIgnoreCase("fieldworker")) {
                     	processFieldWorkerParams(parser);
-                    	((FieldWorkerLoginActivity) listener).runOnUiThread(changeMessageFieldWorker);
+                    	callingActivity.runOnUiThread(changeMessageFieldWorker);
                     }
                     break;
             }
