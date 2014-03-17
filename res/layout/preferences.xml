@@ -3,9 +3,9 @@
     android:layout_height="wrap_content">
     
      <EditTextPreference 
-         	android:key="interopServer" 
+        	android:key="interopserver" 
 	 		android:title="Interop Server URL" 
-	   	 	android:defaultValue="@string/default_server_url" />
+	    	android:defaultValue="@string/default_server_url" />
 
      <EditTextPreference
     		android:id="@+id/openhdsserver"

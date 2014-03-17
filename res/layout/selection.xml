@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView
@@ -42,7 +42,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
 
@@ -52,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="ExtId:"
+                    android:text="@string/external_id_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -60,7 +59,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:paddingBottom="5dp"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
@@ -84,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="District:"
+                    android:text="@string/hierarchy2_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -92,7 +90,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
 
@@ -102,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="ExtId:"
+                    android:text="@string/external_id_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -110,7 +107,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:paddingBottom="5dp"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
@@ -133,7 +129,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="1dp"
-                    android:text="Village:"
+                    android:text="@string/hierarchy3_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -141,7 +137,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="1dp"
-                    android:inputType="text"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
 
@@ -151,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="1dp"
-                    android:text="ExtId:"
+                    android:text="@string/external_id_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -159,7 +154,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="1dp"
-                    android:inputType="text"
                     android:paddingBottom="5dp"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
@@ -182,7 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="Subvillage:"
+                    android:text="@string/hierarchy4_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -190,7 +184,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
 
@@ -200,7 +193,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="ExtId:"
+                    android:text="@string/external_id_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -208,7 +201,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:paddingBottom="5dp"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
@@ -231,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="Floor:"
+                    android:text="@string/hierarchy5_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -239,7 +231,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
 
@@ -249,7 +240,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="ExtId:"
+                    android:text="@string/external_id_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -257,7 +248,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:inputType="text"
                     android:paddingBottom="5dp"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
@@ -351,7 +341,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="ExtId:"
+                    android:text="@string/external_id_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
@@ -447,7 +437,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="ExtId:"
+                    android:text="@string/external_id_lbl"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
                 <TextView
