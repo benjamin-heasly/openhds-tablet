@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal" >
 
-    <Button
-        android:id="@+id/fieldWorkerLoginBtn"
-        android:layout_width="250dp"
-        android:layout_height="75dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="43dp"
-        android:text="Log in as Field Worker"
-        android:textSize="20dp" />
+    <fragment
+        android:id="@+id/fragment1"
+        android:name="org.openhds.mobile.fragment.FieldWorkerLoginFragment"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_margin="100dp"
+        android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/supervisorLoginBtn"
-        android:layout_width="250dp"
-        android:layout_height="75dp"
-        android:layout_below="@+id/fieldWorkerLoginBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:text="Log in as Supervisor"
-        android:textSize="20dp" />
+    <fragment
+        android:id="@+id/fragment2"
+        android:name="org.openhds.mobile.fragment.SupervisorLoginFragment"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_margin="100dp"
+        android:layout_weight="1" />
 
-</RelativeLayout>
+</LinearLayout>
