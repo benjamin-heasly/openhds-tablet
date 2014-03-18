@@ -11,8 +11,8 @@
     <string name="configuration">Configuration</string>
     <string name="configureDatabase">Configure Database</string>
     <string name="databaseSync">Sync with OpenHDS Database</string>
-    <string name="default_server_url">http://130.111.132.88:8080/openhds</string>
-    <string name="default_openhdsserver">http://130.111.132.88:8080/openhds</string>
+    <string name="default_interop_server_url">http://130.111.132.88:8080/openhds</string>
+    <string name="default_openhds_server_url">http://130.111.132.88:8080/openhds</string>
     <string name="delete_form_btn">Delete Form</string>
     <string name="download_form_button">Download Forms</string>
     <string name="failure_reasons_txt">Failure messages:</string>
@@ -84,4 +84,8 @@
     <string name="login_password">Password</string>
     <string name="fieldworker_login">Field Worker Login</string>
     <string name="supervisor_login">Supervisor Login</string>
+    <string name="preferences">Preferences</string>
+    <string name="openhds_server_url">openhds_server_url</string>
+    <string name="openhds_server_url_default_summary">Same URL used for OpenHDS Server via Web browser</string>
+
 </resources>

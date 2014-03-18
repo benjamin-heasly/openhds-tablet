@@ -10,7 +10,7 @@
         android:name="org.openhds.mobile.fragment.FieldWorkerLoginFragment"
         android:layout_width="0px"
         android:layout_height="wrap_content"
-        android:layout_margin="100dp"
+        android:layout_margin="30dp"
         android:layout_weight="1" />
 
     <fragment
@@ -18,7 +18,15 @@
         android:name="org.openhds.mobile.fragment.SupervisorLoginFragment"
         android:layout_width="0px"
         android:layout_height="wrap_content"
-        android:layout_margin="100dp"
+        android:layout_margin="30dp"
         android:layout_weight="1" />
+
+    <fragment
+        android:id="@+id/loginPreferenceFragment"
+        android:name="org.openhds.mobile.fragment.LoginPreferenceFragment"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:layout_weight="2" />
 
 </LinearLayout>

@@ -48,7 +48,7 @@ public class SyncDatabaseActivity extends Activity implements CollectEntitiesLis
 	     initializeProgressDialog();
 	     
 		 settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-	     url = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_SERVER, getString(R.string.default_openhdsserver));
+	     url = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_SERVER, getString(R.string.default_openhds_server_url));
 	     username = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_USERNAME, getString(R.string.username));
 	     password = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_PASSWORD, getString(R.string.password));
 	     
