@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -249,13 +248,6 @@ public class SupervisorLoginActivity extends AbstractActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add("Server Preferences");
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		startActivity(new Intent(getApplicationContext(),
-				ServerPreferencesActivity.class));
 		return true;
 	}
 }

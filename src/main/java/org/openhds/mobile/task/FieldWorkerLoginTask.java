@@ -21,7 +21,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.activity.ServerPreferencesActivity;
+import org.openhds.mobile.R;
 import org.openhds.mobile.listener.RetrieveFieldWorkersListener;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Result;
@@ -106,9 +106,9 @@ public class FieldWorkerLoginTask extends AsyncTask<Boolean, Void, Result> {
 	
 	private void invokeWebService() throws AuthenticationException, ClientProtocolException, IOException, XmlPullParserException {
 		
-		String username = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_USERNAME, "");
-	    String password = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_PASSWORD, "");
-	    String url = settings.getString(ServerPreferencesActivity.OPENHDS_KEY_SERVER, "");
+		String username = settings.getString(callingActivity.getString(R.string.supervisor_username_key), "");
+	    String password = settings.getString(callingActivity.getString(R.string.supervisor_password_key), "");
+	    String url = settings.getString(callingActivity.getString(R.string.openhds_server_url_key), "");
 		
 		creds = new UsernamePasswordCredentials(username, password);
 		 

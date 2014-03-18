@@ -70,17 +70,6 @@ public class FieldWorkerLoginActivity extends Activity implements OnClickListene
         return true;
     }
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.configure_server:
-                Intent i = new Intent(this, ServerPreferencesActivity.class);
-                startActivity(i);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-		
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.registerChkBox: 

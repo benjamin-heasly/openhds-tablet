@@ -58,10 +58,10 @@ public class DebuggingOpeningActivity extends Activity {
         // should update preference management to
         // "modern fragment-based preferenceActivity"
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(ServerPreferencesActivity.OPENHDS_KEY_SERVER, OPENHDS_URL);
-        editor.putString(ServerPreferencesActivity.INTEROP_SERVER, INTEROP_URL);
-        editor.putString(ServerPreferencesActivity.OPENHDS_KEY_USERNAME, SUPERVISOR_USER);
-        editor.putString(ServerPreferencesActivity.OPENHDS_KEY_PASSWORD, SUPERVISOR_PASSWORD);
+        editor.putString(getString(R.string.openhds_server_url_key), OPENHDS_URL);
+        editor.putString(getString(R.string.interop_server_url_key), INTEROP_URL);
+        editor.putString(getString(R.string.supervisor_username_key), SUPERVISOR_USER);
+        editor.putString(getString(R.string.supervisor_password_key), SUPERVISOR_PASSWORD);
         if (editor.commit()) {
             Toast.makeText(getApplicationContext(), "Set server URLs", Toast.LENGTH_LONG).show();
             authenticateSupervisor();

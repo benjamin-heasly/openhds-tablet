@@ -146,7 +146,6 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.configure_server:
-            createPreferencesMenu();
             return true;
         case R.id.sync_database:
             createSyncDatabaseMenu();
@@ -500,14 +499,6 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
 
         registerTransitions();
         stateMachine.transitionInSequence(state);
-    }
-
-    /**
-     * Creates the 'Configure Server' option in the action menu.
-     */
-    private void createPreferencesMenu() {
-        Intent i = new Intent(this, ServerPreferencesActivity.class);
-        startActivity(i);
     }
 
     /**
