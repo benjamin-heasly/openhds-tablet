@@ -48,7 +48,7 @@ public class DebuggingOpeningActivity extends Activity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 
-        // chain of async method calls results in statrting UpdateActivity
+        // chain of async method calls results in starting UpdateActivity
         setServerURLS();
     }
 

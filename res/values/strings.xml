@@ -80,5 +80,8 @@
     <string name="hierarchy5_select_lbl">Select Floor</string>
     <string name="hierarchy5_lbl">Floor:</string>
     <string name="hierarchy5_hint_lbl">Floor External Id</string>
-
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="fieldworker_login">Field Worker Login</string>
+    <string name="supervisor_login">Supervisor Login</string>
 </resources>

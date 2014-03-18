@@ -14,7 +14,7 @@ public class FieldWorkerLoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.generic_login_fragment, container, false);
         TextView title = (TextView) v.findViewById(R.id.titleTextView);
-        title.setText("Field Worker Login");
+        title.setText(R.string.fieldworker_login);
         return v;
     }
 }
