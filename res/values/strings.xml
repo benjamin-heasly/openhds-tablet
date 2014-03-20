@@ -91,6 +91,6 @@
     <string name="supervisor_password_key">supervisor_password</string>
     <string name="openhds_server_url_default_summary">Same URL used for OpenHDS Server via Web browser</string>
     <string name="openhds_server_url_title">OpenHDS Server URL</string>
-    <string name="supervisor_login_url">/api/user/authenticate</string>
+    <string name="supervisor_login_url">/api/rest/socialgroups</string>
 
 </resources>
