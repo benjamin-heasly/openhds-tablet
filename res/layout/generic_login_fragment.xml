@@ -33,7 +33,7 @@
         android:layout_below="@+id/usernameEditText"
         android:ems="10"
         android:hint="@string/login_password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/loginButton"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/passwordEditText"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/login_btn" />
+        android:text="@string/login_btn"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
