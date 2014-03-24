@@ -94,6 +94,6 @@
     <string name="supervisor_login_url">/api/rest/socialgroups</string>
     <string name="landscape_layout_tag">landscape</string>
     <string name="portrait_layout_tag">portrait</string>
-    
+    <string name="supervisor_bad_credentials">Supervisor credentials not authenticated</string>
 
 </resources>
