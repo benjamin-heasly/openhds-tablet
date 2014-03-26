@@ -87,13 +87,15 @@
     <string name="preferences">Preferences</string>
     <string name="openhds_server_url_key">openhds_server_url</string>
     <string name="interop_server_url_key">interop_server_url</string>
-    <string name="supervisor_username_key">supervisor_username</string>
-    <string name="supervisor_password_key">supervisor_password</string>
     <string name="openhds_server_url_default_summary">Same URL used for OpenHDS Server via Web browser</string>
     <string name="openhds_server_url_title">OpenHDS Server URL</string>
     <string name="supervisor_login_url">/api/rest/socialgroups</string>
     <string name="landscape_layout_tag">landscape</string>
     <string name="portrait_layout_tag">portrait</string>
     <string name="supervisor_bad_credentials">Supervisor credentials not authenticated</string>
+    <string name="preference_invalid_label">Invalid!</string>
+    <string name="preference_invalid_warning">Invalid preference value</string>
+    <string name="sync_database_name">Sync Database</string>
+    <string name="sync_database_description">This button will sync the database.</string>
 
 </resources>
