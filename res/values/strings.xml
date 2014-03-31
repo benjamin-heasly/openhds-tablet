@@ -97,9 +97,9 @@
     <string name="preference_invalid_label">Invalid!</string>
     <string name="preference_invalid_warning">Invalid preference value</string>
     <string name="sync_database_name">Sync Database</string>
-    <string name="sync_database_description">This button will sync the database.</string>
+    <string name="sync_database_description">Syncs census data with server.</string>
     <string name="sync_field_worker_name">Sync Field Workers</string>
-    <string name="sync_field_worker_description">This button will sync the field workers.</string>
+    <string name="sync_field_worker_description">Syncs field workers with server.</string>
     <string name="field_worker_bad_credentials">Invalid field worker credentials</string>
 
 </resources>
