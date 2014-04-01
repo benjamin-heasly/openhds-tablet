@@ -33,7 +33,6 @@ import org.openhds.mobile.model.PregnancyOutcome;
 import org.openhds.mobile.model.Round;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.model.StateMachine;
-import org.openhds.mobile.model.StateMachine.State;
 import org.openhds.mobile.task.OdkGeneratedFormLoadTask;
 
 import android.app.ActionBar;
@@ -94,8 +93,8 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
     private AlertDialog householdDialog;
 
     private final FormFiller formFiller = new FormFiller();
-    private final StateMachine stateMachine = new StateMachine();
-
+    private StateMachine stateMachine;
+    
     private LocationVisit locationVisit = new LocationVisit();
     private FilledForm filledForm;
     private AlertDialog xformUnfinishedDialog;
@@ -176,7 +175,7 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
         	Location location1 = (Location) data.getExtras().getSerializable("location");
         	locationVisit.setLocation(location1);
         	vf.onLoaderReset(null);
-            stateMachine.transitionTo(State.CREATE_VISIT);
+            stateMachine.transitionTo("Create Visit");
             break;
         case FILTER_INMIGRATION:
             handleFilterInMigrationResult(resultCode, data);
@@ -280,7 +279,7 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
             hideProgressFragment();
 
             if (result) {
-                stateMachine.transitionTo(State.CREATE_VISIT);
+                stateMachine.transitionTo("Create Visit");
             } else {
                 createUnfinishedFormDialog();
             }
@@ -300,7 +299,7 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
         new CreateInternalInMigrationTask(individual).execute();
         locationVisit.setSelectedIndividual(individual);
 
-        stateMachine.transitionTo(State.INMIGRATION);
+        stateMachine.transitionTo("Inmigration");
         
     }
 
@@ -440,15 +439,15 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
             hideProgressFragment();
 
             if (result) {
-            	if (stateMachine.getState()==State.INMIGRATION) {
-            		stateMachine.transitionTo(State.SELECT_EVENT);
+            	if (stateMachine.getState()=="Inmigration") {
+            		stateMachine.transitionTo("Select Event");
             		if (extInm)
                 		onFinishExternalInmigration();
-            	} else if (stateMachine.getState()==State.SELECT_INDIVIDUAL) {
+            	} else if (stateMachine.getState()=="Select Individual") {
             		if (extInm)
                 		onFinishExternalInmigration();
             	}else {
-            		stateMachine.transitionTo(State.SELECT_INDIVIDUAL);
+            		stateMachine.transitionTo("Select Individual");
             	}
             } else {
                 createUnfinishedFormDialog();
@@ -477,7 +476,7 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
      * This method is responsible for restoring the screen state.
      */
     private void restoreState(Bundle savedState) {
-        State state = State.SELECT_HIERARCHY_1;
+        String state = "Select Hierarchy 1";
         if (savedState != null) {
             locationVisit = (LocationVisit) savedState.getSerializable("locationvisit");
 
@@ -492,13 +491,10 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
 
             sf.setLocationVisit(locationVisit);
             ef.setLocationVisit(locationVisit);
-
-            String currentState = savedState.getString("currentState");
-            state = State.valueOf(currentState);
         }
 
         registerTransitions();
-        stateMachine.transitionInSequence(state);
+        //stateMachine.transitionInSequence(state);
     }
 
     /**
@@ -707,8 +703,8 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
             	locationVisit = locationVisit.completeVisit();
                 sf.setLocationVisit(locationVisit);
                 ef.setLocationVisit(locationVisit);
-                stateMachine.transitionTo(State.FINISH_VISIT);
-                stateMachine.transitionTo(State.SELECT_LOCATION);
+                stateMachine.transitionTo("Finish Visit");
+                stateMachine.transitionTo("Select Location");
                 vf.onLoaderReset(null);
                 }
         });
@@ -1062,7 +1058,7 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
 
     public void onClearIndividual() {
         locationVisit.setSelectedIndividual(null);
-        stateMachine.transitionTo(State.SELECT_INDIVIDUAL);
+        stateMachine.transitionTo("Select Individual");
     }
 
     public void loadForm(final int requestCode) {
@@ -1080,43 +1076,43 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
 
     public void onHierarchy1() {
         locationVisit.clearLevelsBelow(0);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_1);
+        stateMachine.transitionTo("Select Hierarchy 1");
         loadHierarchy1ValueData();
     }
 
     public void onHierarchy2() {
         locationVisit.clearLevelsBelow(1);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_2);
+        stateMachine.transitionTo("Select Hierarchy 2");
         loadHierarchy2ValueData();
     }
     
     public void onHierarchy3() {
         locationVisit.clearLevelsBelow(2);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_3);
+        stateMachine.transitionTo("Select Hierarchy 3");
         loadHierarchy3ValueData();
     }
 
     public void onHierarchy4() {
         locationVisit.clearLevelsBelow(3);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_4);
+        stateMachine.transitionTo("Select Hierarchy 4");
         loadHierarchy4ValueData();
     }
     
     public void onHierarchy5() {
         locationVisit.clearLevelsBelow(4);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_5);
+        stateMachine.transitionTo("Select Hierarchy 5");
         loadHierarchy5ValueData();
     }
 
     public void onLocation() {
         locationVisit.clearLevelsBelow(6);
-        stateMachine.transitionTo(State.SELECT_LOCATION);
+        stateMachine.transitionTo("Select Location");
         loadLocationValueData();
     }
 
     public void onRound() {
         locationVisit.clearLevelsBelow(5);
-        stateMachine.transitionTo(State.SELECT_ROUND);
+        stateMachine.transitionTo("Select Round");
         loadRoundValueData();
     }
 
@@ -1127,7 +1123,7 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
 
     public void onHierarchy1Selected(LocationHierarchy hierarchy) {
         locationVisit.setHierarchy1(hierarchy);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_2);
+        stateMachine.transitionTo("Select Hierarchy 2");
     }
 
     private void registerTransitions() {
@@ -1137,38 +1133,38 @@ public class UpdateActivity extends Activity implements ValueFragment.ValueListe
 
     public void onHierarchy2Selected(LocationHierarchy subregion) {
         locationVisit.setHierarchy2(subregion);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_3);
+        stateMachine.transitionTo("Select Hierarchy 3");
     }
     
 
     public void onHierarchy3Selected(LocationHierarchy hierarchy) {
         locationVisit.setHierarchy3(hierarchy);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_4);
+        stateMachine.transitionTo("Select Hierarchy 4");
     }
 
     public void onHierarchy4Selected(LocationHierarchy village) {
         locationVisit.setHierarchy4(village);
-        stateMachine.transitionTo(State.SELECT_HIERARCHY_5);
+        stateMachine.transitionTo("Select Hierarchy 5");
     }
     
     public void onHierarchy5Selected(LocationHierarchy floor) {
         locationVisit.setHierarchy5(floor);
-        stateMachine.transitionTo(State.SELECT_ROUND);
+        stateMachine.transitionTo("Select Round");
     }
 
     public void onRoundSelected(Round round) {
         locationVisit.setRound(round);
-        stateMachine.transitionTo(State.SELECT_LOCATION);
+        stateMachine.transitionTo("Select Location");
     }
 
     public void onLocationSelected(Location location) {
         locationVisit.setLocation(location);
-        stateMachine.transitionTo(State.CREATE_VISIT);
+        stateMachine.transitionTo("Create Visit");
     }
 
     public void onIndividualSelected(Individual individual) {
         locationVisit.setSelectedIndividual(individual);
-        stateMachine.transitionTo(State.SELECT_EVENT);
+        stateMachine.transitionTo("Select Event");
     }
 
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
