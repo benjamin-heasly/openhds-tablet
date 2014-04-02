@@ -1,8 +1,9 @@
-package org.openhds.mobile;
+package org.openhds.mobile.database.queries;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
