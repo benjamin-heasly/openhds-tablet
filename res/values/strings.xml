@@ -101,5 +101,12 @@
     <string name="sync_field_worker_name">Sync Field Workers</string>
     <string name="sync_field_worker_description">Syncs field workers with server.</string>
     <string name="field_worker_bad_credentials">Invalid field worker credentials</string>
+    <string name="region_label">Region</string>
+    <string name="map_area_label">Map Area</string>
+    <string name="sector_label">Sector</string>
+    <string name="household_label">Household</string>
+    <string name="individual_label">Individual</string>
+    
+    
 
 </resources>
