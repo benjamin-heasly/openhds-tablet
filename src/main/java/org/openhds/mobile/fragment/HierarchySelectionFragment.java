@@ -75,6 +75,7 @@ public class HierarchySelectionFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			navigator.jumpUp((String) v.getTag());
+			
 		}
 	}
 
