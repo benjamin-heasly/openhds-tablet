@@ -1,13 +1,24 @@
 package org.openhds.mobile.activity;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
+import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
+import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
+import org.openhds.mobile.FormsProviderAPI;
+import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.QueryHelper;
 import org.openhds.mobile.database.queries.QueryResult;
@@ -17,7 +28,17 @@ import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 public class CensusActivity extends Activity implements HierarchyNavigator {
 
@@ -54,6 +75,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	private List<QueryResult> currentResults;
 	private HierarchySelectionFragment selectionFragment;
 	private HierarchyValueFragment valueFragment;
+	private Button createIndividualButton;
+	private Button createHouseholdButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +87,22 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		for (String state : stateSequence) {
 			stateMachine.registerListener(state, new HierarchyStateListener());
 		}
+
+		FrameLayout formButtonsContainer = (FrameLayout) findViewById(R.id.right_column);
+		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		params.setMargins(15, 0, 15, 0);
+
+		createIndividualButton = makeNewGenericButton(this, null, "Create Individual", "createIndividualButton",
+				new CreateFormsListener(), formButtonsContainer);
+		createIndividualButton.setBackgroundColor(getResources().getColor(R.color.Orange));
+		createIndividualButton.setLayoutParams(params);
+		createIndividualButton.setVisibility(View.GONE);
+
+		createHouseholdButton = makeNewGenericButton(this, null, "Create Household", "createHouseholdButton",
+				new CreateFormsListener(), formButtonsContainer);
+		createHouseholdButton.setBackgroundColor(getResources().getColor(R.color.Orange));
+		createHouseholdButton.setLayoutParams(params);
+		createHouseholdButton.setVisibility(View.GONE);
 
 		if (null == savedInstanceState) {
 			// create fresh activity
@@ -159,7 +198,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	}
 
 	private void updateButtonLabel(String state) {
-		
+
 		String buttonLabel = getResourceString(CensusActivity.this, stateLabels.get(state));
 		QueryResult selected = hierarchyPath.get(state);
 		boolean buttonIsHighlighted = true;
@@ -246,7 +285,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			valueFragment.populateValues(currentResults);
 			if (!state.equals(stateSequence.get(stateSequence.size() - 1))) {
 				selectionFragment.setButtonAllowed(state, true);
-				// show forms
+			}
+
+			if (state.equals(stateSequence.get(stateSequence.size() - 2))) {
+				createIndividualButton.setVisibility(View.VISIBLE);
+			}
+			if (state.equals(stateSequence.get(stateSequence.size() - 3))) {
+				createHouseholdButton.setVisibility(View.VISIBLE);
 			}
 		}
 
@@ -254,6 +299,113 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		public void onExitState() {
 			String state = stateMachine.getState();
 			updateButtonLabel(state);
+
+			if (state.equals(stateSequence.get(stateSequence.size() - 2))) {
+				createIndividualButton.setVisibility(View.GONE);
+			}
+			if (state.equals(stateSequence.get(stateSequence.size() - 3))) {
+				createHouseholdButton.setVisibility(View.GONE);
+			}
+		}
+	}
+
+	private class CreateFormsListener implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			
+			if(v.getTag() == createIndividualButton.getTag()){
+				Uri contentUri = makeEditableFormCopy("Individual");
+				startActivityForResult(new Intent(Intent.ACTION_EDIT, contentUri), 0);
+			}else if(v.getTag() == createHouseholdButton.getTag()){
+				Uri contentUri = makeEditableFormCopy("Household");
+				startActivityForResult(new Intent(Intent.ACTION_EDIT, contentUri), 0);
+			}
+			
+		}
+
+		private Uri makeEditableFormCopy(String name) {
+			// find a blank form with given name
+			Cursor cursor = getContentResolver().query(
+					FormsProviderAPI.FormsColumns.CONTENT_URI,
+					new String[] { FormsProviderAPI.FormsColumns.JR_FORM_ID,
+							FormsProviderAPI.FormsColumns.FORM_FILE_PATH },
+					FormsProviderAPI.FormsColumns.JR_FORM_ID + " like ?", new String[] { name + "%" }, null);
+
+			if (cursor.moveToFirst()) {
+				String jrFormId = cursor.getString(0);
+				String formFilePath = cursor.getString(1);
+
+				try {
+					// copy this input xml file
+					FileInputStream blankFormStream = new FileInputStream(formFilePath);
+
+					// to a new editable output xml file
+					File editableFormFile = getExternalStorageXmlFile(jrFormId, name, ".xml");
+					FileOutputStream editableFormStream = new FileOutputStream(editableFormFile);
+
+					if (copyFile(blankFormStream, editableFormStream)) {
+						editableFormStream.close();
+						return shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId);
+					} else {
+						return null;
+					}
+
+				} catch (Exception e) {
+					showLongToast(CensusActivity.this, e.getMessage());
+					return null;
+				}
+
+			}
+			return null;
+		}
+
+		private Uri shareOdkFormInstance(File targetFile, String displayName, String formId) {
+			ContentValues values = new ContentValues();
+			values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
+			values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
+			values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
+			return getContentResolver().insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
+		}
+
+		public boolean copyFile(FileInputStream inStream, FileOutputStream outStream) {
+			try {
+				// Transfer bytes from in to out
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = inStream.read(buf)) > 0) {
+					outStream.write(buf, 0, len);
+				}
+				inStream.close();
+				outStream.close();
+			} catch (Exception e) {
+				showLongToast(CensusActivity.this, e.getMessage());
+				return false;
+			}
+			return true;
+		}
+
+		private File getExternalStorageXmlFile(String subDir, String baseName, String extension) {
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss");
+			df.setTimeZone(TimeZone.getDefault());
+			String date = df.format(new Date());
+			String externalFileName = baseName + date + extension;
+
+			File root = Environment.getExternalStorageDirectory();
+			String destinationPath = root.getAbsolutePath() + File.separator + "Android" + File.separator
+					+ "data" + File.separator + "org.openhds.mobile" + File.separator + "files"
+					+ File.separator + subDir;
+			File parentDir = new File(destinationPath);
+			if (!parentDir.exists()) {
+				boolean created = parentDir.mkdirs();
+				if (!created) {
+					return null;
+				}
+			}
+
+			destinationPath += File.separator + externalFileName;
+			File targetFile = new File(destinationPath);
+			return targetFile;
 		}
 	}
 }
