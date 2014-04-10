@@ -140,7 +140,7 @@ public class DebuggingOpeningActivity extends Activity {
 	// finally, go to the fieldworker update UI
 	private void startUpdateActivity(FieldWorker fieldWorker) {
 		Intent intent = new Intent(getApplicationContext(),
-				UpdateActivity.class);
+				CensusActivity.class);
 		intent.putExtra("fieldWorker", fieldWorker);
 		startActivity(intent);
 	}
