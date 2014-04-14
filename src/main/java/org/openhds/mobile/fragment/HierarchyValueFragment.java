@@ -1,5 +1,8 @@
 package org.openhds.mobile.fragment;
 
+import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
+
 import java.util.List;
 
 import org.openhds.mobile.R;
@@ -17,7 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 public class HierarchyValueFragment extends Fragment {
 
@@ -37,8 +40,7 @@ public class HierarchyValueFragment extends Fragment {
 	}
 
 	public void populateValues(List<QueryResult> values) {
-		queryResultAdapter = new HierarchyValueAdapter(getActivity(), R.layout.listview_value_container,
-				values);
+		queryResultAdapter = new HierarchyValueAdapter(getActivity(), R.layout.generic_list_item, values);
 
 		ListView listView = (ListView) getActivity().findViewById(R.id.value_fragment_listview);
 		listView.setAdapter(queryResultAdapter);
@@ -63,19 +65,14 @@ public class HierarchyValueFragment extends Fragment {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
-			if (convertView == null) {
-				convertView = getActivity().getLayoutInflater().inflate(R.layout.listview_value_container,
-						null);
-			}
-
 			QueryResult qr = queryResultAdapter.getItem(position);
 
-			TextView queryResultName = (TextView) convertView.findViewById(R.id.name_text);
-			queryResultName.setText(qr.getName());
+			if (convertView == null) {
+				convertView = makeNewGenericLayout(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
+						null, null);
+			}
 
-			TextView queryResultExtId = (TextView) convertView.findViewById(R.id.ext_id_text);
-			queryResultExtId.setText(qr.getExtId());
-
+			configureGenericLayout(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId());
 			return convertView;
 		}
 	}

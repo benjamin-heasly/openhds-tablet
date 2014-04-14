@@ -3,26 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/value_frag_selector"
-    android:paddingTop="2.5dp"
-    android:paddingBottom="2.5dp">
-    
+    android:paddingBottom="2.5dp"
+    android:paddingTop="2.5dp" >
 
     <TextView
-        android:id="@+id/name_text"
+        android:id="@+id/primary_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:paddingLeft="15dp"
-        android:textAppearance="?android:attr/textAppearanceLargeInverse"
-        android:text="Bob Bobson"/>
+        android:text="Bob Bobson"
+        android:textAppearance="?android:attr/textAppearanceLargeInverse" />
 
     <TextView
-        android:id="@+id/ext_id_text"
+        android:id="@+id/secondary_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:layout_below="@id/name_text"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/primary_text"
         android:paddingLeft="15dp"
-        android:textAppearance="?android:attr/textAppearanceMediumInverse"
-        android:text="b12345"/>
+        android:text="b12345"
+        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
 
 </RelativeLayout>

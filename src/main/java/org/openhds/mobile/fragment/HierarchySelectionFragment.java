@@ -1,7 +1,8 @@
 package org.openhds.mobile.fragment;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
+import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,38 +16,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 
 public class HierarchySelectionFragment extends Fragment {
 
+	// for some reason margin in layout XML is ignored
+	private static final int BUTTON_MARGIN = 10;
+
 	private HierarchyNavigator navigator;
-	private Map<String, Button> buttonsForStates;
+	private Map<String, RelativeLayout> viewsForStates;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		LinearLayout buttonContainer = (LinearLayout) inflater.inflate(R.layout.hierarchy_selection_fragment,
-				container, false);
+		LinearLayout selectionContainer = (LinearLayout) inflater.inflate(
+				R.layout.hierarchy_selection_fragment, container, false);
 
+		viewsForStates = new HashMap<String, RelativeLayout>();
 		HierarchyButtonListener listener = new HierarchyButtonListener();
+
 		Map<String, Integer> labels = navigator.getStateLabels();
-		buttonsForStates = new HashMap<String, Button>();
 		for (String state : navigator.getStateSequence()) {
 			final String description = null;
-			// MAKE BUTTON
-			Button b = makeNewGenericButton(getActivity(), description,
-					getResourceString(getActivity(), labels.get(state)), state, listener, buttonContainer);
-			// CUSTOMIZE BUTTON WITH A LAYOUTPARAMS
-			LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-			params.setMargins(0, 20, 0, 0);
-			b.setLayoutParams(params);
-			buttonsForStates.put(state, b);
+			// MAKE CLICKABLELAYOUT
+			// for some reason margin in layout XML is ignored
+			RelativeLayout layout = makeNewGenericLayout(getActivity(),
+					getResourceString(getActivity(), labels.get(state)), description, state, listener,
+					selectionContainer);
+			LayoutParams params = (LayoutParams) layout.getLayoutParams();
+			params.setMargins(0, 0, 0, BUTTON_MARGIN);
+
+			viewsForStates.put(state, layout);
 			setButtonAllowed(state, false);
 			setButtonHighlighted(state, false);
 		}
 
-		return buttonContainer;
+		return selectionContainer;
 	}
 
 	public void setNavigator(HierarchyNavigator navigator) {
@@ -54,38 +60,39 @@ public class HierarchySelectionFragment extends Fragment {
 	}
 
 	public void setButtonAllowed(String state, boolean isShown) {
-		Button b = buttonsForStates.get(state);
 
-		if (null == b) {
+		RelativeLayout layout = viewsForStates.get(state);
+
+		if (null == layout) {
 			return;
 		}
-		b.setVisibility(isShown ? View.VISIBLE : View.GONE);
-
+		layout.setVisibility(isShown ? View.VISIBLE : View.INVISIBLE);
 	}
 
-	public void setButtonLabel(String state, String label) {
-		Button b = buttonsForStates.get(state);
-		if (null == b) {
+	public void setButtonLabel(String state, String name, String id) {
+		RelativeLayout layout = viewsForStates.get(state);
+		if (null == layout) {
 			return;
 		}
-		b.setText(label);
+		configureGenericLayout(getActivity(), layout, name, id);
 	}
 
 	private class HierarchyButtonListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			navigator.jumpUp((String) v.getTag());
-			
+
 		}
 	}
 
 	public void setButtonHighlighted(String state, boolean isHighlighted) {
-		Button b = buttonsForStates.get(state);
 
-		if (null == b) {
+		RelativeLayout layout = viewsForStates.get(state);
+
+		if (null == layout) {
 			return;
 		}
-		b.setBackgroundColor(isHighlighted ? getResources().getColor(R.color.SommerBlue) : 
-			getResources().getColor(R.color.WolfGray));
+		layout.setBackgroundColor(isHighlighted ? getResources().getColor(R.color.SommerBlue)
+				: getResources().getColor(R.color.WolfGray));
 	}
 }

@@ -6,7 +6,9 @@ import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class LayoutUtils {
@@ -21,9 +23,9 @@ public class LayoutUtils {
 
 		if (null == description) {
 			t.setVisibility(View.GONE);
-			
-		}else{
-			t.setText(description);	
+
+		} else {
+			t.setText(description);
 		}
 
 		b.setText(buttonName);
@@ -33,4 +35,44 @@ public class LayoutUtils {
 		return b;
 	}
 
+	public static RelativeLayout makeNewGenericLayout(Activity activity, String primaryText,
+			String secondaryText, Object layoutTag, OnClickListener listener, ViewGroup container) {
+
+		RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(
+				R.layout.generic_list_item, null);
+		layout.setTag(layoutTag);
+
+		if (null != listener) {
+			layout.setOnClickListener(listener);
+		}
+
+		if (null != container) {
+			container.addView(layout);
+		}
+
+		configureGenericLayout(activity, layout, primaryText, secondaryText);
+
+		return layout;
+	}
+
+	public static void configureGenericLayout(Activity activity, RelativeLayout layout, String primaryText,
+			String secondaryText) {
+
+		TextView primary = (TextView) layout.findViewById(R.id.primary_text);
+		TextView secondary = (TextView) layout.findViewById(R.id.secondary_text);
+
+		if (null == primaryText) {
+			primary.setVisibility(View.GONE);
+		} else {
+			primary.setVisibility(View.VISIBLE);
+			primary.setText(primaryText);
+		}
+
+		if (null == secondaryText) {
+			secondary.setVisibility(View.GONE);
+		} else {
+			secondary.setVisibility(View.VISIBLE);
+			secondary.setText(secondaryText);
+		}
+	}
 }

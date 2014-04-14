@@ -195,19 +195,22 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		} else {
 			valueFragment.populateValues(currentResults);
 		}
+		
+		
+		
 	}
 
 	private void updateButtonLabel(String state) {
-
-		String buttonLabel = getResourceString(CensusActivity.this, stateLabels.get(state));
+		
 		QueryResult selected = hierarchyPath.get(state);
-		boolean buttonIsHighlighted = true;
-		if (null != selected) {
-			buttonIsHighlighted = false;
-			buttonLabel = selected.getName() + "\n" + selected.getExtId();
+		if (null == selected) {
+			String stateLabel = getResourceString(CensusActivity.this, stateLabels.get(state));
+			selectionFragment.setButtonLabel(state, stateLabel, null);
+			selectionFragment.setButtonHighlighted(state, true);
+		} else {
+			selectionFragment.setButtonLabel(state, selected.getName(), selected.getExtId());
+			selectionFragment.setButtonHighlighted(state, false);
 		}
-		selectionFragment.setButtonLabel(state, buttonLabel);
-		selectionFragment.setButtonHighlighted(state, buttonIsHighlighted);
 	}
 
 	@Override
