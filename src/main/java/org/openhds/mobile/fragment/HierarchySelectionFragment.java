@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
@@ -43,7 +45,7 @@ public class HierarchySelectionFragment extends Fragment {
 			// for some reason margin in layout XML is ignored
 			RelativeLayout layout = makeNewGenericLayout(getActivity(),
 					getResourceString(getActivity(), labels.get(state)), description, state, listener,
-					selectionContainer);
+					selectionContainer, 0);
 			LayoutParams params = (LayoutParams) layout.getLayoutParams();
 			params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -92,7 +94,9 @@ public class HierarchySelectionFragment extends Fragment {
 		if (null == layout) {
 			return;
 		}
+
 		layout.setBackgroundColor(isHighlighted ? getResources().getColor(R.color.SommerBlue)
 				: getResources().getColor(R.color.WolfGray));
+
 	}
 }

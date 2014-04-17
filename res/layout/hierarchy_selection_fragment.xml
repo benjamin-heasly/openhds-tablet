@@ -5,8 +5,8 @@
     android:layout_marginLeft="15dp"
     android:layout_marginRight="15dp"
     android:baselineAligned="false"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
-    <!-- android:animateLayoutChanges="true" -->
+
 
 </LinearLayout>

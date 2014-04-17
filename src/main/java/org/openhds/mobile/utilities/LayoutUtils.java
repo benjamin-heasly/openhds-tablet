@@ -1,12 +1,12 @@
 package org.openhds.mobile.utilities;
 
 import org.openhds.mobile.R;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,8 +35,10 @@ public class LayoutUtils {
 		return b;
 	}
 
+	
+	
 	public static RelativeLayout makeNewGenericLayout(Activity activity, String primaryText,
-			String secondaryText, Object layoutTag, OnClickListener listener, ViewGroup container) {
+			String secondaryText, Object layoutTag, OnClickListener listener, ViewGroup container, int background) {
 
 		RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(
 				R.layout.generic_list_item, null);
@@ -48,6 +50,10 @@ public class LayoutUtils {
 
 		if (null != container) {
 			container.addView(layout);
+		}
+		
+		if(0 != background){
+		layout.setBackgroundResource(background);
 		}
 
 		configureGenericLayout(activity, layout, primaryText, secondaryText);

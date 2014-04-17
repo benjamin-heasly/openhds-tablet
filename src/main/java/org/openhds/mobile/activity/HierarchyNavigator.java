@@ -14,4 +14,6 @@ public interface HierarchyNavigator {
 	public void jumpUp(String state);
 
 	public void stepDown(QueryResult qr);
+	
+	public void launchForm(String formName);
 }

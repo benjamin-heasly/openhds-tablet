@@ -4,10 +4,9 @@ import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.CensusActivity;
-import org.openhds.mobile.activity.OpeningActivity;
-import org.openhds.mobile.activity.SupervisorMainActivity;
-import org.openhds.mobile.database.DatabaseAdapter;
+import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
+import org.openhds.mobile.model.FieldWorker;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -20,19 +19,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class FieldWorkerLoginFragment extends Fragment implements
-		OnClickListener {
+public class FieldWorkerLoginFragment extends Fragment implements OnClickListener {
 
+	public static final String FIELD_WORKER_EXTRA = "FieldWorker";
 	private EditText usernameEditText;
 	private EditText passwordEditText;
 	private Button loginButton;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View v = inflater.inflate(R.layout.generic_login_fragment, container,
-				false);
+		View v = inflater.inflate(R.layout.generic_login_fragment, container, false);
 		TextView title = (TextView) v.findViewById(R.id.titleTextView);
 		title.setText(R.string.fieldworker_login);
 
@@ -63,17 +60,22 @@ public class FieldWorkerLoginFragment extends Fragment implements
 		String password = "";
 		String username = getUsernameFromEditText();
 
-		if (Queries.hasFieldWorker(getActivity().getContentResolver(),
-				username, password)) {
-			launchCensusActivity();
+		if (Queries.hasFieldWorker(getActivity().getContentResolver(), username, password)) {
+
+			FieldWorker fieldWorker = Converter.toFieldWorker(Queries.getFieldWorkByExtId(getActivity()
+					.getContentResolver(), username));
+
+			launchCensusActivity(fieldWorker);
 		} else {
 			showLongToast(getActivity(), R.string.field_worker_bad_credentials);
 		}
 	}
 
-	private void launchCensusActivity() {
-		//TODO pass in a fieldworker object
+	private void launchCensusActivity(FieldWorker fieldWorker) {
+		
 		Intent intent = new Intent(getActivity(), CensusActivity.class);
+		intent.putExtra(FIELD_WORKER_EXTRA, fieldWorker);
+
 		startActivity(intent);
 	}
 

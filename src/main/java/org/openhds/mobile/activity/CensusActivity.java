@@ -1,44 +1,30 @@
 package org.openhds.mobile.activity;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
-import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
-import org.openhds.mobile.FormsProviderAPI;
-import org.openhds.mobile.InstanceProviderAPI;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.QueryHelper;
 import org.openhds.mobile.database.queries.QueryResult;
+import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
+import org.openhds.mobile.fragment.HierarchyFormFragment;
 import org.openhds.mobile.fragment.HierarchySelectionFragment;
 import org.openhds.mobile.fragment.HierarchyValueFragment;
+import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.model.FormLauncher;
+import org.openhds.mobile.model.FormRecord;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class CensusActivity extends Activity implements HierarchyNavigator {
 
@@ -49,8 +35,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	public static final String INDIVIDUAL_STATE = "individual";
 	public static final String BOTTOM_STATE = "bottom";
 
+	public static final String EXT_ID_SUFFIX = "ExtId";
+	public static final String REGION_ID_FORM_FIELDNAME = REGION_STATE + EXT_ID_SUFFIX;
+	public static final String MAP_AREA_ID_FORM_FIELDNAME = MAP_AREA_STATE + EXT_ID_SUFFIX;
+	public static final String SECTOR_ID_FORM_FIELDNAME = SECTOR_STATE + EXT_ID_SUFFIX;
+	public static final String HOUSEHOLD_ID_FORM_FIELDNAME = HOUSEHOLD_STATE + EXT_ID_SUFFIX;
+	public static final String INDIVIDUAL_ID_FORM_FIELDNAME = INDIVIDUAL_STATE + EXT_ID_SUFFIX;
+	public static final String FIELDWORKER_ID_FORM_FIELDNAME = "fieldworker" + EXT_ID_SUFFIX;
+	public static final String COLLECTION_DT_FORM_FIELDNAME = "collectionDateTime";
+
 	private static final List<String> stateSequence = new ArrayList<String>();
 	private static final Map<String, Integer> stateLabels = new HashMap<String, Integer>();
+	private static final Map<String, List<FormRecord>> formsForStates = new HashMap<String, List<FormRecord>>();
+
 	static {
 		stateSequence.add(REGION_STATE);
 		stateSequence.add(MAP_AREA_STATE);
@@ -65,18 +62,34 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		stateLabels.put(HOUSEHOLD_STATE, R.string.household_label);
 		stateLabels.put(INDIVIDUAL_STATE, R.string.individual_label);
 		stateLabels.put(BOTTOM_STATE, R.string.bottom_label);
+
+		ArrayList<FormRecord> regionFormList = new ArrayList<FormRecord>();
+		ArrayList<FormRecord> mapAreaFormList = new ArrayList<FormRecord>();
+		ArrayList<FormRecord> sectorFormList = new ArrayList<FormRecord>();
+		ArrayList<FormRecord> householdFormList = new ArrayList<FormRecord>();
+		householdFormList.add(new FormRecord("Household", "Create Household"));
+		ArrayList<FormRecord> individualFormList = new ArrayList<FormRecord>();
+		individualFormList.add(new FormRecord("Individual", "Create Individual"));
+		ArrayList<FormRecord> emptyBottomList = new ArrayList<FormRecord>();
+
+		formsForStates.put(REGION_STATE, regionFormList);
+		formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
+		formsForStates.put(SECTOR_STATE, sectorFormList);
+		formsForStates.put(HOUSEHOLD_STATE, householdFormList);
+		formsForStates.put(INDIVIDUAL_STATE, individualFormList);
+		formsForStates.put(BOTTOM_STATE, emptyBottomList);
 	}
 
 	private static final String SELECTION_FRAGMENT_TAG = "hierarchySelectionFragment";
 	private static final String VALUE_FRAGMENT_TAG = "hierarchyValueFragment";
+	private static final String FORM_FRAGMENT_TAG = "hierarchyFormFragment";
 
 	private StateMachine stateMachine;
 	private Map<String, QueryResult> hierarchyPath;
 	private List<QueryResult> currentResults;
 	private HierarchySelectionFragment selectionFragment;
 	private HierarchyValueFragment valueFragment;
-	private Button createIndividualButton;
-	private Button createHouseholdButton;
+	private HierarchyFormFragment formFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,31 +101,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			stateMachine.registerListener(state, new HierarchyStateListener());
 		}
 
-		FrameLayout formButtonsContainer = (FrameLayout) findViewById(R.id.right_column);
-		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		params.setMargins(15, 0, 15, 0);
-
-		createIndividualButton = makeNewGenericButton(this, null, "Create Individual", "createIndividualButton",
-				new CreateFormsListener(), formButtonsContainer);
-		createIndividualButton.setBackgroundColor(getResources().getColor(R.color.Orange));
-		createIndividualButton.setLayoutParams(params);
-		createIndividualButton.setVisibility(View.GONE);
-
-		createHouseholdButton = makeNewGenericButton(this, null, "Create Household", "createHouseholdButton",
-				new CreateFormsListener(), formButtonsContainer);
-		createHouseholdButton.setBackgroundColor(getResources().getColor(R.color.Orange));
-		createHouseholdButton.setLayoutParams(params);
-		createHouseholdButton.setVisibility(View.GONE);
-
 		if (null == savedInstanceState) {
 			// create fresh activity
 			selectionFragment = new HierarchySelectionFragment();
 			selectionFragment.setNavigator(this);
 			valueFragment = new HierarchyValueFragment();
 			valueFragment.setNavigator(this);
+			formFragment = new HierarchyFormFragment();
+			formFragment.setNavigator(this);
+
 			getFragmentManager().beginTransaction()
 					.add(R.id.left_column, selectionFragment, SELECTION_FRAGMENT_TAG)
-					.add(R.id.middle_column, valueFragment, VALUE_FRAGMENT_TAG).commit();
+					.add(R.id.middle_column, valueFragment, VALUE_FRAGMENT_TAG)
+					.add(R.id.right_column, formFragment, FORM_FRAGMENT_TAG).commit();
 
 		} else {
 			// restore saved activity state
@@ -122,6 +123,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			valueFragment = (HierarchyValueFragment) getFragmentManager().findFragmentByTag(
 					VALUE_FRAGMENT_TAG);
 			valueFragment.setNavigator(this);
+			formFragment = (HierarchyFormFragment) getFragmentManager().findFragmentByTag(FORM_FRAGMENT_TAG);
+			formFragment.setNavigator(this);
 
 			// try to re-fetch selected data all the way down the hierarchy path
 			for (String state : stateSequence) {
@@ -195,13 +198,11 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		} else {
 			valueFragment.populateValues(currentResults);
 		}
-		
-		
-		
+
 	}
 
 	private void updateButtonLabel(String state) {
-		
+
 		QueryResult selected = hierarchyPath.get(state);
 		if (null == selected) {
 			String stateLabel = getResourceString(CensusActivity.this, stateLabels.get(state));
@@ -290,12 +291,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				selectionFragment.setButtonAllowed(state, true);
 			}
 
-			if (state.equals(stateSequence.get(stateSequence.size() - 2))) {
-				createIndividualButton.setVisibility(View.VISIBLE);
-			}
-			if (state.equals(stateSequence.get(stateSequence.size() - 3))) {
-				createHouseholdButton.setVisibility(View.VISIBLE);
-			}
+			formFragment.createFormButtons(formsForStates.get(state));
 		}
 
 		@Override
@@ -303,112 +299,36 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			String state = stateMachine.getState();
 			updateButtonLabel(state);
 
-			if (state.equals(stateSequence.get(stateSequence.size() - 2))) {
-				createIndividualButton.setVisibility(View.GONE);
-			}
-			if (state.equals(stateSequence.get(stateSequence.size() - 3))) {
-				createHouseholdButton.setVisibility(View.GONE);
-			}
 		}
 	}
 
-	private class CreateFormsListener implements OnClickListener {
+	@Override
+	public void launchForm(String formName) {
+		FormLauncher fl = new FormLauncher(formName, this);
+		getFormFieldNameMap();
+		fl.launchForm();
+	}
 
-		@Override
-		public void onClick(View v) {
-			
-			if(v.getTag() == createIndividualButton.getTag()){
-				Uri contentUri = makeEditableFormCopy("Individual");
-				startActivityForResult(new Intent(Intent.ACTION_EDIT, contentUri), 0);
-			}else if(v.getTag() == createHouseholdButton.getTag()){
-				Uri contentUri = makeEditableFormCopy("Household");
-				startActivityForResult(new Intent(Intent.ACTION_EDIT, contentUri), 0);
+	public Map<String, String> getFormFieldNameMap() {
+
+		HashMap<String, String> formFieldNames = new HashMap<String, String>();
+
+		for (String state : stateSequence) {
+			if (null != hierarchyPath.get(state)) {
+				formFieldNames.put(state + EXT_ID_SUFFIX, hierarchyPath.get(state).getExtId());
 			}
-			
 		}
 
-		private Uri makeEditableFormCopy(String name) {
-			// find a blank form with given name
-			Cursor cursor = getContentResolver().query(
-					FormsProviderAPI.FormsColumns.CONTENT_URI,
-					new String[] { FormsProviderAPI.FormsColumns.JR_FORM_ID,
-							FormsProviderAPI.FormsColumns.FORM_FILE_PATH },
-					FormsProviderAPI.FormsColumns.JR_FORM_ID + " like ?", new String[] { name + "%" }, null);
+		
+		FieldWorker fieldWorker = (FieldWorker) getIntent().getExtras().get(
+				FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
+		formFieldNames.put(FIELDWORKER_ID_FORM_FIELDNAME, fieldWorker.getExtId());
 
-			if (cursor.moveToFirst()) {
-				String jrFormId = cursor.getString(0);
-				String formFilePath = cursor.getString(1);
-
-				try {
-					// copy this input xml file
-					FileInputStream blankFormStream = new FileInputStream(formFilePath);
-
-					// to a new editable output xml file
-					File editableFormFile = getExternalStorageXmlFile(jrFormId, name, ".xml");
-					FileOutputStream editableFormStream = new FileOutputStream(editableFormFile);
-
-					if (copyFile(blankFormStream, editableFormStream)) {
-						editableFormStream.close();
-						return shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId);
-					} else {
-						return null;
-					}
-
-				} catch (Exception e) {
-					showLongToast(CensusActivity.this, e.getMessage());
-					return null;
-				}
-
-			}
-			return null;
-		}
-
-		private Uri shareOdkFormInstance(File targetFile, String displayName, String formId) {
-			ContentValues values = new ContentValues();
-			values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
-			values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
-			values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
-			return getContentResolver().insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
-		}
-
-		public boolean copyFile(FileInputStream inStream, FileOutputStream outStream) {
-			try {
-				// Transfer bytes from in to out
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = inStream.read(buf)) > 0) {
-					outStream.write(buf, 0, len);
-				}
-				inStream.close();
-				outStream.close();
-			} catch (Exception e) {
-				showLongToast(CensusActivity.this, e.getMessage());
-				return false;
-			}
-			return true;
-		}
-
-		private File getExternalStorageXmlFile(String subDir, String baseName, String extension) {
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss");
-			df.setTimeZone(TimeZone.getDefault());
-			String date = df.format(new Date());
-			String externalFileName = baseName + date + extension;
-
-			File root = Environment.getExternalStorageDirectory();
-			String destinationPath = root.getAbsolutePath() + File.separator + "Android" + File.separator
-					+ "data" + File.separator + "org.openhds.mobile" + File.separator + "files"
-					+ File.separator + subDir;
-			File parentDir = new File(destinationPath);
-			if (!parentDir.exists()) {
-				boolean created = parentDir.mkdirs();
-				if (!created) {
-					return null;
-				}
-			}
-
-			destinationPath += File.separator + externalFileName;
-			File targetFile = new File(destinationPath);
-			return targetFile;
-		}
+		
+		
+		Calendar c = Calendar.getInstance();
+		formFieldNames.put(COLLECTION_DT_FORM_FIELDNAME, c.getTime().toString());
+		
+		return formFieldNames;
 	}
 }
