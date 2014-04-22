@@ -89,7 +89,7 @@
     <string name="interop_server_url_key">interop_server_url</string>
     <string name="openhds_server_url_default_summary">Same URL used for OpenHDS Server via Web browser</string>
     <string name="openhds_server_url_title">OpenHDS Server URL</string>
-    <string name="supervisor_login_url">/api/rest/socialgroups</string>
+    <string name="supervisor_login_url">/api/rest/visits</string>
     <string name="field_workers_sync_url">/api/rest/fieldworkers</string>
     <string name="landscape_layout_tag">landscape</string>
     <string name="portrait_layout_tag">portrait</string>

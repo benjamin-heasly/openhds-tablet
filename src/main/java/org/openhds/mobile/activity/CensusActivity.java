@@ -71,6 +71,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		ArrayList<FormRecord> individualFormList = new ArrayList<FormRecord>();
 		individualFormList.add(new FormRecord("Individual", "Create Individual"));
 		ArrayList<FormRecord> emptyBottomList = new ArrayList<FormRecord>();
+		emptyBottomList.add(new FormRecord("Testform", "Create Test Form"));
 
 		formsForStates.put(REGION_STATE, regionFormList);
 		formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
@@ -304,8 +305,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 	@Override
 	public void launchForm(String formName) {
-		FormLauncher fl = new FormLauncher(formName, this);
-		getFormFieldNameMap();
+		FormLauncher fl = new FormLauncher(formName, this, getFormFieldNameMap());
 		fl.launchForm();
 	}
 

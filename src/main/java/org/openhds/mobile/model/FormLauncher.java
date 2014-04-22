@@ -3,14 +3,17 @@ package org.openhds.mobile.model;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -28,12 +31,14 @@ public class FormLauncher {
 
 	Uri contentUri;
 	Activity activity;
+	Map<String, String> formFieldNames;
 
-	public FormLauncher(String formName, Activity activity) {
+	public FormLauncher(String formName, Activity activity, Map<String, String> formFieldNames) {
 
+		this.formFieldNames = formFieldNames;
 		this.activity = activity;
 		contentUri = makeEditableFormCopy(formName);
-
+		
 	}
 
 	public Intent launchForm() {
@@ -58,25 +63,49 @@ public class FormLauncher {
 			SAXBuilder builder = new SAXBuilder();
 
 			try {
-				// copy this input xml file
-				// FileInputStream blankFormStream = new
-				// FileInputStream(formFilePath);
 
-				// to a new editable output xml file
-
-				// FileOutputStream editableFormStream = new
-				// FileOutputStream(editableFormFile);
-
+				// get reference to unfilled form
 				Document blankDoc = builder.build(new File(formFilePath));
-				File editableFormFile = getExternalStorageXmlFile(jrFormId, name, ".xml");
-				Document editableDoc = new Document();
-				editableDoc = blankDoc.clone();
 
-				XMLOutputter xmlOutput = new XMLOutputter();
+				Element root = blankDoc.getRootElement();
+
+				ElementFilter filter = new ElementFilter("data");
+
+				Document filledForm = new Document();
+
+				if (root.getDescendants(filter).hasNext()) {
+
+					Element filledFormRoot = root.getDescendants(filter).next();
+					filledFormRoot.detach();
+					filledForm.setRootElement(filledFormRoot);
+
+					List<Element> dataChildren;
+
+					dataChildren = filledFormRoot.getChildren();
+
+					for (Element child : dataChildren) {
+	
+						if (formFieldNames.containsKey(child.getName())
+								&& null != formFieldNames.get(child.getName())) {
+							
+							child.setText(formFieldNames.get(child.getName()));
+							
+						}else{
+							child.setText("");
+						}
+	
+					}
+				}
+
+				File editableFormFile = getExternalStorageXmlFile(jrFormId, name, ".xml");
 				FileOutputStream fos = new FileOutputStream(editableFormFile);
-				xmlOutput.output(editableDoc, fos);
+				XMLOutputter xmlOutput = new XMLOutputter();
+				xmlOutput.setFormat(Format.getPrettyFormat());
+				xmlOutput.output(filledForm, fos);
 				fos.close();
+
 				return shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId);
+
 
 			} catch (Exception e) {
 				showLongToast(activity, e.getMessage() + " " + e.getCause());
@@ -93,24 +122,8 @@ public class FormLauncher {
 		values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
 		values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
 		return activity.getContentResolver().insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
-	}
 
-//	private boolean copyFile(FileInputStream inStream, FileOutputStream outStream) {
-//		try {
-//			// Transfer bytes from in to out
-//			byte[] buf = new byte[1024];
-//			int len;
-//			while ((len = inStream.read(buf)) > 0) {
-//				outStream.write(buf, 0, len);
-//			}
-//			inStream.close();
-//			outStream.close();
-//		} catch (Exception e) {
-//			showLongToast(activity, e.getMessage());
-//			return false;
-//		}
-//		return true;
-//	}
+	}
 
 	private File getExternalStorageXmlFile(String subDir, String baseName, String extension) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss");
