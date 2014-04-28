@@ -172,7 +172,7 @@ public class SyncEntitiesTask extends
 	private void deleteAllTables() {
 		// ordering is somewhat important during delete. a few tables have
 		// foreign keys
-		resolver.delete(OpenHDS.IndividualGroups.CONTENT_ID_URI_BASE, null,
+		resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null,
 				null);
 		resolver.delete(OpenHDS.Rounds.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Visits.CONTENT_ID_URI_BASE, null, null);
@@ -397,11 +397,11 @@ public class SyncEntitiesTask extends
 				if (parser.getEventType() != XmlPullParser.END_TAG) {
 					parser.nextTag(); // <endType>
 					// parser.nextTag(); // </endType>
-					cv.put(OpenHDS.Individuals.COLUMN_RESIDENCE_END_TYPE,
+					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE,
 							parser.nextText());
 					parser.nextTag(); // <location>
 					parser.nextTag(); // <extId>
-					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE,
+					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID,
 							parser.nextText());
 					parser.nextTag(); // </location>
 					parser.nextTag(); // </residency>
@@ -463,10 +463,10 @@ public class SyncEntitiesTask extends
 					for (String item : groups) {
 						ContentValues socialGroups = new ContentValues();
 						socialGroups
-								.put(OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID,
+								.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
 										cv.getAsString(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
 						socialGroups
-								.put(OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID,
+								.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
 										item);
 						individualSocialGroups.add(socialGroups);
 					}
@@ -499,7 +499,7 @@ public class SyncEntitiesTask extends
 		}
 
 		if (!individualSocialGroups.isEmpty()) {
-			resolver.bulkInsert(OpenHDS.IndividualGroups.CONTENT_ID_URI_BASE,
+			resolver.bulkInsert(OpenHDS.Memberships.CONTENT_ID_URI_BASE,
 					individualSocialGroups.toArray(emptyArray));
 		}
 	}
@@ -608,7 +608,7 @@ public class SyncEntitiesTask extends
 			ContentValues cv = new ContentValues();
 
 			parser.nextTag();
-			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID,
+			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID,
 					parser.nextText());
 
 			parser.nextTag(); // <groupHead>
@@ -617,12 +617,12 @@ public class SyncEntitiesTask extends
 			parser.nextTag(); // <residencies>
 			parser.nextTag(); // </residencies>
 			parser.nextTag(); // <extId>
-			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD,
+			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD,
 					parser.nextText());
 			parser.nextTag(); // </groupHead>
 
 			parser.nextTag();
-			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME,
+			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME,
 					parser.nextText());
 
 			values.add(cv);

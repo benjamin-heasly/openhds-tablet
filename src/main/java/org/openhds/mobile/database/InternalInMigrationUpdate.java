@@ -27,8 +27,8 @@ public class InternalInMigrationUpdate implements Updatable {
             }
 
             ContentValues cv = new ContentValues();
-            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE, individual.getCurrentResidence());
-            cv.put(OpenHDS.Individuals.COLUMN_RESIDENCE_END_TYPE, "NA");
+            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID, individual.getCurrentResidence());
+            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, "NA");
 
             Cursor cursor = resolver.query(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
                     new String[] { OpenHDS.Individuals._ID }, OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + " = ?",

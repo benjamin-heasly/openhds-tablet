@@ -55,7 +55,7 @@ public class HierarchyFormFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			FormRecord form = formListAdapter.getItem(position);		
-				navigator.launchForm(form.getFormName());
+				navigator.launchForm(form);
 		}
 	}
 

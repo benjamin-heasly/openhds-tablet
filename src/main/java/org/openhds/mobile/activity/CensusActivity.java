@@ -9,38 +9,44 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-
 import org.openhds.mobile.R;
-import org.openhds.mobile.database.queries.QueryHelper;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
 import org.openhds.mobile.fragment.HierarchySelectionFragment;
 import org.openhds.mobile.fragment.HierarchyValueFragment;
 import org.openhds.mobile.model.FieldWorker;
-import org.openhds.mobile.model.FormLauncher;
+import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormRecord;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
+import org.openhds.mobile.projectdata.QueryHelper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class CensusActivity extends Activity implements HierarchyNavigator {
 
+	public static final int EDIT_FORM_INTENT = 1;
+
 	public static final String REGION_STATE = "region";
+	public static final String PROVINCE_STATE = "province";
+	public static final String DISTRICT_STATE = "district";
 	public static final String MAP_AREA_STATE = "mapArea";
 	public static final String SECTOR_STATE = "sector";
 	public static final String HOUSEHOLD_STATE = "household";
 	public static final String INDIVIDUAL_STATE = "individual";
 	public static final String BOTTOM_STATE = "bottom";
-
+	
 	public static final String EXT_ID_SUFFIX = "ExtId";
 	public static final String REGION_ID_FORM_FIELDNAME = REGION_STATE + EXT_ID_SUFFIX;
+	public static final String PROVINCE_ID_FORM_FIELDNAME = PROVINCE_STATE + EXT_ID_SUFFIX;
+	public static final String DISTRICT_ID_FORM_FIELDNAME = DISTRICT_STATE + EXT_ID_SUFFIX;
 	public static final String MAP_AREA_ID_FORM_FIELDNAME = MAP_AREA_STATE + EXT_ID_SUFFIX;
 	public static final String SECTOR_ID_FORM_FIELDNAME = SECTOR_STATE + EXT_ID_SUFFIX;
 	public static final String HOUSEHOLD_ID_FORM_FIELDNAME = HOUSEHOLD_STATE + EXT_ID_SUFFIX;
-	public static final String INDIVIDUAL_ID_FORM_FIELDNAME = INDIVIDUAL_STATE + EXT_ID_SUFFIX;
+	public static final String INDIVIDUAL_ID_FORM_FIELDNAME = HOUSEHOLD_STATE + EXT_ID_SUFFIX;
 	public static final String FIELDWORKER_ID_FORM_FIELDNAME = "fieldworker" + EXT_ID_SUFFIX;
 	public static final String COLLECTION_DT_FORM_FIELDNAME = "collectionDateTime";
 
@@ -50,6 +56,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 	static {
 		stateSequence.add(REGION_STATE);
+		stateSequence.add(PROVINCE_STATE);
+		stateSequence.add(DISTRICT_STATE);
 		stateSequence.add(MAP_AREA_STATE);
 		stateSequence.add(SECTOR_STATE);
 		stateSequence.add(HOUSEHOLD_STATE);
@@ -57,6 +65,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		stateSequence.add(BOTTOM_STATE);
 
 		stateLabels.put(REGION_STATE, R.string.region_label);
+		stateLabels.put(PROVINCE_STATE, R.string.province_label);
+		stateLabels.put(DISTRICT_STATE, R.string.district_label);
 		stateLabels.put(MAP_AREA_STATE, R.string.map_area_label);
 		stateLabels.put(SECTOR_STATE, R.string.sector_label);
 		stateLabels.put(HOUSEHOLD_STATE, R.string.household_label);
@@ -64,21 +74,27 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		stateLabels.put(BOTTOM_STATE, R.string.bottom_label);
 
 		ArrayList<FormRecord> regionFormList = new ArrayList<FormRecord>();
+		ArrayList<FormRecord> provinceFormList = new ArrayList<FormRecord>();
+		ArrayList<FormRecord> districtFormList = new ArrayList<FormRecord>();
 		ArrayList<FormRecord> mapAreaFormList = new ArrayList<FormRecord>();
 		ArrayList<FormRecord> sectorFormList = new ArrayList<FormRecord>();
 		ArrayList<FormRecord> householdFormList = new ArrayList<FormRecord>();
-		householdFormList.add(new FormRecord("Household", "Create Household"));
 		ArrayList<FormRecord> individualFormList = new ArrayList<FormRecord>();
+		ArrayList<FormRecord> bottomFormList = new ArrayList<FormRecord>();
+
+		householdFormList.add(new FormRecord("Household", "Create Household"));
 		individualFormList.add(new FormRecord("Individual", "Create Individual"));
-		ArrayList<FormRecord> emptyBottomList = new ArrayList<FormRecord>();
-		emptyBottomList.add(new FormRecord("Testform", "Create Test Form"));
+		individualFormList.add(new FormRecord("Testform", "Create Test Form"));
+		// bottomFormList.add(new FormRecord("Testform", "Create Test Form"));
 
 		formsForStates.put(REGION_STATE, regionFormList);
+		formsForStates.put(PROVINCE_STATE, provinceFormList);
+		formsForStates.put(DISTRICT_STATE, districtFormList);
 		formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
 		formsForStates.put(SECTOR_STATE, sectorFormList);
 		formsForStates.put(HOUSEHOLD_STATE, householdFormList);
 		formsForStates.put(INDIVIDUAL_STATE, individualFormList);
-		formsForStates.put(BOTTOM_STATE, emptyBottomList);
+		formsForStates.put(BOTTOM_STATE, bottomFormList);
 	}
 
 	private static final String SELECTION_FRAGMENT_TAG = "hierarchySelectionFragment";
@@ -86,6 +102,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	private static final String FORM_FRAGMENT_TAG = "hierarchyFormFragment";
 
 	private StateMachine stateMachine;
+	private FormHelper formHelper;
 	private Map<String, QueryResult> hierarchyPath;
 	private List<QueryResult> currentResults;
 	private HierarchySelectionFragment selectionFragment;
@@ -101,6 +118,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		for (String state : stateSequence) {
 			stateMachine.registerListener(state, new HierarchyStateListener());
 		}
+
+		formHelper = new FormHelper(getContentResolver());
 
 		if (null == savedInstanceState) {
 			// create fresh activity
@@ -226,7 +245,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	}
 
 	// Required to update currentResults for targetState and transition to the
-	// target state.
+	// targetState.
 	@Override
 	public void jumpUp(String targetState) {
 		int targetIndex = stateSequence.indexOf(targetState);
@@ -304,9 +323,34 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	}
 
 	@Override
-	public void launchForm(String formName) {
-		FormLauncher fl = new FormLauncher(formName, this, getFormFieldNameMap());
-		fl.launchForm();
+	public void launchForm(FormRecord form) {
+
+		formHelper.newFormInstance(form, getFormFieldNameMap());
+		Intent intent = formHelper.buildEditFormInstanceIntent();
+		startActivityForResult(intent, EDIT_FORM_INTENT);
+
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == EDIT_FORM_INTENT) {
+
+			if (resultCode == RESULT_OK) {
+				if (formHelper.checkFormInstanceStatus()) {
+					Map<String, String> formInstanceData = formHelper.getFormInstanceData();
+					FormRecord whichForm = formHelper.getForm();
+					formInstanceData.isEmpty();
+					
+				} else {
+					// TODO: otherstuff
+				}
+
+			}
+			if (resultCode == RESULT_CANCELED) {
+				// Write your code if there's no result
+			}
+		}
 	}
 
 	public Map<String, String> getFormFieldNameMap() {
@@ -319,16 +363,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			}
 		}
 
-		
 		FieldWorker fieldWorker = (FieldWorker) getIntent().getExtras().get(
 				FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
 		formFieldNames.put(FIELDWORKER_ID_FORM_FIELDNAME, fieldWorker.getExtId());
 
-		
-		
 		Calendar c = Calendar.getInstance();
 		formFieldNames.put(COLLECTION_DT_FORM_FIELDNAME, c.getTime().toString());
-		
+
 		return formFieldNames;
 	}
 }

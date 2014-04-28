@@ -24,11 +24,11 @@ public class MembershipUpdate implements Updatable {
              }
              
              ContentValues cv = new ContentValues();
-             cv.put(OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID, membership.getIndExtId());
-             cv.put(OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID, membership.getGroupextId());
+             cv.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, membership.getIndExtId());
+             cv.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID, membership.getGroupextId());
 
 
-             resolver.insert(OpenHDS.IndividualGroups.CONTENT_ID_URI_BASE, cv);
+             resolver.insert(OpenHDS.Memberships.CONTENT_ID_URI_BASE, cv);
          } catch (FileNotFoundException e) {
              Log.e(VisitUpdate.class.getName(), "Could not read Membership XML file");
          }

@@ -117,14 +117,14 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME);
         individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER);
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE);
+        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID);
         // special case to display individuals first name and last name on the
         // value fragment
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FULLNAME,
+        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHERNAMES,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME + " || ' ' || "
                         + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME + " as "
-                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FULLNAME);
+                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHERNAMES);
 
         locationsProjectionMap = new HashMap<String, String>();
         locationsProjectionMap.put(OpenHDS.Locations._ID, OpenHDS.Locations._ID);
@@ -172,44 +172,44 @@ public class OpenHDSProvider extends ContentProvider {
 
         fieldworkersProjectionMap = new HashMap<String, String>();
         fieldworkersProjectionMap.put(OpenHDS.FieldWorkers._ID, OpenHDS.FieldWorkers._ID);
-        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID,
-                OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID);
-        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_FIRSTNAME,
-                OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_FIRSTNAME);
-        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_LASTNAME,
-                OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_LASTNAME);
-        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_PASSWORD,
-                OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_PASSWORD);
+        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID,
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID);
+        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME,
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME);
+        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME,
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME);
+        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD,
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD);
 
         socialgroupsProjectionMap = new HashMap<String, String>();
         socialgroupsProjectionMap.put(OpenHDS.SocialGroups._ID, OpenHDS.SocialGroups._ID);
-        socialgroupsProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID,
-                OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID);
-        socialgroupsProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD,
-                OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD);
-        socialgroupsProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME,
-                OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME);
+        socialgroupsProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID,
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID);
+        socialgroupsProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD,
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD);
+        socialgroupsProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME,
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME);
 
         // A duplicate of the default social group projection map but is used in
         // join query. The join query requires the
         // columns be explicit with the table alias
         socialgroupsJoinProjectionMap = new HashMap<String, String>();
         socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups._ID, "s." + OpenHDS.SocialGroups._ID);
-        socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID, "s."
-                + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID);
-        socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD, "s."
-                + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD);
-        socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME, "s."
-                + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME);
-        socialgroupsJoinProjectionMap.put(OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID, "x."
-                + OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID);
+        socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, "s."
+                + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID);
+        socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD, "s."
+                + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD);
+        socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, "s."
+                + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME);
+        socialgroupsJoinProjectionMap.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, "x."
+                + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID);
 
         individualgroupsProjectionMap = new HashMap<String, String>();
-        individualgroupsProjectionMap.put(OpenHDS.IndividualGroups._ID, OpenHDS.IndividualGroups._ID);
-        individualgroupsProjectionMap.put(OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID,
-                OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID);
-        individualgroupsProjectionMap.put(OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID,
-                OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID);
+        individualgroupsProjectionMap.put(OpenHDS.Memberships._ID, OpenHDS.Memberships._ID);
+        individualgroupsProjectionMap.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
+                OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID);
+        individualgroupsProjectionMap.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
+                OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID);
     }
 
     static class DatabaseHelper extends SQLiteOpenHelper {
@@ -228,10 +228,10 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_RESIDENCE_END_TYPE + " TEXT);" 
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID + " TEXT,"
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE + " TEXT);" 
                     + " CREATE INDEX IDX_RESIDENCY ON " +  OpenHDS.Individuals.TABLE_NAME
-                    + "(" +  OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE + ")");
+                    + "(" +  OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID + ")");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " (" + OpenHDS.Locations._ID
                     + " INTEGER PRIMARY KEY," + OpenHDS.Locations.COLUMN_LOCATION_EXTID + " TEXT NOT NULL,"
@@ -262,26 +262,26 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE + " TEXT NOT NULL);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.FieldWorkers.TABLE_NAME + " (" + OpenHDS.FieldWorkers._ID
-                    + " INTEGER PRIMARY KEY," + OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID + " TEXT NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_FIRSTNAME + " TEXT NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_LASTNAME + " TEXT NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_PASSWORD + " TEXT NOT NULL);");
+                    + " INTEGER PRIMARY KEY," + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID + " TEXT NOT NULL,"
+                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME + " TEXT NOT NULL,"
+                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME + " TEXT NOT NULL,"
+                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD + " TEXT NOT NULL);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.SocialGroups.TABLE_NAME + " (" + OpenHDS.SocialGroups._ID
-                    + " INTEGER PRIMARY KEY," + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID + " TEXT NOT NULL,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD + " TEXT NOT NULL,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME + " TEXT NOT NULL);");
+                    + " INTEGER PRIMARY KEY," + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " TEXT NOT NULL,"
+                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD + " TEXT NOT NULL,"
+                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME + " TEXT NOT NULL);");
 
-            db.execSQL("CREATE TABLE " + OpenHDS.IndividualGroups.TABLE_NAME + " (" + OpenHDS.IndividualGroups._ID
-                    + " INTEGER PRIMARY KEY," + OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID + " TEXT NOT NULL,"
-                    + OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID + " TEXT NOT NULL);");
+            db.execSQL("CREATE TABLE " + OpenHDS.Memberships.TABLE_NAME + " (" + OpenHDS.Memberships._ID
+                    + " INTEGER PRIMARY KEY," + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID + " TEXT NOT NULL,"
+                    + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID + " TEXT NOT NULL);");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
                     + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.IndividualGroups.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Memberships.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.SocialGroups.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.FieldWorkers.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Relationships.TABLE_NAME);
@@ -354,9 +354,9 @@ public class OpenHDSProvider extends ContentProvider {
                     + uri.getPathSegments().get(OpenHDS.Individuals.NOTE_ID_PATH_POSITION));
             break;
         case INDIVIDUAL_SG:
-            qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join " + OpenHDS.IndividualGroups.TABLE_NAME
-                    + " x on s." + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID + " = x."
-                    + OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID);
+            qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join " + OpenHDS.Memberships.TABLE_NAME
+                    + " x on s." + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " = x."
+                    + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID);
             qb.setProjectionMap(socialgroupsJoinProjectionMap);
             break;
         case LOCATIONS:
@@ -428,11 +428,11 @@ public class OpenHDSProvider extends ContentProvider {
                     uri.getPathSegments().get(OpenHDS.SocialGroups.LOCATION_PATH_POSITION));
             break;
         case SOCIALGROUPS_BY_INDIVIDUAL:
-            qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join " + OpenHDS.IndividualGroups.TABLE_NAME
-                    + " x on s." + OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID + " = x."
-                    + OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID);
+            qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join " + OpenHDS.Memberships.TABLE_NAME
+                    + " x on s." + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " = x."
+                    + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID);
             qb.setProjectionMap(socialgroupsJoinProjectionMap);
-            qb.appendWhere("x." + OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID + " = '"
+            qb.appendWhere("x." + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID + " = '"
                     + uri.getPathSegments().get(OpenHDS.SocialGroups.LOCATION_PATH_POSITION) + "'");
             sortOrder = "s." + OpenHDS.SocialGroups._ID;
             break;
@@ -443,14 +443,14 @@ public class OpenHDSProvider extends ContentProvider {
                     + uri.getPathSegments().get(OpenHDS.SocialGroups.ID_PATH_POSITION));
             break;
         case INDIVIDUALGROUPS:
-            qb.setTables(OpenHDS.IndividualGroups.TABLE_NAME);
+            qb.setTables(OpenHDS.Memberships.TABLE_NAME);
             qb.setProjectionMap(individualgroupsProjectionMap);
             break;
         case INDIVIDUALGROUP_ID:
-            qb.setTables(OpenHDS.IndividualGroups.TABLE_NAME);
+            qb.setTables(OpenHDS.Memberships.TABLE_NAME);
             qb.setProjectionMap(individualgroupsProjectionMap);
-            qb.appendWhere(OpenHDS.IndividualGroups._ID + "="
-                    + uri.getPathSegments().get(OpenHDS.IndividualGroups.ID_PATH_POSITION));
+            qb.appendWhere(OpenHDS.Memberships._ID + "="
+                    + uri.getPathSegments().get(OpenHDS.Memberships.ID_PATH_POSITION));
             break;
         default:
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -483,15 +483,15 @@ public class OpenHDSProvider extends ContentProvider {
         // get all individuals at location
         Cursor c = db.query(OpenHDS.Individuals.TABLE_NAME,
                 new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID },
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE + " = ?", new String[] { string }, null, null, null);
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID + " = ?", new String[] { string }, null, null, null);
 
         // iterate over all individuals and collect their memberships
         // this results in a subset of households at the location
         Set<String> socialGroupExtIds = new HashSet<String>();
         while (c.moveToNext()) {
-            Cursor c2 = db.query(OpenHDS.IndividualGroups.TABLE_NAME,
-                    new String[] { OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID },
-                    OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID + " = ?", new String[] { c.getString(0) }, null,
+            Cursor c2 = db.query(OpenHDS.Memberships.TABLE_NAME,
+                    new String[] { OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID },
+                    OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID + " = ?", new String[] { c.getString(0) }, null,
                     null, null);
             while (c2.moveToNext()) {
                 socialGroupExtIds.add(c2.getString(0));
@@ -510,7 +510,7 @@ public class OpenHDSProvider extends ContentProvider {
             placeholders.append(",?");
         }
 
-        qb.appendWhere(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID + " IN (" + placeholders.toString() + ")");
+        qb.appendWhere(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " IN (" + placeholders.toString() + ")");
         return socialGroupExtIds.toArray(new String[] {});
     }
 
@@ -552,9 +552,9 @@ public class OpenHDSProvider extends ContentProvider {
         case SOCIALGROUP_ID:
             return OpenHDS.SocialGroups.CONTENT_ITEM_TYPE;
         case INDIVIDUALGROUPS:
-            return OpenHDS.IndividualGroups.CONTENT_TYPE;
+            return OpenHDS.Memberships.CONTENT_TYPE;
         case INDIVIDUALGROUP_ID:
-            return OpenHDS.IndividualGroups.CONTENT_ITEM_TYPE;
+            return OpenHDS.Memberships.CONTENT_ITEM_TYPE;
         default:
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
@@ -599,8 +599,8 @@ public class OpenHDSProvider extends ContentProvider {
             contentUriBase = OpenHDS.SocialGroups.CONTENT_ID_URI_BASE;
             break;
         case INDIVIDUALGROUPS:
-            table = OpenHDS.IndividualGroups.TABLE_NAME;
-            contentUriBase = OpenHDS.IndividualGroups.CONTENT_ID_URI_BASE;
+            table = OpenHDS.Memberships.TABLE_NAME;
+            contentUriBase = OpenHDS.Memberships.CONTENT_ID_URI_BASE;
             break;
         default:
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -692,11 +692,11 @@ public class OpenHDSProvider extends ContentProvider {
             count = db.delete(OpenHDS.SocialGroups.TABLE_NAME, finalWhere, whereArgs);
             break;
         case INDIVIDUALGROUPS:
-            count = db.delete(OpenHDS.IndividualGroups.TABLE_NAME, where, whereArgs);
+            count = db.delete(OpenHDS.Memberships.TABLE_NAME, where, whereArgs);
             break;
         case INDIVIDUALGROUP_ID:
-            finalWhere = buildFinalWhere(uri, OpenHDS.IndividualGroups.ID_PATH_POSITION, where);
-            count = db.delete(OpenHDS.IndividualGroups.TABLE_NAME, finalWhere, whereArgs);
+            finalWhere = buildFinalWhere(uri, OpenHDS.Memberships.ID_PATH_POSITION, where);
+            count = db.delete(OpenHDS.Memberships.TABLE_NAME, finalWhere, whereArgs);
             break;
         default:
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -781,11 +781,11 @@ public class OpenHDSProvider extends ContentProvider {
             count = db.update(OpenHDS.SocialGroups.TABLE_NAME, values, finalWhere, whereArgs);
             break;
         case INDIVIDUALGROUPS:
-            count = db.update(OpenHDS.IndividualGroups.TABLE_NAME, values, where, whereArgs);
+            count = db.update(OpenHDS.Memberships.TABLE_NAME, values, where, whereArgs);
             break;
         case INDIVIDUALGROUP_ID:
-            finalWhere = buildFinalWhere(uri, OpenHDS.IndividualGroups.ID_PATH_POSITION, where);
-            count = db.update(OpenHDS.IndividualGroups.TABLE_NAME, values, finalWhere, whereArgs);
+            finalWhere = buildFinalWhere(uri, OpenHDS.Memberships.ID_PATH_POSITION, where);
+            count = db.update(OpenHDS.Memberships.TABLE_NAME, values, finalWhere, whereArgs);
             break;
         default:
             throw new IllegalArgumentException("Unknown URI " + uri);

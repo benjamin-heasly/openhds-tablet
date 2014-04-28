@@ -237,7 +237,7 @@ public class ValueLocFragment extends ListFragment implements LoaderCallbacks<Cu
         StringBuilder builder = new StringBuilder();
 
         if (!TextUtils.isEmpty(arg1.getString("location"))) {
-            builder.append(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE + " = ?");
+            builder.append(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID + " = ?");
         }
         if (!TextUtils.isEmpty(arg1.getString("firstName"))) {
             if (builder.length() > 0)

@@ -296,9 +296,9 @@ public class LocationVisit implements Serializable {
         String socialGroupPrefix = hierarchy4.getExtId() + location.getExtId().substring(3, 9);
 
         Cursor cursor = resolver.query(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE,
-                new String[] { OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID },
-                OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID + " LIKE ?", new String[] { socialGroupPrefix + "%" },
-                OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID + " DESC");
+                new String[] { OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID },
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " LIKE ?", new String[] { socialGroupPrefix + "%" },
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " DESC");
 
         if (cursor.moveToNext()) {
  //           int lastIncrement = Integer.parseInt(cursor.getString(0).substring(9, 11));

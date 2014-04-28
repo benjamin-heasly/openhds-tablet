@@ -1,13 +1,13 @@
 package org.openhds.mobile.model;
 
-import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -20,41 +20,86 @@ import org.jdom2.output.XMLOutputter;
 import org.openhds.mobile.FormsProviderAPI;
 import org.openhds.mobile.InstanceProviderAPI;
 
-import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 
-public class FormLauncher {
+public class FormHelper {
 
 	Uri contentUri;
-	Activity activity;
+	ContentResolver resolver;
 	Map<String, String> formFieldNames;
+	FormRecord form;
 
-	public FormLauncher(String formName, Activity activity, Map<String, String> formFieldNames) {
+	String finalizedFormFilePath;
 
-		this.formFieldNames = formFieldNames;
-		this.activity = activity;
-		contentUri = makeEditableFormCopy(formName);
-		
+	public FormHelper(ContentResolver resolver) {
+		this.resolver = resolver;
+	}
+	
+	public FormRecord getForm() {
+		return form;
 	}
 
-	public Intent launchForm() {
-
+	public Intent buildEditFormInstanceIntent() {
 		Intent intent = new Intent(Intent.ACTION_EDIT, contentUri);
-		activity.startActivityForResult(intent, 0);
 		return intent;
 	}
 
-	private Uri makeEditableFormCopy(String name) {
+	public boolean checkFormInstanceStatus() {
+		Cursor cursor = resolver.query(contentUri, new String[] { InstanceProviderAPI.InstanceColumns.STATUS,
+				InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH },
+				InstanceProviderAPI.InstanceColumns.STATUS + "=?",
+				new String[] { InstanceProviderAPI.STATUS_COMPLETE }, null);
+		if (cursor.moveToNext()) {
+			finalizedFormFilePath = cursor.getString(cursor
+					.getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+			cursor.close();
+			return true;
+		} else {
+			cursor.close();
+			return false;
+		}
+	}
+
+	public Map<String, String> getFormInstanceData() {
+
+		if (null == finalizedFormFilePath) {
+			return null;
+		}
+		Map<String, String> finalizedFormData = new HashMap<String, String>();
+		SAXBuilder builder = new SAXBuilder();
+		try {
+
+			Document finalizedDoc = builder.build(new File(finalizedFormFilePath));
+			Element root = finalizedDoc.getRootElement();
+			Iterator<Element> itr = root.getDescendants(new ElementFilter());
+
+			while (itr.hasNext()) {
+				Element child = itr.next();
+				finalizedFormData.put(child.getName(), child.getText());
+			}
+
+		} catch (Exception e) {
+			return null;
+		}
+
+		return finalizedFormData;
+	}
+
+	public boolean newFormInstance(FormRecord form, Map<String, String> formFieldNames) {
 		// find a blank form with given name
-		Cursor cursor = activity.getContentResolver().query(
-				FormsProviderAPI.FormsColumns.CONTENT_URI,
-				new String[] { FormsProviderAPI.FormsColumns.JR_FORM_ID,
-						FormsProviderAPI.FormsColumns.FORM_FILE_PATH },
-				FormsProviderAPI.FormsColumns.JR_FORM_ID + " like ?", new String[] { name + "%" }, null);
+
+		this.form = form;
+		this.formFieldNames = formFieldNames;
+		finalizedFormFilePath = null;
+
+		Cursor cursor = resolver.query(FormsProviderAPI.FormsColumns.CONTENT_URI, new String[] {
+				FormsProviderAPI.FormsColumns.JR_FORM_ID, FormsProviderAPI.FormsColumns.FORM_FILE_PATH },
+				FormsProviderAPI.FormsColumns.JR_FORM_ID + " like ?", new String[] { form.getFormName() + "%" }, null);
 
 		if (cursor.moveToFirst()) {
 			String jrFormId = cursor.getString(0);
@@ -73,47 +118,45 @@ public class FormLauncher {
 
 				Document filledForm = new Document();
 
-				if (root.getDescendants(filter).hasNext()) {
+				Iterator<Element> itr = root.getDescendants(filter);
 
-					Element filledFormRoot = root.getDescendants(filter).next();
+				if (itr.hasNext()) {
+
+					Element filledFormRoot = itr.next();
 					filledFormRoot.detach();
 					filledForm.setRootElement(filledFormRoot);
+					Iterator<Element> dataDecendantsItr = filledFormRoot.getDescendants(new ElementFilter());
 
-					List<Element> dataChildren;
+					while (dataDecendantsItr.hasNext()) {
 
-					dataChildren = filledFormRoot.getChildren();
+						Element child = dataDecendantsItr.next();
 
-					for (Element child : dataChildren) {
-	
 						if (formFieldNames.containsKey(child.getName())
 								&& null != formFieldNames.get(child.getName())) {
-							
+
 							child.setText(formFieldNames.get(child.getName()));
-							
-						}else{
+
+						} else {
 							child.setText("");
 						}
-	
 					}
 				}
 
-				File editableFormFile = getExternalStorageXmlFile(jrFormId, name, ".xml");
+				File editableFormFile = getExternalStorageXmlFile(jrFormId, form.getFormName(), ".xml");
 				FileOutputStream fos = new FileOutputStream(editableFormFile);
 				XMLOutputter xmlOutput = new XMLOutputter();
 				xmlOutput.setFormat(Format.getPrettyFormat());
 				xmlOutput.output(filledForm, fos);
 				fos.close();
 
-				return shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId);
-
+				contentUri = shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId);
 
 			} catch (Exception e) {
-				showLongToast(activity, e.getMessage() + " " + e.getCause());
-				return null;
+				return false;
 			}
 
 		}
-		return null;
+		return false;
 	}
 
 	private Uri shareOdkFormInstance(File targetFile, String displayName, String formId) {
@@ -121,12 +164,11 @@ public class FormLauncher {
 		values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
 		values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
 		values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
-		return activity.getContentResolver().insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
-
+		return resolver.insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
 	}
 
 	private File getExternalStorageXmlFile(String subDir, String baseName, String extension) {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss", Locale.getDefault());
 		df.setTimeZone(TimeZone.getDefault());
 		String date = df.format(new Date());
 		String externalFileName = baseName + date + extension;

@@ -108,12 +108,12 @@ public class SyncFieldworkersTask extends HttpTask<Void, Integer> {
 
 	public boolean addFieldWorker(FieldWorker fwu) {
 		ContentValues cv = new ContentValues();
-		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID, fwu.getExtId());
-		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_FIRSTNAME,
+		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID, fwu.getExtId());
+		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME,
 				fwu.getFirstName());
-		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_LASTNAME,
+		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME,
 				fwu.getLastName());
-		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_PASSWORD,
+		cv.put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD,
 				fwu.getPassword());
 
 		try {
@@ -126,7 +126,7 @@ public class SyncFieldworkersTask extends HttpTask<Void, Integer> {
 
 	public int deleteFieldWorker(FieldWorker fwu) {
 		return contentResolver.delete(OpenHDS.FieldWorkers.CONTENT_URI,
-				OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID + " = ?",
+				OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID + " = ?",
 				new String[] { fwu.getExtId() });
 	}
 

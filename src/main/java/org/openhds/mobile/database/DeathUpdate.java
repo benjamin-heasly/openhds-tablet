@@ -27,7 +27,7 @@ public class DeathUpdate implements Updatable {
             }
 
             ContentValues cv = new ContentValues();
-            cv.put(OpenHDS.Individuals.COLUMN_RESIDENCE_END_TYPE, "DTH");
+            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, "DTH");
             Cursor cursor = resolver.query(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
                     new String[] { OpenHDS.Individuals._ID }, OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + " = ?",
                     new String[] { individual.getExtId() }, null);

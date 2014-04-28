@@ -1,9 +1,12 @@
-package org.openhds.mobile.database.queries;
+package org.openhds.mobile.projectdata;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openhds.mobile.activity.CensusActivity;
+import org.openhds.mobile.database.queries.Converter;
+import org.openhds.mobile.database.queries.Queries;
+import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
@@ -14,6 +17,8 @@ import android.database.Cursor;
 public class QueryHelper {
 
 	public static final String REGION_HIERARCHY_LEVEL_NAME = "Region";
+	public static final String PROVINCE_HIERARCHY_LEVEL_NAME = "Province";
+	public static final String DISTRICT_HIERARCHY_LEVEL_NAME = "District";
 	public static final String MAP_AREA_HIERARCHY_LEVEL_NAME = "MapArea";
 	public static final String SECTOR_HIERARCHY_LEVEL_NAME = "Sector";
 
@@ -21,6 +26,12 @@ public class QueryHelper {
 
 		if (state.equals(CensusActivity.REGION_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, REGION_HIERARCHY_LEVEL_NAME);
+			return getHierarchyQueryResults(cursor, state);
+		} else if (state.equals(CensusActivity.PROVINCE_STATE)) {
+			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, PROVINCE_HIERARCHY_LEVEL_NAME);
+			return getHierarchyQueryResults(cursor, state);
+		} else if (state.equals(CensusActivity.DISTRICT_STATE)) {
+			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, DISTRICT_HIERARCHY_LEVEL_NAME);
 			return getHierarchyQueryResults(cursor, state);
 		} else if (state.equals(CensusActivity.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, MAP_AREA_HIERARCHY_LEVEL_NAME);
@@ -42,7 +53,8 @@ public class QueryHelper {
 			String childState) {
 		String state = qr.getState();
 
-		if (state.equals(CensusActivity.REGION_STATE) || state.equals(CensusActivity.MAP_AREA_STATE)) {
+		if (state.equals(CensusActivity.REGION_STATE) || state.equals(CensusActivity.PROVINCE_STATE)
+				|| state.equals(CensusActivity.DISTRICT_STATE) || state.equals(CensusActivity.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchysByParent(contentResolver, qr.getExtId());
 			return getHierarchyQueryResults(cursor, childState);
 		} else if (state.equals(CensusActivity.SECTOR_STATE)) {

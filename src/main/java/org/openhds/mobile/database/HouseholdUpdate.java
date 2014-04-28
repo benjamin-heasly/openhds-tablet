@@ -23,18 +23,18 @@ public class HouseholdUpdate implements Updatable {
             
             // creat the social group
             ContentValues cv = new ContentValues();
-            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID, sg.getExtId());
-            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD, sg.getGroupHead());
-            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME, sg.getGroupName());
+            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, sg.getExtId());
+            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD, sg.getGroupHead());
+            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, sg.getGroupName());
             
             resolver.insert(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, cv);
             
             // create the membership for the head to the social group
             cv.clear();
-            cv.put(OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID, sg.getGroupHead());
-            cv.put(OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID, sg.getExtId());
+            cv.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, sg.getGroupHead());
+            cv.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID, sg.getExtId());
             
-            resolver.insert(OpenHDS.IndividualGroups.CONTENT_ID_URI_BASE, cv);
+            resolver.insert(OpenHDS.Memberships.CONTENT_ID_URI_BASE, cv);
         } catch (FileNotFoundException e) {
             Log.e(HouseholdUpdate.class.getName(), "Could not find Household XML file");
         }

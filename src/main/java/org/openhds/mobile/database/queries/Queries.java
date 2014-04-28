@@ -51,7 +51,7 @@ public class Queries {
 
 	public static Cursor getIndividualsByResidency(ContentResolver resolver, String extId) {
 		return getCursor(resolver, OpenHDS.Individuals.CONTENT_ID_URI_BASE,
-				OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE, extId);
+				OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID, extId);
 	}
 
 	private static boolean isFound(Cursor cursor) {
@@ -101,31 +101,31 @@ public class Queries {
 
 	public static boolean hasFieldWorker(ContentResolver resolver, String extId, String password) {
 		Cursor cursor = resolver.query(OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE,
-				new String[] { OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID },
-				OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID + " = ? AND "
-						+ OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_PASSWORD + " = ?", new String[] { extId,
+				new String[] { OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID },
+				OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID + " = ? AND "
+						+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD + " = ?", new String[] { extId,
 						password }, null);
 		return isFound(cursor);
 	}
 
 	public static Cursor getFieldWorkByExtId(ContentResolver resolver, String extId) {
 		return getCursor(resolver, OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE,
-				OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID, extId);
+				OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID, extId);
 	}
 
 	public static boolean hasSocialGroupByExtId(ContentResolver resolver, String temp) {
 		return queryForSingleRow(resolver, OpenHDS.SocialGroups.CONTENT_ID_URI_BASE,
-				OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID, temp);
+				OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, temp);
 	}
 
 	public static Cursor getSocialGroupByName(ContentResolver resolver, String groupName) {
 		return getCursor(resolver, OpenHDS.SocialGroups.CONTENT_ID_URI_BASE,
-				OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME, groupName);
+				OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, groupName);
 	}
 
 	public static Cursor getSocialGroupsByIndividualExtId(ContentResolver resolver, String extId) {
 		Uri uri = OpenHDS.Individuals.CONTENT_SG_URI_BASE.buildUpon().appendPath(extId).build();
-		return resolver.query(uri, null, "x." + OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID + " = ?",
+		return resolver.query(uri, null, "x." + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID + " = ?",
 				new String[] { extId }, "s." + OpenHDS.SocialGroups._ID);
 	}
 

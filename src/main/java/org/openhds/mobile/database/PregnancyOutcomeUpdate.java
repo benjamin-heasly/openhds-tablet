@@ -29,7 +29,7 @@ public class PregnancyOutcomeUpdate implements Updatable {
 
             // figure out the residency to stick the child
             Cursor mother = resolver.query(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
-                    new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE },
+                    new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID },
                     OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + " = ?",
                     new String[] { pregOut.getMother().getExtId() }, null);
             if (!mother.moveToNext()) {
@@ -52,8 +52,8 @@ public class PregnancyOutcomeUpdate implements Updatable {
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER, child.getGender());
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME, child.getLastName());
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER, child.getMother());
-                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE, residency);
-                cv.put(OpenHDS.Individuals.COLUMN_RESIDENCE_END_TYPE, "NA");
+                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID, residency);
+                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, "NA");
 
                 
                 resolver.insert(OpenHDS.Individuals.CONTENT_ID_URI_BASE, cv);
@@ -65,10 +65,10 @@ public class PregnancyOutcomeUpdate implements Updatable {
                 }
                 SocialGroup sg = groups.get(0);
                 cv.clear();
-                cv.put(OpenHDS.IndividualGroups.COLUMN_INDIVIDUALUUID, child.getExtId());
-                cv.put(OpenHDS.IndividualGroups.COLUMN_SOCIALGROUPUUID, sg.getExtId());
+                cv.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, child.getExtId());
+                cv.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID, sg.getExtId());
                 
-                resolver.insert(OpenHDS.IndividualGroups.CONTENT_ID_URI_BASE, cv);
+                resolver.insert(OpenHDS.Memberships.CONTENT_ID_URI_BASE, cv);
             }
 
         } catch (FileNotFoundException e) {

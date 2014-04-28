@@ -32,7 +32,7 @@ public class Converter {
     }
 
     private static void populateIndividual(Cursor cursor, Individual individual) {
-        individual.setCurrentResidence(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE)));
+        individual.setCurrentResidence(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID)));
         individual.setDob(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB)));
         individual.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID)));
         individual.setFather(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER)));
@@ -93,10 +93,10 @@ public class Converter {
         FieldWorker fw = new FieldWorker();
 
         if (cursor.moveToNext()) {
-            fw.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_EXTID)));
-            fw.setFirstName(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_FIRSTNAME)));
-            fw.setLastName(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_LASTNAME)));
-            fw.setPassword(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELDWORKER_PASSWORD)));
+            fw.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID)));
+            fw.setFirstName(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME)));
+            fw.setLastName(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME)));
+            fw.setPassword(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD)));
         }
 
         cursor.close();
@@ -117,9 +117,9 @@ public class Converter {
     }
 
     private static void populateSocialGroup(Cursor cursor, SocialGroup sg) {
-        sg.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_EXTID)));
-        sg.setGroupHead(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPHEAD)));
-        sg.setGroupName(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIALGROUP_GROUPNAME)));
+        sg.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID)));
+        sg.setGroupHead(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD)));
+        sg.setGroupName(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME)));
     }
 
     public static List<SocialGroup> toSocialGroupList(Cursor cursor) {
