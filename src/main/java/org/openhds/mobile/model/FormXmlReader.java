@@ -111,7 +111,7 @@ public class FormXmlReader {
             
             Individual individual = new Individual();
             individual.setCurrentResidence(xpath.evaluate("/data/locationId/text()", doc));
-            individual.setDobIn(xpath.evaluate("/data/individualInfo/dateOfBirth/text()", doc));
+            individual.setDob(xpath.evaluate("/data/individualInfo/dateOfBirth/text()", doc));
             individual.setExtId(xpath.evaluate("/data/individualInfo/individualId/text()", doc));
             individual.setFather(xpath.evaluate("/data/individualInfo/fatherId/text()", doc));
             individual.setFirstName(xpath.evaluate("/data/individualInfo/firstName/text()", doc));
@@ -155,7 +155,7 @@ public class FormXmlReader {
                 } 
                 
                 Individual individual = new Individual();
-                individual.setDobIn(pregOutcome.getRecordedDate());
+                individual.setDob(pregOutcome.getRecordedDate());
                 individual.setExtId(xpath.evaluate("./childId/text()", node));
                 individual.setFather(father.getExtId());
                 individual.setMother(mother.getExtId());
@@ -164,7 +164,7 @@ public class FormXmlReader {
                 individual.setLastName(xpath.evaluate(".//lastName/text()", node));
                 SocialGroup group = new SocialGroup();
                 group.setExtId(xpath.evaluate("./socialGroupId/text()", node));
-                individual.setSocialGroups(Arrays.asList(group));
+                //individual.setSocialGroups(Arrays.asList(group));
                 
                 pregOutcome.addChild(individual);
             }

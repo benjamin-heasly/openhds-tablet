@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.database.IndividualAdapter;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
@@ -18,12 +19,15 @@ import org.openhds.mobile.fragment.HierarchyValueFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormRecord;
+import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
-import org.openhds.mobile.projectdata.QueryHelper;
+import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.projectdata.ProjectQueryHelper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 public class CensusActivity extends Activity implements HierarchyNavigator {
@@ -38,17 +42,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	public static final String HOUSEHOLD_STATE = "household";
 	public static final String INDIVIDUAL_STATE = "individual";
 	public static final String BOTTOM_STATE = "bottom";
-	
-	public static final String EXT_ID_SUFFIX = "ExtId";
-	public static final String REGION_ID_FORM_FIELDNAME = REGION_STATE + EXT_ID_SUFFIX;
-	public static final String PROVINCE_ID_FORM_FIELDNAME = PROVINCE_STATE + EXT_ID_SUFFIX;
-	public static final String DISTRICT_ID_FORM_FIELDNAME = DISTRICT_STATE + EXT_ID_SUFFIX;
-	public static final String MAP_AREA_ID_FORM_FIELDNAME = MAP_AREA_STATE + EXT_ID_SUFFIX;
-	public static final String SECTOR_ID_FORM_FIELDNAME = SECTOR_STATE + EXT_ID_SUFFIX;
-	public static final String HOUSEHOLD_ID_FORM_FIELDNAME = HOUSEHOLD_STATE + EXT_ID_SUFFIX;
-	public static final String INDIVIDUAL_ID_FORM_FIELDNAME = HOUSEHOLD_STATE + EXT_ID_SUFFIX;
-	public static final String FIELDWORKER_ID_FORM_FIELDNAME = "fieldworker" + EXT_ID_SUFFIX;
-	public static final String COLLECTION_DT_FORM_FIELDNAME = "collectionDateTime";
 
 	private static final List<String> stateSequence = new ArrayList<String>();
 	private static final Map<String, Integer> stateLabels = new HashMap<String, Integer>();
@@ -180,7 +173,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 	// attempt to re-fetch the selected data at the given state
 	private boolean restoreHierarchyPath(String state, String extId) {
-		currentResults = QueryHelper.getAll(getContentResolver(), state);
+		currentResults = ProjectQueryHelper.getAll(getContentResolver(), state);
 		for (QueryResult qr : currentResults) {
 			if (extId.equals(qr.getExtId())) {
 				hierarchyPath.put(state, qr);
@@ -205,11 +198,11 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		String state = stateSequence.get(stateIndex);
 		if (0 == stateIndex) {
 			selectionFragment.setButtonAllowed(state, true);
-			currentResults = QueryHelper.getAll(getContentResolver(), stateSequence.get(0));
+			currentResults = ProjectQueryHelper.getAll(getContentResolver(), stateSequence.get(0));
 		} else {
 			String previousState = stateSequence.get(stateIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = QueryHelper.getChildren(getContentResolver(), previousSelection, state);
+			currentResults = ProjectQueryHelper.getChildren(getContentResolver(), previousSelection, state);
 		}
 		stateMachine.transitionTo(state);
 
@@ -270,12 +263,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		// prepare to stepDown() from this target state
 		if (0 == targetIndex) {
 			// root of the hierarchy
-			currentResults = QueryHelper.getAll(getContentResolver(), stateSequence.get(0));
+			currentResults = ProjectQueryHelper.getAll(getContentResolver(), stateSequence.get(0));
 		} else {
 			// middle of the hierarchy
 			String previousState = stateSequence.get(targetIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = QueryHelper.getChildren(getContentResolver(), previousSelection, targetState);
+			currentResults = ProjectQueryHelper.getChildren(getContentResolver(), previousSelection,
+					targetState);
 		}
 		stateMachine.transitionTo(targetState);
 	}
@@ -294,7 +288,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		int currentIndex = stateSequence.indexOf(currentState);
 		if (currentIndex >= 0 && currentIndex < stateSequence.size() - 1) {
 			String nextState = stateSequence.get(currentIndex + 1);
-			currentResults = QueryHelper.getChildren(getContentResolver(), selected, nextState);
+			currentResults = ProjectQueryHelper.getChildren(getContentResolver(), selected, nextState);
 			hierarchyPath.put(currentState, selected);
 			stateMachine.transitionTo(nextState);
 		}
@@ -339,9 +333,10 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			if (resultCode == RESULT_OK) {
 				if (formHelper.checkFormInstanceStatus()) {
 					Map<String, String> formInstanceData = formHelper.getFormInstanceData();
-					FormRecord whichForm = formHelper.getForm();
-					formInstanceData.isEmpty();
-					
+					Individual individual = IndividualAdapter.create(formInstanceData);
+					Uri result = IndividualAdapter.insert(getContentResolver(), individual);
+					result.equals(result);
+
 				} else {
 					// TODO: otherstuff
 				}
@@ -359,16 +354,17 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 		for (String state : stateSequence) {
 			if (null != hierarchyPath.get(state)) {
-				formFieldNames.put(state + EXT_ID_SUFFIX, hierarchyPath.get(state).getExtId());
+				String fieldName = ProjectFormFields.General.getExtIdFieldNameFromState(state);
+				formFieldNames.put(fieldName, hierarchyPath.get(state).getExtId());
 			}
 		}
 
 		FieldWorker fieldWorker = (FieldWorker) getIntent().getExtras().get(
 				FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
-		formFieldNames.put(FIELDWORKER_ID_FORM_FIELDNAME, fieldWorker.getExtId());
+		formFieldNames.put(ProjectFormFields.General.COLLECTED_BY_FIELD_WORKER_EXTID, fieldWorker.getExtId());
 
 		Calendar c = Calendar.getInstance();
-		formFieldNames.put(COLLECTION_DT_FORM_FIELDNAME, c.getTime().toString());
+		formFieldNames.put(ProjectFormFields.General.COLLECTED_DATE_TIME, c.getTime().toString());
 
 		return formFieldNames;
 	}

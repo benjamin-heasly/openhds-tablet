@@ -59,14 +59,14 @@ public class PregnancyOutcomeUpdate implements Updatable {
                 resolver.insert(OpenHDS.Individuals.CONTENT_ID_URI_BASE, cv);
                 
                 // now the membership
-                List<SocialGroup> groups = child.getSocialGroups();
-                if (groups.size() == 0) {
-                    continue;
-                }
-                SocialGroup sg = groups.get(0);
-                cv.clear();
-                cv.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, child.getExtId());
-                cv.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID, sg.getExtId());
+//                List<SocialGroup> groups = child.getSocialGroups();
+//                if (groups.size() == 0) {
+//                    continue;
+//                }
+//                SocialGroup sg = groups.get(0);
+//                cv.clear();
+//                cv.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, child.getExtId());
+//                cv.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID, sg.getExtId());
                 
                 resolver.insert(OpenHDS.Memberships.CONTENT_ID_URI_BASE, cv);
             }

@@ -4,13 +4,49 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.R;
+import org.openhds.mobile.activity.CensusActivity;
 
-public class FormFieldMappings {
+public class ProjectFormFields {
+
+	public static final class General {
+		public static final String COLLECTED_DATE_TIME = "collectionDateTime";
+		public static final String COLLECTED_BY_FIELD_WORKER_EXTID = "fieldWorkerExtId";
+
+		public static final String REGION_STATE_FIELD_NAME = "regionExtId";
+		public static final String PROVINCE_STATE_FIELD_NAME = "provinceExtId";
+		public static final String DISTRICT_STATE_FIELD_NAME = "districtExtId";
+		public static final String MAP_AREA_STATE_FIELD_NAME = "mapAreaExtId";
+		public static final String SECTOR_STATE_FIELD_NAME = "sectorExtId";
+		public static final String HOUSEHOLD_STATE_FIELD_NAME = "householdExtId";
+		public static final String INDIVIDUAL_STATE_FIELD_NAME = "individualExtId";
+		public static final String BOTTOM_STATE_FIELD_NAME = "bottomExtId";
+
+		private static final Map<String, String> stateFieldNames = new HashMap<String, String>();
+
+		static {
+			stateFieldNames.put(CensusActivity.REGION_STATE, REGION_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.PROVINCE_STATE, PROVINCE_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.DISTRICT_STATE, DISTRICT_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.MAP_AREA_STATE, MAP_AREA_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.SECTOR_STATE, SECTOR_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.HOUSEHOLD_STATE, HOUSEHOLD_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.INDIVIDUAL_STATE, INDIVIDUAL_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.BOTTOM_STATE, BOTTOM_STATE_FIELD_NAME);
+		}
+
+		public static String getExtIdFieldNameFromState(String state) {
+			if (stateFieldNames.containsKey(state)) {
+				return stateFieldNames.get(state);
+			} else {
+				return null;
+			}
+		}
+	}
 
 	public static final class Individuals {
 
 		// for individuals table
-		public static final String COLLECTION_DATE_TIME = "collectionDateTime";
 		public static final String INDIVIDUAL_EXTID = "individualExtId";
 		public static final String FIRST_NAME = "individualFirstName";
 		public static final String LAST_NAME = "individualLastName";
@@ -23,8 +59,10 @@ public class FormFieldMappings {
 		public static final String OTHER_PHONE_NUMBER = "individualOtherPhoneNumber";
 		public static final String LANGUAGE_PREFERENCE = "individualLanguagePreference";
 		public static final String DIP = "individualDip";
+		public static final String MOTHER_EXTID = "individualMotherExtId";
+		public static final String FATHER_EXTID = "individualFatherExtId";
 
-		// for relationships and memberships table
+		// for relationships and memberships tables
 		public static final String RELATIONSHIP_TO_HEAD = "individualRelationshipToHeadOfHousehold";
 		public static final String HOUSEHOLD_EXTID = "householdExtId";
 		public static final String MEMBER_STATUS = "individualMemberStatus";
@@ -46,14 +84,13 @@ public class FormFieldMappings {
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
 					LANGUAGE_PREFERENCE);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID, DIP);
-
-			// TODO: these would be pre-filled and readable from the form
-			// public static final String COLUMN_INDIVIDUAL_MOTHER = "mother";
-			// public static final String COLUMN_INDIVIDUAL_FATHER = "father";
-
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER, MOTHER_EXTID);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER, FATHER_EXTID);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
+					HOUSEHOLD_EXTID);
 		}
 
-		public String getFieldNameFromColumn(String column) {
+		public static String getFieldNameFromColumn(String column) {
 			if (columnsToFieldNames.containsKey(column)) {
 				return columnsToFieldNames.get(column);
 			} else {

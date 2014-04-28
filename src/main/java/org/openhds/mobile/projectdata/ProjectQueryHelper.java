@@ -14,7 +14,7 @@ import org.openhds.mobile.model.LocationHierarchy;
 import android.content.ContentResolver;
 import android.database.Cursor;
 
-public class QueryHelper {
+public class ProjectQueryHelper {
 
 	public static final String REGION_HIERARCHY_LEVEL_NAME = "Region";
 	public static final String PROVINCE_HIERARCHY_LEVEL_NAME = "Province";
@@ -114,7 +114,7 @@ public class QueryHelper {
 		for (Individual individual : Converter.toIndividualList(cursor)) {
 			QueryResult qr = new QueryResult();
 			qr.setExtId(individual.getExtId());
-			qr.setName(individual.getFullName());
+			qr.setName(individual.getFirstName() + " " + individual.getLastName());
 			qr.setState(state);
 			results.add(qr);
 		}
