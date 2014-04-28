@@ -40,22 +40,19 @@ public class OpenHDS {
 		public static final String COLUMN_INDIVIDUAL_LAST_NAME = "lastName";
 		public static final String COLUMN_INDIVIDUAL_DOB = "dob";
 		public static final String COLUMN_INDIVIDUAL_GENDER = "gender";
-		public static final String COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID = "currentResidence";
-		
-		// currently unused for bioko project
 		public static final String COLUMN_INDIVIDUAL_MOTHER = "mother";
 		public static final String COLUMN_INDIVIDUAL_FATHER = "father";
+		public static final String COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID = "currentResidence";
 		public static final String COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE = "endType";
 
 		// extensions for bioko project
-		public static final String COLUMN_INDIVIDUAL_COLLECTION_DATETIME = "collectionDateTime";
+		public static final String COLUMN_INDIVIDUAL_OTHER_ID = "otherId";
 		public static final String COLUMN_INDIVIDUAL_OTHER_NAMES = "otherNames";
 		public static final String COLUMN_INDIVIDUAL_AGE = "age";
 		public static final String COLUMN_INDIVIDUAL_AGE_UNITS = "ageUnits";
 		public static final String COLUMN_INDIVIDUAL_PHONE_NUMBER = "phoneNumber";
 		public static final String COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER = "otherPhoneNumber";
 		public static final String COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE = "languagePreference";
-		public static final String COLUMN_INDIVIDUAL_DIP = "dip";
 	}
 
 	public static final class Locations implements BaseColumns {
@@ -166,6 +163,7 @@ public class OpenHDS {
 
 		public static final String COLUMN_RELATIONSHIP_INDIVIDUAL_A = "individualA";
 		public static final String COLUMN_RELATIONSHIP_INDIVIDUAL_B = "individualB";
+		public static final String COLUMN_RELATIONSHIP_TYPE = "relationshipType";
 		public static final String COLUMN_RELATIONSHIP_STARTDATE = "startDate";
 	}
 
@@ -221,7 +219,7 @@ public class OpenHDS {
 
 		public static final String COLUMN_SOCIAL_GROUP_EXTID = "extId";
 		public static final String COLUMN_SOCIAL_GROUP_NAME = "groupName";
-		public static final String COLUMN_SOCIAL_GROUP_HEAD = "groupHead";
+		public static final String COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID = "groupHead_extId";
 	}
 
 	public static final class Memberships implements BaseColumns {
@@ -240,9 +238,9 @@ public class OpenHDS {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.memberships";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.memberships";
 
-		public static final String COLUMN_SOCIAL_GROUP_EXTID = "socialgroup_extId";
+		public static final String COLUMN_SOCIAL_GROUP_EXTID = "socialGroup_extId";
 		public static final String COLUMN_INDIVIDUAL_EXTID = "individual_extId";
-		public static final String COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD = "relationToHead";
+		public static final String COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD = "relationshipToHead";
 		public static final String COLUMN_MEMBERSHIP_STATUS = "memberStatus";
 	}
 }

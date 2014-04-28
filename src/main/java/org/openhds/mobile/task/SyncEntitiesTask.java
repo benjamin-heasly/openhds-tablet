@@ -617,7 +617,7 @@ public class SyncEntitiesTask extends
 			parser.nextTag(); // <residencies>
 			parser.nextTag(); // </residencies>
 			parser.nextTag(); // <extId>
-			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD,
+			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID,
 					parser.nextText());
 			parser.nextTag(); // </groupHead>
 

@@ -24,7 +24,7 @@ public class HouseholdUpdate implements Updatable {
             // creat the social group
             ContentValues cv = new ContentValues();
             cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, sg.getExtId());
-            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD, sg.getGroupHead());
+            cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID, sg.getGroupHead());
             cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, sg.getGroupName());
             
             resolver.insert(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, cv);

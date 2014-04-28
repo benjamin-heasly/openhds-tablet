@@ -118,7 +118,7 @@ public class Converter {
 
     private static void populateSocialGroup(Cursor cursor, SocialGroup sg) {
         sg.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID)));
-        sg.setGroupHead(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD)));
+        sg.setGroupHead(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID)));
         sg.setGroupName(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME)));
     }
 
