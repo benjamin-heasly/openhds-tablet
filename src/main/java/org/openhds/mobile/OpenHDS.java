@@ -35,12 +35,12 @@ public class OpenHDS {
 
 		// general individual columns
 		public static final String COLUMN_INDIVIDUAL_EXTID = "extId";
-		public static final String COLUMN_INDIVIDUAL_FIRSTNAME = "firstName";
-		public static final String COLUMN_INDIVIDUAL_OTHERNAMES = "otherNames";
-		public static final String COLUMN_INDIVIDUAL_LASTNAME = "lastName";
+		public static final String COLUMN_INDIVIDUAL_FIRST_NAME = "firstName";
+		public static final String COLUMN_INDIVIDUAL_FULL_NAME = "fullName";
+		public static final String COLUMN_INDIVIDUAL_LAST_NAME = "lastName";
 		public static final String COLUMN_INDIVIDUAL_DOB = "dob";
 		public static final String COLUMN_INDIVIDUAL_GENDER = "gender";
-		public static final String COLUMN_INDIVIDUAL_LOCATION_EXTID = "currentResidence";
+		public static final String COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID = "currentResidence";
 		
 		// currently unused for bioko project
 		public static final String COLUMN_INDIVIDUAL_MOTHER = "mother";
@@ -49,13 +49,13 @@ public class OpenHDS {
 
 		// extensions for bioko project
 		public static final String COLUMN_INDIVIDUAL_COLLECTION_DATETIME = "collectionDateTime";
+		public static final String COLUMN_INDIVIDUAL_OTHER_NAMES = "otherNames";
 		public static final String COLUMN_INDIVIDUAL_AGE = "age";
 		public static final String COLUMN_INDIVIDUAL_AGE_UNITS = "ageUnits";
 		public static final String COLUMN_INDIVIDUAL_PHONE_NUMBER = "phoneNumber";
 		public static final String COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER = "otherPhoneNumber";
 		public static final String COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE = "languagePreference";
 		public static final String COLUMN_INDIVIDUAL_DIP = "dip";
-		public static final String COLUMN_INDIVIDUAL_MEMBER_STATUS = "memberStatus";
 	}
 
 	public static final class Locations implements BaseColumns {
@@ -225,11 +225,11 @@ public class OpenHDS {
 	}
 
 	public static final class Memberships implements BaseColumns {
-		public static final String TABLE_NAME = "individualgroups";
+		public static final String TABLE_NAME = "memberships";
 		private static final String SCHEME = "content://";
 
-		private static final String PATH_NOTES = "/individualgroups";
-		private static final String PATH_NOTE_ID = "/individualgroups/";
+		private static final String PATH_NOTES = "/memberships";
+		private static final String PATH_NOTE_ID = "/memberships/";
 
 		public static final int ID_PATH_POSITION = 2;
 
@@ -237,11 +237,12 @@ public class OpenHDS {
 		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID);
 		public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID + "/#");
 
-		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.individualgroups";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.individualgroups";
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.memberships";
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.memberships";
 
 		public static final String COLUMN_SOCIAL_GROUP_EXTID = "socialgroup_extId";
 		public static final String COLUMN_INDIVIDUAL_EXTID = "individual_extId";
-		public static final String COLUMN_MEMBERSHIPS_RELATIONSHIP_TO_HEAD = "relationToHead";
+		public static final String COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD = "relationToHead";
+		public static final String COLUMN_MEMBERSHIP_STATUS = "memberStatus";
 	}
 }

@@ -27,11 +27,11 @@ public class ExternalInMigrationUpdate implements Updatable {
             cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB, individual.getDob());
             cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID, individual.getExtId());
             cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER, individual.getFather());
-            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME, individual.getFirstName());
+            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, individual.getFirstName());
             cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER, individual.getGender());
-            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME, individual.getLastName());
+            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, individual.getLastName());
             cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER, individual.getMother());
-            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID, individual.getCurrentResidence());
+            cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, individual.getCurrentResidence());
             cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, "NA");
             
             resolver.insert(OpenHDS.Individuals.CONTENT_ID_URI_BASE, cv);

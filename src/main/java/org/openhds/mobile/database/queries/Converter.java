@@ -32,13 +32,13 @@ public class Converter {
     }
 
     private static void populateIndividual(Cursor cursor, Individual individual) {
-        individual.setCurrentResidence(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID)));
+        individual.setCurrentResidence(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID)));
         individual.setDob(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB)));
         individual.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID)));
         individual.setFather(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER)));
-        individual.setFirstName(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME)));
+        individual.setFirstName(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME)));
         individual.setGender(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER)));
-        individual.setLastName(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME)));
+        individual.setLastName(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME)));
         individual.setMother(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER)));
     }
 

@@ -51,7 +51,7 @@ public class Queries {
 
 	public static Cursor getIndividualsByResidency(ContentResolver resolver, String extId) {
 		return getCursor(resolver, OpenHDS.Individuals.CONTENT_ID_URI_BASE,
-				OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID, extId);
+				OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, extId);
 	}
 
 	private static boolean isFound(Cursor cursor) {

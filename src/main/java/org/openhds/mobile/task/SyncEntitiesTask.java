@@ -401,7 +401,7 @@ public class SyncEntitiesTask extends
 							parser.nextText());
 					parser.nextTag(); // <location>
 					parser.nextTag(); // <extId>
-					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID,
+					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
 							parser.nextText());
 					parser.nextTag(); // </location>
 					parser.nextTag(); // </residency>
@@ -430,7 +430,7 @@ public class SyncEntitiesTask extends
 				parser.nextTag(); // </father>
 
 				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME,
+				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
 						parser.nextText());
 
 				parser.nextTag();
@@ -438,7 +438,7 @@ public class SyncEntitiesTask extends
 						parser.nextText());
 
 				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME,
+				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME,
 						parser.nextText());
 
 				parser.nextTag();

@@ -29,7 +29,7 @@ public class PregnancyOutcomeUpdate implements Updatable {
 
             // figure out the residency to stick the child
             Cursor mother = resolver.query(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
-                    new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID },
+                    new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID },
                     OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + " = ?",
                     new String[] { pregOut.getMother().getExtId() }, null);
             if (!mother.moveToNext()) {
@@ -48,11 +48,11 @@ public class PregnancyOutcomeUpdate implements Updatable {
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB, child.getDob());
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID, child.getExtId());
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER, child.getFather());
-                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME, child.getFirstName());
+                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, child.getFirstName());
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER, child.getGender());
-                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME, child.getLastName());
+                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, child.getLastName());
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER, child.getMother());
-                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID, residency);
+                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residency);
                 cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, "NA");
 
                 

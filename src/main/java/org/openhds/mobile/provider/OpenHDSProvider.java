@@ -47,7 +47,7 @@ public class OpenHDSProvider extends ContentProvider {
     private static HashMap<String, String> fieldworkersProjectionMap;
     private static HashMap<String, String> socialgroupsProjectionMap;
     private static HashMap<String, String> socialgroupsJoinProjectionMap;
-    private static HashMap<String, String> individualgroupsProjectionMap;
+    private static HashMap<String, String> membershipsProjectionMap;
 
     private static final int INDIVIDUALS = 1;
     private static final int INDIVIDUAL_ID = 2;
@@ -68,8 +68,8 @@ public class OpenHDSProvider extends ContentProvider {
     private static final int SOCIALGROUPS_BY_LOCATION = 20;
     private static final int SOCIALGROUPS_BY_INDIVIDUAL = 21;
     private static final int SOCIALGROUP_ID = 16;
-    private static final int INDIVIDUALGROUPS = 17;
-    private static final int INDIVIDUALGROUP_ID = 18;
+    private static final int MEMBERSHIPS = 17;
+    private static final int MEMBERSHIPS_ID = 18;
 
     private static final UriMatcher sUriMatcher;
     private DatabaseHelper mOpenHelper;
@@ -98,8 +98,8 @@ public class OpenHDSProvider extends ContentProvider {
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups/location/*", SOCIALGROUPS_BY_LOCATION);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups/individual/*", SOCIALGROUPS_BY_INDIVIDUAL);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups/#", SOCIALGROUP_ID);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "individualgroups", INDIVIDUALGROUPS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "individualgroups/#", INDIVIDUALGROUP_ID);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, "memberships", MEMBERSHIPS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, "memberships/#", MEMBERSHIPS_ID);
 
         individualsProjectionMap = new HashMap<String, String>();
         individualsProjectionMap.put(OpenHDS.Individuals._ID, OpenHDS.Individuals._ID);
@@ -109,22 +109,20 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID);
         individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER);
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME);
+        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME);
         individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER);
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME);
+        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME);
         individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER);
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID);
-        // special case to display individuals first name and last name on the
-        // value fragment
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHERNAMES,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME + " || ' ' || "
-                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME + " as "
-                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHERNAMES);
+        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID);
+        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FULL_NAME,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME + " || ' ' || "
+                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME + " as "
+                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FULL_NAME);
 
         locationsProjectionMap = new HashMap<String, String>();
         locationsProjectionMap.put(OpenHDS.Locations._ID, OpenHDS.Locations._ID);
@@ -204,11 +202,11 @@ public class OpenHDSProvider extends ContentProvider {
         socialgroupsJoinProjectionMap.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, "x."
                 + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID);
 
-        individualgroupsProjectionMap = new HashMap<String, String>();
-        individualgroupsProjectionMap.put(OpenHDS.Memberships._ID, OpenHDS.Memberships._ID);
-        individualgroupsProjectionMap.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
+        membershipsProjectionMap = new HashMap<String, String>();
+        membershipsProjectionMap.put(OpenHDS.Memberships._ID, OpenHDS.Memberships._ID);
+        membershipsProjectionMap.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
                 OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID);
-        individualgroupsProjectionMap.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
+        membershipsProjectionMap.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
                 OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID);
     }
 
@@ -224,14 +222,14 @@ public class OpenHDSProvider extends ContentProvider {
                     + " INTEGER PRIMARY KEY," + OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME + " TEXT,"
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME + " TEXT,"
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID + " TEXT,"
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE + " TEXT);" 
                     + " CREATE INDEX IDX_RESIDENCY ON " +  OpenHDS.Individuals.TABLE_NAME
-                    + "(" +  OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID + ")");
+                    + "(" +  OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID + ")");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " (" + OpenHDS.Locations._ID
                     + " INTEGER PRIMARY KEY," + OpenHDS.Locations.COLUMN_LOCATION_EXTID + " TEXT NOT NULL,"
@@ -442,13 +440,13 @@ public class OpenHDSProvider extends ContentProvider {
             qb.appendWhere(OpenHDS.SocialGroups._ID + "="
                     + uri.getPathSegments().get(OpenHDS.SocialGroups.ID_PATH_POSITION));
             break;
-        case INDIVIDUALGROUPS:
+        case MEMBERSHIPS:
             qb.setTables(OpenHDS.Memberships.TABLE_NAME);
-            qb.setProjectionMap(individualgroupsProjectionMap);
+            qb.setProjectionMap(membershipsProjectionMap);
             break;
-        case INDIVIDUALGROUP_ID:
+        case MEMBERSHIPS_ID:
             qb.setTables(OpenHDS.Memberships.TABLE_NAME);
-            qb.setProjectionMap(individualgroupsProjectionMap);
+            qb.setProjectionMap(membershipsProjectionMap);
             qb.appendWhere(OpenHDS.Memberships._ID + "="
                     + uri.getPathSegments().get(OpenHDS.Memberships.ID_PATH_POSITION));
             break;
@@ -483,7 +481,7 @@ public class OpenHDSProvider extends ContentProvider {
         // get all individuals at location
         Cursor c = db.query(OpenHDS.Individuals.TABLE_NAME,
                 new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID },
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LOCATION_EXTID + " = ?", new String[] { string }, null, null, null);
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID + " = ?", new String[] { string }, null, null, null);
 
         // iterate over all individuals and collect their memberships
         // this results in a subset of households at the location
@@ -551,9 +549,9 @@ public class OpenHDSProvider extends ContentProvider {
             return OpenHDS.SocialGroups.CONTENT_TYPE;
         case SOCIALGROUP_ID:
             return OpenHDS.SocialGroups.CONTENT_ITEM_TYPE;
-        case INDIVIDUALGROUPS:
+        case MEMBERSHIPS:
             return OpenHDS.Memberships.CONTENT_TYPE;
-        case INDIVIDUALGROUP_ID:
+        case MEMBERSHIPS_ID:
             return OpenHDS.Memberships.CONTENT_ITEM_TYPE;
         default:
             throw new IllegalArgumentException("Unknown URI " + uri);
@@ -598,7 +596,7 @@ public class OpenHDSProvider extends ContentProvider {
             table = OpenHDS.SocialGroups.TABLE_NAME;
             contentUriBase = OpenHDS.SocialGroups.CONTENT_ID_URI_BASE;
             break;
-        case INDIVIDUALGROUPS:
+        case MEMBERSHIPS:
             table = OpenHDS.Memberships.TABLE_NAME;
             contentUriBase = OpenHDS.Memberships.CONTENT_ID_URI_BASE;
             break;
@@ -691,10 +689,10 @@ public class OpenHDSProvider extends ContentProvider {
             finalWhere = buildFinalWhere(uri, OpenHDS.SocialGroups.ID_PATH_POSITION, where);
             count = db.delete(OpenHDS.SocialGroups.TABLE_NAME, finalWhere, whereArgs);
             break;
-        case INDIVIDUALGROUPS:
+        case MEMBERSHIPS:
             count = db.delete(OpenHDS.Memberships.TABLE_NAME, where, whereArgs);
             break;
-        case INDIVIDUALGROUP_ID:
+        case MEMBERSHIPS_ID:
             finalWhere = buildFinalWhere(uri, OpenHDS.Memberships.ID_PATH_POSITION, where);
             count = db.delete(OpenHDS.Memberships.TABLE_NAME, finalWhere, whereArgs);
             break;
@@ -780,10 +778,10 @@ public class OpenHDSProvider extends ContentProvider {
             finalWhere = buildFinalWhere(uri, OpenHDS.SocialGroups.ID_PATH_POSITION, where);
             count = db.update(OpenHDS.SocialGroups.TABLE_NAME, values, finalWhere, whereArgs);
             break;
-        case INDIVIDUALGROUPS:
+        case MEMBERSHIPS:
             count = db.update(OpenHDS.Memberships.TABLE_NAME, values, where, whereArgs);
             break;
-        case INDIVIDUALGROUP_ID:
+        case MEMBERSHIPS_ID:
             finalWhere = buildFinalWhere(uri, OpenHDS.Memberships.ID_PATH_POSITION, where);
             count = db.update(OpenHDS.Memberships.TABLE_NAME, values, finalWhere, whereArgs);
             break;

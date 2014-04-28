@@ -31,9 +31,9 @@ public class FormFieldMappings {
 			
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_COLLECTION_DATETIME, COLLECTION_DATE_TIME);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID, INDIVIDUAL_EXTID);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRSTNAME, FIRST_NAME);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LASTNAME, LAST_NAME);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHERNAMES, OTHER_NAMES);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, FIRST_NAME);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, LAST_NAME);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FULL_NAME, OTHER_NAMES);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB, DATE_OF_BIRTH);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE, AGE);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS, AGE_UNITS);
@@ -42,7 +42,6 @@ public class FormFieldMappings {
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER, OTHER_PHONE_NUMBER);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE, LANGUAGE_PREFERENCE);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DIP, DIP);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MEMBER_STATUS, MEMBER_STATUS);
 		}
 		 
 		 public String getFieldNameFromColumn(String column){
