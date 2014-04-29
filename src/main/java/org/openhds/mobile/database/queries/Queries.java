@@ -129,6 +129,14 @@ public class Queries {
 				new String[] { extId }, "s." + OpenHDS.SocialGroups._ID);
 	}
 
+	public static Cursor getIndividualsExtIdsByPrefix(ContentResolver resolver, String prefix) {
+		String likeArg = "'" + prefix + "%'";
+		return resolver.query(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
+				new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID },
+				OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + " LIKE " + likeArg, null,
+				OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID);
+	}
+
 	public static Cursor allSocialGroups(ContentResolver resolver) {
 		return resolver.query(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, null, null, null, null);
 	}

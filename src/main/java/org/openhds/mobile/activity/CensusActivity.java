@@ -1,6 +1,7 @@
 package org.openhds.mobile.activity;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
+import static org.openhds.mobile.database.queries.Queries.getIndividualsExtIdsByPrefix;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.IndividualAdapter;
 import org.openhds.mobile.database.queries.QueryResult;
@@ -24,9 +26,11 @@ import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectQueryHelper;
+import org.openhds.mobile.utilities.LuhnValidator;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -365,6 +369,28 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 		Calendar c = Calendar.getInstance();
 		formFieldNames.put(ProjectFormFields.General.COLLECTED_DATE_TIME, c.getTime().toString());
+
+		String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
+
+		Cursor cursor = getIndividualsExtIdsByPrefix(getContentResolver(), generatedIdPrefix);
+		int nextSequence = 0;
+		if (cursor.moveToLast()) {
+			String lastExtId = cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
+			int prefixLength = generatedIdPrefix.length();
+			int checkDigitLength = 1;
+			String lastSequenceNumber = lastExtId.substring(prefixLength + 1, lastExtId.length()
+					- checkDigitLength);
+			nextSequence = Integer.parseInt(lastSequenceNumber) + 1;
+		}
+		String generatedIdSeqNum = String.format("%05d", nextSequence);
+
+		Character generatedIdCheck = LuhnValidator.generateCheckCharacter(generatedIdSeqNum
+				+ generatedIdSeqNum);
+
+		String individualExtId = generatedIdPrefix + generatedIdSeqNum + generatedIdCheck.toString();
+
+		formFieldNames.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
 
 		return formFieldNames;
 	}

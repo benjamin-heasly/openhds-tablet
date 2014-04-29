@@ -19,247 +19,272 @@ import android.database.Cursor;
  */
 public class Converter {
 
-    public static Individual toIndividual(Cursor cursor) {
-        Individual individual = new Individual();
+	public static Individual toIndividual(Cursor cursor) {
+		Individual individual = new Individual();
 
-        if (cursor.moveToNext()) {
-            populateIndividual(cursor, individual);
-        }
+		if (cursor.moveToNext()) {
+			populateIndividual(cursor, individual);
+		}
 
-        cursor.close();
+		cursor.close();
 
-        return individual;
-    }
+		return individual;
+	}
 
-    private static void populateIndividual(Cursor cursor, Individual individual) {
-        individual.setCurrentResidence(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID)));
-        individual.setDob(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB)));
-        individual.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID)));
-        individual.setFather(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER)));
-        individual.setFirstName(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME)));
-        individual.setGender(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER)));
-        individual.setLastName(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME)));
-        individual.setMother(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER)));
-    }
+	private static void populateIndividual(Cursor cursor, Individual individual) {
+		individual.setCurrentResidence(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID)));
+		individual.setDob(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB)));
+		individual.setExtId(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID)));
+		individual.setFather(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER)));
+		individual.setFirstName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME)));
+		individual.setGender(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER)));
+		individual.setLastName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME)));
+		individual.setMother(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER)));
+	}
 
-    public static Location toLocation(Cursor cursor) {
-        Location location = new Location();
+	public static Location toLocation(Cursor cursor) {
+		Location location = new Location();
 
-        if (cursor.moveToNext()) {
-            populateLocation(cursor, location);
-        }
+		if (cursor.moveToNext()) {
+			populateLocation(cursor, location);
+		}
 
-        cursor.close();
+		cursor.close();
 
-        return location;
-    }
+		return location;
+	}
 
-    private static void populateLocation(Cursor cursor, Location location) {
-        location.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_EXTID)));
-        location.setHierarchy(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY)));
-        location.setLatitude(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE)));
-        location.setLongitude(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE)));
-        location.setName(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_NAME)));
-    }
+	private static void populateLocation(Cursor cursor, Location location) {
+		location.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_EXTID)));
+		location.setHierarchy(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY)));
+		location.setLatitude(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE)));
+		location.setLongitude(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE)));
+		location.setName(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_NAME)));
+	}
 
-    public static LocationHierarchy toHierarhcy(Cursor cursor, boolean close) {
-        LocationHierarchy hierarchy = new LocationHierarchy();
+	public static LocationHierarchy toHierarhcy(Cursor cursor, boolean close) {
+		LocationHierarchy hierarchy = new LocationHierarchy();
 
-        if (cursor.moveToNext()) {
-            populateHierarchy(cursor, hierarchy);
-        }
+		if (cursor.moveToNext()) {
+			populateHierarchy(cursor, hierarchy);
+		}
 
-        if (close) {
-            cursor.close();
-        }
+		if (close) {
+			cursor.close();
+		}
 
-        return hierarchy;
-    }
+		return hierarchy;
+	}
 
-    public static LocationHierarchy convertToHierarchy(Cursor cursor) {
-        LocationHierarchy hierarchy = new LocationHierarchy();
-        populateHierarchy(cursor, hierarchy);
-        return hierarchy;
-    }
+	public static LocationHierarchy convertToHierarchy(Cursor cursor) {
+		LocationHierarchy hierarchy = new LocationHierarchy();
+		populateHierarchy(cursor, hierarchy);
+		return hierarchy;
+	}
 
-    private static void populateHierarchy(Cursor cursor, LocationHierarchy hierarchy) {
-        hierarchy.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID)));
-        hierarchy.setLevel(cursor.getString(cursor.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL)));
-        hierarchy.setName(cursor.getString(cursor.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME)));
-        hierarchy.setParent(cursor.getString(cursor.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT)));
-    }
+	private static void populateHierarchy(Cursor cursor, LocationHierarchy hierarchy) {
+		hierarchy.setExtId(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID)));
+		hierarchy.setLevel(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL)));
+		hierarchy.setName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME)));
+		hierarchy.setParent(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT)));
+	}
 
-    public static FieldWorker toFieldWorker(Cursor cursor) {
-        FieldWorker fw = new FieldWorker();
+	public static FieldWorker toFieldWorker(Cursor cursor) {
+		FieldWorker fw = new FieldWorker();
 
-        if (cursor.moveToNext()) {
-            fw.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID)));
-            fw.setFirstName(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME)));
-            fw.setLastName(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME)));
-            fw.setPassword(cursor.getString(cursor.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD)));
-        }
+		if (cursor.moveToNext()) {
+			fw.setExtId(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID)));
+			fw.setFirstName(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME)));
+			fw.setLastName(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME)));
+			fw.setPassword(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD)));
 
-        cursor.close();
+			// temporary way to get field worker Id prefix. should be actual
+			// attribute of field worker.
+			int id = cursor.getInt(cursor.getColumnIndex(OpenHDS.FieldWorkers._ID));
+			String idString = String.format("%02d", id);
+			fw.setCollectedIdPrefix(idString);
+		}
 
-        return fw;
-    }
+		cursor.close();
 
-    public static SocialGroup toSocialGroup(Cursor cursor) {
-        SocialGroup sg = new SocialGroup();
+		return fw;
+	}
 
-        if (cursor.moveToNext()) {
-            populateSocialGroup(cursor, sg);
-        }
+	public static SocialGroup toSocialGroup(Cursor cursor) {
+		SocialGroup sg = new SocialGroup();
 
-        cursor.close();
+		if (cursor.moveToNext()) {
+			populateSocialGroup(cursor, sg);
+		}
 
-        return sg;
-    }
+		cursor.close();
 
-    private static void populateSocialGroup(Cursor cursor, SocialGroup sg) {
-        sg.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID)));
-        sg.setGroupHead(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID)));
-        sg.setGroupName(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME)));
-    }
+		return sg;
+	}
 
-    public static List<SocialGroup> toSocialGroupList(Cursor cursor) {
-        List<SocialGroup> socialGroups = new ArrayList<SocialGroup>();
+	private static void populateSocialGroup(Cursor cursor, SocialGroup sg) {
+		sg.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID)));
+		sg.setGroupHead(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID)));
+		sg.setGroupName(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME)));
+	}
 
-        while (cursor.moveToNext()) {
-            SocialGroup sg = new SocialGroup();
-            populateSocialGroup(cursor, sg);
-            socialGroups.add(sg);
-        }
+	public static List<SocialGroup> toSocialGroupList(Cursor cursor) {
+		List<SocialGroup> socialGroups = new ArrayList<SocialGroup>();
 
-        cursor.close();
+		while (cursor.moveToNext()) {
+			SocialGroup sg = new SocialGroup();
+			populateSocialGroup(cursor, sg);
+			socialGroups.add(sg);
+		}
 
-        return socialGroups;
-    }
+		cursor.close();
 
-    public static List<LocationHierarchy> toHierarchyList(Cursor cursor) {
-        List<LocationHierarchy> hierarchys = new ArrayList<LocationHierarchy>();
+		return socialGroups;
+	}
 
-        while (cursor.moveToNext()) {
-            LocationHierarchy hierarchy = new LocationHierarchy();
-            populateHierarchy(cursor, hierarchy);
-            hierarchys.add(hierarchy);
-        }
+	public static List<LocationHierarchy> toHierarchyList(Cursor cursor) {
+		List<LocationHierarchy> hierarchys = new ArrayList<LocationHierarchy>();
 
-        cursor.close();
+		while (cursor.moveToNext()) {
+			LocationHierarchy hierarchy = new LocationHierarchy();
+			populateHierarchy(cursor, hierarchy);
+			hierarchys.add(hierarchy);
+		}
 
-        return hierarchys;
-    }
+		cursor.close();
 
-    public static List<Location> toLocationList(Cursor cursor) {
-        List<Location> locations = new ArrayList<Location>();
+		return hierarchys;
+	}
 
-        while (cursor.moveToNext()) {
-            Location location = new Location();
-            populateLocation(cursor, location);
-            locations.add(location);
-        }
+	public static List<Location> toLocationList(Cursor cursor) {
+		List<Location> locations = new ArrayList<Location>();
 
-        cursor.close();
+		while (cursor.moveToNext()) {
+			Location location = new Location();
+			populateLocation(cursor, location);
+			locations.add(location);
+		}
 
-        return locations;
-    }
+		cursor.close();
 
-    public static List<Individual> toIndividualList(Cursor cursor) {
-        List<Individual> individuals = new ArrayList<Individual>();
+		return locations;
+	}
 
-        while (cursor.moveToNext()) {
-            Individual individual = new Individual();
-            populateIndividual(cursor, individual);
-            individuals.add(individual);
-        }
+	public static List<Individual> toIndividualList(Cursor cursor) {
+		List<Individual> individuals = new ArrayList<Individual>();
 
-        cursor.close();
+		while (cursor.moveToNext()) {
+			Individual individual = new Individual();
+			populateIndividual(cursor, individual);
+			individuals.add(individual);
+		}
 
-        return individuals;
-    }
+		cursor.close();
 
-    public static List<Round> toRoundList(Cursor cursor) {
-        List<Round> rounds = new ArrayList<Round>();
+		return individuals;
+	}
 
-        while (cursor.moveToNext()) {
-            Round round = new Round();
-            round.setEndDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
-            round.setRoundNumber(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
-            round.setStartDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
-            rounds.add(round);
-        }
+	public static List<Round> toRoundList(Cursor cursor) {
+		List<Round> rounds = new ArrayList<Round>();
 
-        cursor.close();
+		while (cursor.moveToNext()) {
+			Round round = new Round();
+			round.setEndDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
+			round.setRoundNumber(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
+			round.setStartDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
+			rounds.add(round);
+		}
 
-        return rounds;
-    }
+		cursor.close();
 
-    public static List<Relationship> toRelationshipList(Cursor cursor) {
-        List<Relationship> relationships = new ArrayList<Relationship>();
+		return rounds;
+	}
 
-        while (cursor.moveToNext()) {
-            Relationship rel = new Relationship();
-            rel.setIndividualA(cursor.getString(cursor
-                    .getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
-            rel.setIndividualB(cursor.getString(cursor
-                    .getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B)));
-            rel.setStartDate(cursor.getString(cursor
-                    .getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE)));
+	public static List<Relationship> toRelationshipList(Cursor cursor) {
+		List<Relationship> relationships = new ArrayList<Relationship>();
 
-            relationships.add(rel);
-        }
+		while (cursor.moveToNext()) {
+			Relationship rel = new Relationship();
+			rel.setIndividualA(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
+			rel.setIndividualB(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B)));
+			rel.setStartDate(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE)));
 
-        cursor.close();
+			relationships.add(rel);
+		}
 
-        return relationships;
-    }
+		cursor.close();
 
-    public static List<Relationship> toRelationshipListSwapped(Cursor cursor) {
-        List<Relationship> relationships = new ArrayList<Relationship>();
+		return relationships;
+	}
 
-        while (cursor.moveToNext()) {
-            Relationship rel = new Relationship();
-            rel.setIndividualA(cursor.getString(cursor
-                    .getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B)));
-            rel.setIndividualB(cursor.getString(cursor
-                    .getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
-            rel.setStartDate(cursor.getString(cursor
-                    .getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE)));
+	public static List<Relationship> toRelationshipListSwapped(Cursor cursor) {
+		List<Relationship> relationships = new ArrayList<Relationship>();
 
-            relationships.add(rel);
-        }
+		while (cursor.moveToNext()) {
+			Relationship rel = new Relationship();
+			rel.setIndividualA(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B)));
+			rel.setIndividualB(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
+			rel.setStartDate(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE)));
 
-        cursor.close();
+			relationships.add(rel);
+		}
 
-        return relationships;
-    }
+		cursor.close();
 
-    public static Round convertToRound(Cursor cursor) {
-        Round round = new Round();
-        round.setEndDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
-        round.setRoundNumber(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
-        round.setStartDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
+		return relationships;
+	}
 
-        return round;
-    }
+	public static Round convertToRound(Cursor cursor) {
+		Round round = new Round();
+		round.setEndDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
+		round.setRoundNumber(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
+		round.setStartDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
 
-    public static Location convertToLocation(Cursor cursor) {
-        Location location = new Location();
-        populateLocation(cursor, location);
+		return round;
+	}
 
-        return location;
-    }
+	public static Location convertToLocation(Cursor cursor) {
+		Location location = new Location();
+		populateLocation(cursor, location);
 
-    public static Individual convertToIndividual(Cursor cursor) {
-        Individual individual = new Individual();
-        populateIndividual(cursor, individual);
+		return location;
+	}
 
-        return individual;
-    }
+	public static Individual convertToIndividual(Cursor cursor) {
+		Individual individual = new Individual();
+		populateIndividual(cursor, individual);
 
-    public static SocialGroup convertToSocialGroup(Cursor cursor) {
-        SocialGroup sg = new SocialGroup();
-        populateSocialGroup(cursor, sg);
-        return sg;
-    }
+		return individual;
+	}
+
+	public static SocialGroup convertToSocialGroup(Cursor cursor) {
+		SocialGroup sg = new SocialGroup();
+		populateSocialGroup(cursor, sg);
+		return sg;
+	}
 }
