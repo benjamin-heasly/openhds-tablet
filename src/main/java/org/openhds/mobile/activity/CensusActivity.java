@@ -210,12 +210,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		}
 		stateMachine.transitionTo(state);
 
-		if (1 == currentResults.size()) {
-			stepDown(currentResults.get(0));
-		} else {
-			valueFragment.populateValues(currentResults);
-		}
-
+		valueFragment.populateValues(currentResults);
 	}
 
 	private void updateButtonLabel(String state) {
