@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
     android:paddingBottom="2.5dp"
     android:paddingTop="2.5dp" >
 
@@ -24,4 +23,12 @@
         android:text="b12345"
         android:textAppearance="?android:attr/textAppearanceMediumInverse" />
 
+    <LinearLayout
+        android:id="@+id/pay_load_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/secondary_text"
+        android:orientation="vertical"
+        android:paddingLeft="15dp" >
+    </LinearLayout>
 </RelativeLayout>

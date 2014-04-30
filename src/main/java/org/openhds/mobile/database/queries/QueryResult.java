@@ -1,10 +1,14 @@
 package org.openhds.mobile.database.queries;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class QueryResult {
 
 	private String state;
 	private String extId;
 	private String name;
+	private Map<String, String> payLoad = new HashMap<String, String>();
 
 	public String getState() {
 		return state;
@@ -30,8 +34,13 @@ public class QueryResult {
 		this.name = name;
 	}
 
+	public Map<String, String> getPayLoad() {
+		return payLoad;
+	}
+
 	@Override
 	public String toString() {
-		return "QueryResult[name: " + name + " extId: " + extId + " state: " + state + " ]";
+		return "QueryResult[name: " + name + " extId: " + extId + " state: " + state + " + payload size: "
+				+ payLoad.size() + "]";
 	}
 }

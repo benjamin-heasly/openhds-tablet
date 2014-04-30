@@ -1,13 +1,15 @@
 package org.openhds.mobile.utilities;
 
+import java.util.Map;
+
 import org.openhds.mobile.R;
-import android.annotation.SuppressLint;
+
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,10 +37,9 @@ public class LayoutUtils {
 		return b;
 	}
 
-	
-	
 	public static RelativeLayout makeNewGenericLayout(Activity activity, String primaryText,
-			String secondaryText, Object layoutTag, OnClickListener listener, ViewGroup container, int background) {
+			String secondaryText, Object layoutTag, OnClickListener listener, ViewGroup container,
+			int background, Map<String, String> payLoad) {
 
 		RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(
 				R.layout.generic_list_item, null);
@@ -51,21 +52,22 @@ public class LayoutUtils {
 		if (null != container) {
 			container.addView(layout);
 		}
-		
-		if(0 != background){
-		layout.setBackgroundResource(background);
+
+		if (0 != background) {
+			layout.setBackgroundResource(background);
 		}
 
-		configureGenericLayout(activity, layout, primaryText, secondaryText);
+		configureGenericLayout(activity, layout, primaryText, secondaryText, payLoad);
 
 		return layout;
 	}
 
 	public static void configureGenericLayout(Activity activity, RelativeLayout layout, String primaryText,
-			String secondaryText) {
+			String secondaryText, Map<String, String> payLoad) {
 
 		TextView primary = (TextView) layout.findViewById(R.id.primary_text);
 		TextView secondary = (TextView) layout.findViewById(R.id.secondary_text);
+		LinearLayout payLoadContainer = (LinearLayout) layout.findViewById(R.id.pay_load_container);
 
 		if (null == primaryText) {
 			primary.setVisibility(View.GONE);
@@ -79,6 +81,23 @@ public class LayoutUtils {
 		} else {
 			secondary.setVisibility(View.VISIBLE);
 			secondary.setText(secondaryText);
+		}
+
+		if (null == payLoad) {
+			payLoadContainer.setVisibility(View.GONE);
+		} else {
+			payLoadContainer.removeAllViews();
+			for (String key : payLoad.keySet()) {
+				String value = payLoad.get(key);
+				if (null == value) {
+					continue;
+				}
+				TextView textView = new TextView(activity);
+				textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
+				textView.setText(key + ": " + value);
+				payLoadContainer.addView(textView);
+			}
+			payLoadContainer.setVisibility(View.VISIBLE);
 		}
 	}
 }

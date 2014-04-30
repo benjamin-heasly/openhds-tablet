@@ -72,10 +72,10 @@ public class HierarchyFormFragment extends Fragment {
 
 			if (convertView == null) {
 				convertView = makeNewGenericLayout(getActivity(), form.getFormLabel(), null, form.getFormLabel(), null, null,
-						R.drawable.form_frag_selector);
+						R.drawable.form_frag_selector, null);
 			}
 
-			configureGenericLayout(getActivity(), (RelativeLayout) convertView, form.getFormLabel(), null);
+			configureGenericLayout(getActivity(), (RelativeLayout) convertView, form.getFormLabel(), null, null);
 			return convertView;
 
 		}

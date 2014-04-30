@@ -70,10 +70,11 @@ public class HierarchyValueFragment extends Fragment {
 
 			if (convertView == null) {
 				convertView = makeNewGenericLayout(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
-						null, null, R.drawable.value_frag_selector);
+						null, null, R.drawable.value_frag_selector, null);
 			}
 
-			configureGenericLayout(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId());
+			configureGenericLayout(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId(),
+					qr.getPayLoad());
 			return convertView;
 		}
 	}

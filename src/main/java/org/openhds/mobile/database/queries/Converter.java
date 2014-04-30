@@ -47,6 +47,17 @@ public class Converter {
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME)));
 		individual.setMother(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER)));
+		individual.setAge(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE)));
+		individual.setAgeUnits(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS)));
+		individual.setLanguagePreference(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
+
+		// TODO:
+		// Query for adding the relationship to Head of Household needs to be done
+		// and added to the field for individual so we can put it into the payload
+		// and display it in valuefrag
+
 	}
 
 	public static Location toLocation(Cursor cursor) {
