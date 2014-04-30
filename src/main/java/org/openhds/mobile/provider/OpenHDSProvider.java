@@ -263,7 +263,7 @@ public class OpenHDSProvider extends ContentProvider {
 					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER + " TEXT,"
 					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE + " TEXT,"
 					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID + " TEXT);"
-					+ " CREATE INDEX IDX_RESIDENCY ON " + OpenHDS.Individuals.TABLE_NAME + "("
+					+ " CREATE INDEX IDX_INDIVIDUAL_BY_RESIDENCE ON " + OpenHDS.Individuals.TABLE_NAME + "("
 					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID + ")");
 
 			db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " (" + OpenHDS.Locations._ID
@@ -271,7 +271,9 @@ public class OpenHDSProvider extends ContentProvider {
 					+ OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY + " TEXT NOT NULL,"
 					+ OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"
 					+ OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE + " TEXT,"
-					+ OpenHDS.Locations.COLUMN_LOCATION_NAME + " TEXT NOT NULL);");
+					+ OpenHDS.Locations.COLUMN_LOCATION_NAME + " TEXT NOT NULL);"
+					+ " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON " + OpenHDS.Locations.TABLE_NAME + "("
+					+ OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY + ")");
 
 			db.execSQL("CREATE TABLE " + OpenHDS.HierarchyItems.TABLE_NAME + " ("
 					+ OpenHDS.HierarchyItems._ID + " INTEGER PRIMARY KEY,"
