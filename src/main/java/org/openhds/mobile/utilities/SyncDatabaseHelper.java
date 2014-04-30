@@ -22,15 +22,14 @@ public class SyncDatabaseHelper implements SyncDatabaseListener {
 
 	public SyncDatabaseHelper(Context context) {
 		this.callingContext = context;
-		initializeProgressDialog();
+		progressDialog = new ProgressDialog(callingContext);
 	}
 
 	public AsyncTask<Void, Integer, HttpTask.EndResult> getCurrentTask() {
 		return currentTask;
 	}
 
-	public void setCurrentTask(
-			AsyncTask<Void, Integer, HttpTask.EndResult> currentTask) {
+	public void setCurrentTask(AsyncTask<Void, Integer, HttpTask.EndResult> currentTask) {
 		this.currentTask = currentTask;
 	}
 
@@ -39,14 +38,14 @@ public class SyncDatabaseHelper implements SyncDatabaseListener {
 	}
 
 	private void initializeProgressDialog() {
-		progressDialog = new ProgressDialog(callingContext);
 		progressDialog.setCancelable(true);
 		progressDialog.setOnCancelListener(new SyncingOnCancelListener());
-		progressDialog.setTitle("Working...");
-		progressDialog.setMessage("Do not interrupt");
+		progressDialog.setTitle("Working.");
+		progressDialog.setMessage("Please wait.");
 	}
 
 	public void startSync() {
+		initializeProgressDialog();
 		progressDialog.show();
 
 		if (null != currentTask && currentTask.getStatus() == Status.RUNNING) {
@@ -69,18 +68,15 @@ public class SyncDatabaseHelper implements SyncDatabaseListener {
 	private class SyncingOnCancelListener implements OnCancelListener {
 		public void onCancel(DialogInterface dialog) {
 			ConfirmOnCancelListener listener = new ConfirmOnCancelListener();
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					callingContext);
-			builder.setMessage("Are you sure you want to stop sync?")
-					.setCancelable(false).setPositiveButton("Yes", listener)
-					.setNegativeButton("No", listener);
+			AlertDialog.Builder builder = new AlertDialog.Builder(callingContext);
+			builder.setMessage("Are you sure you want to stop sync?").setCancelable(false)
+					.setPositiveButton("Yes", listener).setNegativeButton("No", listener);
 			AlertDialog alert = builder.create();
 			alert.show();
 		}
 	}
 
-	private class ConfirmOnCancelListener implements
-			DialogInterface.OnClickListener {
+	private class ConfirmOnCancelListener implements DialogInterface.OnClickListener {
 
 		@Override
 		public void onClick(DialogInterface dialogInterface, int which) {

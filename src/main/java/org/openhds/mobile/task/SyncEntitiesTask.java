@@ -120,11 +120,12 @@ public class SyncEntitiesTask extends
 			break;
 		}
 
+		dialog.setTitle(builder.toString());
 		if (values.length > 0) {
-			builder.append(" Saved " + values[0] + " items");
+			dialog.setMessage("Saved " + values[0] + " items.");
+		} else {
+			dialog.setMessage("Please wait.");
 		}
-
-		dialog.setMessage(builder.toString());
 	}
 
 	@Override
