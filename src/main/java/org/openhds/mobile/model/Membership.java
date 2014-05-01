@@ -4,22 +4,44 @@ import java.io.Serializable;
 
 public class Membership implements Serializable {
 
-	private static final long serialVersionUID = 571090333555561853L;
 	
-	private String indExtId;
-	private String groupextId;
+	private static final long serialVersionUID = -3909095153199193088L;
 	
-	
-	public String getIndExtId() {
-		return indExtId;
+	private String individualExtId;
+	private String socialGroupExtId;
+	private String relationshipToHead;
+	private String status;
+
+	public String getIndividualExtId() {
+		return individualExtId;
 	}
-	public void setIndExtId(String indExtId) {
-		this.indExtId = indExtId;
+
+	public String getStatus() {
+		return status;
 	}
-	public String getGroupextId() {
-		return groupextId;
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
-	public void setGroupextId(String groupextId) {
-		this.groupextId = groupextId;
+
+	public void setIndividualExtId(String individualExtId) {
+		this.individualExtId = individualExtId;
 	}
+
+	public String getSocialGroupExtId() {
+		return socialGroupExtId;
 	}
+
+	public void setSocialGroupExtId(String socialGroupExtId) {
+		this.socialGroupExtId = socialGroupExtId;
+	}
+
+	public String getRelationshipToHead() {
+		return relationshipToHead;
+	}
+
+	public void setRelationshipToHead(String relationshipToHead) {
+		this.relationshipToHead = relationshipToHead;
+	}
+
+}

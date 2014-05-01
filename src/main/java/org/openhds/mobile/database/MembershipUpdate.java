@@ -24,8 +24,8 @@ public class MembershipUpdate implements Updatable {
              }
              
              ContentValues cv = new ContentValues();
-             cv.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, membership.getIndExtId());
-             cv.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID, membership.getGroupextId());
+//             cv.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, membership.getIndExtId());
+//             cv.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID, membership.getGroupextId());
 
 
              resolver.insert(OpenHDS.Memberships.CONTENT_ID_URI_BASE, cv);

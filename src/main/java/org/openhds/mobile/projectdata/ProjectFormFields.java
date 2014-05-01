@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.R;
 import org.openhds.mobile.activity.CensusActivity;
 
 public class ProjectFormFields {
@@ -62,7 +61,7 @@ public class ProjectFormFields {
 		public static final String MOTHER_EXTID = "individualMotherExtId";
 		public static final String FATHER_EXTID = "individualFatherExtId";
 
-		// for relationships and memberships tables
+		// TODO: for relationships and memberships tables
 		public static final String RELATIONSHIP_TO_HEAD = "individualRelationshipToHeadOfHousehold";
 		public static final String HOUSEHOLD_EXTID = "householdExtId";
 		public static final String MEMBER_STATUS = "individualMemberStatus";

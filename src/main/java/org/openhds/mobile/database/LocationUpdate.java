@@ -29,7 +29,7 @@ public class LocationUpdate implements Updatable {
         ContentValues cv = new ContentValues();
 
         cv.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID, location.getExtId());
-        cv.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, location.getHierarchy());
+        //cv.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, location.getHierarchy());
         cv.put(OpenHDS.Locations.COLUMN_LOCATION_NAME, location.getName());
 
         cv.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE, "");

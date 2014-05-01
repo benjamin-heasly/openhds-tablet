@@ -185,7 +185,7 @@ public class LocationVisit implements Serializable {
 
         location = new Location();
         location.setExtId(locationId);
-        location.setHierarchy(hierarchy5.getExtId());
+        //location.setHierarchy(hierarchy5.getExtId());
     }
 
     private String generateLocationId(ContentResolver resolver) {

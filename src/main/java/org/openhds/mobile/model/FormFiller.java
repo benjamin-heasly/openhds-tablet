@@ -117,13 +117,13 @@ public class FormFiller {
 
     public FilledForm fillDeathForm(LocationVisit locationVisit, SocialGroup sg) {
     	FilledForm form = null;
-    	if (locationVisit.getSelectedIndividual().getExtId().equalsIgnoreCase(locationVisit.getLocation().getHead())) {
-    		form = new FilledForm(UpdateEvent.DEATHTOHOH);
-    		if (sg !=null)
-    			addHousehold(sg, form);
-        } else {
-        	form = new FilledForm(UpdateEvent.DEATH);
-        }
+//    	if (locationVisit.getSelectedIndividual().getExtId().equalsIgnoreCase(locationVisit.getLocation().getHead())) {
+//    		form = new FilledForm(UpdateEvent.DEATHTOHOH);
+//    		if (sg !=null)
+//    			addHousehold(sg, form);
+//        } else {
+//        	form = new FilledForm(UpdateEvent.DEATH);
+//        }
         addFieldWorker(locationVisit, form);
         addVisit(locationVisit, form);
         addIndividual(locationVisit.getSelectedIndividual(), form);

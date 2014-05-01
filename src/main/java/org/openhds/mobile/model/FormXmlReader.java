@@ -30,7 +30,7 @@ public class FormXmlReader {
             Document doc = buildDocument(is);
             location.setName(xpath.evaluate("/data/locationName/text()", doc));
             location.setExtId(xpath.evaluate("/data/locationId/text()", doc));
-            location.setHierarchy(xpath.evaluate("/data/hierarchyId/text()", doc));
+            //location.setHierarchy(xpath.evaluate("/data/hierarchyId/text()", doc));
 
             return location;
         } catch (ParserConfigurationException e) {
@@ -74,14 +74,14 @@ public class FormXmlReader {
         try {
             Membership membership = new Membership();
             Document doc = buildDocument(input);
-            membership.setIndExtId(xpath.evaluate("/data/individualId/text()", doc));
-            membership.setGroupextId(xpath.evaluate("/data/householdId/text()", doc));
+//            membership.setIndExtId(xpath.evaluate("/data/individualId/text()", doc));
+//            membership.setGroupextId(xpath.evaluate("/data/householdId/text()", doc));
            
             return membership;
         } catch (ParserConfigurationException e) {
         } catch (SAXException e) {
         } catch (IOException e) {
-        } catch (XPathExpressionException e) {
+//        } catch (XPathExpressionException e) {
         }
         return null;
     }

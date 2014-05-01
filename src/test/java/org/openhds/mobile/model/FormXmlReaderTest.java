@@ -25,7 +25,7 @@ public class FormXmlReaderTest extends TestCase {
 
         assertEquals("Test House Name", location.getName());
         assertEquals("AKPIDUIDD001", location.getExtId());
-        assertEquals("IDD", location.getHierarchy());
+        //assertEquals("IDD", location.getHierarchy());
     }
 
     String visitXml = 

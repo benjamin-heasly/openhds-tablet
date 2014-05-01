@@ -27,7 +27,6 @@ public class ProjectQueryHelper {
 	// These should be string resources instead of constants
 	public static final String AGE_KEY = "age";
 	public static final String LANGUAGE_KEY = "language preference";
-	public static final String RELATIONSHIP_TO_HEAD_KEY = "relationship to head";
 	public static final String OTHER_NAMES_KEY = "other names";
 
 	public static List<QueryResult> getAll(ContentResolver contentResolver, String state) {
@@ -128,7 +127,6 @@ public class ProjectQueryHelper {
 			qr.getPayLoad().put(OTHER_NAMES_KEY, individual.getOtherNames());
 			qr.getPayLoad().put(AGE_KEY, individual.getAge() + " (" + individual.getAgeUnits() + ")");
 			qr.getPayLoad().put(LANGUAGE_KEY, individual.getLanguagePreference());
-			qr.getPayLoad().put(RELATIONSHIP_TO_HEAD_KEY, individual.getRelationshipToHead());
 
 			results.add(qr);
 		}

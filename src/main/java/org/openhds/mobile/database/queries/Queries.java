@@ -118,6 +118,11 @@ public class Queries {
 				OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, temp);
 	}
 
+	public static Cursor getSocialGroupByExtId(ContentResolver resolver, String extId) {
+		return getCursor(resolver, OpenHDS.SocialGroups.CONTENT_ID_URI_BASE,
+				OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, extId);
+	}
+
 	public static Cursor getSocialGroupByName(ContentResolver resolver, String groupName) {
 		return getCursor(resolver, OpenHDS.SocialGroups.CONTENT_ID_URI_BASE,
 				OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, groupName);
@@ -157,5 +162,17 @@ public class Queries {
 	public static Cursor getRelationshipByIndividualB(ContentResolver resolver, String extId) {
 		return getCursor(resolver, OpenHDS.Relationships.CONTENT_ID_URI_BASE,
 				OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B, extId);
+	}
+
+	public static Cursor getRelationshipByBothIndividuals(ContentResolver resolver, String extIdA,
+			String extIdB) {
+		return resolver.query(OpenHDS.Relationships.CONTENT_ID_URI_BASE, new String[] {
+				OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A,
+				OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B,
+				OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE,
+				OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE },
+				OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A + " = '" + extIdA + "' AND "
+						+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B + " = '" + extIdB + "'",
+				null, null);
 	}
 }

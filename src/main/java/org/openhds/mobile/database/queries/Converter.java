@@ -22,7 +22,7 @@ public class Converter {
 	public static Individual toIndividual(Cursor cursor) {
 		Individual individual = new Individual();
 
-		if (cursor.moveToNext()) {
+		if (cursor.moveToFirst()) {
 			populateIndividual(cursor, individual);
 		}
 
@@ -52,18 +52,12 @@ public class Converter {
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS)));
 		individual.setLanguagePreference(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
-
-		// TODO:
-		// Query for adding the relationship to Head of Household needs to be done
-		// and added to the field for individual so we can put it into the payload
-		// and display it in valuefrag
-
 	}
 
 	public static Location toLocation(Cursor cursor) {
 		Location location = new Location();
 
-		if (cursor.moveToNext()) {
+		if (cursor.moveToFirst()) {
 			populateLocation(cursor, location);
 		}
 
@@ -74,7 +68,7 @@ public class Converter {
 
 	private static void populateLocation(Cursor cursor, Location location) {
 		location.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_EXTID)));
-		location.setHierarchy(cursor.getString(cursor
+		location.setHierarchyExtId(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY)));
 		location.setLatitude(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE)));
@@ -142,7 +136,7 @@ public class Converter {
 	public static SocialGroup toSocialGroup(Cursor cursor) {
 		SocialGroup sg = new SocialGroup();
 
-		if (cursor.moveToNext()) {
+		if (cursor.moveToFirst()) {
 			populateSocialGroup(cursor, sg);
 		}
 
@@ -228,6 +222,24 @@ public class Converter {
 		cursor.close();
 
 		return rounds;
+	}
+
+	public static Relationship toRelationship(Cursor cursor) {
+		Relationship relationship = new Relationship();
+
+		if (cursor.moveToFirst()) {
+			relationship.setIndividualA(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
+			relationship.setIndividualB(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B)));
+			relationship.setStartDate(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE)));
+			relationship.setType(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE)));
+		}
+
+		cursor.close();
+		return relationship;
 	}
 
 	public static List<Relationship> toRelationshipList(Cursor cursor) {
