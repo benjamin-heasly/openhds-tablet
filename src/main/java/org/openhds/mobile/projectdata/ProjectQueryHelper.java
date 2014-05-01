@@ -33,27 +33,62 @@ public class ProjectQueryHelper {
 
 		if (state.equals(CensusActivity.REGION_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, REGION_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResults(cursor, state);
+			return getHierarchyQueryResultList(cursor, state);
 		} else if (state.equals(CensusActivity.PROVINCE_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, PROVINCE_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResults(cursor, state);
+			return getHierarchyQueryResultList(cursor, state);
 		} else if (state.equals(CensusActivity.DISTRICT_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, DISTRICT_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResults(cursor, state);
+			return getHierarchyQueryResultList(cursor, state);
 		} else if (state.equals(CensusActivity.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, MAP_AREA_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResults(cursor, state);
+			return getHierarchyQueryResultList(cursor, state);
 		} else if (state.equals(CensusActivity.SECTOR_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, SECTOR_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResults(cursor, state);
+			return getHierarchyQueryResultList(cursor, state);
 		} else if (state.equals(CensusActivity.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getAllLocations(contentResolver);
-			return getLocationQueryResults(cursor, state);
+			return getLocationQueryResultList(cursor, state);
 		} else if (state.equals(CensusActivity.INDIVIDUAL_STATE)) {
 			Cursor cursor = Queries.getAllIndividuals(contentResolver);
-			return getIndividualQueryResults(cursor, state);
+			return getIndividualQueryResultList(cursor, state);
 		}
 		return new ArrayList<QueryResult>();
+	}
+
+	public static QueryResult getIfExists(ContentResolver contentResolver, String state, String extId) {
+
+		if (state.equals(CensusActivity.REGION_STATE)) {
+			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getHierarchyQueryResult(cursor, state, true);
+		} else if (state.equals(CensusActivity.PROVINCE_STATE)) {
+			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getHierarchyQueryResult(cursor, state, true);
+		} else if (state.equals(CensusActivity.DISTRICT_STATE)) {
+			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getHierarchyQueryResult(cursor, state, true);
+		} else if (state.equals(CensusActivity.MAP_AREA_STATE)) {
+			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getHierarchyQueryResult(cursor, state, true);
+		} else if (state.equals(CensusActivity.SECTOR_STATE)) {
+			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getHierarchyQueryResult(cursor, state, true);
+		} else if (state.equals(CensusActivity.HOUSEHOLD_STATE)) {
+			Cursor cursor = Queries.getLocationByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getLocationQueryResult(cursor, state, true);
+		} else if (state.equals(CensusActivity.INDIVIDUAL_STATE)) {
+			Cursor cursor = Queries.getIndividualByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getIndividualQueryResult(cursor, state, true);
+		}
+
+		return null;
 	}
 
 	public static List<QueryResult> getChildren(ContentResolver contentResolver, QueryResult qr,
@@ -63,74 +98,113 @@ public class ProjectQueryHelper {
 		if (state.equals(CensusActivity.REGION_STATE) || state.equals(CensusActivity.PROVINCE_STATE)
 				|| state.equals(CensusActivity.DISTRICT_STATE) || state.equals(CensusActivity.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchysByParent(contentResolver, qr.getExtId());
-			return getHierarchyQueryResults(cursor, childState);
+			return getHierarchyQueryResultList(cursor, childState);
 		} else if (state.equals(CensusActivity.SECTOR_STATE)) {
 			Cursor cursor = Queries.getLocationsByHierachy(contentResolver, qr.getExtId());
-			return getLocationQueryResults(cursor, childState);
+			return getLocationQueryResultList(cursor, childState);
 		} else if (state.equals(CensusActivity.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getIndividualsByResidency(contentResolver, qr.getExtId());
-			return getIndividualQueryResults(cursor, childState);
+			return getIndividualQueryResultList(cursor, childState);
 		}
 
 		return new ArrayList<QueryResult>();
 	}
 
-	private static List<QueryResult> getHierarchyQueryResults(Cursor cursor, String state) {
+	private static List<QueryResult> getHierarchyQueryResultList(Cursor cursor, String state) {
 		List<QueryResult> results = new ArrayList<QueryResult>();
 
-		if (null == cursor) {
+		if (null == cursor || cursor.getCount() < 1) {
 			return results;
 		}
 
-		for (LocationHierarchy lh : Converter.toHierarchyList(cursor)) {
-			QueryResult qr = new QueryResult();
-			qr.setExtId(lh.getExtId());
-			qr.setName(lh.getName());
-			qr.setState(state);
-			results.add(qr);
+		while (cursor.moveToNext()) {
+			results.add(getHierarchyQueryResult(cursor, state, false));
 		}
+
+		cursor.close();
 
 		return results;
 	}
 
-	private static List<QueryResult> getLocationQueryResults(Cursor cursor, String state) {
+	private static QueryResult getHierarchyQueryResult(Cursor cursor, String state, boolean close) {
+
+		if (null == cursor || cursor.getCount() < 1) {
+			return null;
+		}
+
+		LocationHierarchy hierarchy = Converter.toHierarchy(cursor, close);
+		QueryResult qr = new QueryResult();
+		qr.setExtId(hierarchy.getExtId());
+		qr.setName(hierarchy.getName());
+		qr.setState(state);
+
+		return qr;
+	}
+
+	private static List<QueryResult> getLocationQueryResultList(Cursor cursor, String state) {
 		List<QueryResult> results = new ArrayList<QueryResult>();
 
-		if (null == cursor) {
+		if (null == cursor || cursor.getCount() < 1) {
 			return results;
 		}
 
-		for (Location location : Converter.toLocationList(cursor)) {
-			QueryResult qr = new QueryResult();
-			qr.setExtId(location.getExtId());
-			qr.setName(location.getName());
-			qr.setState(state);
-			results.add(qr);
+		while (cursor.moveToNext()) {
+			results.add(getLocationQueryResult(cursor, state, false));
 		}
+
+		cursor.close();
 
 		return results;
 	}
 
-	private static List<QueryResult> getIndividualQueryResults(Cursor cursor, String state) {
+	private static QueryResult getLocationQueryResult(Cursor cursor, String state, boolean close) {
+
+		if (null == cursor || cursor.getCount() < 1) {
+			return null;
+		}
+
+		Location location = Converter.toLocation(cursor, close);
+		QueryResult qr = new QueryResult();
+		qr.setExtId(location.getExtId());
+		qr.setName(location.getName());
+		qr.setState(state);
+
+		return qr;
+	}
+
+	private static List<QueryResult> getIndividualQueryResultList(Cursor cursor, String state) {
 		List<QueryResult> results = new ArrayList<QueryResult>();
 
-		if (null == cursor) {
+		if (null == cursor || cursor.getCount() < 1) {
 			return results;
 		}
 
-		for (Individual individual : Converter.toIndividualList(cursor)) {
-			QueryResult qr = new QueryResult();
-			qr.setExtId(individual.getExtId());
-			qr.setName(individual.getFirstName() + " " + individual.getLastName());
-			qr.setState(state);
-
-			qr.getPayLoad().put(OTHER_NAMES_KEY, individual.getOtherNames());
-			qr.getPayLoad().put(AGE_KEY, individual.getAge() + " (" + individual.getAgeUnits() + ")");
-			qr.getPayLoad().put(LANGUAGE_KEY, individual.getLanguagePreference());
-
-			results.add(qr);
+		while (cursor.moveToNext()) {
+			results.add(getIndividualQueryResult(cursor, state, false));
 		}
+
+		cursor.close();
 
 		return results;
 	}
+
+	private static QueryResult getIndividualQueryResult(Cursor cursor, String state, boolean close) {
+
+		if (null == cursor || cursor.getCount() < 1) {
+			return null;
+		}
+
+		Individual individual = Converter.toIndividual(cursor, close);
+		QueryResult qr = new QueryResult();
+		qr.setExtId(individual.getExtId());
+		qr.setName(Individual.getFullName(individual));
+		qr.setState(state);
+
+		qr.getPayLoad().put(OTHER_NAMES_KEY, individual.getOtherNames());
+		qr.getPayLoad().put(AGE_KEY, Individual.getAgeWithUnits(individual));
+		qr.getPayLoad().put(LANGUAGE_KEY, individual.getLanguagePreference());
+
+		return qr;
+	}
+
 }

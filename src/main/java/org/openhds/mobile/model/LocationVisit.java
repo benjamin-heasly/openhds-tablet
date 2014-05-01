@@ -348,7 +348,7 @@ public class LocationVisit implements Serializable {
         } else {
             String fatherId = currentHusband.getIndividualB();
             cursor = Queries.getIndividualByExtId(resolver, fatherId);
-            return Converter.toIndividual(cursor);
+            return Converter.toIndividual(cursor,true);
         }
     }
 

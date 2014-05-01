@@ -10,6 +10,7 @@ import org.openhds.mobile.model.FieldWorker;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,10 +62,9 @@ public class FieldWorkerLoginFragment extends Fragment implements OnClickListene
 		String username = getUsernameFromEditText();
 
 		if (Queries.hasFieldWorker(getActivity().getContentResolver(), username, password)) {
-
-			FieldWorker fieldWorker = Converter.toFieldWorker(Queries.getFieldWorkByExtId(getActivity()
-					.getContentResolver(), username));
-
+			Cursor cursor = Queries.getFieldWorkByExtId(getActivity().getContentResolver(), username);
+			cursor.moveToFirst();
+			FieldWorker fieldWorker = Converter.toFieldWorker(cursor, true);
 			launchCensusActivity(fieldWorker);
 		} else {
 			showLongToast(getActivity(), R.string.field_worker_bad_credentials);
@@ -72,7 +72,7 @@ public class FieldWorkerLoginFragment extends Fragment implements OnClickListene
 	}
 
 	private void launchCensusActivity(FieldWorker fieldWorker) {
-		
+
 		Intent intent = new Intent(getActivity(), CensusActivity.class);
 		intent.putExtra(FIELD_WORKER_EXTRA, fieldWorker);
 

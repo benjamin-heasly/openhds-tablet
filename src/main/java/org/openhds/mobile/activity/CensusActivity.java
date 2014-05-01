@@ -161,8 +161,15 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			for (String state : stateSequence) {
 				if (savedInstanceState.containsKey(state)) {
 					String extId = savedInstanceState.getString(state);
-					if (!restoreHierarchyPath(state, extId)) {
+
+					if (null == extId) {
 						break;
+					}
+					QueryResult qr = ProjectQueryHelper.getIfExists(getContentResolver(), state, extId);
+					if (null == qr) {
+						break;
+					} else {
+						hierarchyPath.put(state, qr);
 					}
 				} else {
 					break;
@@ -187,18 +194,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	protected void onResume() {
 		super.onResume();
 		hierarchySetup();
-	}
-
-	// attempt to re-fetch the selected data at the given state
-	private boolean restoreHierarchyPath(String state, String extId) {
-		currentResults = ProjectQueryHelper.getAll(getContentResolver(), state);
-		for (QueryResult qr : currentResults) {
-			if (extId.equals(qr.getExtId())) {
-				hierarchyPath.put(state, qr);
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private void hierarchySetup() {
@@ -326,23 +321,32 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				String socialGroupExtId = locationExtId.substring(3);
 				Cursor socialGroupCursor = Queries.getSocialGroupByExtId(getContentResolver(),
 						socialGroupExtId);
-				if (socialGroupCursor.getCount() > 0) {
-					SocialGroup socialGroup = Converter.toSocialGroup(socialGroupCursor);
+				if (socialGroupCursor.moveToFirst()) {
+					SocialGroup socialGroup = Converter.toSocialGroup(socialGroupCursor, true);
 					String headExtId = socialGroup.getGroupHead();
 					if (!"UNK".equals(headExtId)) {
 						Cursor individualCursor = Queries.getIndividualByExtId(getContentResolver(),
 								headExtId);
-						headOfHouseholdDefined = true;
-						currentHeadOfHousehold = Converter.toIndividual(individualCursor);
+						if (individualCursor.moveToFirst()) {
+							headOfHouseholdDefined = true;
+							currentHeadOfHousehold = Converter.toIndividual(individualCursor, true);
 
-						for (QueryResult qr : currentResults) {
-							Cursor relationshipCursor = Queries.getRelationshipByBothIndividuals(
-									getContentResolver(), currentHeadOfHousehold.getExtId(), qr.getExtId());
-							Relationship relationship = Converter.toRelationship(relationshipCursor);
-							qr.getPayLoad().put(RELATIONSHIP_TO_HEAD_KEY, relationship.getType());
+							for (QueryResult qr : currentResults) {
+								Cursor relationshipCursor = Queries.getRelationshipByBothIndividuals(
+										getContentResolver(), currentHeadOfHousehold.getExtId(),
+										qr.getExtId());
+								if (relationshipCursor.moveToFirst()) {
+									Relationship relationship = Converter.toRelationship(relationshipCursor,
+											true);
+									qr.getPayLoad().put(RELATIONSHIP_TO_HEAD_KEY, relationship.getType());
+								}
+								relationshipCursor.close();
+							}
 						}
+						individualCursor.close();
 					}
 				}
+				socialGroupCursor.close();
 
 				List<FormRecord> individualForms = formsForStates.get(state);
 				if (headOfHouseholdDefined) {
@@ -401,7 +405,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						// update name of location
 						Cursor locationCursor = Queries.getLocationByExtId(getContentResolver(),
 								locationExtId);
-						Location location = Converter.toLocation(locationCursor);
+						locationCursor.moveToNext();
+						Location location = Converter.toLocation(locationCursor, true);
 						location.setName(locationName);
 						selectedLocation.setName(locationName);
 						int rowsAffected = LocationAdapter.update(getContentResolver(), location);
@@ -410,8 +415,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						Cursor socialGroupCursor = Queries.getSocialGroupByExtId(getContentResolver(),
 								socialGroupExtId);
 						SocialGroup socialGroup;
-						if (socialGroupCursor.getCount() > 0) {
-							socialGroup = Converter.toSocialGroup(socialGroupCursor);
+						if (socialGroupCursor.moveToFirst()) {
+							socialGroup = Converter.toSocialGroup(socialGroupCursor, true);
 							socialGroup.setGroupHead(individual.getExtId());
 							socialGroup.setGroupName(locationName);
 							rowsAffected = SocialGroupAdapter.update(getContentResolver(), socialGroup);
@@ -419,6 +424,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							socialGroup = SocialGroupAdapter.create(socialGroupExtId, individual);
 							result = SocialGroupAdapter.insert(getContentResolver(), socialGroup);
 						}
+						socialGroupCursor.close();
 
 						// create membership of hoh in own household
 						Membership membership = MembershipAdapter.create(individual, socialGroup,
@@ -436,10 +442,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						// make membership in household
 						Cursor socialGroupCursor = Queries.getSocialGroupByExtId(getContentResolver(),
 								socialGroupExtId);
-						SocialGroup socialGroup = Converter.toSocialGroup(socialGroupCursor);
-						Membership membership = MembershipAdapter.create(individual, socialGroup,
-								relationshipType, membershipStatus);
-						result = MembershipAdapter.insert(getContentResolver(), membership);
+						if (socialGroupCursor.moveToFirst()) {
+							SocialGroup socialGroup = Converter.toSocialGroup(socialGroupCursor, true);
+							Membership membership = MembershipAdapter.create(individual, socialGroup,
+									relationshipType, membershipStatus);
+							result = MembershipAdapter.insert(getContentResolver(), membership);
+						}
+						socialGroupCursor.close();
 					}
 
 					// refresh to reflect new individual

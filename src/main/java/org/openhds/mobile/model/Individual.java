@@ -159,4 +159,13 @@ public class Individual implements Serializable {
 	public void setLanguagePreference(String languagePreference) {
 		this.languagePreference = languagePreference;
 	}
+	
+	public static String getFullName(Individual individual){
+		String fullname = individual.getFirstName() + " " + individual.getLastName();
+		return fullname;
+	}
+	public static String getAgeWithUnits(Individual individual){
+		String ageWithUnits = individual.age + " " + "("+individual.ageUnits+")";
+		return ageWithUnits;
+	}
 }

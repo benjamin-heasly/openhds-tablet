@@ -19,14 +19,16 @@ import android.database.Cursor;
  */
 public class Converter {
 
-	public static Individual toIndividual(Cursor cursor) {
+	public static Individual toIndividual(Cursor cursor, boolean close) {
 		Individual individual = new Individual();
 
-		if (cursor.moveToFirst()) {
+		if (cursor.getPosition() > -1) {
 			populateIndividual(cursor, individual);
 		}
 
-		cursor.close();
+		if (close) {
+			cursor.close();
+		}
 
 		return individual;
 	}
@@ -54,14 +56,16 @@ public class Converter {
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
 	}
 
-	public static Location toLocation(Cursor cursor) {
+	public static Location toLocation(Cursor cursor, boolean close) {
 		Location location = new Location();
 
-		if (cursor.moveToFirst()) {
+		if (cursor.getPosition() > -1) {
 			populateLocation(cursor, location);
 		}
 
-		cursor.close();
+		if (close) {
+			cursor.close();
+		}
 
 		return location;
 	}
@@ -77,10 +81,10 @@ public class Converter {
 		location.setName(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_NAME)));
 	}
 
-	public static LocationHierarchy toHierarhcy(Cursor cursor, boolean close) {
+	public static LocationHierarchy toHierarchy(Cursor cursor, boolean close) {
 		LocationHierarchy hierarchy = new LocationHierarchy();
 
-		if (cursor.moveToNext()) {
+		if (cursor.getPosition() > -1) {
 			populateHierarchy(cursor, hierarchy);
 		}
 
@@ -108,10 +112,10 @@ public class Converter {
 				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT)));
 	}
 
-	public static FieldWorker toFieldWorker(Cursor cursor) {
+	public static FieldWorker toFieldWorker(Cursor cursor, boolean close) {
 		FieldWorker fw = new FieldWorker();
 
-		if (cursor.moveToNext()) {
+		if (cursor.getPosition() > -1) {
 			fw.setExtId(cursor.getString(cursor
 					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID)));
 			fw.setFirstName(cursor.getString(cursor
@@ -128,19 +132,23 @@ public class Converter {
 			fw.setCollectedIdPrefix(idString);
 		}
 
-		cursor.close();
+		if (close) {
+			cursor.close();
+		}
 
 		return fw;
 	}
 
-	public static SocialGroup toSocialGroup(Cursor cursor) {
+	public static SocialGroup toSocialGroup(Cursor cursor, boolean close) {
 		SocialGroup sg = new SocialGroup();
 
-		if (cursor.moveToFirst()) {
+		if (cursor.getPosition() > -1) {
 			populateSocialGroup(cursor, sg);
 		}
 
-		cursor.close();
+		if (close) {
+			cursor.close();
+		}
 
 		return sg;
 	}
@@ -224,10 +232,10 @@ public class Converter {
 		return rounds;
 	}
 
-	public static Relationship toRelationship(Cursor cursor) {
+	public static Relationship toRelationship(Cursor cursor, boolean close) {
 		Relationship relationship = new Relationship();
 
-		if (cursor.moveToFirst()) {
+		if (cursor.getPosition() > -1) {
 			relationship.setIndividualA(cursor.getString(cursor
 					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
 			relationship.setIndividualB(cursor.getString(cursor
@@ -238,7 +246,9 @@ public class Converter {
 					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE)));
 		}
 
-		cursor.close();
+		if (close) {
+			cursor.close();
+		}
 		return relationship;
 	}
 
