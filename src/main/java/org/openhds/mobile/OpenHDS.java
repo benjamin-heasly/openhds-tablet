@@ -52,6 +52,8 @@ public class OpenHDS {
 		public static final String COLUMN_INDIVIDUAL_AGE_UNITS = "ageUnits";
 		public static final String COLUMN_INDIVIDUAL_PHONE_NUMBER = "phoneNumber";
 		public static final String COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER = "otherPhoneNumber";
+		public static final String COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME = "pointOfContactName";
+		public static final String COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER = "pointOfContactPhoneNumber";
 		public static final String COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE = "languagePreference";
 	}
 

@@ -56,6 +56,8 @@ public class ProjectFormFields {
 		public static final String GENDER = "individualGender";
 		public static final String PHONE_NUMBER = "individualPhoneNumber";
 		public static final String OTHER_PHONE_NUMBER = "individualOtherPhoneNumber";
+		public static final String POINT_OF_CONTACT_NAME = "individualPointOfContactName";
+		public static final String POINT_OF_CONTACT_PHONE_NUMBER = "individualPointOfContactPhoneNumber";
 		public static final String LANGUAGE_PREFERENCE = "individualLanguagePreference";
 		public static final String DIP = "individualDip";
 		public static final String MOTHER_EXTID = "individualMotherExtId";
@@ -80,6 +82,10 @@ public class ProjectFormFields {
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER, PHONE_NUMBER);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER,
 					OTHER_PHONE_NUMBER);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME,
+					POINT_OF_CONTACT_NAME);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER,
+					POINT_OF_CONTACT_PHONE_NUMBER);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
 					LANGUAGE_PREFERENCE);
 			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID, DIP);

@@ -14,6 +14,8 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER;
+import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME;
+import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Individuals.CONTENT_ID_URI_BASE;
@@ -62,6 +64,10 @@ public class IndividualAdapter {
 				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_PHONE_NUMBER)));
 		individual.setOtherPhoneNumber(formInstanceData.get(ProjectFormFields.Individuals
 				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER)));
+		individual.setPointOfContactName(formInstanceData.get(ProjectFormFields.Individuals
+				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME)));
+		individual.setPointOfContactPhoneNumber(formInstanceData.get(ProjectFormFields.Individuals
+				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER)));
 		individual.setLanguagePreference(formInstanceData.get(ProjectFormFields.Individuals
 				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
 		return individual;
@@ -86,6 +92,8 @@ public class IndividualAdapter {
 		cv.put(COLUMN_INDIVIDUAL_AGE_UNITS, individual.getAgeUnits());
 		cv.put(COLUMN_INDIVIDUAL_PHONE_NUMBER, individual.getPhoneNumber());
 		cv.put(COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER, individual.getOtherPhoneNumber());
+		cv.put(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME, individual.getPointOfContactName());
+		cv.put(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER, individual.getPointOfContactPhoneNumber());
 		cv.put(COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE, individual.getLanguagePreference());
 
 		return resolver.insert(CONTENT_ID_URI_BASE, cv);

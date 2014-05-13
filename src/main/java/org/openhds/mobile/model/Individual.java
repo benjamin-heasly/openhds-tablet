@@ -22,7 +22,26 @@ public class Individual implements Serializable {
 	private String ageUnits;
 	private String phoneNumber;
 	private String otherPhoneNumber;
+	private String pointOfContactName;
+	private String pointOfContactPhoneNumber;
 	private String languagePreference;
+	
+	public String getPointOfContactName() {
+		return pointOfContactName;
+	}
+
+	public void setPointOfContactName(String pointOfContactName) {
+		this.pointOfContactName = pointOfContactName;
+	}
+
+	public String getPointOfContactPhoneNumber() {
+		return pointOfContactPhoneNumber;
+	}
+
+	public void setPointOfContactPhoneNumber(String pointOfContactPhoneNumber) {
+		this.pointOfContactPhoneNumber = pointOfContactPhoneNumber;
+	}
+	
 
 	public String getExtId() {
 		return extId;
