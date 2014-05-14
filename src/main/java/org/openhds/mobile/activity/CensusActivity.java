@@ -62,6 +62,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	private static final Map<String, List<FormRecord>> formsForStates = new HashMap<String, List<FormRecord>>();
 
 	private static final String CREATE_HEAD_OF_HOUSEHOLD_LABEL = "Create Head of Household";
+	private static final String ADD_MEMBER_OF_HOUSEHOLD_LABEL = "Add Member of Household";
+	private static final String EDIT_INDIVIDUAL_LABEL = "Edit Individual";
 
 	static {
 		stateSequence.add(REGION_STATE);
@@ -91,8 +93,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		ArrayList<FormRecord> individualFormList = new ArrayList<FormRecord>();
 		ArrayList<FormRecord> bottomFormList = new ArrayList<FormRecord>();
 
-		individualFormList.add(new FormRecord("Individual", CREATE_HEAD_OF_HOUSEHOLD_LABEL));
-		individualFormList.add(new FormRecord("Individual", "Add Member of Household"));
+		individualFormList.add(new FormRecord("Individual",
+				CREATE_HEAD_OF_HOUSEHOLD_LABEL, null));
+		individualFormList.add(new FormRecord("Individual",
+				ADD_MEMBER_OF_HOUSEHOLD_LABEL, null));
+
+		bottomFormList.add(new FormRecord("Individual", EDIT_INDIVIDUAL_LABEL,
+				INDIVIDUAL_STATE));
 
 		formsForStates.put(REGION_STATE, regionFormList);
 		formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -125,7 +132,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.census_activity);
 		hierarchyPath = new HashMap<String, QueryResult>();
-		stateMachine = new StateMachine(new HashSet<String>(stateSequence), stateSequence.get(0));
+		stateMachine = new StateMachine(new HashSet<String>(stateSequence),
+				stateSequence.get(0));
 		for (String state : stateSequence) {
 			stateMachine.registerListener(state, new HierarchyStateListener());
 		}
@@ -141,20 +149,24 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			formFragment = new HierarchyFormFragment();
 			formFragment.setNavigator(this);
 
-			getFragmentManager().beginTransaction()
-					.add(R.id.left_column, selectionFragment, SELECTION_FRAGMENT_TAG)
+			getFragmentManager()
+					.beginTransaction()
+					.add(R.id.left_column, selectionFragment,
+							SELECTION_FRAGMENT_TAG)
 					.add(R.id.middle_column, valueFragment, VALUE_FRAGMENT_TAG)
-					.add(R.id.right_column, formFragment, FORM_FRAGMENT_TAG).commit();
+					.add(R.id.right_column, formFragment, FORM_FRAGMENT_TAG)
+					.commit();
 
 		} else {
 			// restore saved activity state
-			selectionFragment = (HierarchySelectionFragment) getFragmentManager().findFragmentByTag(
-					SELECTION_FRAGMENT_TAG);
+			selectionFragment = (HierarchySelectionFragment) getFragmentManager()
+					.findFragmentByTag(SELECTION_FRAGMENT_TAG);
 			selectionFragment.setNavigator(this);
-			valueFragment = (HierarchyValueFragment) getFragmentManager().findFragmentByTag(
-					VALUE_FRAGMENT_TAG);
+			valueFragment = (HierarchyValueFragment) getFragmentManager()
+					.findFragmentByTag(VALUE_FRAGMENT_TAG);
 			valueFragment.setNavigator(this);
-			formFragment = (HierarchyFormFragment) getFragmentManager().findFragmentByTag(FORM_FRAGMENT_TAG);
+			formFragment = (HierarchyFormFragment) getFragmentManager()
+					.findFragmentByTag(FORM_FRAGMENT_TAG);
 			formFragment.setNavigator(this);
 
 			// try to re-fetch selected data all the way down the hierarchy path
@@ -165,7 +177,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 					if (null == extId) {
 						break;
 					}
-					QueryResult qr = ProjectQueryHelper.getIfExists(getContentResolver(), state, extId);
+					QueryResult qr = ProjectQueryHelper.getIfExists(
+							getContentResolver(), state, extId);
 					if (null == qr) {
 						break;
 					} else {
@@ -211,11 +224,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		String state = stateSequence.get(stateIndex);
 		if (0 == stateIndex) {
 			selectionFragment.setButtonAllowed(state, true);
-			currentResults = ProjectQueryHelper.getAll(getContentResolver(), stateSequence.get(0));
+			currentResults = ProjectQueryHelper.getAll(getContentResolver(),
+					stateSequence.get(0));
 		} else {
 			String previousState = stateSequence.get(stateIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = ProjectQueryHelper.getChildren(getContentResolver(), previousSelection, state);
+			currentResults = ProjectQueryHelper.getChildren(
+					getContentResolver(), previousSelection, state);
 		}
 		stateMachine.transitionTo(state);
 
@@ -226,11 +241,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 		QueryResult selected = hierarchyPath.get(state);
 		if (null == selected) {
-			String stateLabel = getResourceString(CensusActivity.this, stateLabels.get(state));
+			String stateLabel = getResourceString(CensusActivity.this,
+					stateLabels.get(state));
 			selectionFragment.setButtonLabel(state, stateLabel, null);
 			selectionFragment.setButtonHighlighted(state, true);
 		} else {
-			selectionFragment.setButtonLabel(state, selected.getName(), selected.getExtId());
+			selectionFragment.setButtonLabel(state, selected.getName(),
+					selected.getExtId());
 			selectionFragment.setButtonHighlighted(state, false);
 		}
 	}
@@ -251,7 +268,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	public void jumpUp(String targetState) {
 		int targetIndex = stateSequence.indexOf(targetState);
 		if (targetIndex < 0) {
-			throw new IllegalStateException("Target state <" + targetState + "> is not a valid state");
+			throw new IllegalStateException("Target state <" + targetState
+					+ "> is not a valid state");
 		}
 
 		String currentState = stateMachine.getState();
@@ -271,13 +289,14 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		// prepare to stepDown() from this target state
 		if (0 == targetIndex) {
 			// root of the hierarchy
-			currentResults = ProjectQueryHelper.getAll(getContentResolver(), stateSequence.get(0));
+			currentResults = ProjectQueryHelper.getAll(getContentResolver(),
+					stateSequence.get(0));
 		} else {
 			// middle of the hierarchy
 			String previousState = stateSequence.get(targetIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = ProjectQueryHelper.getChildren(getContentResolver(), previousSelection,
-					targetState);
+			currentResults = ProjectQueryHelper.getChildren(
+					getContentResolver(), previousSelection, targetState);
 		}
 		stateMachine.transitionTo(targetState);
 	}
@@ -289,14 +308,16 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 		String currentState = stateMachine.getState();
 		if (!currentState.equals(selected.getState())) {
-			throw new IllegalStateException("Selected state <" + selected.getState()
-					+ "> mismatch with current state <" + currentState + ">");
+			throw new IllegalStateException("Selected state <"
+					+ selected.getState() + "> mismatch with current state <"
+					+ currentState + ">");
 		}
 
 		int currentIndex = stateSequence.indexOf(currentState);
 		if (currentIndex >= 0 && currentIndex < stateSequence.size() - 1) {
 			String nextState = stateSequence.get(currentIndex + 1);
-			currentResults = ProjectQueryHelper.getChildren(getContentResolver(), selected, nextState);
+			currentResults = ProjectQueryHelper.getChildren(
+					getContentResolver(), selected, nextState);
 			hierarchyPath.put(currentState, selected);
 			stateMachine.transitionTo(nextState);
 		}
@@ -317,28 +338,37 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				// and does it have a valid head of household
 				boolean headOfHouseholdDefined = false;
 				currentHeadOfHousehold = null;
-				String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE).getExtId();
+				String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE)
+						.getExtId();
 				String socialGroupExtId = locationExtId.substring(3);
-				Cursor socialGroupCursor = Queries.getSocialGroupByExtId(getContentResolver(),
-						socialGroupExtId);
+				Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
+						getContentResolver(), socialGroupExtId);
 				if (socialGroupCursor.moveToFirst()) {
-					SocialGroup socialGroup = Converter.toSocialGroup(socialGroupCursor, true);
+					SocialGroup socialGroup = Converter.toSocialGroup(
+							socialGroupCursor, true);
 					String headExtId = socialGroup.getGroupHead();
 					if (!"UNK".equals(headExtId)) {
-						Cursor individualCursor = Queries.getIndividualByExtId(getContentResolver(),
-								headExtId);
+						Cursor individualCursor = Queries.getIndividualByExtId(
+								getContentResolver(), headExtId);
 						if (individualCursor.moveToFirst()) {
 							headOfHouseholdDefined = true;
-							currentHeadOfHousehold = Converter.toIndividual(individualCursor, true);
+							currentHeadOfHousehold = Converter.toIndividual(
+									individualCursor, true);
 
 							for (QueryResult qr : currentResults) {
-								Cursor relationshipCursor = Queries.getRelationshipByBothIndividuals(
-										getContentResolver(), currentHeadOfHousehold.getExtId(),
-										qr.getExtId());
+								Cursor relationshipCursor = Queries
+										.getRelationshipByBothIndividuals(
+												getContentResolver(),
+												currentHeadOfHousehold
+														.getExtId(), qr
+														.getExtId());
 								if (relationshipCursor.moveToFirst()) {
-									Relationship relationship = Converter.toRelationship(relationshipCursor,
-											true);
-									qr.getPayLoad().put(RELATIONSHIP_TO_HEAD_KEY, relationship.getType());
+									Relationship relationship = Converter
+											.toRelationship(relationshipCursor,
+													true);
+									qr.getPayLoad().put(
+											RELATIONSHIP_TO_HEAD_KEY,
+											relationship.getType());
 								}
 								relationshipCursor.close();
 							}
@@ -350,9 +380,11 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 				List<FormRecord> individualForms = formsForStates.get(state);
 				if (headOfHouseholdDefined) {
-					formFragment.createFormButtons(individualForms.subList(1, 2));
+					formFragment.createFormButtons(individualForms
+							.subList(1, 2));
 				} else {
-					formFragment.createFormButtons(individualForms.subList(0, 1));
+					formFragment.createFormButtons(individualForms
+							.subList(0, 1));
 				}
 
 			} else {
@@ -372,8 +404,24 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 	@Override
 	public void launchForm(FormRecord form) {
+		Map<String, String> formFieldMap = getFormFieldNameMap();
+		String editState;
 
-		formHelper.newFormInstance(form, getFormFieldNameMap());
+		if (null != (editState = form.getEditForState())) {
+			String extId = hierarchyPath.get(form.getEditForState()).getExtId();
+
+			switch (editState) {
+			case INDIVIDUAL_STATE:
+				Cursor cursor = Queries.getIndividualByExtId(getContentResolver(), extId);
+				cursor.moveToFirst();
+				Individual individualToEdit = Converter.toIndividual(cursor, true);		
+				formFieldMap = IndividualAdapter.individualToFormFields(individualToEdit);
+				break;
+			}
+
+		}
+
+		formHelper.newFormInstance(form, formFieldMap);
 		Intent intent = formHelper.buildEditFormInstanceIntent();
 		startActivityForResult(intent, EDIT_FORM_INTENT);
 
@@ -387,66 +435,88 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			if (resultCode == RESULT_OK) {
 				if (formHelper.checkFormInstanceStatus()) {
 
-					QueryResult selectedLocation = hierarchyPath.get(HOUSEHOLD_STATE);
+					QueryResult selectedLocation = hierarchyPath
+							.get(HOUSEHOLD_STATE);
 
-					Map<String, String> formInstanceData = formHelper.getFormInstanceData();
-					Individual individual = IndividualAdapter.create(formInstanceData);
-					Uri result = IndividualAdapter.insert(getContentResolver(), individual);
+					Map<String, String> formInstanceData = formHelper
+							.getFormInstanceData();
+					Individual individual = IndividualAdapter
+							.create(formInstanceData);
+					Uri result = IndividualAdapter.insert(getContentResolver(),
+							individual);
 
 					FormRecord formRecord = formHelper.getForm();
-					String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE).getExtId();
+					String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE)
+							.getExtId();
 					String socialGroupExtId = locationExtId.substring(3);
 					String relationshipType = formInstanceData
 							.get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
 					String membershipStatus = formInstanceData
 							.get(ProjectFormFields.Individuals.MEMBER_STATUS);
-					String locationName = "House of " + individual.getLastName();
-					if (formRecord.getFormLabel().equals(CREATE_HEAD_OF_HOUSEHOLD_LABEL)) {
+					String locationName = "House of "
+							+ individual.getLastName();
+					if (formRecord.getFormLabel().equals(
+							CREATE_HEAD_OF_HOUSEHOLD_LABEL)) {
 						// update name of location
-						Cursor locationCursor = Queries.getLocationByExtId(getContentResolver(),
-								locationExtId);
+						Cursor locationCursor = Queries.getLocationByExtId(
+								getContentResolver(), locationExtId);
 						locationCursor.moveToNext();
-						Location location = Converter.toLocation(locationCursor, true);
+						Location location = Converter.toLocation(
+								locationCursor, true);
 						location.setName(locationName);
 						selectedLocation.setName(locationName);
-						int rowsAffected = LocationAdapter.update(getContentResolver(), location);
+						int rowsAffected = LocationAdapter.update(
+								getContentResolver(), location);
 
 						// get the social group associated with current location
-						Cursor socialGroupCursor = Queries.getSocialGroupByExtId(getContentResolver(),
-								socialGroupExtId);
+						Cursor socialGroupCursor = Queries
+								.getSocialGroupByExtId(getContentResolver(),
+										socialGroupExtId);
 						SocialGroup socialGroup;
 						if (socialGroupCursor.moveToFirst()) {
-							socialGroup = Converter.toSocialGroup(socialGroupCursor, true);
+							socialGroup = Converter.toSocialGroup(
+									socialGroupCursor, true);
 							socialGroup.setGroupHead(individual.getExtId());
 							socialGroup.setGroupName(locationName);
-							rowsAffected = SocialGroupAdapter.update(getContentResolver(), socialGroup);
+							rowsAffected = SocialGroupAdapter.update(
+									getContentResolver(), socialGroup);
 						} else {
-							socialGroup = SocialGroupAdapter.create(socialGroupExtId, individual);
-							result = SocialGroupAdapter.insert(getContentResolver(), socialGroup);
+							socialGroup = SocialGroupAdapter.create(
+									socialGroupExtId, individual);
+							result = SocialGroupAdapter.insert(
+									getContentResolver(), socialGroup);
 						}
 						socialGroupCursor.close();
 
 						// create membership of hoh in own household
-						Membership membership = MembershipAdapter.create(individual, socialGroup,
-								relationshipType, membershipStatus);
-						result = MembershipAdapter.insert(getContentResolver(), membership);
+						Membership membership = MembershipAdapter.create(
+								individual, socialGroup, relationshipType,
+								membershipStatus);
+						result = MembershipAdapter.insert(getContentResolver(),
+								membership);
 
 					} else {
 						// make relationship to head of household
 						String startDate = formInstanceData
 								.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
-						Relationship relationship = RelationshipAdapter.create(currentHeadOfHousehold,
-								individual, relationshipType, startDate);
-						RelationshipAdapter.insert(getContentResolver(), relationship);
+						Relationship relationship = RelationshipAdapter.create(
+								currentHeadOfHousehold, individual,
+								relationshipType, startDate);
+						RelationshipAdapter.insert(getContentResolver(),
+								relationship);
 
 						// make membership in household
-						Cursor socialGroupCursor = Queries.getSocialGroupByExtId(getContentResolver(),
-								socialGroupExtId);
+						Cursor socialGroupCursor = Queries
+								.getSocialGroupByExtId(getContentResolver(),
+										socialGroupExtId);
 						if (socialGroupCursor.moveToFirst()) {
-							SocialGroup socialGroup = Converter.toSocialGroup(socialGroupCursor, true);
-							Membership membership = MembershipAdapter.create(individual, socialGroup,
-									relationshipType, membershipStatus);
-							result = MembershipAdapter.insert(getContentResolver(), membership);
+							SocialGroup socialGroup = Converter.toSocialGroup(
+									socialGroupCursor, true);
+							Membership membership = MembershipAdapter.create(
+									individual, socialGroup, relationshipType,
+									membershipStatus);
+							result = MembershipAdapter.insert(
+									getContentResolver(), membership);
 						}
 						socialGroupCursor.close();
 					}
@@ -472,41 +542,50 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 		for (String state : stateSequence) {
 			if (null != hierarchyPath.get(state)) {
-				String fieldName = ProjectFormFields.General.getExtIdFieldNameFromState(state);
-				formFieldNames.put(fieldName, hierarchyPath.get(state).getExtId());
+				String fieldName = ProjectFormFields.General
+						.getExtIdFieldNameFromState(state);
+				formFieldNames.put(fieldName, hierarchyPath.get(state)
+						.getExtId());
 			}
 		}
 
 		FieldWorker fieldWorker = (FieldWorker) getIntent().getExtras().get(
 				FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
-		formFieldNames.put(ProjectFormFields.General.COLLECTED_BY_FIELD_WORKER_EXTID, fieldWorker.getExtId());
+		formFieldNames.put(
+				ProjectFormFields.General.COLLECTED_BY_FIELD_WORKER_EXTID,
+				fieldWorker.getExtId());
 
 		Calendar c = Calendar.getInstance();
-		formFieldNames.put(ProjectFormFields.General.COLLECTED_DATE_TIME, c.getTime().toString());
+		formFieldNames.put(ProjectFormFields.General.COLLECTED_DATE_TIME, c
+				.getTime().toString());
 
 		String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
 
-		Cursor cursor = getIndividualsExtIdsByPrefix(getContentResolver(), generatedIdPrefix);
+		Cursor cursor = getIndividualsExtIdsByPrefix(getContentResolver(),
+				generatedIdPrefix);
 		int nextSequence = 0;
 		if (cursor.moveToLast()) {
-			String lastExtId = cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
+			String lastExtId = cursor
+					.getString(cursor
+							.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
 			int prefixLength = generatedIdPrefix.length();
 			int checkDigitLength = 1;
-			String lastSequenceNumber = lastExtId.substring(prefixLength + 1, lastExtId.length()
-					- checkDigitLength);
+			String lastSequenceNumber = lastExtId.substring(prefixLength + 1,
+					lastExtId.length() - checkDigitLength);
 			nextSequence = Integer.parseInt(lastSequenceNumber) + 1;
 		}
 		cursor.close();
 		// TODO: break out 5-digit number format, don't use string literal here.
 		String generatedIdSeqNum = String.format("%05d", nextSequence);
 
-		Character generatedIdCheck = LuhnValidator.generateCheckCharacter(generatedIdSeqNum
-				+ generatedIdSeqNum);
+		Character generatedIdCheck = LuhnValidator
+				.generateCheckCharacter(generatedIdSeqNum + generatedIdSeqNum);
 
-		String individualExtId = generatedIdPrefix + generatedIdSeqNum + generatedIdCheck.toString();
+		String individualExtId = generatedIdPrefix + generatedIdSeqNum
+				+ generatedIdCheck.toString();
 
-		formFieldNames.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+		formFieldNames.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
+				individualExtId);
 
 		return formFieldNames;
 	}

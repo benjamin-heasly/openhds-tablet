@@ -3,14 +3,12 @@ package org.openhds.mobile.fragment;
 import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
 
-import org.openhds.mobile.model.FormRecord;
-
 import java.util.List;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.HierarchyNavigator;
+import org.openhds.mobile.model.FormRecord;
 
-import android.animation.LayoutTransition;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -54,8 +52,8 @@ public class HierarchyFormFragment extends Fragment {
 	private class HierarchyFormListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			FormRecord form = formListAdapter.getItem(position);		
-				navigator.launchForm(form);
+			FormRecord form = formListAdapter.getItem(position);	
+				navigator.launchForm(form);	
 		}
 	}
 

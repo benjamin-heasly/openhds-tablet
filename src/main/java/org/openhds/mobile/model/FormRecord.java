@@ -4,10 +4,12 @@ public class FormRecord {
 
 	private String formName;
 	private String formLabel;
-
-	public FormRecord(String formName, String formLabel) {
+	private String editForState;
+	
+	public FormRecord(String formName, String formLabel, String state) {
 		this.formName = formName;
 		this.formLabel = formLabel;
+		this.editForState = state;
 	}
 
 	public String getFormName() {
@@ -16,6 +18,10 @@ public class FormRecord {
 
 	public String getFormLabel() {
 		return formLabel;
+	}
+	
+	public String getEditForState() {
+		return editForState;
 	}
 
 }

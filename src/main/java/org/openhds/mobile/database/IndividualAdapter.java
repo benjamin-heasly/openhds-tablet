@@ -20,6 +20,7 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Individuals.CONTENT_ID_URI_BASE;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.openhds.mobile.model.Individual;
@@ -31,6 +32,7 @@ import android.net.Uri;
 
 public class IndividualAdapter {
 
+	
 	public static Individual create(Map<String, String> formInstanceData) {
 		Individual individual = new Individual();
 
@@ -73,6 +75,30 @@ public class IndividualAdapter {
 		return individual;
 	}
 
+	public static Map<String,String> individualToFormFields(Individual individual){
+		Map<String,String> formFields = new HashMap<String,String>();
+
+		formFields.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individual.getExtId());
+		formFields.put(ProjectFormFields.Individuals.FIRST_NAME, individual.getFirstName());
+		formFields.put(ProjectFormFields.Individuals.LAST_NAME, individual.getLastName());
+		formFields.put(ProjectFormFields.Individuals.DATE_OF_BIRTH, individual.getDob());
+		formFields.put(ProjectFormFields.Individuals.GENDER, individual.getGender());
+		formFields.put(ProjectFormFields.Individuals.MOTHER_EXTID, individual.getMother());
+		formFields.put(ProjectFormFields.Individuals.FATHER_EXTID, individual.getFather());
+		formFields.put(ProjectFormFields.Individuals.DIP, individual.getOtherId());
+		formFields.put(ProjectFormFields.Individuals.OTHER_NAMES, individual.getOtherNames());
+		formFields.put(ProjectFormFields.Individuals.AGE, individual.getAge());
+		formFields.put(ProjectFormFields.Individuals.AGE_UNITS, individual.getAgeUnits());
+		formFields.put(ProjectFormFields.Individuals.PHONE_NUMBER, individual.getPhoneNumber());
+		formFields.put(ProjectFormFields.Individuals.OTHER_PHONE_NUMBER, individual.getOtherPhoneNumber());
+		formFields.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, individual.getPointOfContactName());
+		formFields.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, individual.getPointOfContactPhoneNumber());
+		formFields.put(ProjectFormFields.Individuals.LANGUAGE_PREFERENCE, individual.getLanguagePreference());
+
+		return formFields;
+	}
+	
+	
 	public static Uri insert(ContentResolver resolver, Individual individual) {
 		ContentValues cv = new ContentValues();
 
