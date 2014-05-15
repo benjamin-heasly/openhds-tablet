@@ -232,6 +232,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			currentResults = ProjectQueryHelper.getChildren(
 					getContentResolver(), previousSelection, state);
 		}
+		// make sure that listeners will fire for the current state
+		stateMachine.transitionTo(stateSequence.get(0));
 		stateMachine.transitionTo(state);
 
 		valueFragment.populateValues(currentResults);
@@ -391,6 +393,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				formFragment.createFormButtons(formsForStates.get(state));
 			}
 
+			currentResults.equals(currentResults);
+			
 			valueFragment.populateValues(currentResults);
 		}
 
@@ -404,7 +408,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 	@Override
 	public void launchForm(FormRecord form) {
-		Map<String, String> formFieldMap = getFormFieldNameMap();
+		Map<String, String> formFieldMap = getFormFieldNameMap(null);
 		String editState;
 
 		if (null != (editState = form.getEditForState())) {
@@ -414,8 +418,16 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			case INDIVIDUAL_STATE:
 				Cursor cursor = Queries.getIndividualByExtId(getContentResolver(), extId);
 				cursor.moveToFirst();
-				Individual individualToEdit = Converter.toIndividual(cursor, true);		
-				formFieldMap = IndividualAdapter.individualToFormFields(individualToEdit);
+				Individual individualToEdit = Converter.toIndividual(cursor, true);	
+				
+				formFieldMap = getFormFieldNameMap(IndividualAdapter.individualToFormFields(individualToEdit));	
+				
+				String socialGroupExtId = hierarchyPath.get(HOUSEHOLD_STATE).getExtId().substring(3);
+				cursor = Queries.getMembershipByHouseholdAndIndividualExtId(getContentResolver(), socialGroupExtId, extId);
+				cursor.moveToFirst();
+				Membership membership = Converter.toMembership(cursor, true);
+				formFieldMap.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD, membership.getRelationshipToHead());
+				formFieldMap.put(ProjectFormFields.Individuals.MEMBER_STATUS, membership.getStatus());
 				break;
 			}
 
@@ -435,16 +447,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			if (resultCode == RESULT_OK) {
 				if (formHelper.checkFormInstanceStatus()) {
 
+					
 					QueryResult selectedLocation = hierarchyPath
 							.get(HOUSEHOLD_STATE);
-
 					Map<String, String> formInstanceData = formHelper
 							.getFormInstanceData();
+					
+					//INSERT or UPDATE INDIVIDUAL
 					Individual individual = IndividualAdapter
 							.create(formInstanceData);
-					Uri result = IndividualAdapter.insert(getContentResolver(),
+					boolean result = IndividualAdapter.insertOrUpdate(getContentResolver(),
 							individual);
 
+					
 					FormRecord formRecord = formHelper.getForm();
 					String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE)
 							.getExtId();
@@ -455,6 +470,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							.get(ProjectFormFields.Individuals.MEMBER_STATUS);
 					String locationName = "House of "
 							+ individual.getLastName();
+					
+					//HANDLE HEAD OF HOUSEHOLD CREATION
 					if (formRecord.getFormLabel().equals(
 							CREATE_HEAD_OF_HOUSEHOLD_LABEL)) {
 						// update name of location
@@ -483,7 +500,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						} else {
 							socialGroup = SocialGroupAdapter.create(
 									socialGroupExtId, individual);
-							result = SocialGroupAdapter.insert(
+							//TODO: create insertOrUpdate for socialGroupAdapter
+							SocialGroupAdapter.insert(
 									getContentResolver(), socialGroup);
 						}
 						socialGroupCursor.close();
@@ -492,20 +510,24 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						Membership membership = MembershipAdapter.create(
 								individual, socialGroup, relationshipType,
 								membershipStatus);
-						result = MembershipAdapter.insert(getContentResolver(),
+						//TODO: create insertOrUpdate for membershipAdapter
+						result = MembershipAdapter.insertOrUpdate(getContentResolver(),
 								membership);
 
+						
+						//NON-HEAD OF HOUSEHOLD FORM CREATIONS/EDITS
 					} else {
-						// make relationship to head of household
+						
+						// INSERT or UPDATE RELATIONSHIP
 						String startDate = formInstanceData
 								.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
 						Relationship relationship = RelationshipAdapter.create(
 								currentHeadOfHousehold, individual,
 								relationshipType, startDate);
-						RelationshipAdapter.insert(getContentResolver(),
+						result = RelationshipAdapter.insertOrUpdate(getContentResolver(),
 								relationship);
 
-						// make membership in household
+						// INSERT or UPDATE MEMBERSHIP
 						Cursor socialGroupCursor = Queries
 								.getSocialGroupByExtId(getContentResolver(),
 										socialGroupExtId);
@@ -515,7 +537,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							Membership membership = MembershipAdapter.create(
 									individual, socialGroup, relationshipType,
 									membershipStatus);
-							result = MembershipAdapter.insert(
+							
+							result = MembershipAdapter.insertOrUpdate(
 									getContentResolver(), membership);
 						}
 						socialGroupCursor.close();
@@ -536,8 +559,10 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		}
 	}
 
-	public Map<String, String> getFormFieldNameMap() {
-
+	
+	//Takes in optional map to merge with
+	public Map<String, String> getFormFieldNameMap(Map<String,String> inputMap) {
+		
 		HashMap<String, String> formFieldNames = new HashMap<String, String>();
 
 		for (String state : stateSequence) {
@@ -575,6 +600,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			nextSequence = Integer.parseInt(lastSequenceNumber) + 1;
 		}
 		cursor.close();
+		
 		// TODO: break out 5-digit number format, don't use string literal here.
 		String generatedIdSeqNum = String.format("%05d", nextSequence);
 
@@ -586,6 +612,15 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 		formFieldNames.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
 				individualExtId);
+		
+		if(null != inputMap){
+			for(String key : formFieldNames.keySet()){
+				if(!inputMap.containsKey(key)){
+					inputMap.put(key, formFieldNames.get(key));
+				}
+			}
+			return inputMap;
+		}
 
 		return formFieldNames;
 	}
