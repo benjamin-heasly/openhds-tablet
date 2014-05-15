@@ -14,7 +14,7 @@ public class Queries {
 	private Queries() {
 	}
 
-	public static boolean individualByExtId(ContentResolver resolver, String extId) {
+	public static boolean hasIndividualByExtId(ContentResolver resolver, String extId) {
 		return queryForSingleRow(resolver, OpenHDS.Individuals.CONTENT_ID_URI_BASE,
 				OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID, extId);
 	}
@@ -175,4 +175,42 @@ public class Queries {
 						+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B + " = '" + extIdB + "'",
 				null, null);
 	}
+	
+	public static boolean hasRelationshipByBothIndividuals(ContentResolver resolver, String extIdA,
+			String extIdB) {
+		
+		Cursor cursor = getRelationshipByBothIndividuals(resolver, extIdA, extIdB);
+		
+		if(cursor.getCount() > 0){
+			cursor.close();
+			return true;
+		} else {
+			cursor.close();
+			return false;
+		}
+	}
+	
+	public static Cursor getMembershipByHouseholdAndIndividualExtId(ContentResolver resolver, String extIdH, String extIdI){
+		return resolver.query(OpenHDS.Memberships.CONTENT_ID_URI_BASE, new String[] {
+				OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
+				OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
+				OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD,
+				OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS },
+				OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID + " = '" + extIdH + "' AND "
+						+ OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID + " = '" + extIdI + "'",
+				null, null);
+	}
+	
+	public static boolean hasMembershipByHouseholdAndIndividualExtId(ContentResolver resolver, String extIdH, String extIdI) {
+		Cursor cursor = getMembershipByHouseholdAndIndividualExtId(resolver, extIdH, extIdI);
+		if(cursor.getCount() > 0){
+			cursor.close();
+			return true;
+		} else {
+			cursor.close();
+			return false;	
+		}
+	
+	}
+	
 }

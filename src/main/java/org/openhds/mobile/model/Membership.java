@@ -5,7 +5,8 @@ import java.io.Serializable;
 public class Membership implements Serializable {
 
 	
-	private static final long serialVersionUID = -3909095153199193088L;
+	private static final long serialVersionUID = 6446118055284774938L;
+	
 	
 	private String individualExtId;
 	private String socialGroupExtId;

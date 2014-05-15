@@ -9,7 +9,6 @@ import org.openhds.mobile.R;
 import org.openhds.mobile.activity.HierarchyNavigator;
 import org.openhds.mobile.database.queries.QueryResult;
 
-import android.animation.LayoutTransition;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;

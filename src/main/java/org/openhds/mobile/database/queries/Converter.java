@@ -8,6 +8,7 @@ import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.model.Round;
 import org.openhds.mobile.model.SocialGroup;
@@ -34,26 +35,51 @@ public class Converter {
 	}
 
 	private static void populateIndividual(Cursor cursor, Individual individual) {
-		individual.setCurrentResidence(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID)));
-		individual.setDob(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB)));
+		individual
+				.setCurrentResidence(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID)));
+		individual.setDob(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB)));
 		individual.setExtId(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID)));
 		individual.setFather(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER)));
-		individual.setFirstName(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME)));
+		individual
+				.setFirstName(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME)));
 		individual.setGender(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER)));
-		individual.setLastName(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME)));
+		individual
+				.setLastName(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME)));
+		individual
+				.setOtherNames(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES)));
 		individual.setMother(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER)));
-		individual.setAge(cursor.getString(cursor.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE)));
-		individual.setAgeUnits(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS)));
-		individual.setLanguagePreference(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
+		individual.setAge(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE)));
+		individual
+				.setAgeUnits(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS)));
+		individual
+				.setLanguagePreference(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
+		individual
+				.setOtherId(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID)));
+		individual
+				.setPhoneNumber(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER)));
+		individual
+				.setOtherPhoneNumber(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER)));
+		individual
+				.setPointOfContactName(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME)));
+		individual
+				.setPointOfContactPhoneNumber(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER)));
 	}
 
 	public static Location toLocation(Cursor cursor, boolean close) {
@@ -71,14 +97,16 @@ public class Converter {
 	}
 
 	private static void populateLocation(Cursor cursor, Location location) {
-		location.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_EXTID)));
+		location.setExtId(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_EXTID)));
 		location.setHierarchyExtId(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY)));
 		location.setLatitude(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE)));
 		location.setLongitude(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE)));
-		location.setName(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_NAME)));
+		location.setName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_NAME)));
 	}
 
 	public static LocationHierarchy toHierarchy(Cursor cursor, boolean close) {
@@ -101,15 +129,19 @@ public class Converter {
 		return hierarchy;
 	}
 
-	private static void populateHierarchy(Cursor cursor, LocationHierarchy hierarchy) {
-		hierarchy.setExtId(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID)));
-		hierarchy.setLevel(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL)));
+	private static void populateHierarchy(Cursor cursor,
+			LocationHierarchy hierarchy) {
+		hierarchy
+				.setExtId(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID)));
+		hierarchy
+				.setLevel(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL)));
 		hierarchy.setName(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME)));
-		hierarchy.setParent(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT)));
+		hierarchy
+				.setParent(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT)));
 	}
 
 	public static FieldWorker toFieldWorker(Cursor cursor, boolean close) {
@@ -127,7 +159,8 @@ public class Converter {
 
 			// temporary way to get field worker Id prefix. should be actual
 			// attribute of field worker.
-			int id = cursor.getInt(cursor.getColumnIndex(OpenHDS.FieldWorkers._ID));
+			int id = cursor.getInt(cursor
+					.getColumnIndex(OpenHDS.FieldWorkers._ID));
 			String idString = String.format("%02d", id);
 			fw.setCollectedIdPrefix(idString);
 		}
@@ -154,10 +187,12 @@ public class Converter {
 	}
 
 	private static void populateSocialGroup(Cursor cursor, SocialGroup sg) {
-		sg.setExtId(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID)));
+		sg.setExtId(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID)));
 		sg.setGroupHead(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID)));
-		sg.setGroupName(cursor.getString(cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME)));
+		sg.setGroupName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME)));
 	}
 
 	public static List<SocialGroup> toSocialGroupList(Cursor cursor) {
@@ -221,9 +256,12 @@ public class Converter {
 
 		while (cursor.moveToNext()) {
 			Round round = new Round();
-			round.setEndDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
-			round.setRoundNumber(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
-			round.setStartDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
+			round.setEndDate(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
+			round.setRoundNumber(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
+			round.setStartDate(cursor.getString(cursor
+					.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
 			rounds.add(round);
 		}
 
@@ -236,14 +274,18 @@ public class Converter {
 		Relationship relationship = new Relationship();
 
 		if (cursor.getPosition() > -1) {
-			relationship.setIndividualA(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
-			relationship.setIndividualB(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B)));
-			relationship.setStartDate(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE)));
-			relationship.setType(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE)));
+			relationship
+					.setIndividualA(cursor.getString(cursor
+							.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A)));
+			relationship
+					.setIndividualB(cursor.getString(cursor
+							.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B)));
+			relationship
+					.setStartDate(cursor.getString(cursor
+							.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE)));
+			relationship
+					.setType(cursor.getString(cursor
+							.getColumnIndex(OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE)));
 		}
 
 		if (close) {
@@ -292,11 +334,38 @@ public class Converter {
 		return relationships;
 	}
 
+	public static Membership toMembership(Cursor cursor, boolean close) {
+		Membership membership = new Membership();
+
+		if (cursor.getPosition() > -1) {
+			membership
+					.setSocialGroupExtId(cursor.getString(cursor
+							.getColumnIndexOrThrow(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID)));
+			membership
+					.setIndividualExtId(cursor.getString(cursor
+							.getColumnIndex(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID)));
+			membership
+					.setRelationshipToHead(cursor.getString(cursor
+							.getColumnIndex(OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD)));
+			membership
+					.setStatus(cursor.getString(cursor
+							.getColumnIndex(OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS)));
+
+		}
+		if (close) {
+			cursor.close();
+		}
+		return membership;
+	}
+
 	public static Round convertToRound(Cursor cursor) {
 		Round round = new Round();
-		round.setEndDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
-		round.setRoundNumber(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
-		round.setStartDate(cursor.getString(cursor.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
+		round.setEndDate(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
+		round.setRoundNumber(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
+		round.setStartDate(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
 
 		return round;
 	}

@@ -14,7 +14,9 @@ public class Individual implements Serializable {
 	private String dob;
 	private String mother;
 	private String father;
-	private String currentResidence;
+	
+	private String currentResidence;// don't rely on this, will be switching to using residencey table
+	
 	private String endType;
 	private String otherId;
 	private String otherNames;
