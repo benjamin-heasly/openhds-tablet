@@ -19,7 +19,7 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Individuals.CONTENT_ID_URI_BASE;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
+
 
 import java.util.HashMap;
 import java.util.Map;

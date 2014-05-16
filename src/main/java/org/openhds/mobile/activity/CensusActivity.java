@@ -41,7 +41,6 @@ import org.openhds.mobile.utilities.LuhnValidator;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 
 public class CensusActivity extends Activity implements HierarchyNavigator {
@@ -392,8 +391,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			} else {
 				formFragment.createFormButtons(formsForStates.get(state));
 			}
-
-			currentResults.equals(currentResults);
 			
 			valueFragment.populateValues(currentResults);
 		}
@@ -459,7 +456,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 					boolean result = IndividualAdapter.insertOrUpdate(getContentResolver(),
 							individual);
 
-					
+				
 					FormRecord formRecord = formHelper.getForm();
 					String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE)
 							.getExtId();
@@ -514,13 +511,24 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						result = MembershipAdapter.insertOrUpdate(getContentResolver(),
 								membership);
 
+						String startDate = formInstanceData
+								.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+						
+						Relationship relationship = RelationshipAdapter.create(
+								individual, individual,
+								relationshipType, startDate);
+						result = RelationshipAdapter.insertOrUpdate(getContentResolver(),
+								relationship);
+						
 						
 						//NON-HEAD OF HOUSEHOLD FORM CREATIONS/EDITS
 					} else {
 						
-						// INSERT or UPDATE RELATIONSHIP
+						
 						String startDate = formInstanceData
 								.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+						
+						// INSERT or UPDATE RELATIONSHIP
 						Relationship relationship = RelationshipAdapter.create(
 								currentHeadOfHousehold, individual,
 								relationshipType, startDate);

@@ -16,8 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
@@ -41,8 +39,8 @@ public class HierarchySelectionFragment extends Fragment {
 		Map<String, Integer> labels = navigator.getStateLabels();
 		for (String state : navigator.getStateSequence()) {
 			final String description = null;
-			// MAKE CLICKABLELAYOUT
-			// for some reason margin in layout XML is ignored
+			
+
 			RelativeLayout layout = makeNewGenericLayout(getActivity(),
 					getResourceString(getActivity(), labels.get(state)), description, state, listener,
 					selectionContainer, 0, null);
