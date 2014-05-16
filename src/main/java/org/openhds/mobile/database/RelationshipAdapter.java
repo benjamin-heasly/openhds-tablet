@@ -27,24 +27,28 @@ public class RelationshipAdapter {
 		return relationship;
 	}
 
-	public static Uri insert(ContentResolver resolver, Relationship relationship) {
+	private static ContentValues buildContentValues(Relationship relationship) {
+
 		ContentValues cv = new ContentValues();
 
 		cv.put(COLUMN_RELATIONSHIP_INDIVIDUAL_A, relationship.getIndividualA());
 		cv.put(COLUMN_RELATIONSHIP_INDIVIDUAL_B, relationship.getIndividualB());
 		cv.put(COLUMN_RELATIONSHIP_STARTDATE, relationship.getStartDate());
 		cv.put(COLUMN_RELATIONSHIP_TYPE, relationship.getType());
+
+		return cv;
+	}
+
+	public static Uri insert(ContentResolver resolver, Relationship relationship) {
+
+		ContentValues cv = buildContentValues(relationship);
 
 		return resolver.insert(CONTENT_ID_URI_BASE, cv);
 	}
 
 	public static int update(ContentResolver resolver, Relationship relationship) {
-		ContentValues cv = new ContentValues();
 
-		cv.put(COLUMN_RELATIONSHIP_INDIVIDUAL_A, relationship.getIndividualA());
-		cv.put(COLUMN_RELATIONSHIP_INDIVIDUAL_B, relationship.getIndividualB());
-		cv.put(COLUMN_RELATIONSHIP_STARTDATE, relationship.getStartDate());
-		cv.put(COLUMN_RELATIONSHIP_TYPE, relationship.getType());
+		ContentValues cv = buildContentValues(relationship);
 
 		return resolver.update(
 				CONTENT_ID_URI_BASE,
@@ -60,11 +64,10 @@ public class RelationshipAdapter {
 
 		if (!Queries.hasRelationshipByBothIndividuals(resolver,
 				relationship.getIndividualA(), relationship.getIndividualB())) {
-			insert(resolver, relationship);
-			return true;
+			return (null != insert(resolver, relationship));
 		} else {
-			update(resolver, relationship);
-			return false;
+			return (update(resolver, relationship) > 0);
+
 		}
 	}
 }

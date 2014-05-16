@@ -5,6 +5,7 @@ import static org.openhds.mobile.OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_I
 import static org.openhds.mobile.OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME;
 import static org.openhds.mobile.OpenHDS.SocialGroups.CONTENT_ID_URI_BASE;
 
+import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.SocialGroup;
 
@@ -43,5 +44,16 @@ public class SocialGroupAdapter {
 		cv.put(COLUMN_SOCIAL_GROUP_NAME, socialGroup.getGroupName());
 
 		return resolver.insert(CONTENT_ID_URI_BASE, cv);
+	}
+	
+	//returns true if the insert or update worked, false if they didn't insert anything/update anything.
+	public static boolean insertOrUpdate(ContentResolver resolver, SocialGroup socialGroup){
+		
+		if(!Queries.hasSocialGroupByExtId(resolver, socialGroup.getExtId())){
+			return (null != insert(resolver,  socialGroup));
+		} else {
+			return (update(resolver,  socialGroup) > 0);
+		}
+		
 	}
 }

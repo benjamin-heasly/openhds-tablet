@@ -101,9 +101,7 @@ public class IndividualAdapter {
 		return formFields;
 	}
 	
-	
-	
-	public static int update(ContentResolver resolver, Individual individual) {
+	private static ContentValues buildContentValues(Individual individual){
 		ContentValues cv = new ContentValues(); 
 		
 		cv.put(COLUMN_INDIVIDUAL_EXTID, individual.getExtId());
@@ -115,7 +113,6 @@ public class IndividualAdapter {
 		cv.put(COLUMN_INDIVIDUAL_FATHER, individual.getFather());
 		cv.put(COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, individual.getCurrentResidence());
 		cv.put(COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, individual.getEndType());
-
 		cv.put(COLUMN_INDIVIDUAL_OTHER_ID, individual.getOtherId());
 		cv.put(COLUMN_INDIVIDUAL_OTHER_NAMES, individual.getOtherNames());
 		cv.put(COLUMN_INDIVIDUAL_AGE, individual.getAge());
@@ -125,37 +122,22 @@ public class IndividualAdapter {
 		cv.put(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME, individual.getPointOfContactName());
 		cv.put(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER, individual.getPointOfContactPhoneNumber());
 		cv.put(COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE, individual.getLanguagePreference());
+		
+		return cv;
+	}
+	
+	public static int update(ContentResolver resolver, Individual individual) {
+		
+		ContentValues cv = buildContentValues(individual);
 		
 		return resolver.update(CONTENT_ID_URI_BASE, cv, COLUMN_INDIVIDUAL_EXTID + " = '" + individual.getExtId()
 				+ "'", null);
 	}
 	
 	public static Uri insert(ContentResolver resolver, Individual individual) {
-		ContentValues cv = new ContentValues();
-
 		
-			
-		cv.put(COLUMN_INDIVIDUAL_EXTID, individual.getExtId());
-		cv.put(COLUMN_INDIVIDUAL_FIRST_NAME, individual.getFirstName());
-		cv.put(COLUMN_INDIVIDUAL_LAST_NAME, individual.getLastName());
-		cv.put(COLUMN_INDIVIDUAL_DOB, individual.getDob());
-		cv.put(COLUMN_INDIVIDUAL_GENDER, individual.getGender());
-		cv.put(COLUMN_INDIVIDUAL_MOTHER, individual.getMother());
-		cv.put(COLUMN_INDIVIDUAL_FATHER, individual.getFather());
-		cv.put(COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, individual.getCurrentResidence());
-		cv.put(COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, individual.getEndType());
+		ContentValues cv = buildContentValues(individual);
 
-		cv.put(COLUMN_INDIVIDUAL_OTHER_ID, individual.getOtherId());
-		cv.put(COLUMN_INDIVIDUAL_OTHER_NAMES, individual.getOtherNames());
-		cv.put(COLUMN_INDIVIDUAL_AGE, individual.getAge());
-		cv.put(COLUMN_INDIVIDUAL_AGE_UNITS, individual.getAgeUnits());
-		cv.put(COLUMN_INDIVIDUAL_PHONE_NUMBER, individual.getPhoneNumber());
-		cv.put(COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER, individual.getOtherPhoneNumber());
-		cv.put(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME, individual.getPointOfContactName());
-		cv.put(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER, individual.getPointOfContactPhoneNumber());
-		cv.put(COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE, individual.getLanguagePreference());
-
-		
 		return resolver.insert(CONTENT_ID_URI_BASE, cv);
 		
 	}
@@ -164,11 +146,12 @@ public class IndividualAdapter {
 	public static boolean insertOrUpdate(ContentResolver resolver, Individual individual) {
 		
 		if(!Queries.hasIndividualByExtId(resolver, individual.getExtId())){
-			 insert(resolver, individual);
-			 return true;
+			 
+			return (null != insert(resolver, individual));
+			
 		} else {
-			update(resolver, individual);
-			return false;
+			return (update(resolver, individual) > 0);
+
 		}
 	}
 	
