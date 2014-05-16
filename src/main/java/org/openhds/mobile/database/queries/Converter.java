@@ -10,7 +10,6 @@ import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.model.Relationship;
-import org.openhds.mobile.model.Round;
 import org.openhds.mobile.model.SocialGroup;
 
 import android.database.Cursor;
@@ -57,6 +56,7 @@ public class Converter {
 						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES)));
 		individual.setMother(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER)));
+
 		individual.setAge(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE)));
 		individual
@@ -148,14 +148,8 @@ public class Converter {
 		FieldWorker fw = new FieldWorker();
 
 		if (cursor.getPosition() > -1) {
-			fw.setExtId(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID)));
-			fw.setFirstName(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME)));
-			fw.setLastName(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME)));
-			fw.setPassword(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD)));
+
+			populateFieldWorker(cursor, fw);
 
 			// temporary way to get field worker Id prefix. should be actual
 			// attribute of field worker.
@@ -170,6 +164,18 @@ public class Converter {
 		}
 
 		return fw;
+	}
+
+	private static void populateFieldWorker(Cursor cursor, FieldWorker fw) {
+
+		fw.setExtId(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID)));
+		fw.setFirstName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME)));
+		fw.setLastName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME)));
+		fw.setPassword(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD)));
 	}
 
 	public static SocialGroup toSocialGroup(Cursor cursor, boolean close) {
@@ -249,25 +255,6 @@ public class Converter {
 		cursor.close();
 
 		return individuals;
-	}
-
-	public static List<Round> toRoundList(Cursor cursor) {
-		List<Round> rounds = new ArrayList<Round>();
-
-		while (cursor.moveToNext()) {
-			Round round = new Round();
-			round.setEndDate(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
-			round.setRoundNumber(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
-			round.setStartDate(cursor.getString(cursor
-					.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
-			rounds.add(round);
-		}
-
-		cursor.close();
-
-		return rounds;
 	}
 
 	public static Relationship toRelationship(Cursor cursor, boolean close) {
@@ -358,35 +345,4 @@ public class Converter {
 		return membership;
 	}
 
-	public static Round convertToRound(Cursor cursor) {
-		Round round = new Round();
-		round.setEndDate(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE)));
-		round.setRoundNumber(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_NUMBER)));
-		round.setStartDate(cursor.getString(cursor
-				.getColumnIndex(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE)));
-
-		return round;
-	}
-
-	public static Location convertToLocation(Cursor cursor) {
-		Location location = new Location();
-		populateLocation(cursor, location);
-
-		return location;
-	}
-
-	public static Individual convertToIndividual(Cursor cursor) {
-		Individual individual = new Individual();
-		populateIndividual(cursor, individual);
-
-		return individual;
-	}
-
-	public static SocialGroup convertToSocialGroup(Cursor cursor) {
-		SocialGroup sg = new SocialGroup();
-		populateSocialGroup(cursor, sg);
-		return sg;
-	}
 }

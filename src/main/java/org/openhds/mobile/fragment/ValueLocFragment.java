@@ -111,14 +111,14 @@ public class ValueLocFragment extends ListFragment implements LoaderCallbacks<Cu
             LocationHierarchy village = Converter.convertToHierarchy(cursor);
             listener.onHierarchy4Selected(village);
             break;
-        case ROUND:
-            Round round = Converter.convertToRound(cursor);
-            listener.onRoundSelected(round);
-            break;
-        case LOCATION:
-            Location location = Converter.convertToLocation(cursor);
-            listener.onLocationSelected(location);
-            break;
+//        case ROUND:
+//            Round round = Converter.convertToRound(cursor);
+//            listener.onRoundSelected(round);
+//            break;
+//        case LOCATION:
+//            Location location = Converter.convertToLocation(cursor);
+//            listener.onLocationSelected(location);
+//            break;
         }
 
         adapter.swapCursor(null);
