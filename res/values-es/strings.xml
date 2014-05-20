@@ -95,5 +95,9 @@
     <string name="household_label">Domicilio</string>
     <string name="individual_label">Individuo</string>
     <string name="bottom_label">Fondo</string>
+    <string name="create_head_of_household_label">Crear Cabeza de Domicilio</string>
+    <string name="add_member_of_household_label">Añadir un Miembro del Domicilio</string>
+    <string name="edit_individual_label">Editar Individuo</string>
+    <string name="house_of_prefix">Casa de</string>
 
 </resources>

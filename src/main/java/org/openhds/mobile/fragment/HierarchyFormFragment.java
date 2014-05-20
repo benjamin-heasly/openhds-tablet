@@ -69,11 +69,11 @@ public class HierarchyFormFragment extends Fragment {
 			FormRecord form = formListAdapter.getItem(position);
 
 			if (convertView == null) {
-				convertView = makeNewGenericLayout(getActivity(), form.getFormLabel(), null, form.getFormLabel(), null, null,
+				convertView = makeNewGenericLayout(getActivity(), getString(form.getFormLabelId()), null, form.getFormLabelId(), null, null,
 						R.drawable.form_frag_selector, null);
 			}
 
-			configureGenericLayout(getActivity(), (RelativeLayout) convertView, form.getFormLabel(), null, null);
+			configureGenericLayout(getActivity(), (RelativeLayout) convertView, getString(form.getFormLabelId()), null, null);
 			return convertView;
 
 		}

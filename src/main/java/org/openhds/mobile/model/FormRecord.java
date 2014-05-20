@@ -3,12 +3,12 @@ package org.openhds.mobile.model;
 public class FormRecord {
 
 	private String formName;
-	private String formLabel;
+	private int formLabelId;
 	private String editForState;
 	
-	public FormRecord(String formName, String formLabel, String state) {
+	public FormRecord(String formName, int formLabelId, String state) {
 		this.formName = formName;
-		this.formLabel = formLabel;
+		this.formLabelId = formLabelId;
 		this.editForState = state;
 	}
 
@@ -16,8 +16,8 @@ public class FormRecord {
 		return formName;
 	}
 
-	public String getFormLabel() {
-		return formLabel;
+	public int getFormLabelId() {
+		return formLabelId;
 	}
 	
 	public String getEditForState() {

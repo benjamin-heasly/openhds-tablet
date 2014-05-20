@@ -8,7 +8,6 @@ import static org.openhds.mobile.OpenHDS.Relationships.CONTENT_ID_URI_BASE;
 
 import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.model.Relationship;
 
 import android.content.ContentResolver;

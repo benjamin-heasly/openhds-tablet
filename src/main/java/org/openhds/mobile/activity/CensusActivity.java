@@ -60,10 +60,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	private static final Map<String, Integer> stateLabels = new HashMap<String, Integer>();
 	private static final Map<String, List<FormRecord>> formsForStates = new HashMap<String, List<FormRecord>>();
 
-	private static final String CREATE_HEAD_OF_HOUSEHOLD_LABEL = "Create Head of Household";
-	private static final String ADD_MEMBER_OF_HOUSEHOLD_LABEL = "Add Member of Household";
-	private static final String EDIT_INDIVIDUAL_LABEL = "Edit Individual";
-
 	static {
 		stateSequence.add(REGION_STATE);
 		stateSequence.add(PROVINCE_STATE);
@@ -93,12 +89,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		ArrayList<FormRecord> bottomFormList = new ArrayList<FormRecord>();
 
 		individualFormList.add(new FormRecord("Individual",
-				CREATE_HEAD_OF_HOUSEHOLD_LABEL, null));
+				R.string.create_head_of_household_label, null));
 		individualFormList.add(new FormRecord("Individual",
-				ADD_MEMBER_OF_HOUSEHOLD_LABEL, null));
+				R.string.add_member_of_household_label, null));
 
-		bottomFormList.add(new FormRecord("Individual", EDIT_INDIVIDUAL_LABEL,
-				INDIVIDUAL_STATE));
+		bottomFormList.add(new FormRecord("Individual",
+				R.string.edit_individual_label, INDIVIDUAL_STATE));
 
 		formsForStates.put(REGION_STATE, regionFormList);
 		formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -341,7 +337,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				currentHeadOfHousehold = null;
 				String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE)
 						.getExtId();
-				String socialGroupExtId = locationExtId.substring(3);
+				String socialGroupExtId = locationExtId;
 				Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
 						getContentResolver(), socialGroupExtId);
 				if (socialGroupCursor.moveToFirst()) {
@@ -423,7 +419,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						.individualToFormFields(individualToEdit));
 
 				String socialGroupExtId = hierarchyPath.get(HOUSEHOLD_STATE)
-						.getExtId().substring(3);
+						.getExtId();
 				cursor = Queries.getMembershipByHouseholdAndIndividualExtId(
 						getContentResolver(), socialGroupExtId, extId);
 				cursor.moveToFirst();
@@ -470,23 +466,21 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 					FormRecord formRecord = formHelper.getForm();
 					String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE)
 							.getExtId();
-					String socialGroupExtId = locationExtId.substring(3);
+					String socialGroupExtId = locationExtId;
 					String relationshipType = formInstanceData
 							.get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
 					String membershipStatus = formInstanceData
 							.get(ProjectFormFields.Individuals.MEMBER_STATUS);
 
 					// HANDLE HEAD OF HOUSEHOLD CREATION
-					if (formRecord.getFormLabel().equals(
-							CREATE_HEAD_OF_HOUSEHOLD_LABEL)) {
+					if (formRecord.getFormLabelId() == R.string.create_head_of_household_label) {
 						// update name of location
 						Cursor locationCursor = Queries.getLocationByExtId(
 								getContentResolver(), locationExtId);
 						locationCursor.moveToNext();
 						Location location = Converter.toLocation(
 								locationCursor, true);
-						String locationName = "House of "
-								+ individual.getLastName();
+						String locationName = individual.getLastName();
 						location.setName(locationName);
 						selectedLocation.setName(locationName);
 						LocationAdapter.update(getContentResolver(), location);
