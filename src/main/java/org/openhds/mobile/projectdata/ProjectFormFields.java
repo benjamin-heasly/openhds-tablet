@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.R;
 import org.openhds.mobile.activity.CensusActivity;
 
 public class ProjectFormFields {
@@ -22,6 +23,8 @@ public class ProjectFormFields {
 		public static final String BOTTOM_STATE_FIELD_NAME = "bottomExtId";
 
 		private static final Map<String, String> stateFieldNames = new HashMap<String, String>();
+		
+		 
 
 		static {
 			stateFieldNames.put(CensusActivity.REGION_STATE, REGION_STATE_FIELD_NAME);
@@ -32,8 +35,11 @@ public class ProjectFormFields {
 			stateFieldNames.put(CensusActivity.HOUSEHOLD_STATE, HOUSEHOLD_STATE_FIELD_NAME);
 			stateFieldNames.put(CensusActivity.INDIVIDUAL_STATE, INDIVIDUAL_STATE_FIELD_NAME);
 			stateFieldNames.put(CensusActivity.BOTTOM_STATE, BOTTOM_STATE_FIELD_NAME);
+
 		}
 
+		
+		
 		public static String getExtIdFieldNameFromState(String state) {
 			if (stateFieldNames.containsKey(state)) {
 				return stateFieldNames.get(state);
@@ -103,4 +109,37 @@ public class ProjectFormFields {
 			}
 		}
 	}
+	
+	public static final class FormSelections {
+		
+
+		private static Map<String, Integer> relationToHeadOfHousehold = new HashMap<String, Integer>();
+		
+		static{			
+			
+			relationToHeadOfHousehold.put("1", R.string.relation_to_head_type_head);
+			relationToHeadOfHousehold.put("2", R.string.relation_to_head_type_spouse);
+			relationToHeadOfHousehold.put("3", R.string.relation_to_head_type_son_daughter);
+			relationToHeadOfHousehold.put("4", R.string.relation_to_head_type_brother_sister);
+			relationToHeadOfHousehold.put("5", R.string.relation_to_head_type_parent);
+			relationToHeadOfHousehold.put("6", R.string.relation_to_head_type_grandchild);
+			relationToHeadOfHousehold.put("7", R.string.relation_to_head_type_not_related);
+			relationToHeadOfHousehold.put("8", R.string.relation_to_head_type_other_relative);
+			relationToHeadOfHousehold.put("9", R.string.relation_to_head_type_dont_know);
+		}
+		
+		public static int getRelationToHeadofHousehold(String relationshipValue) {
+			
+			String blah = relationshipValue;
+			
+			
+			if (relationToHeadOfHousehold.containsKey(relationshipValue)) {
+				return relationToHeadOfHousehold.get(relationshipValue);
+			} else {
+				return 0;
+			}
+		}
+		
+	}
+	
 }

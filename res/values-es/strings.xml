@@ -99,5 +99,26 @@
     <string name="add_member_of_household_label">Añadir un Miembro del Domicilio</string>
     <string name="edit_individual_label">Editar Individuo</string>
     <string name="house_of_prefix">Casa de</string>
+    <string name="other_names_label">Otros Nombres</string>
+    <string name="age_label">Edad</string>
+    <string name="date_of_birth_label">Fecha de Nacimiento</string>
+    <string name="relationship_to_head_label">Relación con la Cabeza del Domicilio</string>
+    <string name="personal_phone_number_label">Numero de Teléfono Personal</string>
+    <string name="other_phone_number_label">Otro Numero de Teléfono</string>
+    <string name="point_of_contact_label">Punto de Contacto</string>
+    <string name="point_of_contact_phone_number_label">Punto de Contacto Numero de Teléfono</string>
+    <string name="language_preference_label">Preferencia de Idioma</string>
+    <string name="dip_label">DIP</string>
+    <string name="member_status_label">Estado del Miembro</string>
+    
+    <string name="relation_to_head_type_head">Cabeza</string>
+    <string name="relation_to_head_type_spouse">Cónyuge</string>
+    <string name="relation_to_head_type_son_daughter">Hijo/Hija</string>
+    <string name="relation_to_head_type_brother_sister">Hermano/Hermana</string>
+    <string name="relation_to_head_type_parent">Padre</string>
+    <string name="relation_to_head_type_grandchild">Nieto</string>
+    <string name="relation_to_head_type_not_related">No Relacionada</string>
+    <string name="relation_to_head_type_other_relative">Otro Pariente</string>
+    <string name="relation_to_head_type_dont_know">No Sé</string>
 
 </resources>

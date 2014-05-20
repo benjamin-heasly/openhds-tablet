@@ -87,6 +87,7 @@ public class LayoutUtils {
 			payLoadContainer.setVisibility(View.GONE);
 		} else {
 			payLoadContainer.removeAllViews();
+			
 			for (String key : payLoad.keySet()) {
 				String value = payLoad.get(key);
 				if (null == value) {

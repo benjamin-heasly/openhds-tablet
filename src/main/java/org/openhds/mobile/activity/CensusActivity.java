@@ -120,7 +120,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 	// TODO: reconsider where to maintain the current head of household
 	private Individual currentHeadOfHousehold;
-	public static final String RELATIONSHIP_TO_HEAD_KEY = "relationship to head";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -313,8 +312,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		int currentIndex = stateSequence.indexOf(currentState);
 		if (currentIndex >= 0 && currentIndex < stateSequence.size() - 1) {
 			String nextState = stateSequence.get(currentIndex + 1);
-			currentResults = ProjectQueryHelper.getChildren(
-					getContentResolver(), selected, nextState);
+
+			if (nextState.equals(BOTTOM_STATE)) {
+				Map<String,String> formFieldNames = 
+						makeIndividualFormMap(hierarchyPath.get(HOUSEHOLD_STATE).getExtId(),selected.getExtId());
+				currentResults = new ArrayList<QueryResult>();
+				
+				currentResults.add(ProjectQueryHelper.createCompleteIndividualQueryResult(formFieldNames,nextState, this));
+
+			} else {
+				currentResults = ProjectQueryHelper.getChildren(
+						getContentResolver(), selected, nextState);
+			}
+
 			hierarchyPath.put(currentState, selected);
 			stateMachine.transitionTo(nextState);
 		}
@@ -364,8 +374,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 											.toRelationship(relationshipCursor,
 													true);
 									qr.getPayLoad().put(
-											RELATIONSHIP_TO_HEAD_KEY,
-											relationship.getType());
+											getString(R.string.relationship_to_head_label),
+											getString(ProjectFormFields.FormSelections.getRelationToHeadofHousehold(relationship.getType())));
 								}
 								relationshipCursor.close();
 							}
@@ -399,6 +409,30 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		}
 	}
 
+	private Map<String, String> makeIndividualFormMap(String householdExtID,
+			String individualExtId) {
+		Map<String, String> formFieldMap = getFormFieldNameMap(null);
+		Cursor cursor = Queries.getIndividualByExtId(getContentResolver(),
+				individualExtId);
+		cursor.moveToFirst();
+		Individual individualToEdit = Converter.toIndividual(cursor, true);
+
+		formFieldMap = getFormFieldNameMap(IndividualAdapter
+				.individualToFormFields(individualToEdit));
+
+		cursor = Queries.getMembershipByHouseholdAndIndividualExtId(
+				getContentResolver(), householdExtID, individualExtId);
+		cursor.moveToFirst();
+		Membership membership = Converter.toMembership(cursor, true);
+		formFieldMap.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
+				membership.getRelationshipToHead());
+		formFieldMap.put(ProjectFormFields.Individuals.MEMBER_STATUS,
+				membership.getStatus());
+
+		return formFieldMap;
+
+	}
+
 	@Override
 	public void launchForm(FormRecord form) {
 		Map<String, String> formFieldMap = getFormFieldNameMap(null);
@@ -409,26 +443,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 			switch (editState) {
 			case INDIVIDUAL_STATE:
-				Cursor cursor = Queries.getIndividualByExtId(
-						getContentResolver(), extId);
-				cursor.moveToFirst();
-				Individual individualToEdit = Converter.toIndividual(cursor,
-						true);
-
-				formFieldMap = getFormFieldNameMap(IndividualAdapter
-						.individualToFormFields(individualToEdit));
-
-				String socialGroupExtId = hierarchyPath.get(HOUSEHOLD_STATE)
-						.getExtId();
-				cursor = Queries.getMembershipByHouseholdAndIndividualExtId(
-						getContentResolver(), socialGroupExtId, extId);
-				cursor.moveToFirst();
-				Membership membership = Converter.toMembership(cursor, true);
-				formFieldMap.put(
-						ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
-						membership.getRelationshipToHead());
-				formFieldMap.put(ProjectFormFields.Individuals.MEMBER_STATUS,
-						membership.getStatus());
+				formFieldMap = makeIndividualFormMap(
+						hierarchyPath.get(HOUSEHOLD_STATE).getExtId(), extId);
 				break;
 			}
 
