@@ -308,22 +308,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 					+ selected.getState() + "> mismatch with current state <"
 					+ currentState + ">");
 		}
-
+		//
 		int currentIndex = stateSequence.indexOf(currentState);
 		if (currentIndex >= 0 && currentIndex < stateSequence.size() - 1) {
 			String nextState = stateSequence.get(currentIndex + 1);
 
-			if (nextState.equals(BOTTOM_STATE)) {
-				Map<String,String> formFieldNames = 
-						makeIndividualFormMap(hierarchyPath.get(HOUSEHOLD_STATE).getExtId(),selected.getExtId());
-				currentResults = new ArrayList<QueryResult>();
-				
-				currentResults.add(ProjectQueryHelper.createCompleteIndividualQueryResult(formFieldNames,nextState, this));
-
-			} else {
-				currentResults = ProjectQueryHelper.getChildren(
-						getContentResolver(), selected, nextState);
-			}
+			currentResults = ProjectQueryHelper.getChildren(
+					getContentResolver(), selected, nextState);
 
 			hierarchyPath.put(currentState, selected);
 			stateMachine.transitionTo(nextState);
@@ -373,9 +364,11 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 									Relationship relationship = Converter
 											.toRelationship(relationshipCursor,
 													true);
-									qr.getPayLoad().put(
-											getString(R.string.relationship_to_head_label),
-											getString(ProjectFormFields.FormSelections.getRelationToHeadofHousehold(relationship.getType())));
+									qr.getPayLoad()
+											.put(getString(R.string.relationship_to_head_label),
+													getString(ProjectFormFields.FormSelections
+															.getRelationToHeadofHousehold(relationship
+																	.getType())));
 								}
 								relationshipCursor.close();
 							}
@@ -394,6 +387,16 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							.subList(0, 1));
 				}
 
+			} else if (state.equals(BOTTOM_STATE)) {
+				Map<String, String> formFieldNames = makeIndividualFormMap(
+						hierarchyPath.get(HOUSEHOLD_STATE).getExtId(),
+						hierarchyPath.get(INDIVIDUAL_STATE).getExtId());
+				currentResults = new ArrayList<QueryResult>();
+
+				currentResults.add(ProjectQueryHelper
+						.createCompleteIndividualQueryResult(formFieldNames,
+								state, getBaseContext()));
+				formFragment.createFormButtons(formsForStates.get(state));
 			} else {
 				formFragment.createFormButtons(formsForStates.get(state));
 			}

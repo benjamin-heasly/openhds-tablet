@@ -50,7 +50,7 @@
     <string name="firstname_hint_lbl">Nombre</string>
     <string name="lastname_lbl">Apellido:</string>
     <string name="lastname_hint_lbl">Apellido</string>
-    <string name="gender_lbl">Género:</string>
+    <string name="gender_lbl">Género</string>
     <string name="male_lbl">Masculino</string>
     <string name="female_lbl">Femenino</string>
     <string name="clear_lbl">Clear</string>

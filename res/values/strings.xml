@@ -56,7 +56,7 @@
     <string name="firstname_hint_lbl">First Name</string>
     <string name="lastname_lbl">Last Name:</string>
     <string name="lastname_hint_lbl">Last Name</string>
-    <string name="gender_lbl">Gender:</string>
+    <string name="gender_lbl">Gender</string>
     <string name="male_lbl">Male</string>
     <string name="female_lbl">Female</string>
     <string name="clear_lbl">Clear</string>
