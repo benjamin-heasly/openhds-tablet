@@ -5,6 +5,7 @@ import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
 import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
 
+import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.task.HttpTask.RequestContext;
@@ -13,6 +14,9 @@ import org.openhds.mobile.task.SyncFieldworkersTask;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,6 +53,14 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 				getResourceString(this, R.string.sync_field_worker_name),
 				getResourceString(this, R.string.sync_field_worker_name), this,
 				supervisorOptionsList);
+
+		makeNewGenericButton(
+				this,
+				getResourceString(this,
+						R.string.send_finalized_forms_description),
+				getResourceString(this, R.string.send_finalized_forms_name),
+				getResourceString(this, R.string.send_finalized_forms_name),
+				this, supervisorOptionsList);
 
 		if (null != savedInstanceState) {
 			return;
@@ -89,6 +101,17 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 		} else if (tag.equals(getResourceString(this,
 				R.string.sync_field_worker_name))) {
 			syncFieldWorkers();
+		} else if (tag.equals((getResourceString(this,
+				R.string.send_finalized_forms_name)))) {
+
+			// build finalized form Uri
+			Uri contentUri = InstanceProviderAPI.InstanceColumns.CONTENT_URI;
+
+
+			Intent intent = new Intent();
+			intent.setAction(Intent.ACTION_EDIT);
+			startActivity(intent);
+
 		}
 	}
 
