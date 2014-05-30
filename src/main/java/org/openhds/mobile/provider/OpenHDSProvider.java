@@ -493,7 +493,9 @@ public class OpenHDSProvider extends ContentProvider {
 			password = UUID.randomUUID().toString();
 			Editor editor = sp.edit();
 			editor.putString(DATABASE_PASSWORD_KEY, password);
+
 			editor.commit();
+
 		}
 
 		// Assumes that any failures will be reported by a thrown exception.

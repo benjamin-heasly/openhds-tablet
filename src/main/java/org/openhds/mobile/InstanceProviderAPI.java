@@ -21,6 +21,10 @@ import android.provider.BaseColumns;
 	    /**
 	     * Notes table
 	     */
+	    
+	    
+	    
+	    
 	    public static final class InstanceColumns implements BaseColumns {
 	        // This class cannot be instantiated
 	        private InstanceColumns() {}

@@ -5,12 +5,22 @@ import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
 import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.task.HttpTask.RequestContext;
 import org.openhds.mobile.task.SyncEntitiesTask;
 import org.openhds.mobile.task.SyncFieldworkersTask;
+import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
 import android.app.Activity;
@@ -104,10 +114,37 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 		} else if (tag.equals((getResourceString(this,
 				R.string.send_finalized_forms_name)))) {
 
-			// build finalized form Uri
-			Uri contentUri = InstanceProviderAPI.InstanceColumns.CONTENT_URI;
 
 
+			String finalizedFormFilePath;
+
+			Cursor cursor = getContentResolver()
+					.query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+							new String[] {
+									InstanceProviderAPI.InstanceColumns.STATUS,
+									InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH },
+							InstanceProviderAPI.InstanceColumns.STATUS + "=?",
+							new String[] { InstanceProviderAPI.STATUS_COMPLETE },
+							null);
+
+			while (cursor.moveToNext()) {
+				finalizedFormFilePath = cursor
+						.getString(cursor
+								.getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+
+				File file = new File(finalizedFormFilePath);
+
+				try {
+					EncryptionHelper eh = new EncryptionHelper(this);
+					eh.decryptFile(file);
+				} catch (NoSuchAlgorithmException | InvalidKeyException
+						| IllegalBlockSizeException | BadPaddingException
+						| NoSuchPaddingException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			cursor.close();
 			Intent intent = new Intent();
 			intent.setAction(Intent.ACTION_EDIT);
 			startActivity(intent);

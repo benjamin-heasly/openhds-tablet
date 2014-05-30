@@ -3,12 +3,20 @@ package org.openhds.mobile.activity;
 import static org.openhds.mobile.database.queries.Queries.getIndividualsExtIdsByPrefix;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
@@ -36,6 +44,7 @@ import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectQueryHelper;
+import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.LuhnValidator;
 
 import android.app.Activity;
@@ -396,7 +405,9 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				currentResults.add(ProjectQueryHelper
 						.createCompleteIndividualQueryResult(formFieldNames,
 								state, getBaseContext()));
+
 				formFragment.createFormButtons(formsForStates.get(state));
+
 			} else {
 				formFragment.createFormButtons(formsForStates.get(state));
 			}
@@ -468,12 +479,26 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 				// CURRENTLY: only handles individual related forms.
 				// TODO: Allow checking for forms from other states.
+
 				if (formHelper.checkFormInstanceStatus()) {
 
 					QueryResult selectedLocation = hierarchyPath
 							.get(HOUSEHOLD_STATE);
+
 					Map<String, String> formInstanceData = formHelper
 							.getFormInstanceData();
+
+					File file = new File(formHelper.getFinalizedFormFilePath());
+					try {
+						EncryptionHelper eh = new EncryptionHelper(this);
+						eh.encryptFile(file);
+					} catch (NoSuchAlgorithmException | InvalidKeyException
+							| NoSuchPaddingException
+							| IllegalBlockSizeException | BadPaddingException
+							| IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
 					// INSERT or UPDATE INDIVIDUAL
 					Individual individual = IndividualAdapter
@@ -589,6 +614,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				// Write your code if there's no result
 			}
 		}
+
 	}
 
 	// Takes in optional map to merge with
