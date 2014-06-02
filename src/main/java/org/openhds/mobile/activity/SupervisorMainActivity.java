@@ -6,13 +6,6 @@ import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
 import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
 
 import java.io.File;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.R;
@@ -26,7 +19,6 @@ import org.openhds.mobile.utilities.SyncDatabaseHelper;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -114,10 +106,10 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 		} else if (tag.equals((getResourceString(this,
 				R.string.send_finalized_forms_name)))) {
 
-
-
+			// File DEcryption
 			String finalizedFormFilePath;
 
+			// point at forms with status marked as finalized
 			Cursor cursor = getContentResolver()
 					.query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
 							new String[] {
@@ -127,28 +119,22 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 							new String[] { InstanceProviderAPI.STATUS_COMPLETE },
 							null);
 
+			// iterate over each file
 			while (cursor.moveToNext()) {
 				finalizedFormFilePath = cursor
 						.getString(cursor
 								.getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
 
-				File file = new File(finalizedFormFilePath);
+				// send path of file to decrypt method of EncryptionHelper
+				EncryptionHelper.decryptFile(new File(finalizedFormFilePath),
+						this);
 
-				try {
-					EncryptionHelper eh = new EncryptionHelper(this);
-					eh.decryptFile(file);
-				} catch (NoSuchAlgorithmException | InvalidKeyException
-						| IllegalBlockSizeException | BadPaddingException
-						| NoSuchPaddingException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
-			cursor.close();
-			Intent intent = new Intent();
-			intent.setAction(Intent.ACTION_EDIT);
-			startActivity(intent);
 
+			// Close cursor, launch intent for ODKCollect's send final forms
+			// screen.
+			cursor.close();
+			startActivity(new Intent(Intent.ACTION_EDIT));
 		}
 	}
 

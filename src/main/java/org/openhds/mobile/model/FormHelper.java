@@ -54,10 +54,6 @@ public class FormHelper {
 		return intent;
 	}
 
-	public Uri getContentUri() {
-		return contentUri;
-	}
-
 	public boolean checkFormInstanceStatus() {
 		Cursor cursor = resolver.query(contentUri, new String[] {
 				InstanceProviderAPI.InstanceColumns.STATUS,
