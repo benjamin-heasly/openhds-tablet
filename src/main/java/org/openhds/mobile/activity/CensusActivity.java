@@ -27,7 +27,8 @@ import org.openhds.mobile.fragment.HierarchySelectionFragment;
 import org.openhds.mobile.fragment.HierarchyValueFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormHelper;
-import org.openhds.mobile.model.FormRecord;
+import org.openhds.mobile.model.FormBehaviour;
+import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.Membership;
@@ -39,6 +40,7 @@ import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectQueryHelper;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.LuhnValidator;
+import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -60,7 +62,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 	private static final List<String> stateSequence = new ArrayList<String>();
 	private static final Map<String, Integer> stateLabels = new HashMap<String, Integer>();
-	private static final Map<String, List<FormRecord>> formsForStates = new HashMap<String, List<FormRecord>>();
+	private static final Map<String, List<FormBehaviour>> formsForStates = new HashMap<String, List<FormBehaviour>>();
 
 	static {
 		stateSequence.add(REGION_STATE);
@@ -81,21 +83,21 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		stateLabels.put(INDIVIDUAL_STATE, R.string.individual_label);
 		stateLabels.put(BOTTOM_STATE, R.string.bottom_label);
 
-		ArrayList<FormRecord> regionFormList = new ArrayList<FormRecord>();
-		ArrayList<FormRecord> provinceFormList = new ArrayList<FormRecord>();
-		ArrayList<FormRecord> districtFormList = new ArrayList<FormRecord>();
-		ArrayList<FormRecord> mapAreaFormList = new ArrayList<FormRecord>();
-		ArrayList<FormRecord> sectorFormList = new ArrayList<FormRecord>();
-		ArrayList<FormRecord> householdFormList = new ArrayList<FormRecord>();
-		ArrayList<FormRecord> individualFormList = new ArrayList<FormRecord>();
-		ArrayList<FormRecord> bottomFormList = new ArrayList<FormRecord>();
+		ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
+		ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
+		ArrayList<FormBehaviour> districtFormList = new ArrayList<FormBehaviour>();
+		ArrayList<FormBehaviour> mapAreaFormList = new ArrayList<FormBehaviour>();
+		ArrayList<FormBehaviour> sectorFormList = new ArrayList<FormBehaviour>();
+		ArrayList<FormBehaviour> householdFormList = new ArrayList<FormBehaviour>();
+		ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
+		ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
-		individualFormList.add(new FormRecord("Individual",
+		individualFormList.add(new FormBehaviour("Individual",
 				R.string.create_head_of_household_label, null));
-		individualFormList.add(new FormRecord("Individual",
+		individualFormList.add(new FormBehaviour("Individual",
 				R.string.add_member_of_household_label, null));
 
-		bottomFormList.add(new FormRecord("Individual",
+		bottomFormList.add(new FormBehaviour("Individual",
 				R.string.edit_individual_label, INDIVIDUAL_STATE));
 
 		formsForStates.put(REGION_STATE, regionFormList);
@@ -380,7 +382,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				}
 				socialGroupCursor.close();
 
-				List<FormRecord> individualForms = formsForStates.get(state);
+				List<FormBehaviour> individualForms = formsForStates
+						.get(state);
 				if (headOfHouseholdDefined) {
 					formFragment.createFormButtons(individualForms
 							.subList(1, 2));
@@ -441,7 +444,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	}
 
 	@Override
-	public void launchForm(FormRecord form) {
+	public void launchForm(FormBehaviour form) {
 		Map<String, String> formFieldMap = getFormFieldNameMap(null);
 		String editState;
 
@@ -482,8 +485,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							.getFormInstanceData();
 
 					// File encryption
-					File file = new File(formHelper.getFinalizedFormFilePath());
-					EncryptionHelper.encryptFile(file, this);
+					EncryptionHelper
+							.encryptFiles(
+									FormInstance
+											.toListOfFiles(OdkCollectHelper
+													.getAllFormInstances(getContentResolver())),
+									this);
 
 					// INSERT or UPDATE INDIVIDUAL
 					Individual individual = IndividualAdapter
@@ -492,7 +499,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							individual);
 
 					// Pull relevant strings from the FormRecord.
-					FormRecord formRecord = formHelper.getForm();
+					FormBehaviour formBehaviors = formHelper.getForm();
 					String locationExtId = hierarchyPath.get(HOUSEHOLD_STATE)
 							.getExtId();
 					String socialGroupExtId = locationExtId;
@@ -502,7 +509,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							.get(ProjectFormFields.Individuals.MEMBER_STATUS);
 
 					// HANDLE HEAD OF HOUSEHOLD CREATION
-					if (formRecord.getFormLabelId() == R.string.create_head_of_household_label) {
+					if (formBehaviors.getFormLabelId() == R.string.create_head_of_household_label) {
 						// update name of location
 						Cursor locationCursor = Queries.getLocationByExtId(
 								getContentResolver(), locationExtId);

@@ -10,10 +10,12 @@ import java.io.File;
 import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
+import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.task.HttpTask.RequestContext;
 import org.openhds.mobile.task.SyncEntitiesTask;
 import org.openhds.mobile.task.SyncFieldworkersTask;
 import org.openhds.mobile.utilities.EncryptionHelper;
+import org.openhds.mobile.utilities.OdkCollectHelper;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
 import android.app.Activity;
@@ -105,37 +107,15 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 			syncFieldWorkers();
 		} else if (tag.equals((getResourceString(this,
 				R.string.send_finalized_forms_name)))) {
-
-			// File DEcryption
-			String finalizedFormFilePath;
-
-			// point at forms with status marked as finalized
-			Cursor cursor = getContentResolver()
-					.query(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
-							new String[] {
-									InstanceProviderAPI.InstanceColumns.STATUS,
-									InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH },
-							InstanceProviderAPI.InstanceColumns.STATUS + "=?",
-							new String[] { InstanceProviderAPI.STATUS_COMPLETE },
-							null);
-
-			// iterate over each file
-			while (cursor.moveToNext()) {
-				finalizedFormFilePath = cursor
-						.getString(cursor
-								.getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
-
-				// send path of file to decrypt method of EncryptionHelper
-				EncryptionHelper.decryptFile(new File(finalizedFormFilePath),
-						this);
-
-			}
-
-			// Close cursor, launch intent for ODKCollect's send final forms
-			// screen.
-			cursor.close();
+			decryptAllForms();
 			startActivity(new Intent(Intent.ACTION_EDIT));
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		encryptAllForms();
 	}
 
 	private void syncDatabase() {
@@ -153,6 +133,21 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 		syncDatabaseHelper.setCurrentTask(currentTask);
 
 		syncDatabaseHelper.startSync();
+	}
+
+	private void decryptAllForms() {
+
+		EncryptionHelper.decryptFiles(FormInstance
+				.toListOfFiles(OdkCollectHelper
+						.getAllFormInstances(getContentResolver())), this);
+	}
+
+	private void encryptAllForms() {
+
+		EncryptionHelper.encryptFiles(FormInstance
+				.toListOfFiles(OdkCollectHelper
+						.getAllFormInstances(getContentResolver())), this);
+
 	}
 
 	private void syncFieldWorkers() {

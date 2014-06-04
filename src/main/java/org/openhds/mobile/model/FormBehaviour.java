@@ -1,12 +1,12 @@
 package org.openhds.mobile.model;
 
-public class FormRecord {
+public class FormBehaviour {
 
 	private String formName;
 	private int formLabelId;
 	private String editForState;
 	
-	public FormRecord(String formName, int formLabelId, String state) {
+	public FormBehaviour(String formName, int formLabelId, String state) {
 		this.formName = formName;
 		this.formLabelId = formLabelId;
 		this.editForState = state;

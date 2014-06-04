@@ -4,6 +4,9 @@ import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.fragment.SupervisorLoginFragment;
+import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.utilities.EncryptionHelper;
+import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,12 +17,19 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 public class OpeningActivity extends Activity {
-	
-	
+
 	public static final String USERNAME_KEY = "usernameKey";
 	public static final String PASSWORD_KEY = "passwordKey";
 
 	private FrameLayout loginPrefContainer;
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		EncryptionHelper.encryptFiles(FormInstance
+				.toListOfFiles(OdkCollectHelper
+						.getAllFormInstances(getContentResolver())), this);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

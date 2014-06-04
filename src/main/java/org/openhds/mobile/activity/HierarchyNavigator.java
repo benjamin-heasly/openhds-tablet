@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openhds.mobile.database.queries.QueryResult;
-import org.openhds.mobile.model.FormRecord;
+import org.openhds.mobile.model.FormBehaviour;
 
 public interface HierarchyNavigator {
 
@@ -16,5 +16,5 @@ public interface HierarchyNavigator {
 
 	public void stepDown(QueryResult qr);
 	
-	public void launchForm(FormRecord form);
+	public void launchForm(FormBehaviour form);
 }

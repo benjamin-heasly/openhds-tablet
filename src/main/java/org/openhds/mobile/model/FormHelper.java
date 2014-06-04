@@ -32,7 +32,7 @@ public class FormHelper {
 	Uri contentUri;
 	ContentResolver resolver;
 	Map<String, String> formFieldNames;
-	FormRecord form;
+	FormBehaviour form;
 
 	String finalizedFormFilePath;
 
@@ -45,7 +45,7 @@ public class FormHelper {
 		return finalizedFormFilePath;
 	}
 
-	public FormRecord getForm() {
+	public FormBehaviour getForm() {
 		return form;
 	}
 
@@ -99,7 +99,7 @@ public class FormHelper {
 		return finalizedFormData;
 	}
 
-	public boolean newFormInstance(FormRecord form,
+	public boolean newFormInstance(FormBehaviour form,
 			Map<String, String> formFieldNames) {
 		// find a blank form with given name
 

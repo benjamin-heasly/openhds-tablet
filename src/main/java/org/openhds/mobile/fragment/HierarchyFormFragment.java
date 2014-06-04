@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.HierarchyNavigator;
-import org.openhds.mobile.model.FormRecord;
+import org.openhds.mobile.model.FormBehaviour;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -39,7 +39,7 @@ public class HierarchyFormFragment extends Fragment {
 		this.navigator = navigator;
 	}
 
-	public void createFormButtons(List<FormRecord> values) {
+	public void createFormButtons(List<FormBehaviour> values) {
 
 		formListAdapter = new HierarchyFormAdapter(getActivity(), R.layout.generic_list_item, values);
 
@@ -52,21 +52,21 @@ public class HierarchyFormFragment extends Fragment {
 	private class HierarchyFormListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			FormRecord form = formListAdapter.getItem(position);	
+			FormBehaviour form = formListAdapter.getItem(position);	
 				navigator.launchForm(form);	
 		}
 	}
 
-	private class HierarchyFormAdapter extends ArrayAdapter<FormRecord> {
+	private class HierarchyFormAdapter extends ArrayAdapter<FormBehaviour> {
 
-		public HierarchyFormAdapter(Context context, int resource, List<FormRecord> objects) {
+		public HierarchyFormAdapter(Context context, int resource, List<FormBehaviour> objects) {
 			super(context, resource, objects);
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
-			FormRecord form = formListAdapter.getItem(position);
+			FormBehaviour form = formListAdapter.getItem(position);
 
 			if (convertView == null) {
 				convertView = makeNewGenericLayout(getActivity(), getString(form.getFormLabelId()), null, form.getFormLabelId(), null, null,
