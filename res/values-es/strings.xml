@@ -51,8 +51,8 @@
     <string name="lastname_lbl">Apellido:</string>
     <string name="lastname_hint_lbl">Apellido</string>
     <string name="gender_lbl">Género</string>
-    <string name="male_lbl">Masculino</string>
-    <string name="female_lbl">Femenino</string>
+    <string name="db_val_gender_male">Masculino</string>
+    <string name="db_val_gender_female">Femenino</string>
     <string name="clear_lbl">Clear</string>
     <string name="search_lbl">Buscar</string>
     <string name="search_loc_lbl">Buscar Ubicación</string>
@@ -111,14 +111,14 @@
     <string name="dip_label">DIP</string>
     <string name="member_status_label">Estado del Miembro</string>
     
-    <string name="relation_to_head_type_head">Cabeza</string>
-    <string name="relation_to_head_type_spouse">Cónyuge</string>
-    <string name="relation_to_head_type_son_daughter">Hijo/Hija</string>
-    <string name="relation_to_head_type_brother_sister">Hermano/Hermana</string>
-    <string name="relation_to_head_type_parent">Padre</string>
-    <string name="relation_to_head_type_grandchild">Nieto</string>
-    <string name="relation_to_head_type_not_related">No Relacionada</string>
-    <string name="relation_to_head_type_other_relative">Otro Pariente</string>
-    <string name="relation_to_head_type_dont_know">No Sé</string>
+    <string name="db_val_relation_to_head_type_head">Cabeza</string>
+    <string name="db_val_relation_to_head_type_spouse">Cónyuge</string>
+    <string name="db_val_relation_to_head_type_son_daughter">Hijo/Hija</string>
+    <string name="db_val_relation_to_head_type_brother_sister">Hermano/Hermana</string>
+    <string name="db_val_relation_to_head_type_parent">Padre</string>
+    <string name="db_val_relation_to_head_type_grandchild">Nieto</string>
+    <string name="db_val_relation_to_head_type_not_related">No Relacionada</string>
+    <string name="db_val_relation_to_head_type_other_relative">Otro Pariente</string>
+    <string name="db_val_relation_to_head_type_dont_know">No Sé</string>
 
 </resources>

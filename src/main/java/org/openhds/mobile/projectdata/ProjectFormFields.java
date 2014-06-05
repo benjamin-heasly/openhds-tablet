@@ -23,23 +23,27 @@ public class ProjectFormFields {
 		public static final String BOTTOM_STATE_FIELD_NAME = "bottomExtId";
 
 		private static final Map<String, String> stateFieldNames = new HashMap<String, String>();
-		
-		 
 
 		static {
-			stateFieldNames.put(CensusActivity.REGION_STATE, REGION_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.PROVINCE_STATE, PROVINCE_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.DISTRICT_STATE, DISTRICT_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.MAP_AREA_STATE, MAP_AREA_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.SECTOR_STATE, SECTOR_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.HOUSEHOLD_STATE, HOUSEHOLD_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.INDIVIDUAL_STATE, INDIVIDUAL_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.BOTTOM_STATE, BOTTOM_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.REGION_STATE,
+					REGION_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.PROVINCE_STATE,
+					PROVINCE_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.DISTRICT_STATE,
+					DISTRICT_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.MAP_AREA_STATE,
+					MAP_AREA_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.SECTOR_STATE,
+					SECTOR_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.HOUSEHOLD_STATE,
+					HOUSEHOLD_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.INDIVIDUAL_STATE,
+					INDIVIDUAL_STATE_FIELD_NAME);
+			stateFieldNames.put(CensusActivity.BOTTOM_STATE,
+					BOTTOM_STATE_FIELD_NAME);
 
 		}
 
-		
-		
 		public static String getExtIdFieldNameFromState(String state) {
 			if (stateFieldNames.containsKey(state)) {
 				return stateFieldNames.get(state);
@@ -77,28 +81,49 @@ public class ProjectFormFields {
 		private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
 		static {
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID, INDIVIDUAL_EXTID);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, FIRST_NAME);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, LAST_NAME);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES, OTHER_NAMES);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB, DATE_OF_BIRTH);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE, AGE);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS, AGE_UNITS);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER, GENDER);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER, PHONE_NUMBER);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER,
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID,
+					INDIVIDUAL_EXTID);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
+					FIRST_NAME);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, LAST_NAME);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES,
+					OTHER_NAMES);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB,
+					DATE_OF_BIRTH);
+			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE,
+					AGE);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS, AGE_UNITS);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER, GENDER);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER,
+					PHONE_NUMBER);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER,
 					OTHER_PHONE_NUMBER);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME,
-					POINT_OF_CONTACT_NAME);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER,
-					POINT_OF_CONTACT_PHONE_NUMBER);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
+			columnsToFieldNames
+					.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME,
+							POINT_OF_CONTACT_NAME);
+			columnsToFieldNames
+					.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER,
+							POINT_OF_CONTACT_PHONE_NUMBER);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
 					LANGUAGE_PREFERENCE);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID, DIP);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER, MOTHER_EXTID);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER, FATHER_EXTID);
-			columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-					HOUSEHOLD_EXTID);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID, DIP);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER, MOTHER_EXTID);
+			columnsToFieldNames.put(
+					OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER, FATHER_EXTID);
+			columnsToFieldNames
+					.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
+							HOUSEHOLD_EXTID);
 		}
 
 		public static String getFieldNameFromColumn(String column) {
@@ -109,37 +134,42 @@ public class ProjectFormFields {
 			}
 		}
 	}
-	
+
 	public static final class FormSelections {
-		
 
 		private static Map<String, Integer> relationToHeadOfHousehold = new HashMap<String, Integer>();
-		
-		static{			
-			
-			relationToHeadOfHousehold.put("1", R.string.relation_to_head_type_head);
-			relationToHeadOfHousehold.put("2", R.string.relation_to_head_type_spouse);
-			relationToHeadOfHousehold.put("3", R.string.relation_to_head_type_son_daughter);
-			relationToHeadOfHousehold.put("4", R.string.relation_to_head_type_brother_sister);
-			relationToHeadOfHousehold.put("5", R.string.relation_to_head_type_parent);
-			relationToHeadOfHousehold.put("6", R.string.relation_to_head_type_grandchild);
-			relationToHeadOfHousehold.put("7", R.string.relation_to_head_type_not_related);
-			relationToHeadOfHousehold.put("8", R.string.relation_to_head_type_other_relative);
-			relationToHeadOfHousehold.put("9", R.string.relation_to_head_type_dont_know);
+
+		static {
+
+			relationToHeadOfHousehold.put("1",
+					R.string.db_val_relation_to_head_type_head);
+			relationToHeadOfHousehold.put("2",
+					R.string.db_val_relation_to_head_type_spouse);
+			relationToHeadOfHousehold.put("3",
+					R.string.db_val_relation_to_head_type_son_daughter);
+			relationToHeadOfHousehold.put("4",
+					R.string.db_val_relation_to_head_type_brother_sister);
+			relationToHeadOfHousehold.put("5",
+					R.string.db_val_relation_to_head_type_parent);
+			relationToHeadOfHousehold.put("6",
+					R.string.db_val_relation_to_head_type_grandchild);
+			relationToHeadOfHousehold.put("7",
+					R.string.db_val_relation_to_head_type_not_related);
+			relationToHeadOfHousehold.put("8",
+					R.string.db_val_relation_to_head_type_other_relative);
+			relationToHeadOfHousehold.put("9",
+					R.string.db_val_relation_to_head_type_dont_know);
 		}
-		
+
 		public static int getRelationToHeadofHousehold(String relationshipValue) {
-			
-			String blah = relationshipValue;
-			
-			
+
 			if (relationToHeadOfHousehold.containsKey(relationshipValue)) {
 				return relationToHeadOfHousehold.get(relationshipValue);
 			} else {
 				return 0;
 			}
 		}
-		
+
 	}
-	
+
 }

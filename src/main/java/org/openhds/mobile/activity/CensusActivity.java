@@ -3,7 +3,6 @@ package org.openhds.mobile.activity;
 import static org.openhds.mobile.database.queries.Queries.getIndividualsExtIdsByPrefix;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -26,8 +25,8 @@ import org.openhds.mobile.fragment.HierarchyFormFragment;
 import org.openhds.mobile.fragment.HierarchySelectionFragment;
 import org.openhds.mobile.fragment.HierarchyValueFragment;
 import org.openhds.mobile.model.FieldWorker;
-import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormBehaviour;
+import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
@@ -38,6 +37,7 @@ import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectQueryHelper;
+import org.openhds.mobile.projectdata.ProjectResourceMapper;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.LuhnValidator;
 import org.openhds.mobile.utilities.OdkCollectHelper;
@@ -370,9 +370,9 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 													true);
 									qr.getPayLoad()
 											.put(getString(R.string.relationship_to_head_label),
-													getString(ProjectFormFields.FormSelections
-															.getRelationToHeadofHousehold(relationship
-																	.getType())));
+													getString(ProjectResourceMapper.Database
+															.getRelationshipStringId((relationship
+																	.getType()))));
 								}
 								relationshipCursor.close();
 							}
@@ -382,8 +382,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				}
 				socialGroupCursor.close();
 
-				List<FormBehaviour> individualForms = formsForStates
-						.get(state);
+				List<FormBehaviour> individualForms = formsForStates.get(state);
 				if (headOfHouseholdDefined) {
 					formFragment.createFormButtons(individualForms
 							.subList(1, 2));
@@ -409,6 +408,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			}
 
 			valueFragment.populateValues(currentResults);
+
 		}
 
 		@Override

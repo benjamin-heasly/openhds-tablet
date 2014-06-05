@@ -3,6 +3,7 @@ package org.openhds.mobile.utilities;
 import java.util.Map;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.projectdata.ProjectResourceMapper;
 
 import android.app.Activity;
 import android.view.View;
