@@ -3,7 +3,7 @@ package org.openhds.mobile.utilities;
 import java.util.Map;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.projectdata.ProjectResourceMapper;
+import org.openhds.mobile.projectdata.ProjectResources;
 
 import android.app.Activity;
 import android.view.View;
@@ -16,10 +16,12 @@ import android.widget.TextView;
 
 public class LayoutUtils {
 
-	public static Button makeNewGenericButton(Activity activity, String description, String buttonName,
-			Object buttonTag, OnClickListener listener, ViewGroup container) {
+	public static Button makeNewGenericButton(Activity activity,
+			String description, String buttonName, Object buttonTag,
+			OnClickListener listener, ViewGroup container) {
 
-		View v = activity.getLayoutInflater().inflate(R.layout.generic_textview_button, null);
+		View v = activity.getLayoutInflater().inflate(
+				R.layout.generic_textview_button, null);
 		container.addView(v);
 		Button b = (Button) v.findViewById(R.id.generic_button);
 		TextView t = (TextView) v.findViewById(R.id.generic_button_description);
@@ -38,12 +40,14 @@ public class LayoutUtils {
 		return b;
 	}
 
-	public static RelativeLayout makeNewGenericLayout(Activity activity, String primaryText,
-			String secondaryText, Object layoutTag, OnClickListener listener, ViewGroup container,
-			int background, Map<String, String> payLoad) {
+	public static RelativeLayout makeNewGenericLayout(Activity activity,
+			String primaryText, String secondaryText, Object layoutTag,
+			OnClickListener listener, ViewGroup container, int background,
+			Map<Integer, String> stringsPayLoad,
+			Map<Integer, Integer> stringsIdsPayLoad) {
 
-		RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(
-				R.layout.generic_list_item, null);
+		RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater()
+				.inflate(R.layout.generic_list_item, null);
 		layout.setTag(layoutTag);
 
 		if (null != listener) {
@@ -58,17 +62,22 @@ public class LayoutUtils {
 			layout.setBackgroundResource(background);
 		}
 
-		configureGenericLayout(activity, layout, primaryText, secondaryText, payLoad);
+		configureGenericLayout(activity, layout, primaryText, secondaryText,
+				stringsPayLoad, stringsIdsPayLoad);
 
 		return layout;
 	}
 
-	public static void configureGenericLayout(Activity activity, RelativeLayout layout, String primaryText,
-			String secondaryText, Map<String, String> payLoad) {
+	public static void configureGenericLayout(Activity activity,
+			RelativeLayout layout, String primaryText, String secondaryText,
+			Map<Integer, String> stringsPayLoad,
+			Map<Integer, Integer> stringsIdsPayLoad) {
 
 		TextView primary = (TextView) layout.findViewById(R.id.primary_text);
-		TextView secondary = (TextView) layout.findViewById(R.id.secondary_text);
-		LinearLayout payLoadContainer = (LinearLayout) layout.findViewById(R.id.pay_load_container);
+		TextView secondary = (TextView) layout
+				.findViewById(R.id.secondary_text);
+		LinearLayout payLoadContainer = (LinearLayout) layout
+				.findViewById(R.id.pay_load_container);
 
 		if (null == primaryText) {
 			primary.setVisibility(View.GONE);
@@ -84,21 +93,47 @@ public class LayoutUtils {
 			secondary.setText(secondaryText);
 		}
 
-		if (null == payLoad) {
+		if (null == stringsPayLoad) {
 			payLoadContainer.setVisibility(View.GONE);
 		} else {
 			payLoadContainer.removeAllViews();
-			
-			for (String key : payLoad.keySet()) {
-				String value = payLoad.get(key);
+
+			for (Integer key : stringsPayLoad.keySet()) {
+				String value = stringsPayLoad.get(key);
+
 				if (null == value) {
 					continue;
 				}
+
 				TextView textView = new TextView(activity);
-				textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
-				textView.setText(key + ": " + value);
+				textView.setTextAppearance(activity,
+						android.R.style.TextAppearance_Small_Inverse);
+
+				textView.setText(activity.getResources().getString(key) + ": "
+						+ value);
+
 				payLoadContainer.addView(textView);
 			}
+
+			for (Integer key : stringsIdsPayLoad.keySet()) {
+
+				String value = activity.getResources().getString(
+						stringsIdsPayLoad.get(key));
+
+				if (null == value) {
+					continue;
+				}
+
+				TextView textView = new TextView(activity);
+				textView.setTextAppearance(activity,
+						android.R.style.TextAppearance_Small_Inverse);
+
+				textView.setText(activity.getResources().getString(key) + ": "
+						+ value);
+
+				payLoadContainer.addView(textView);
+			}
+
 			payLoadContainer.setVisibility(View.VISIBLE);
 		}
 	}

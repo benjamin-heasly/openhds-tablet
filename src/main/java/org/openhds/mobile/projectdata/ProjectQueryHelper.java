@@ -27,11 +27,6 @@ public class ProjectQueryHelper {
 	public static final String MAP_AREA_HIERARCHY_LEVEL_NAME = "MapArea";
 	public static final String SECTOR_HIERARCHY_LEVEL_NAME = "Sector";
 
-	// These should be string resources instead of constants
-	public static final String AGE_KEY = "edad";
-	public static final String LANGUAGE_KEY = "preferencia de idioma";
-	public static final String OTHER_NAMES_KEY = "otros nombres";
-
 	public static List<QueryResult> getAll(ContentResolver contentResolver,
 			String state) {
 
@@ -227,10 +222,11 @@ public class ProjectQueryHelper {
 
 		} else {
 
-			qr.getPayLoad().put(OTHER_NAMES_KEY, individual.getOtherNames());
-			qr.getPayLoad()
-					.put(AGE_KEY, Individual.getAgeWithUnits(individual));
-			qr.getPayLoad().put(LANGUAGE_KEY,
+			qr.getStringsPayLoad().put(R.string.other_names_label,
+					individual.getOtherNames());
+			qr.getStringsPayLoad().put(R.string.age_label,
+					Individual.getAgeWithUnits(individual));
+			qr.getStringsPayLoad().put(R.string.language_preference_label,
 					individual.getLanguagePreference());
 
 		}
@@ -238,29 +234,59 @@ public class ProjectQueryHelper {
 		return qr;
 	}
 
-	public static QueryResult createCompleteIndividualQueryResult(Map<String,String> formFieldMap, String state, Context ctx) {
+	public static QueryResult createCompleteIndividualQueryResult(
+			Map<String, String> formFieldMap, String state, Context context) {
 		QueryResult qr = new QueryResult();
-		
-		qr.setExtId(formFieldMap.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
-		qr.setName(formFieldMap.get(ProjectFormFields.Individuals.FIRST_NAME)+ " " +
-		formFieldMap.get(ProjectFormFields.Individuals.LAST_NAME));
-		qr.setState(state);
-		
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.other_names_label), formFieldMap.get(ProjectFormFields.Individuals.OTHER_NAMES));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.age_label), formFieldMap.get(ProjectFormFields.Individuals.AGE)+" "+formFieldMap.get(ProjectFormFields.Individuals.AGE_UNITS));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.date_of_birth_label), formFieldMap.get(ProjectFormFields.Individuals.DATE_OF_BIRTH));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.gender_lbl), formFieldMap.get(ProjectFormFields.Individuals.GENDER));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.relationship_to_head_label), formFieldMap.get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.personal_phone_number_label), formFieldMap.get(ProjectFormFields.Individuals.PHONE_NUMBER));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.other_phone_number_label), formFieldMap.get(ProjectFormFields.Individuals.OTHER_PHONE_NUMBER));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.point_of_contact_label), formFieldMap.get(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.point_of_contact_phone_number_label), formFieldMap.get(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.language_preference_label), formFieldMap.get(ProjectFormFields.Individuals.LANGUAGE_PREFERENCE));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.dip_label), formFieldMap.get(ProjectFormFields.Individuals.DIP));
-		qr.getPayLoad().put(ctx.getResources().getString(R.string.member_status_label), formFieldMap.get(ProjectFormFields.Individuals.MEMBER_STATUS));
-		
 
-	
+		qr.setExtId(formFieldMap
+				.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+		qr.setName(formFieldMap.get(ProjectFormFields.Individuals.FIRST_NAME)
+				+ " "
+				+ formFieldMap.get(ProjectFormFields.Individuals.LAST_NAME));
+		qr.setState(state);
+
+		qr.getStringsPayLoad().put(R.string.other_names_label,
+				formFieldMap.get(ProjectFormFields.Individuals.OTHER_NAMES));
+		qr.getStringsPayLoad().put(
+				ProjectResources.Individual.getIndividualStringId(formFieldMap
+						.get(ProjectFormFields.Individuals.AGE_UNITS)),
+				formFieldMap.get(ProjectFormFields.Individuals.AGE));
+
+		qr.getStringsPayLoad().put(R.string.date_of_birth_label,
+				formFieldMap.get(ProjectFormFields.Individuals.DATE_OF_BIRTH));
+		qr.getStringIdsPayLoad().put(
+				R.string.gender_lbl,
+				ProjectResources.Individual.getIndividualStringId(formFieldMap
+						.get(ProjectFormFields.Individuals.GENDER)));
+		qr.getStringIdsPayLoad()
+				.put(R.string.relationship_to_head_label,
+						ProjectResources.Relationship.getRelationshipStringId(formFieldMap
+								.get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD)));
+		qr.getStringsPayLoad().put(R.string.personal_phone_number_label,
+				formFieldMap.get(ProjectFormFields.Individuals.PHONE_NUMBER));
+		qr.getStringsPayLoad().put(
+				R.string.other_phone_number_label,
+				formFieldMap
+						.get(ProjectFormFields.Individuals.OTHER_PHONE_NUMBER));
+		qr.getStringsPayLoad()
+				.put(R.string.point_of_contact_label,
+						formFieldMap
+								.get(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME));
+		qr.getStringsPayLoad()
+				.put(R.string.point_of_contact_phone_number_label,
+						formFieldMap
+								.get(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER));
+		qr.getStringIdsPayLoad()
+				.put(R.string.language_preference_label,
+						ProjectResources.Individual.getIndividualStringId(formFieldMap
+								.get(ProjectFormFields.Individuals.LANGUAGE_PREFERENCE)));
+		qr.getStringsPayLoad().put(R.string.dip_label,
+				formFieldMap.get(ProjectFormFields.Individuals.DIP));
+		qr.getStringIdsPayLoad().put(
+				R.string.member_status_label,
+				ProjectResources.Individual.getIndividualStringId(formFieldMap
+						.get(ProjectFormFields.Individuals.MEMBER_STATUS)));
+
 		return qr;
 	}
 }

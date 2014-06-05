@@ -37,7 +37,7 @@ import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectQueryHelper;
-import org.openhds.mobile.projectdata.ProjectResourceMapper;
+import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.LuhnValidator;
 import org.openhds.mobile.utilities.OdkCollectHelper;
@@ -368,9 +368,9 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 									Relationship relationship = Converter
 											.toRelationship(relationshipCursor,
 													true);
-									qr.getPayLoad()
-											.put(getString(R.string.relationship_to_head_label),
-													getString(ProjectResourceMapper.Database
+									qr.getStringsPayLoad()
+											.put(R.string.relationship_to_head_label,
+													getString(ProjectResources.Relationship
 															.getRelationshipStringId((relationship
 																	.getType()))));
 								}

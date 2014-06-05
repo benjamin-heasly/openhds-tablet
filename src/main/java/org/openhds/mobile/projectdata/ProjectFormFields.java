@@ -135,41 +135,4 @@ public class ProjectFormFields {
 		}
 	}
 
-	public static final class FormSelections {
-
-		private static Map<String, Integer> relationToHeadOfHousehold = new HashMap<String, Integer>();
-
-		static {
-
-			relationToHeadOfHousehold.put("1",
-					R.string.db_val_relation_to_head_type_head);
-			relationToHeadOfHousehold.put("2",
-					R.string.db_val_relation_to_head_type_spouse);
-			relationToHeadOfHousehold.put("3",
-					R.string.db_val_relation_to_head_type_son_daughter);
-			relationToHeadOfHousehold.put("4",
-					R.string.db_val_relation_to_head_type_brother_sister);
-			relationToHeadOfHousehold.put("5",
-					R.string.db_val_relation_to_head_type_parent);
-			relationToHeadOfHousehold.put("6",
-					R.string.db_val_relation_to_head_type_grandchild);
-			relationToHeadOfHousehold.put("7",
-					R.string.db_val_relation_to_head_type_not_related);
-			relationToHeadOfHousehold.put("8",
-					R.string.db_val_relation_to_head_type_other_relative);
-			relationToHeadOfHousehold.put("9",
-					R.string.db_val_relation_to_head_type_dont_know);
-		}
-
-		public static int getRelationToHeadofHousehold(String relationshipValue) {
-
-			if (relationToHeadOfHousehold.containsKey(relationshipValue)) {
-				return relationToHeadOfHousehold.get(relationshipValue);
-			} else {
-				return 0;
-			}
-		}
-
-	}
-
 }

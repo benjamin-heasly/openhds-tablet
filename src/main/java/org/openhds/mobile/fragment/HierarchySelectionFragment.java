@@ -43,7 +43,7 @@ public class HierarchySelectionFragment extends Fragment {
 
 			RelativeLayout layout = makeNewGenericLayout(getActivity(),
 					getResourceString(getActivity(), labels.get(state)), description, state, listener,
-					selectionContainer, 0, null);
+					selectionContainer, 0, null, null);
 			LayoutParams params = (LayoutParams) layout.getLayoutParams();
 			params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -74,7 +74,7 @@ public class HierarchySelectionFragment extends Fragment {
 		if (null == layout) {
 			return;
 		}
-		configureGenericLayout(getActivity(), layout, name, id, null);
+		configureGenericLayout(getActivity(), layout, name, id, null, null);
 	}
 
 	private class HierarchyButtonListener implements OnClickListener {

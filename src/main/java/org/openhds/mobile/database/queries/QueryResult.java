@@ -8,7 +8,8 @@ public class QueryResult {
 	private String state;
 	private String extId;
 	private String name;
-	private Map<String, String> payLoad = new HashMap<String, String>();
+	private Map<Integer, String> stringsPayLoad = new HashMap<Integer, String>();
+	private Map<Integer, Integer> stringIdsPayLoad = new HashMap<Integer, Integer>();
 
 	public String getState() {
 		return state;
@@ -34,13 +35,17 @@ public class QueryResult {
 		this.name = name;
 	}
 
-	public Map<String, String> getPayLoad() {
-		return payLoad;
+	public Map<Integer, String> getStringsPayLoad() {
+		return stringsPayLoad;
+	}
+	
+	public Map<Integer, Integer> getStringIdsPayLoad() {
+		return stringIdsPayLoad;
 	}
 
 	@Override
 	public String toString() {
-		return "QueryResult[name: " + name + " extId: " + extId + " state: " + state + " + payload size: "
-				+ payLoad.size() + "]";
+		return "QueryResult[name: " + name + " extId: " + extId + " state: "
+				+ state + " + payload size: " + stringsPayLoad.size() + "]";
 	}
 }
