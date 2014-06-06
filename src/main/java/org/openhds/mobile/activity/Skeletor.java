@@ -55,10 +55,10 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 		stateLabels = builder.getStateLabels();
 		stateSequence = builder.getStateSequence();
 		queryHelper = builder.getQueryHelper();
-
 		hierarchyPath = new HashMap<String, QueryResult>();
 		stateMachine = new StateMachine(new HashSet<String>(stateSequence),
 				stateSequence.get(0));
+
 		for (String state : stateSequence) {
 			stateMachine.registerListener(state, new HierarchyStateListener());
 		}
@@ -174,14 +174,62 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 	}
 
 	@Override
-	public void jumpUp(String state) {
-		// TODO Auto-generated method stub
+	public void jumpUp(String targetState) {
+		int targetIndex = stateSequence.indexOf(targetState);
+		if (targetIndex < 0) {
+			throw new IllegalStateException("Target state <" + targetState
+					+ "> is not a valid state");
+		}
+
+		String currentState = stateMachine.getState();
+		int currentIndex = stateSequence.indexOf(currentState);
+		if (targetIndex >= currentIndex) {
+			// use stepDown() to go down the hierarchy
+			return;
+		}
+
+		// un-traverse the hierarchy up to the target state
+		for (int i = currentIndex; i >= targetIndex; i--) {
+			String state = stateSequence.get(i);
+			selectionFragment.setButtonAllowed(state, false);
+			hierarchyPath.remove(state);
+		}
+
+		// prepare to stepDown() from this target state
+		if (0 == targetIndex) {
+			// root of the hierarchy
+			currentResults = queryHelper.getAll(getContentResolver(),
+					stateSequence.get(0));
+		} else {
+			// middle of the hierarchy
+			String previousState = stateSequence.get(targetIndex - 1);
+			QueryResult previousSelection = hierarchyPath.get(previousState);
+			currentResults = queryHelper.getChildren(getContentResolver(),
+					previousSelection, targetState);
+		}
+		stateMachine.transitionTo(targetState);
 
 	}
 
 	@Override
-	public void stepDown(QueryResult qr) {
-		// TODO Auto-generated method stub
+	public void stepDown(QueryResult selected) {
+		String currentState = stateMachine.getState();
+		if (!currentState.equals(selected.getState())) {
+			throw new IllegalStateException("Selected state <"
+					+ selected.getState() + "> mismatch with current state <"
+					+ currentState + ">");
+		}
+		//
+		int currentIndex = stateSequence.indexOf(currentState);
+		if (currentIndex >= 0 && currentIndex < stateSequence.size() - 1) {
+			String nextState = stateSequence.get(currentIndex + 1);
+
+			currentResults = queryHelper.getChildren(getContentResolver(),
+					selected, nextState);
+
+			hierarchyPath.put(currentState, selected);
+			stateMachine.transitionTo(nextState);
+		}
 
 	}
 
@@ -195,11 +243,20 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 
 		@Override
 		public void onEnterState() {
-
+			String state = stateMachine.getState();
+			updateButtonLabel(state);
+			
+			if (!state.equals(stateSequence.get(stateSequence.size() - 1))) {
+				selectionFragment.setButtonAllowed(state, true);
+			}
+			
+			valueFragment.populateValues(currentResults);
 		}
 
 		@Override
 		public void onExitState() {
+			String state = stateMachine.getState();
+			updateButtonLabel(state);
 		}
 	}
 }
