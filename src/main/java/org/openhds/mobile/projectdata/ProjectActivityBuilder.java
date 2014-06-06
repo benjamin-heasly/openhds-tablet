@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.model.FormBehaviour;
 
 public class ProjectActivityBuilder {
 
@@ -20,9 +21,11 @@ public class ProjectActivityBuilder {
 
 		public QueryHelper getQueryHelper();
 
+		public Map<String, List<FormBehaviour>> getFormsforstates();
+
 	}
 
-	private static class CensusActivityBuilder implements
+	public static class CensusActivityBuilder implements
 			ActivityBuilderModule, Serializable {
 		private static final long serialVersionUID = -2241775877237937942L;
 
@@ -37,6 +40,7 @@ public class ProjectActivityBuilder {
 
 		private static final Map<String, Integer> stateLabels = new HashMap<String, Integer>();
 		private static final List<String> stateSequence = new ArrayList<String>();
+		private static final Map<String, List<FormBehaviour>> formsForStates = new HashMap<String, List<FormBehaviour>>();
 
 		static {
 
@@ -58,6 +62,35 @@ public class ProjectActivityBuilder {
 			stateSequence.add(INDIVIDUAL_STATE);
 			stateSequence.add(BOTTOM_STATE);
 
+			ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> districtFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> mapAreaFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> sectorFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> householdFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
+
+			individualFormList.add(new FormBehaviour("Individual",
+					R.string.create_head_of_household_label, null,
+					new CensusFormFilter.AddHeadOfHousehold()));
+			individualFormList.add(new FormBehaviour("Individual",
+					R.string.add_member_of_household_label, null,
+					new CensusFormFilter.AddMemberOfHousehold()));
+
+			bottomFormList.add(new FormBehaviour("Individual",
+					R.string.edit_individual_label, INDIVIDUAL_STATE,
+					new CensusFormFilter.EditIndividual()));
+
+			formsForStates.put(REGION_STATE, regionFormList);
+			formsForStates.put(PROVINCE_STATE, provinceFormList);
+			formsForStates.put(DISTRICT_STATE, districtFormList);
+			formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
+			formsForStates.put(SECTOR_STATE, sectorFormList);
+			formsForStates.put(HOUSEHOLD_STATE, householdFormList);
+			formsForStates.put(INDIVIDUAL_STATE, individualFormList);
+			formsForStates.put(BOTTOM_STATE, bottomFormList);
+
 		}
 
 		@Override
@@ -68,6 +101,11 @@ public class ProjectActivityBuilder {
 		@Override
 		public List<String> getStateSequence() {
 			return stateSequence;
+		}
+
+		@Override
+		public Map<String, List<FormBehaviour>> getFormsforstates() {
+			return formsForStates;
 		}
 
 		@Override

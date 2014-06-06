@@ -93,12 +93,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
 		individualFormList.add(new FormBehaviour("Individual",
-				R.string.create_head_of_household_label, null));
+				R.string.create_head_of_household_label, null, null));
 		individualFormList.add(new FormBehaviour("Individual",
-				R.string.add_member_of_household_label, null));
+				R.string.add_member_of_household_label, null, null));
 
 		bottomFormList.add(new FormBehaviour("Individual",
-				R.string.edit_individual_label, INDIVIDUAL_STATE));
+				R.string.edit_individual_label, INDIVIDUAL_STATE, null));
 
 		formsForStates.put(REGION_STATE, regionFormList);
 		formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -191,6 +191,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		}
 	}
 
+	// moved to SKELETOR
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		// save extIds all down the hierarchy path
@@ -203,12 +204,14 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
+	// moved to SKELETOR
 	@Override
 	protected void onResume() {
 		super.onResume();
 		hierarchySetup();
 	}
 
+	// moved to SKELETOR
 	private void hierarchySetup() {
 		int stateIndex = 0;
 		for (String state : stateSequence) {
@@ -239,6 +242,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		valueFragment.populateValues(currentResults);
 	}
 
+	// moved to SKELETOR
 	private void updateButtonLabel(String state) {
 
 		QueryResult selected = hierarchyPath.get(state);
@@ -254,18 +258,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		}
 	}
 
+	// moved to SKELETOR
 	@Override
 	public Map<String, Integer> getStateLabels() {
 		return stateLabels;
 	}
 
+	// moved to SKELETOR
 	@Override
 	public List<String> getStateSequence() {
 		return stateSequence;
 	}
 
-	// Required to update currentResults for targetState and transition to the
-	// targetState.
+	// moved to SKELETOR
 	@Override
 	public void jumpUp(String targetState) {
 		int targetIndex = stateSequence.indexOf(targetState);
@@ -303,8 +308,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		stateMachine.transitionTo(targetState);
 	}
 
-	// Required to update currentResults with children of selected, and
-	// transition to the next state down.
+	// moved to SKELETOR
 	@Override
 	public void stepDown(QueryResult selected) {
 
@@ -336,6 +340,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			if (!state.equals(stateSequence.get(stateSequence.size() - 1))) {
 				selectionFragment.setButtonAllowed(state, true);
 			}
+
+			// break into AM I VALID? plugins
 
 			if (state.equals(INDIVIDUAL_STATE)) {
 				// Does a household exist at this location
@@ -476,7 +482,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			if (resultCode == RESULT_OK) {
 
 				// CURRENTLY: only handles individual related forms.
-				// TODO: Allow checking for forms from other states.
+				// TODO: BREAK INTO FORM CONSUMERS
 
 				if (formHelper.checkFormInstanceStatus()) {
 

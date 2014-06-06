@@ -32,9 +32,11 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 	private static final String SELECTION_FRAGMENT_TAG = "hierarchySelectionFragment";
 	private static final String VALUE_FRAGMENT_TAG = "hierarchyValueFragment";
 	private static final String FORM_FRAGMENT_TAG = "hierarchyFormFragment";
-
+	
+	private static Map<String, List<FormBehaviour>> formsForStates;
 	private static Map<String, Integer> stateLabels;
 	private static List<String> stateSequence;
+	
 	private StateMachine stateMachine;
 	private Map<String, QueryResult> hierarchyPath;
 	private List<QueryResult> currentResults;
@@ -55,6 +57,7 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 		stateLabels = builder.getStateLabels();
 		stateSequence = builder.getStateSequence();
 		queryHelper = builder.getQueryHelper();
+		formsForStates = builder.getFormsforstates();
 		hierarchyPath = new HashMap<String, QueryResult>();
 		stateMachine = new StateMachine(new HashSet<String>(stateSequence),
 				stateSequence.get(0));
@@ -96,6 +99,25 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 					.findFragmentByTag(FORM_FRAGMENT_TAG);
 			formFragment.setNavigator(this);
 
+			for (String state : stateSequence) {
+				if (savedInstanceState.containsKey(state)) {
+					String extId = savedInstanceState.getString(state);
+
+					if (null == extId) {
+						break;
+					}
+					QueryResult qr = queryHelper.getIfExists(
+							getContentResolver(), state, extId);
+					if (null == qr) {
+						break;
+					} else {
+						hierarchyPath.put(state, qr);
+					}
+				} else {
+					break;
+				}
+			}
+			
 		}
 
 	}
@@ -145,6 +167,14 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 		stateMachine.transitionTo(state);
 
 		valueFragment.populateValues(currentResults);
+	}
+
+	public Map<String, QueryResult> getHierarchyPath() {
+		return hierarchyPath;
+	}
+
+	public List<QueryResult> getCurrentResults() {
+		return currentResults;
 	}
 
 	private void updateButtonLabel(String state) {
@@ -245,11 +275,19 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 		public void onEnterState() {
 			String state = stateMachine.getState();
 			updateButtonLabel(state);
-			
 			if (!state.equals(stateSequence.get(stateSequence.size() - 1))) {
 				selectionFragment.setButtonAllowed(state, true);
 			}
 			
+			List<FormBehaviour> filteredForms = formsForStates.get(state);
+			
+			for(FormBehaviour form : filteredForms){
+				if(!form.getFormFilter().amIValid(Skeletor.this)){
+					filteredForms.remove(form);
+				}
+			}
+			
+			formFragment.createFormButtons(filteredForms);
 			valueFragment.populateValues(currentResults);
 		}
 
