@@ -632,6 +632,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		Calendar c = Calendar.getInstance();
 		formFieldNames.put(ProjectFormFields.General.COLLECTED_DATE_TIME, c
 				.getTime().toString());
+		
+		if (currentHeadOfHousehold == null) {
+
+			formFieldNames.put(
+					ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD, "1");
+
+		}
 
 		String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
 
