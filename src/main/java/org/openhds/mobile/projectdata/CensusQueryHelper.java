@@ -17,7 +17,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 
-public class ProjectQueryHelper {
+public class CensusQueryHelper implements QueryHelper {
 
 	// These must match the server data.
 	// They come from the name column of the locationhierarchylevel table
@@ -27,7 +27,11 @@ public class ProjectQueryHelper {
 	public static final String MAP_AREA_HIERARCHY_LEVEL_NAME = "MapArea";
 	public static final String SECTOR_HIERARCHY_LEVEL_NAME = "Sector";
 
-	public static List<QueryResult> getAll(ContentResolver contentResolver,
+	public CensusQueryHelper() {
+
+	}
+
+	public List<QueryResult> getAll(ContentResolver contentResolver,
 			String state) {
 
 		if (state.equals(CensusActivity.REGION_STATE)) {
@@ -60,7 +64,7 @@ public class ProjectQueryHelper {
 		return new ArrayList<QueryResult>();
 	}
 
-	public static QueryResult getIfExists(ContentResolver contentResolver,
+	public QueryResult getIfExists(ContentResolver contentResolver,
 			String state, String extId) {
 
 		if (state.equals(CensusActivity.REGION_STATE)) {
@@ -97,8 +101,8 @@ public class ProjectQueryHelper {
 		return null;
 	}
 
-	public static List<QueryResult> getChildren(
-			ContentResolver contentResolver, QueryResult qr, String childState) {
+	public List<QueryResult> getChildren(ContentResolver contentResolver,
+			QueryResult qr, String childState) {
 		String state = qr.getState();
 
 		if (state.equals(CensusActivity.REGION_STATE)

@@ -36,7 +36,7 @@ import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectQueryHelper;
+import org.openhds.mobile.projectdata.CensusQueryHelper;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.LuhnValidator;
@@ -121,14 +121,16 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	private HierarchySelectionFragment selectionFragment;
 	private HierarchyValueFragment valueFragment;
 	private HierarchyFormFragment formFragment;
-
+	private CensusQueryHelper censusQueryHelper;
 	// TODO: reconsider where to maintain the current head of household
 	private Individual currentHeadOfHousehold;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.census_activity);
+		setContentView(R.layout.navigate_activity);
+
+		censusQueryHelper = new CensusQueryHelper();
 		hierarchyPath = new HashMap<String, QueryResult>();
 		stateMachine = new StateMachine(new HashSet<String>(stateSequence),
 				stateSequence.get(0));
@@ -175,7 +177,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 					if (null == extId) {
 						break;
 					}
-					QueryResult qr = ProjectQueryHelper.getIfExists(
+					QueryResult qr = censusQueryHelper.getIfExists(
 							getContentResolver(), state, extId);
 					if (null == qr) {
 						break;
@@ -222,12 +224,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		String state = stateSequence.get(stateIndex);
 		if (0 == stateIndex) {
 			selectionFragment.setButtonAllowed(state, true);
-			currentResults = ProjectQueryHelper.getAll(getContentResolver(),
+			currentResults = censusQueryHelper.getAll(getContentResolver(),
 					stateSequence.get(0));
 		} else {
 			String previousState = stateSequence.get(stateIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = ProjectQueryHelper.getChildren(
+			currentResults = censusQueryHelper.getChildren(
 					getContentResolver(), previousSelection, state);
 		}
 		// make sure that listeners will fire for the current state
@@ -289,13 +291,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		// prepare to stepDown() from this target state
 		if (0 == targetIndex) {
 			// root of the hierarchy
-			currentResults = ProjectQueryHelper.getAll(getContentResolver(),
+			currentResults = censusQueryHelper.getAll(getContentResolver(),
 					stateSequence.get(0));
 		} else {
 			// middle of the hierarchy
 			String previousState = stateSequence.get(targetIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = ProjectQueryHelper.getChildren(
+			currentResults = censusQueryHelper.getChildren(
 					getContentResolver(), previousSelection, targetState);
 		}
 		stateMachine.transitionTo(targetState);
@@ -317,7 +319,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		if (currentIndex >= 0 && currentIndex < stateSequence.size() - 1) {
 			String nextState = stateSequence.get(currentIndex + 1);
 
-			currentResults = ProjectQueryHelper.getChildren(
+			currentResults = censusQueryHelper.getChildren(
 					getContentResolver(), selected, nextState);
 
 			hierarchyPath.put(currentState, selected);
@@ -397,7 +399,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						hierarchyPath.get(INDIVIDUAL_STATE).getExtId());
 				currentResults = new ArrayList<QueryResult>();
 
-				currentResults.add(ProjectQueryHelper
+				currentResults.add(CensusQueryHelper
 						.createCompleteIndividualQueryResult(formFieldNames,
 								state, getBaseContext()));
 
