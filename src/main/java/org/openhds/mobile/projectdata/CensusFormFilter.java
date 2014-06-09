@@ -52,11 +52,8 @@ public class CensusFormFilter {
 				if (!filter.hasHeadOfHousehold(skeletor, hierarchyPath)) {
 
 					return true;
-
 				}
-
 			}
-
 			return false;
 		}
 	}
@@ -71,17 +68,13 @@ public class CensusFormFilter {
 
 			if (hierarchyPath
 					.containsKey(ProjectActivityBuilder.CensusActivityBuilder.HOUSEHOLD_STATE)) {
-				
-				CensusFormFilter filter = new CensusFormFilter();
-				
-				if (filter.hasHeadOfHousehold(skeletor, hierarchyPath)) {
-					
-					return true;
-					
-				}
-				
-			}
 
+				CensusFormFilter filter = new CensusFormFilter();
+
+				if (filter.hasHeadOfHousehold(skeletor, hierarchyPath)) {
+					return true;
+				}
+			}
 			return false;
 		}
 
@@ -92,7 +85,29 @@ public class CensusFormFilter {
 		@Override
 		public boolean amIValid(Skeletor skeletor) {
 
-			return true;
+			Map<String, QueryResult> hierarchyPath = skeletor
+					.getHierarchyPath();
+
+			if (hierarchyPath
+					.containsKey(ProjectActivityBuilder.CensusActivityBuilder.INDIVIDUAL_STATE)) {
+
+				CensusFormFilter filter = new CensusFormFilter();
+
+				if (filter.hasHeadOfHousehold(skeletor, hierarchyPath)) {
+
+					String individualExtId = hierarchyPath
+							.get(ProjectActivityBuilder.CensusActivityBuilder.INDIVIDUAL_STATE)
+							.getExtId();
+
+					Cursor individualCursor = Queries.getIndividualByExtId(
+							skeletor.getContentResolver(), individualExtId);
+
+					if (individualCursor.moveToFirst()) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 	}
