@@ -2,11 +2,13 @@ package org.openhds.mobile.activity;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
@@ -15,12 +17,12 @@ import org.openhds.mobile.fragment.HierarchyValueFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
-import org.openhds.mobile.projectdata.CensusQueryHelper;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder.ActivityBuilderModule;
 import org.openhds.mobile.projectdata.QueryHelper;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 
 public class Skeletor extends Activity implements HierarchyNavigator {
@@ -32,11 +34,11 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 	private static final String SELECTION_FRAGMENT_TAG = "hierarchySelectionFragment";
 	private static final String VALUE_FRAGMENT_TAG = "hierarchyValueFragment";
 	private static final String FORM_FRAGMENT_TAG = "hierarchyFormFragment";
-	
+
 	private static Map<String, List<FormBehaviour>> formsForStates;
 	private static Map<String, Integer> stateLabels;
 	private static List<String> stateSequence;
-	
+
 	private StateMachine stateMachine;
 	private Map<String, QueryResult> hierarchyPath;
 	private List<QueryResult> currentResults;
@@ -117,7 +119,7 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 					break;
 				}
 			}
-			
+
 		}
 
 	}
@@ -278,16 +280,18 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 			if (!state.equals(stateSequence.get(stateSequence.size() - 1))) {
 				selectionFragment.setButtonAllowed(state, true);
 			}
-			
+
 			List<FormBehaviour> filteredForms = formsForStates.get(state);
-			
-			for(FormBehaviour form : filteredForms){
-				if(!form.getFormFilter().amIValid(Skeletor.this)){
-					filteredForms.remove(form);
+			List<FormBehaviour> validForms = new ArrayList<FormBehaviour>();
+
+
+			for (FormBehaviour form : filteredForms) {
+				if (form.getFormFilter().amIValid(Skeletor.this)) {
+					validForms.add(form);
 				}
 			}
-			
-			formFragment.createFormButtons(filteredForms);
+
+			formFragment.createFormButtons(validForms);
 			valueFragment.populateValues(currentResults);
 		}
 
@@ -296,5 +300,9 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 			String state = stateMachine.getState();
 			updateButtonLabel(state);
 		}
+	}
+
+	public StateMachine getStateMachine() {
+		return stateMachine;
 	}
 }
