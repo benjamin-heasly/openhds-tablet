@@ -1,6 +1,7 @@
 package org.openhds.mobile.model;
 
 import org.openhds.mobile.projectdata.FormFilter;
+import org.openhds.mobile.projectdata.FormMapper;
 
 public class FormBehaviour {
 
@@ -8,13 +9,15 @@ public class FormBehaviour {
 	private int formLabelId;
 	private String editForState;
 	private FormFilter formFilter;
+	private FormMapper formMapper;
 
 	public FormBehaviour(String formName, int formLabelId, String state,
-			FormFilter formFilter) {
+			FormFilter formFilter, FormMapper formMapper) {
 		this.formName = formName;
 		this.formLabelId = formLabelId;
 		this.editForState = state;
 		this.formFilter = formFilter;
+		this.formMapper = formMapper;
 	}
 
 	public String getFormName() {
@@ -31,6 +34,10 @@ public class FormBehaviour {
 
 	public FormFilter getFormFilter() {
 		return formFilter;
+	}
+	
+	public FormMapper getFormMapper() {
+		return formMapper;
 	}
 
 }

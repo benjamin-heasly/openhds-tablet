@@ -2,7 +2,6 @@ package org.openhds.mobile.projectdata;
 
 import java.util.Map;
 
-import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.activity.Skeletor;
 import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
@@ -11,9 +10,13 @@ import org.openhds.mobile.model.SocialGroup;
 
 import android.database.Cursor;
 
-public class CensusFormFilter {
+// These are not necessarily 1 to 1 with the form types, 
+// but instead filter when a form's behaviour may or may not be appropriate
+// i.e. after you 'add a head of household' you no longer have to display the
+// button (aka it's amIValid() == false).
+public class CensusFormFilters {
 
-	public boolean hasHeadOfHousehold(Skeletor skeletor,
+	private static boolean hasHeadOfHousehold(Skeletor skeletor,
 			Map<String, QueryResult> hierarchyPath) {
 
 		String socialGroupExtId = hierarchyPath.get(
@@ -41,24 +44,10 @@ public class CensusFormFilter {
 		@Override
 		public boolean amIValid(Skeletor skeletor) {
 
-			Map<String, QueryResult> hierarchyPath = skeletor
-					.getHierarchyPath();
-
-			if (hierarchyPath
-					.containsKey(ProjectActivityBuilder.CensusActivityBuilder.HOUSEHOLD_STATE)) {
-
-				CensusFormFilter filter = new CensusFormFilter();
-
-				if (!filter.hasHeadOfHousehold(skeletor, hierarchyPath)) {
-
-					return true;
-
-				}
-
-			}
-
-			return false;
+			return !CensusFormFilters.hasHeadOfHousehold(skeletor,
+					skeletor.getHierarchyPath());
 		}
+
 	}
 
 	public static class AddMemberOfHousehold implements FormFilter {
@@ -66,23 +55,8 @@ public class CensusFormFilter {
 		@Override
 		public boolean amIValid(Skeletor skeletor) {
 
-			Map<String, QueryResult> hierarchyPath = skeletor
-					.getHierarchyPath();
-
-			if (hierarchyPath
-					.containsKey(ProjectActivityBuilder.CensusActivityBuilder.HOUSEHOLD_STATE)) {
-				
-				CensusFormFilter filter = new CensusFormFilter();
-				
-				if (filter.hasHeadOfHousehold(skeletor, hierarchyPath)) {
-					
-					return true;
-					
-				}
-				
-			}
-
-			return false;
+			return CensusFormFilters.hasHeadOfHousehold(skeletor,
+					skeletor.getHierarchyPath());
 		}
 
 	}

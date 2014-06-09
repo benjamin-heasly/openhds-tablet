@@ -93,12 +93,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
 		individualFormList.add(new FormBehaviour("Individual",
-				R.string.create_head_of_household_label, null, null));
+				R.string.create_head_of_household_label, null, null, null));
 		individualFormList.add(new FormBehaviour("Individual",
-				R.string.add_member_of_household_label, null, null));
+				R.string.add_member_of_household_label, null, null, null));
 
 		bottomFormList.add(new FormBehaviour("Individual",
-				R.string.edit_individual_label, INDIVIDUAL_STATE, null));
+				R.string.edit_individual_label, INDIVIDUAL_STATE, null, null));
 
 		formsForStates.put(REGION_STATE, regionFormList);
 		formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -641,6 +641,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		formFieldNames.put(ProjectFormFields.General.COLLECTED_DATE_TIME, c
 				.getTime().toString());
 
+		
+		
 		String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
 
 		Cursor cursor = getIndividualsExtIdsByPrefix(getContentResolver(),
@@ -670,6 +672,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		formFieldNames.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
 				individualExtId);
 
+		
+		//Merge two maps.
 		if (null != inputMap) {
 			for (String key : formFieldNames.keySet()) {
 				if (!inputMap.containsKey(key)) {

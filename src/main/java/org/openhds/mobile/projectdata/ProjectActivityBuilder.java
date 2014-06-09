@@ -25,8 +25,8 @@ public class ProjectActivityBuilder {
 
 	}
 
-	public static class CensusActivityBuilder implements
-			ActivityBuilderModule, Serializable {
+	public static class CensusActivityBuilder implements ActivityBuilderModule,
+			Serializable {
 		private static final long serialVersionUID = -2241775877237937942L;
 
 		public static final String REGION_STATE = "region";
@@ -73,14 +73,18 @@ public class ProjectActivityBuilder {
 
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.create_head_of_household_label, null,
-					new CensusFormFilter.AddHeadOfHousehold()));
+					new CensusFormFilters.AddHeadOfHousehold(),
+					new CensusFormMappers.AddHeadOfHousehold()));
+
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.add_member_of_household_label, null,
-					new CensusFormFilter.AddMemberOfHousehold()));
+					new CensusFormFilters.AddMemberOfHousehold(),
+					new CensusFormMappers.AddMemberOfHousehold()));
 
 			bottomFormList.add(new FormBehaviour("Individual",
 					R.string.edit_individual_label, INDIVIDUAL_STATE,
-					new CensusFormFilter.EditIndividual()));
+					new CensusFormFilters.EditIndividual(),
+					new CensusFormMappers.EditIndividual()));
 
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);

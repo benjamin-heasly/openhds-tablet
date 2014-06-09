@@ -8,13 +8,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
 import org.openhds.mobile.fragment.HierarchySelectionFragment;
 import org.openhds.mobile.fragment.HierarchyValueFragment;
 import org.openhds.mobile.model.FormBehaviour;
+import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
@@ -22,7 +22,7 @@ import org.openhds.mobile.projectdata.ProjectActivityBuilder.ActivityBuilderModu
 import org.openhds.mobile.projectdata.QueryHelper;
 
 import android.app.Activity;
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class Skeletor extends Activity implements HierarchyNavigator {
@@ -39,6 +39,7 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 	private static Map<String, Integer> stateLabels;
 	private static List<String> stateSequence;
 
+	private FormHelper formHelper;
 	private StateMachine stateMachine;
 	private Map<String, QueryResult> hierarchyPath;
 	private List<QueryResult> currentResults;
@@ -64,6 +65,7 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 		stateMachine = new StateMachine(new HashSet<String>(stateSequence),
 				stateSequence.get(0));
 
+		
 		for (String state : stateSequence) {
 			stateMachine.registerListener(state, new HierarchyStateListener());
 		}
@@ -267,8 +269,23 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 
 	@Override
 	public void launchForm(FormBehaviour form) {
-		// TODO Auto-generated method stub
+		
+		
+		
+		formHelper.newFormInstance(form, null);
+		Intent intent = formHelper.buildEditFormInstanceIntent();
+		startActivity(intent);
 
+	}
+
+	private Map<String, String> getFormFieldNames(Map<String, String> inputMap) {
+		Map<String, String> formFieldNames = new HashMap<String, String>();
+
+		
+		
+		
+		
+		return formFieldNames;
 	}
 
 	private class HierarchyStateListener implements StateListener {
@@ -283,7 +300,6 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 
 			List<FormBehaviour> filteredForms = formsForStates.get(state);
 			List<FormBehaviour> validForms = new ArrayList<FormBehaviour>();
-
 
 			for (FormBehaviour form : filteredForms) {
 				if (form.getFormFilter().amIValid(Skeletor.this)) {
