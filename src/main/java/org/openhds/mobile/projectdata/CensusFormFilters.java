@@ -47,7 +47,6 @@ public class CensusFormFilters {
 			return !CensusFormFilters.hasHeadOfHousehold(skeletor,
 					skeletor.getHierarchyPath());
 		}
-
 	}
 
 	public static class AddMemberOfHousehold implements FormFilter {
@@ -58,7 +57,6 @@ public class CensusFormFilters {
 			return CensusFormFilters.hasHeadOfHousehold(skeletor,
 					skeletor.getHierarchyPath());
 		}
-
 	}
 
 	public static class EditIndividual implements FormFilter {
