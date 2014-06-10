@@ -74,17 +74,20 @@ public class ProjectActivityBuilder {
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.create_head_of_household_label, null,
 					new CensusFormFilters.AddHeadOfHousehold(),
-					new CensusFormMappers.AddHeadOfHousehold()));
+					new CensusFormPayloadBuilders.AddHeadOfHousehold(),
+					new CensusFormPayloadConsumers.AddHeadOfHousehold()));
 
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.add_member_of_household_label, null,
 					new CensusFormFilters.AddMemberOfHousehold(),
-					new CensusFormMappers.AddMemberOfHousehold()));
+					new CensusFormPayloadBuilders.AddMemberOfHousehold(),
+					new CensusFormPayloadConsumers.AddMemberOfHousehold()));
 
 			bottomFormList.add(new FormBehaviour("Individual",
 					R.string.edit_individual_label, INDIVIDUAL_STATE,
 					new CensusFormFilters.EditIndividual(),
-					new CensusFormMappers.EditIndividual()));
+					new CensusFormPayloadBuilders.EditIndividual(),
+					new CensusFormPayloadConsumers.EditIndividual()));
 
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);

@@ -62,10 +62,10 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 		queryHelper = builder.getQueryHelper();
 		formsForStates = builder.getFormsforstates();
 		hierarchyPath = new HashMap<String, QueryResult>();
+		formHelper = new FormHelper(getContentResolver());
 		stateMachine = new StateMachine(new HashSet<String>(stateSequence),
 				stateSequence.get(0));
 
-		
 		for (String state : stateSequence) {
 			stateMachine.registerListener(state, new HierarchyStateListener());
 		}
@@ -269,23 +269,29 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 
 	@Override
 	public void launchForm(FormBehaviour form) {
-		
-		
-		
-		formHelper.newFormInstance(form, null);
+		Map<String, String> formFieldMap = new HashMap<String, String>();
+
+		form.getFormPayloadBuilder().buildFormPayload(formFieldMap, this);
+
+		formHelper.newFormInstance(form, formFieldMap);
 		Intent intent = formHelper.buildEditFormInstanceIntent();
-		startActivity(intent);
+		startActivityForResult(intent, 0);
 
 	}
 
-	private Map<String, String> getFormFieldNames(Map<String, String> inputMap) {
-		Map<String, String> formFieldNames = new HashMap<String, String>();
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		
-		
-		
-		
-		return formFieldNames;
+		if (resultCode == RESULT_OK) {
+			FormBehaviour form = formHelper.getForm();
+			formHelper.checkFormInstanceStatus();
+			form.getFormPayloadConsumer().consumeFormPayload(
+					formHelper.getFormInstanceData(), this);
+
+		}
+		if (resultCode == RESULT_CANCELED) {
+			// Write your code if there's no result
+		}
 	}
 
 	private class HierarchyStateListener implements StateListener {

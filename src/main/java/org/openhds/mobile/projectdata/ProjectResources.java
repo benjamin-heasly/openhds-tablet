@@ -13,19 +13,19 @@ public class ProjectResources {
 		 * INDIVIDUAL mapping of Database/Form VALUES to String resources IDs
 		 */
 
-		private static final Map<String, Integer> Individual = new HashMap<String, Integer>();
+		public static final Map<String, Integer> Individual = new HashMap<String, Integer>();
 
-		private static final String AGE_UNITS_YEARS = "Years";
-		private static final String AGE_UNITS_MONTHS = "Months";
+		public static final String AGE_UNITS_YEARS = "Years";
+		public static final String AGE_UNITS_MONTHS = "Months";
 
-		private static final String GENDER_MALE = "Male";
-		private static final String GENDER_FEMALE = "Female";
+		public static final String GENDER_MALE = "Male";
+		public static final String GENDER_FEMALE = "Female";
 
-		private static final String LANGUAGE_PREF_SPANISH = "Spanish";
-		private static final String LANGUAGE_PREF_FANG = "Fang";
-		private static final String LANGUAGE_PREF_BUBE = "Bube";
-		private static final String LANGUAGE_PREF_ENGLISH = "English";
-		private static final String LANGUAGE_PREF_FRENCH = "French";
+		public static final String LANGUAGE_PREF_SPANISH = "Spanish";
+		public static final String LANGUAGE_PREF_FANG = "Fang";
+		public static final String LANGUAGE_PREF_BUBE = "Bube";
+		public static final String LANGUAGE_PREF_ENGLISH = "English";
+		public static final String LANGUAGE_PREF_FRENCH = "French";
 
 		private static final String STATUS_PERMANENT = "Permanent";
 		private static final String STATUS_VISITOR = "Visitor";
@@ -48,9 +48,9 @@ public class ProjectResources {
 			Individual.put(STATUS_VISITOR, R.string.db_val_status_visitor);
 		}
 
-		public static int getIndividualStringId(String value) {
-			if (Individual.containsKey(value)) {
-				return Individual.get(value);
+		public static int getIndividualStringId(String key) {
+			if (Individual.containsKey(key)) {
+				return Individual.get(key);
 			} else {
 				return 0;
 			}
@@ -64,15 +64,15 @@ public class ProjectResources {
 
 		private static final Map<String, Integer> Relationship = new HashMap<String, Integer>();
 
-		private static final String RELATION_TO_HOH_TYPE_HEAD = "1";
-		private static final String RELATION_TO_HOH_TYPE_SPOUSE = "2";
-		private static final String RELATION_TO_HOH_TYPE_SON_DAUGHTER = "3";
-		private static final String RELATION_TO_HOH_TYPE_BROTHER_SISTER = "4";
-		private static final String RELATION_TO_HOH_TYPE_PARENT = "5";
-		private static final String RELATION_TO_HOH_TYPE_GRANDCHILD = "6";
-		private static final String RELATION_TO_HOH_TYPE_NOT_RELATED = "7";
-		private static final String RELATION_TO_HOH_TYPE_OTHER_RELATIVE = "8";
-		private static final String RELATION_TO_HOH_TYPE_DONT_KNOW = "9";
+		public static final String RELATION_TO_HOH_TYPE_HEAD = "1";
+		public static final String RELATION_TO_HOH_TYPE_SPOUSE = "2";
+		public static final String RELATION_TO_HOH_TYPE_SON_DAUGHTER = "3";
+		public static final String RELATION_TO_HOH_TYPE_BROTHER_SISTER = "4";
+		public static final String RELATION_TO_HOH_TYPE_PARENT = "5";
+		public static final String RELATION_TO_HOH_TYPE_GRANDCHILD = "6";
+		public static final String RELATION_TO_HOH_TYPE_NOT_RELATED = "7";
+		public static final String RELATION_TO_HOH_TYPE_OTHER_RELATIVE = "8";
+		public static final String RELATION_TO_HOH_TYPE_DONT_KNOW = "9";
 
 		static {
 			Relationship.put(RELATION_TO_HOH_TYPE_HEAD,
@@ -95,9 +95,9 @@ public class ProjectResources {
 					R.string.db_val_relation_to_head_type_dont_know);
 		}
 
-		public static int getRelationshipStringId(String value) {
-			if (Relationship.containsKey(value)) {
-				return Relationship.get(value);
+		public static int getRelationshipStringId(String key) {
+			if (Relationship.containsKey(key)) {
+				return Relationship.get(key);
 			} else {
 				return 0;
 			}

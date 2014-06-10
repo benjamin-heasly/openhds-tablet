@@ -220,6 +220,7 @@ public class CensusQueryHelper implements QueryHelper {
 		qr.setExtId(individual.getExtId());
 		qr.setName(Individual.getFullName(individual));
 		qr.setState(state);
+		
 
 		if (state.equals(CensusActivity.BOTTOM_STATE)) {
 			// TODO: display detailed view of individual.
@@ -233,13 +234,15 @@ public class CensusQueryHelper implements QueryHelper {
 			qr.getStringsPayLoad().put(R.string.language_preference_label,
 					individual.getLanguagePreference());
 
+			
+
 		}
 
 		return qr;
 	}
 
 	public static QueryResult createCompleteIndividualQueryResult(
-			Map<String, String> formFieldMap, String state, Context context) {
+			Map<String, String> formFieldMap, String state) {
 		QueryResult qr = new QueryResult();
 
 		qr.setExtId(formFieldMap
