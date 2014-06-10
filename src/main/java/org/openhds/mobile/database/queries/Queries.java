@@ -177,6 +177,19 @@ public class Queries {
 				null, null, null);
 	}
 
+	public static Cursor getHeadOfHouseholdByHouseholdExtId(
+			ContentResolver resolver, String householdExtId) {
+		Cursor cursor = getSocialGroupByExtId(resolver, householdExtId);
+		
+		cursor.moveToFirst();
+		int columnIndex = cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID);
+		String headExtId = cursor.getString(columnIndex);
+		
+		cursor.close();
+		return getCursor(resolver, OpenHDS.Individuals.CONTENT_ID_URI_BASE,
+				OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID, headExtId);
+
+	}
 
 	public static Cursor allLocations(ContentResolver contentResolver) {
 		return contentResolver.query(OpenHDS.Locations.CONTENT_ID_URI_BASE,
