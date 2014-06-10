@@ -96,12 +96,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				.add(new FormBehaviour("Individual",
 						R.string.create_head_of_household_label, null, null,
 						null, null));
-		
+
 		individualFormList
 				.add(new FormBehaviour("Individual",
 						R.string.add_member_of_household_label, null, null,
 						null, null));
-		
+
 		bottomFormList.add(new FormBehaviour("Individual",
 				R.string.edit_individual_label, INDIVIDUAL_STATE, null, null,
 				null));
@@ -675,6 +675,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 
 		formFieldNames.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
 				individualExtId);
+
+		if (null == currentHeadOfHousehold) {
+			formFieldNames.put(
+					ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
+					ProjectResources.Relationship.RELATION_TO_HOH_TYPE_HEAD);
+		}
 
 		// Merge two maps.
 		if (null != inputMap) {
