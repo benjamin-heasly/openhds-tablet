@@ -14,9 +14,10 @@ public class Individual implements Serializable {
 	private String dob;
 	private String mother;
 	private String father;
-	
-	private String currentResidence;// don't rely on this, will be switching to using residencey table
-	
+
+	private String currentResidence;// don't rely on this, will be switching to
+									// using residence table
+
 	private String endType;
 	private String otherId;
 	private String otherNames;
@@ -27,7 +28,16 @@ public class Individual implements Serializable {
 	private String pointOfContactName;
 	private String pointOfContactPhoneNumber;
 	private String languagePreference;
-	
+	private String memberStatus;
+
+	public String getMemberStatus() {
+		return memberStatus;
+	}
+
+	public void setMemberStatus(String memberStatus) {
+		this.memberStatus = memberStatus;
+	}
+
 	public String getPointOfContactName() {
 		return pointOfContactName;
 	}
@@ -43,7 +53,6 @@ public class Individual implements Serializable {
 	public void setPointOfContactPhoneNumber(String pointOfContactPhoneNumber) {
 		this.pointOfContactPhoneNumber = pointOfContactPhoneNumber;
 	}
-	
 
 	public String getExtId() {
 		return extId;
@@ -180,13 +189,16 @@ public class Individual implements Serializable {
 	public void setLanguagePreference(String languagePreference) {
 		this.languagePreference = languagePreference;
 	}
-	
-	public static String getFullName(Individual individual){
-		String fullname = individual.getFirstName() + " " + individual.getLastName();
+
+	public static String getFullName(Individual individual) {
+		String fullname = individual.getFirstName() + " "
+				+ individual.getLastName();
 		return fullname;
 	}
-	public static String getAgeWithUnits(Individual individual){
-		String ageWithUnits = individual.age + " " + "("+individual.ageUnits+")";
+
+	public static String getAgeWithUnits(Individual individual) {
+		String ageWithUnits = individual.age + " " + "(" + individual.ageUnits
+				+ ")";
 		return ageWithUnits;
 	}
 }

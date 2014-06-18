@@ -65,6 +65,9 @@ public class Converter {
 		individual
 				.setLanguagePreference(cursor.getString(cursor
 						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
+		
+		individual.setMemberStatus(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS)));
 		individual
 				.setOtherId(cursor.getString(cursor
 						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID)));
@@ -334,9 +337,6 @@ public class Converter {
 			membership
 					.setRelationshipToHead(cursor.getString(cursor
 							.getColumnIndex(OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD)));
-			membership
-					.setStatus(cursor.getString(cursor
-							.getColumnIndex(OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS)));
 
 		}
 		if (close) {

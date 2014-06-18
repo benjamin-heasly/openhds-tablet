@@ -180,11 +180,12 @@ public class Queries {
 	public static Cursor getHeadOfHouseholdByHouseholdExtId(
 			ContentResolver resolver, String householdExtId) {
 		Cursor cursor = getSocialGroupByExtId(resolver, householdExtId);
-		
+
 		cursor.moveToFirst();
-		int columnIndex = cursor.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID);
+		int columnIndex = cursor
+				.getColumnIndex(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID);
 		String headExtId = cursor.getString(columnIndex);
-		
+
 		cursor.close();
 		return getCursor(resolver, OpenHDS.Individuals.CONTENT_ID_URI_BASE,
 				OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID, headExtId);
@@ -247,8 +248,7 @@ public class Queries {
 						new String[] {
 								OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
 								OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
-								OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD,
-								OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS },
+								OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD, },
 						OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID + " = '"
 								+ extIdH + "' AND "
 								+ OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID

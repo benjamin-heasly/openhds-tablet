@@ -124,6 +124,10 @@ public class ProjectFormFields {
 			columnsToFieldNames
 					.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
 							HOUSEHOLD_EXTID);
+			columnsToFieldNames
+			.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
+					MEMBER_STATUS);
+			
 		}
 
 		public static String getFieldNameFromColumn(String column) {

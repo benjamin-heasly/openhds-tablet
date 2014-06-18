@@ -450,8 +450,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		Membership membership = Converter.toMembership(cursor, true);
 		formFieldMap.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
 				membership.getRelationshipToHead());
-		formFieldMap.put(ProjectFormFields.Individuals.MEMBER_STATUS,
-				membership.getStatus());
 
 		return formFieldMap;
 

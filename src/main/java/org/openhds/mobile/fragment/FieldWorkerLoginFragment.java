@@ -81,14 +81,14 @@ public class FieldWorkerLoginFragment extends Fragment implements
 
 	private void launchCensusActivity(FieldWorker fieldWorker) {
 
-		Intent intent = new Intent(getActivity(), CensusActivity.class);
+		Intent intent = new Intent(getActivity(), Skeletor.class);
 
 		// TODO: get a new instance of CensusActivityBuilder and put it into the
 		// intent and send'er'over to skeletor
 
 		intent.putExtra(FIELD_WORKER_EXTRA, fieldWorker);
-//		intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA,
-//				ProjectActivityBuilder.getCensusActivityBuilder());
+		intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA,
+				ProjectActivityBuilder.getCensusActivityBuilder());
 
 		startActivity(intent);
 	}

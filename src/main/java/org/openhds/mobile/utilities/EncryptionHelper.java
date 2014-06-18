@@ -121,6 +121,10 @@ public class EncryptionHelper {
 	private static void startCipher(int cipherMode, Context context,
 			File inFile, File outFile) {
 
+		if (!inFile.exists()) {
+			return;
+		}
+
 		try {
 			aesCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 			aesCipher.init(cipherMode, getOrGenerateKey(context));

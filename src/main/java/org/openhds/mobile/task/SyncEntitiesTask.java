@@ -20,6 +20,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.listener.SyncDatabaseListener;
+import org.openhds.mobile.model.Individual;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -143,6 +144,10 @@ public class SyncEntitiesTask extends
 		deleteAllTables();
 
 		try {
+
+			entity = Entity.INDIVIDUAL;
+			processUrl(baseurl + API_PATH + "/individuals/cached");
+
 			entity = Entity.LOCATION_HIERARCHY;
 			processUrl(baseurl + API_PATH + "/locationhierarchies");
 
@@ -158,9 +163,6 @@ public class SyncEntitiesTask extends
 			entity = Entity.RELATIONSHIP;
 			processUrl(baseurl + API_PATH + "/relationships/cached");
 
-			entity = Entity.INDIVIDUAL;
-			processUrl(baseurl + API_PATH + "/individuals/cached");
-
 			entity = Entity.SOCIALGROUP;
 			processUrl(baseurl + API_PATH + "/socialgroups/cached");
 		} catch (Exception e) {
@@ -173,8 +175,7 @@ public class SyncEntitiesTask extends
 	private void deleteAllTables() {
 		// ordering is somewhat important during delete. a few tables have
 		// foreign keys
-		resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null,
-				null);
+		resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Rounds.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Visits.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Relationships.CONTENT_ID_URI_BASE, null, null);
@@ -231,6 +232,7 @@ public class SyncEntitiesTask extends
 					int cnt = Integer.parseInt(parser.getText());
 					publishProgress(cnt);
 					parser.nextTag();
+
 				} else if (name.equalsIgnoreCase("individuals")) {
 					processIndividualParams(parser);
 				} else if (name.equalsIgnoreCase("locations")) {
@@ -373,136 +375,28 @@ public class SyncEntitiesTask extends
 	}
 
 	private void processIndividualParams(XmlPullParser parser)
-			throws XmlPullParserException, IOException {
-		int individualsParsed = 0;
-		parser.nextTag();
+			throws IOException, XmlPullParserException {
 
-		values.clear();
-		List<ContentValues> individualSocialGroups = new ArrayList<ContentValues>();
+		parser.nextTag();
 		while (notEndOfXmlDoc("individuals", parser)) {
 			try {
-				ContentValues cv = new ContentValues();
 
-				// memberships
-				parser.nextTag();
-				parser.nextTag();
-				List<String> groups = null;
-				if (parser.getEventType() != XmlPullParser.END_TAG) {
-					// memberships are present
-					groups = parseMembershipExtIds(parser);
-				}
+				String testerooni = parser.getName();
 
-				// residencies
-				parser.nextTag();
-				parser.nextTag();
-				if (parser.getEventType() != XmlPullParser.END_TAG) {
-					parser.nextTag(); // <endType>
-					// parser.nextTag(); // </endType>
-					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE,
-							parser.nextText());
-					parser.nextTag(); // <location>
-					parser.nextTag(); // <extId>
-					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-							parser.nextText());
-					parser.nextTag(); // </location>
-					parser.nextTag(); // </residency>
-					parser.nextTag(); // </residencies>
-				}
+				Individual individual = new Individual();
 
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB,
-						parser.nextText());
+				// while(parser.getName().equals("/individual")){
+				//
+				// }
 
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID,
-						parser.nextText());
-				lastExtId = cv
-						.getAsString(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID);
-
-				// father
-				parser.nextTag(); // <father>
-				parser.nextTag(); // <memberships>
-				parser.nextTag(); // </memberships>
-				parser.nextTag(); // <residencies>
-				parser.nextTag(); // </residencies>
-				parser.nextTag(); // <extId>
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER,
-						parser.nextText());
-				parser.nextTag(); // </father>
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
-						parser.nextText());
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER,
-						parser.nextText());
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME,
-						parser.nextText());
-
-				parser.nextTag();
-				if ("middlename".equalsIgnoreCase(parser.getName())) {
-					parser.nextText();
-				}
-
-				// mother
-				parser.nextTag(); // <mother>
-				parser.nextTag(); // <memberships>
-				parser.nextTag(); // </memberships>
-				parser.nextTag(); // <residencies>
-				parser.nextTag(); // </residencies>
-				parser.nextTag(); // <extId>
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER,
-						parser.nextText());
-				parser.nextTag(); // </mother>
-
-				values.add(cv);
-
-				if (groups != null) {
-					for (String item : groups) {
-						ContentValues socialGroups = new ContentValues();
-						socialGroups
-								.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
-										cv.getAsString(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
-						socialGroups
-								.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
-										item);
-						individualSocialGroups.add(socialGroups);
-					}
-				}
-
-				individualsParsed += 1;
-
-				parser.nextTag(); // </individual>
-				parser.nextTag(); // </individuals> or <individual>
-
-				if (individualsParsed % 100 == 0) {
-					persistParsedIndividuals(individualSocialGroups);
-					values.clear();
-					individualSocialGroups.clear();
-					publishProgress(individualsParsed);
-				}
 			} catch (Exception e) {
 				Log.e(getClass().getName(), e.getMessage());
 			}
 		}
-
-		persistParsedIndividuals(individualSocialGroups);
 	}
 
-	private void persistParsedIndividuals(
-			List<ContentValues> individualSocialGroups) {
-		if (!values.isEmpty()) {
-			resolver.bulkInsert(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
-					values.toArray(emptyArray));
-		}
+	private void pullOutMemberships(XmlPullParser parser) {
 
-		if (!individualSocialGroups.isEmpty()) {
-			resolver.bulkInsert(OpenHDS.Memberships.CONTENT_ID_URI_BASE,
-					individualSocialGroups.toArray(emptyArray));
-		}
 	}
 
 	private List<String> parseMembershipExtIds(XmlPullParser parser)
