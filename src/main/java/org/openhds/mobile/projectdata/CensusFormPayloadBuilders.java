@@ -2,6 +2,7 @@ package org.openhds.mobile.projectdata;
 
 import static org.openhds.mobile.database.queries.Queries.getIndividualsExtIdsByPrefix;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +51,10 @@ public class CensusFormPayloadBuilders {
 				fieldWorker.getExtId());
 
 		// add collected DateTime
-		formPayload.put(ProjectFormFields.General.COLLECTED_DATE_TIME, Calendar
-				.getInstance().getTime().toString());
+		formPayload.put(
+				ProjectFormFields.General.COLLECTED_DATE_TIME,
+				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(
+						Calendar.getInstance().getTime()).toString());
 
 	}
 
@@ -132,9 +135,9 @@ public class CensusFormPayloadBuilders {
 		@Override
 		public void buildFormPayload(Map<String, String> formPayload,
 				Skeletor skeletor) {
-			
+
 			addMinimalFormPayload(formPayload, skeletor);
-			
+
 			// build complete individual form
 			Map<String, QueryResult> hierarchyPath = skeletor
 					.getHierarchyPath();
@@ -163,8 +166,6 @@ public class CensusFormPayloadBuilders {
 			Membership membership = Converter.toMembership(cursor, true);
 			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
 					membership.getRelationshipToHead());
-			formPayload.put(ProjectFormFields.Individuals.MEMBER_STATUS,
-					membership.getStatus());
 
 		}
 	}
