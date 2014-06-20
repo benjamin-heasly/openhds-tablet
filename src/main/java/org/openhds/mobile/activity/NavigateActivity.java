@@ -17,8 +17,8 @@ import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
+import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.ActivityBuilderModule;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 
 import android.app.Activity;
@@ -54,8 +54,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		// ACTIVITY BUILDING ZONE~ //
 		// /////////////////////////////////////////////////////////////////////////////////////////////
 
-		ProjectActivityBuilder.ActivityBuilderModule builder = (ActivityBuilderModule) getIntent()
-				.getExtras().get(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA);
+		String builderName = (String) getIntent().getExtras().get(
+				ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA);
+
+		NavigatePluginModule builder = ProjectActivityBuilder
+				.getModuleByName(builderName);
 
 		stateLabels = builder.getStateLabels();
 		stateSequence = builder.getStateSequence();

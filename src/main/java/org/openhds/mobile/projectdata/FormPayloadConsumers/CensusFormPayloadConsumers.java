@@ -18,7 +18,7 @@ import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityBuilder;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityModule;
 import org.openhds.mobile.projectdata.ProjectFormFields.General;
 import org.openhds.mobile.projectdata.ProjectFormFields.Individuals;
 
@@ -45,7 +45,7 @@ public class CensusFormPayloadConsumers {
 			Map<String, QueryResult> hierarchyPath = navigateActivity
 					.getHierarchyPath();
 			QueryResult selectedLocation = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityBuilder.HOUSEHOLD_STATE);
+					.get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
 
 			String relationshipType = formPayload
 					.get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
@@ -96,7 +96,7 @@ public class CensusFormPayloadConsumers {
 			Map<String, QueryResult> hierarchyPath = navigateActivity
 					.getHierarchyPath();
 			QueryResult selectedLocation = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityBuilder.HOUSEHOLD_STATE);
+					.get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
 
 			// Pull out useful strings from the formPayload
 			String relationshipType = formPayload

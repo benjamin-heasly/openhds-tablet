@@ -20,7 +20,7 @@ import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityBuilder;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityModule;
 import org.openhds.mobile.projectdata.ProjectFormFields.General;
 import org.openhds.mobile.projectdata.ProjectFormFields.Individuals;
 import org.openhds.mobile.projectdata.ProjectResources.Relationship;
@@ -150,10 +150,10 @@ public class CensusFormPayloadBuilders {
 					.getHierarchyPath();
 
 			String individualExtId = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityBuilder.INDIVIDUAL_STATE)
+					.get(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)
 					.getExtId();
 			String householdExtId = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityBuilder.HOUSEHOLD_STATE)
+					.get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
 					.getExtId();
 
 			Cursor cursor = Queries.getIndividualByExtId(

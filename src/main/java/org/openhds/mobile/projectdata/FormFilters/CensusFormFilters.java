@@ -8,7 +8,7 @@ import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityBuilder;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityModule;
 
 import android.database.Cursor;
 
@@ -22,7 +22,7 @@ public class CensusFormFilters {
 			Map<String, QueryResult> hierarchyPath) {
 
 		String socialGroupExtId = hierarchyPath.get(
-				ProjectActivityBuilder.CensusActivityBuilder.HOUSEHOLD_STATE)
+				ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
 				.getExtId();
 
 		Cursor socialGroupCursor = Queries.getSocialGroupByExtId(

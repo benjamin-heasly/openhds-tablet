@@ -88,7 +88,7 @@ public class FieldWorkerLoginFragment extends Fragment implements
 
 		intent.putExtra(FIELD_WORKER_EXTRA, fieldWorker);
 		intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA,
-				ProjectActivityBuilder.getCensusActivityBuilder());
+				ProjectActivityBuilder.getActivityModuleNames().get(0));
 
 		startActivity(intent);
 	}

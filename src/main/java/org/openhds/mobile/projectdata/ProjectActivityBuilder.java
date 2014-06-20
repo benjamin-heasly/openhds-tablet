@@ -16,23 +16,15 @@ import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 
 public class ProjectActivityBuilder {
 
-	public static final String ACTIVITY_MODULE_EXTRA = "CensusActivityModule";
-
-	// INTERFACE FOR ALL THE INNER CLASSES
-	public interface ActivityBuilderModule {
-		public Map<String, Integer> getStateLabels();
-
-		public List<String> getStateSequence();
-
-		public QueryHelper getQueryHelper();
-
-		public Map<String, List<FormBehaviour>> getFormsforstates();
-
+	public static final String ACTIVITY_MODULE_EXTRA = "ACTIVITY_MODULE_EXTRA";
+	
+	private static final String CENSUS_ACTIVITY_MODULE = "CensusActivityModule";
+	private static final ArrayList<String> activityModules = new ArrayList<String>();
+	static {
+		activityModules.add(CENSUS_ACTIVITY_MODULE);
 	}
 
-	public static class CensusActivityBuilder implements ActivityBuilderModule,
-			Serializable {
-		private static final long serialVersionUID = -2241775877237937942L;
+	public static class CensusActivityModule implements NavigatePluginModule {
 
 		public static final String REGION_STATE = "region";
 		public static final String PROVINCE_STATE = "province";
@@ -128,9 +120,18 @@ public class ProjectActivityBuilder {
 
 	}
 
-	public static CensusActivityBuilder getCensusActivityBuilder() {
+	public static NavigatePluginModule getModuleByName(String name) {
 
-		return new CensusActivityBuilder();
+		if (name.equals(CENSUS_ACTIVITY_MODULE)) {
+			return new CensusActivityModule();
+		}
+
+		return null;
+
+	}
+
+	public static ArrayList<String> getActivityModuleNames() {
+		return activityModules;
 	}
 
 }
