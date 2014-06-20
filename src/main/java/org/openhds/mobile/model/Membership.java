@@ -4,25 +4,14 @@ import java.io.Serializable;
 
 public class Membership implements Serializable {
 
-	
 	private static final long serialVersionUID = 6446118055284774938L;
-	
-	
+
 	private String individualExtId;
 	private String socialGroupExtId;
 	private String relationshipToHead;
-	private String status;
 
 	public String getIndividualExtId() {
 		return individualExtId;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public void setIndividualExtId(String individualExtId) {

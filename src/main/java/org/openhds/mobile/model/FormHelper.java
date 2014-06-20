@@ -54,6 +54,8 @@ public class FormHelper {
 		return intent;
 	}
 
+	
+	//Pull out to ODKCollectHelper
 	public boolean checkFormInstanceStatus() {
 		Cursor cursor = resolver.query(contentUri, new String[] {
 				InstanceProviderAPI.InstanceColumns.STATUS,
@@ -176,6 +178,7 @@ public class FormHelper {
 		return false;
 	}
 
+	//ODKCollectHelper
 	private Uri shareOdkFormInstance(File targetFile, String displayName,
 			String formId) {
 		ContentValues values = new ContentValues();

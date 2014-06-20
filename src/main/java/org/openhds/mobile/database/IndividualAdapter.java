@@ -8,6 +8,7 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE;
+import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID;
@@ -74,6 +75,8 @@ public class IndividualAdapter {
 				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER)));
 		individual.setLanguagePreference(formInstanceData.get(ProjectFormFields.Individuals
 				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
+		individual.setMemberStatus(formInstanceData.get(ProjectFormFields.Individuals
+				.getFieldNameFromColumn(COLUMN_INDIVIDUAL_STATUS)));
 		return individual;
 	}
 
@@ -95,6 +98,7 @@ public class IndividualAdapter {
 		formFields.put(ProjectFormFields.Individuals.OTHER_PHONE_NUMBER, individual.getOtherPhoneNumber());
 		formFields.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, individual.getPointOfContactName());
 		formFields.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, individual.getPointOfContactPhoneNumber());
+		formFields.put(ProjectFormFields.Individuals.MEMBER_STATUS, individual.getMemberStatus());
 		formFields.put(ProjectFormFields.Individuals.LANGUAGE_PREFERENCE, individual.getLanguagePreference());
 		
 

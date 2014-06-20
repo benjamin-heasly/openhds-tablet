@@ -2,7 +2,6 @@ package org.openhds.mobile.database;
 
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID;
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD;
-import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS;
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID;
 import static org.openhds.mobile.OpenHDS.Memberships.CONTENT_ID_URI_BASE;
 
@@ -23,7 +22,6 @@ public class MembershipAdapter {
 		membership.setIndividualExtId(individual.getExtId());
 		membership.setSocialGroupExtId(socialGroup.getExtId());
 		membership.setRelationshipToHead(relationshipToHead);
-		membership.setStatus(status);
 
 		return membership;
 	}
@@ -36,7 +34,6 @@ public class MembershipAdapter {
 		cv.put(COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD,
 				membership.getRelationshipToHead());
 		cv.put(COLUMN_SOCIAL_GROUP_EXTID, membership.getSocialGroupExtId());
-		cv.put(COLUMN_MEMBERSHIP_STATUS, membership.getStatus());
 
 		return cv;
 

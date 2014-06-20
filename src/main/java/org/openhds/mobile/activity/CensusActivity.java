@@ -36,8 +36,8 @@ import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectQueryHelper;
 import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.projectdata.QueryHelpers.CensusQueryHelper;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.LuhnValidator;
 import org.openhds.mobile.utilities.OdkCollectHelper;
@@ -92,13 +92,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
 		ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
-		individualFormList.add(new FormBehaviour("Individual",
-				R.string.create_head_of_household_label, null));
-		individualFormList.add(new FormBehaviour("Individual",
-				R.string.add_member_of_household_label, null));
+		individualFormList
+				.add(new FormBehaviour("Individual",
+						R.string.create_head_of_household_label, null, null,
+						null, null));
+
+		individualFormList
+				.add(new FormBehaviour("Individual",
+						R.string.add_member_of_household_label, null, null,
+						null, null));
 
 		bottomFormList.add(new FormBehaviour("Individual",
-				R.string.edit_individual_label, INDIVIDUAL_STATE));
+				R.string.edit_individual_label, INDIVIDUAL_STATE, null, null,
+				null));
 
 		formsForStates.put(REGION_STATE, regionFormList);
 		formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -121,14 +127,16 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 	private HierarchySelectionFragment selectionFragment;
 	private HierarchyValueFragment valueFragment;
 	private HierarchyFormFragment formFragment;
-
+	private CensusQueryHelper censusQueryHelper;
 	// TODO: reconsider where to maintain the current head of household
 	private Individual currentHeadOfHousehold;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.census_activity);
+		setContentView(R.layout.navigate_activity);
+
+		censusQueryHelper = new CensusQueryHelper();
 		hierarchyPath = new HashMap<String, QueryResult>();
 		stateMachine = new StateMachine(new HashSet<String>(stateSequence),
 				stateSequence.get(0));
@@ -175,7 +183,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 					if (null == extId) {
 						break;
 					}
-					QueryResult qr = ProjectQueryHelper.getIfExists(
+					QueryResult qr = censusQueryHelper.getIfExists(
 							getContentResolver(), state, extId);
 					if (null == qr) {
 						break;
@@ -189,6 +197,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		}
 	}
 
+	// moved to SKELETOR
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		// save extIds all down the hierarchy path
@@ -201,12 +210,14 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
+	// moved to SKELETOR
 	@Override
 	protected void onResume() {
 		super.onResume();
 		hierarchySetup();
 	}
 
+	// moved to SKELETOR
 	private void hierarchySetup() {
 		int stateIndex = 0;
 		for (String state : stateSequence) {
@@ -222,12 +233,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		String state = stateSequence.get(stateIndex);
 		if (0 == stateIndex) {
 			selectionFragment.setButtonAllowed(state, true);
-			currentResults = ProjectQueryHelper.getAll(getContentResolver(),
+			currentResults = censusQueryHelper.getAll(getContentResolver(),
 					stateSequence.get(0));
 		} else {
 			String previousState = stateSequence.get(stateIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = ProjectQueryHelper.getChildren(
+			currentResults = censusQueryHelper.getChildren(
 					getContentResolver(), previousSelection, state);
 		}
 		// make sure that listeners will fire for the current state
@@ -237,6 +248,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		valueFragment.populateValues(currentResults);
 	}
 
+	// moved to SKELETOR
 	private void updateButtonLabel(String state) {
 
 		QueryResult selected = hierarchyPath.get(state);
@@ -252,18 +264,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		}
 	}
 
+	// moved to SKELETOR
 	@Override
 	public Map<String, Integer> getStateLabels() {
 		return stateLabels;
 	}
 
+	// moved to SKELETOR
 	@Override
 	public List<String> getStateSequence() {
 		return stateSequence;
 	}
 
-	// Required to update currentResults for targetState and transition to the
-	// targetState.
+	// moved to SKELETOR
 	@Override
 	public void jumpUp(String targetState) {
 		int targetIndex = stateSequence.indexOf(targetState);
@@ -289,20 +302,19 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		// prepare to stepDown() from this target state
 		if (0 == targetIndex) {
 			// root of the hierarchy
-			currentResults = ProjectQueryHelper.getAll(getContentResolver(),
+			currentResults = censusQueryHelper.getAll(getContentResolver(),
 					stateSequence.get(0));
 		} else {
 			// middle of the hierarchy
 			String previousState = stateSequence.get(targetIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
-			currentResults = ProjectQueryHelper.getChildren(
+			currentResults = censusQueryHelper.getChildren(
 					getContentResolver(), previousSelection, targetState);
 		}
 		stateMachine.transitionTo(targetState);
 	}
 
-	// Required to update currentResults with children of selected, and
-	// transition to the next state down.
+	// moved to SKELETOR
 	@Override
 	public void stepDown(QueryResult selected) {
 
@@ -317,7 +329,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		if (currentIndex >= 0 && currentIndex < stateSequence.size() - 1) {
 			String nextState = stateSequence.get(currentIndex + 1);
 
-			currentResults = ProjectQueryHelper.getChildren(
+			currentResults = censusQueryHelper.getChildren(
 					getContentResolver(), selected, nextState);
 
 			hierarchyPath.put(currentState, selected);
@@ -334,6 +346,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			if (!state.equals(stateSequence.get(stateSequence.size() - 1))) {
 				selectionFragment.setButtonAllowed(state, true);
 			}
+
+			// break into AM I VALID? plugins
 
 			if (state.equals(INDIVIDUAL_STATE)) {
 				// Does a household exist at this location
@@ -397,9 +411,9 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						hierarchyPath.get(INDIVIDUAL_STATE).getExtId());
 				currentResults = new ArrayList<QueryResult>();
 
-				currentResults.add(ProjectQueryHelper
+				currentResults.add(CensusQueryHelper
 						.createCompleteIndividualQueryResult(formFieldNames,
-								state, getBaseContext()));
+								state));
 
 				formFragment.createFormButtons(formsForStates.get(state));
 
@@ -436,8 +450,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		Membership membership = Converter.toMembership(cursor, true);
 		formFieldMap.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
 				membership.getRelationshipToHead());
-		formFieldMap.put(ProjectFormFields.Individuals.MEMBER_STATUS,
-				membership.getStatus());
 
 		return formFieldMap;
 
@@ -474,7 +486,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 			if (resultCode == RESULT_OK) {
 
 				// CURRENTLY: only handles individual related forms.
-				// TODO: Allow checking for forms from other states.
+				// TODO: BREAK INTO FORM CONSUMERS
 
 				if (formHelper.checkFormInstanceStatus()) {
 
@@ -669,6 +681,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		formFieldNames.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
 				individualExtId);
 
+		if (null == currentHeadOfHousehold) {
+			formFieldNames.put(
+					ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
+					ProjectResources.Relationship.RELATION_TO_HOH_TYPE_HEAD);
+		}
+
+		// Merge two maps.
 		if (null != inputMap) {
 			for (String key : formFieldNames.keySet()) {
 				if (!inputMap.containsKey(key)) {

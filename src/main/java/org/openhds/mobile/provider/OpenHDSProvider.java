@@ -169,6 +169,9 @@ public class OpenHDSProvider extends ContentProvider {
 				OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
 				OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE);
 		individualsProjectionMap.put(
+				OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
+				OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS);
+		individualsProjectionMap.put(
 				OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID,
 				OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID);
 
@@ -299,10 +302,6 @@ public class OpenHDSProvider extends ContentProvider {
 		membershipsProjectionMap.put(
 				OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD,
 				OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD);
-
-		membershipsProjectionMap.put(
-				OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS,
-				OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS);
 	}
 
 	static class DatabaseHelper extends SQLiteOpenHelper {
@@ -351,6 +350,8 @@ public class OpenHDSProvider extends ContentProvider {
 					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER
 					+ " TEXT,"
 					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE
+					+ " TEXT,"
+					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS
 					+ " TEXT,"
 					+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID
 					+ " TEXT);"
@@ -445,8 +446,6 @@ public class OpenHDSProvider extends ContentProvider {
 					+ OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID
 					+ " TEXT NOT NULL,"
 					+ OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD
-					+ " TEXT NOT NULL,"
-					+ OpenHDS.Memberships.COLUMN_MEMBERSHIP_STATUS
 					+ " TEXT NOT NULL);");
 		}
 

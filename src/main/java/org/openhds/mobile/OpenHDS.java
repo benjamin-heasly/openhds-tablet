@@ -55,6 +55,7 @@ public class OpenHDS {
 		public static final String COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME = "pointOfContactName";
 		public static final String COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER = "pointOfContactPhoneNumber";
 		public static final String COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE = "languagePreference";
+		public static final String COLUMN_INDIVIDUAL_STATUS = "memberStatus";
 	}
 
 	public static final class Locations implements BaseColumns {
@@ -243,6 +244,5 @@ public class OpenHDS {
 		public static final String COLUMN_SOCIAL_GROUP_EXTID = "socialGroup_extId";
 		public static final String COLUMN_INDIVIDUAL_EXTID = "individual_extId";
 		public static final String COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD = "relationshipToHead";
-		public static final String COLUMN_MEMBERSHIP_STATUS = "memberStatus";
 	}
 }

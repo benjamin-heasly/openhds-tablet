@@ -20,6 +20,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.listener.SyncDatabaseListener;
+import org.openhds.mobile.model.Individual;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -60,6 +61,8 @@ public class SyncEntitiesTask extends
 	String lastExtId;
 
 	private final List<ContentValues> values = new ArrayList<ContentValues>();
+	private final List<ContentValues> membershipValues = new ArrayList<ContentValues>();
+
 	private final ContentValues[] emptyArray = new ContentValues[] {};
 
 	private State state;
@@ -143,11 +146,6 @@ public class SyncEntitiesTask extends
 		deleteAllTables();
 
 		try {
-			entity = Entity.LOCATION_HIERARCHY;
-			processUrl(baseurl + API_PATH + "/locationhierarchies");
-
-			entity = Entity.LOCATION;
-			processUrl(baseurl + API_PATH + "/locations/cached");
 
 			entity = Entity.ROUND;
 			processUrl(baseurl + API_PATH + "/rounds");
@@ -163,6 +161,13 @@ public class SyncEntitiesTask extends
 
 			entity = Entity.SOCIALGROUP;
 			processUrl(baseurl + API_PATH + "/socialgroups/cached");
+
+			entity = Entity.LOCATION_HIERARCHY;
+			processUrl(baseurl + API_PATH + "/locationhierarchies");
+
+			entity = Entity.LOCATION;
+			processUrl(baseurl + API_PATH + "/locations/cached");
+
 		} catch (Exception e) {
 			return HttpTask.EndResult.FAILURE;
 		}
@@ -173,8 +178,7 @@ public class SyncEntitiesTask extends
 	private void deleteAllTables() {
 		// ordering is somewhat important during delete. a few tables have
 		// foreign keys
-		resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null,
-				null);
+		resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Rounds.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Visits.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Relationships.CONTENT_ID_URI_BASE, null, null);
@@ -231,6 +235,7 @@ public class SyncEntitiesTask extends
 					int cnt = Integer.parseInt(parser.getText());
 					publishProgress(cnt);
 					parser.nextTag();
+
 				} else if (name.equalsIgnoreCase("individuals")) {
 					processIndividualParams(parser);
 				} else if (name.equalsIgnoreCase("locations")) {
@@ -373,135 +378,200 @@ public class SyncEntitiesTask extends
 	}
 
 	private void processIndividualParams(XmlPullParser parser)
-			throws XmlPullParserException, IOException {
-		int individualsParsed = 0;
-		parser.nextTag();
+			throws IOException, XmlPullParserException {
 
 		values.clear();
-		List<ContentValues> individualSocialGroups = new ArrayList<ContentValues>();
+
+		String textValue;
+		String tagName;
+
+		parser.nextTag();
 		while (notEndOfXmlDoc("individuals", parser)) {
+
 			try {
 				ContentValues cv = new ContentValues();
+				while (true) {
+					if (null != (tagName = parser.getName())) {
 
-				// memberships
-				parser.nextTag();
-				parser.nextTag();
-				List<String> groups = null;
-				if (parser.getEventType() != XmlPullParser.END_TAG) {
-					// memberships are present
-					groups = parseMembershipExtIds(parser);
-				}
+						if (tagName.equalsIgnoreCase("individual")
+								&& parser.getEventType() == XmlPullParser.END_TAG) {
+							parser.next();
+							values.add(cv);
+							break;
+						}
 
-				// residencies
-				parser.nextTag();
-				parser.nextTag();
-				if (parser.getEventType() != XmlPullParser.END_TAG) {
-					parser.nextTag(); // <endType>
-					// parser.nextTag(); // </endType>
-					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE,
-							parser.nextText());
-					parser.nextTag(); // <location>
-					parser.nextTag(); // <extId>
-					cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-							parser.nextText());
-					parser.nextTag(); // </location>
-					parser.nextTag(); // </residency>
-					parser.nextTag(); // </residencies>
-				}
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB,
-						parser.nextText());
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID,
-						parser.nextText());
-				lastExtId = cv
-						.getAsString(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID);
-
-				// father
-				parser.nextTag(); // <father>
-				parser.nextTag(); // <memberships>
-				parser.nextTag(); // </memberships>
-				parser.nextTag(); // <residencies>
-				parser.nextTag(); // </residencies>
-				parser.nextTag(); // <extId>
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER,
-						parser.nextText());
-				parser.nextTag(); // </father>
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
-						parser.nextText());
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER,
-						parser.nextText());
-
-				parser.nextTag();
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME,
-						parser.nextText());
-
-				parser.nextTag();
-				if ("middlename".equalsIgnoreCase(parser.getName())) {
-					parser.nextText();
-				}
-
-				// mother
-				parser.nextTag(); // <mother>
-				parser.nextTag(); // <memberships>
-				parser.nextTag(); // </memberships>
-				parser.nextTag(); // <residencies>
-				parser.nextTag(); // </residencies>
-				parser.nextTag(); // <extId>
-				cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER,
-						parser.nextText());
-				parser.nextTag(); // </mother>
-
-				values.add(cv);
-
-				if (groups != null) {
-					for (String item : groups) {
-						ContentValues socialGroups = new ContentValues();
-						socialGroups
-								.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
-										cv.getAsString(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
-						socialGroups
-								.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
-										item);
-						individualSocialGroups.add(socialGroups);
+						if (parser.getEventType() == XmlPullParser.START_TAG) {
+							if (tagName.equalsIgnoreCase("age")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("ageUnits")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("dip")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("dob")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("extId")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("father")) {
+								while (true) {
+									if (null != parser.getName()
+											&& parser.getName()
+													.equalsIgnoreCase("father")
+											&& parser.getEventType() == XmlPullParser.END_TAG) {
+										break;
+									}
+									parser.next();
+								}
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER,
+										"UNK");
+							} else if (tagName.equalsIgnoreCase("mother")) {
+								while (true) {
+									if (null != parser.getName()
+											&& parser.getName()
+													.equalsIgnoreCase("mother")
+											&& parser.getEventType() == XmlPullParser.END_TAG) {
+										break;
+									}
+									parser.next();
+								}
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER,
+										"UNK");
+							} else if (tagName.equalsIgnoreCase("firstName")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
+										parser.nextText());
+							} else if (tagName
+									.equalsIgnoreCase("languagePreference")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("lastName")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("middleName")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("memberStatus")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
+										parser.nextText());
+							} else if (tagName
+									.equalsIgnoreCase("otherPhoneNumber")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("phoneNumber")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER,
+										parser.nextText());
+							} else if (tagName
+									.equalsIgnoreCase("pointOfContactName")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME,
+										parser.nextText());
+							} else if (tagName
+									.equalsIgnoreCase("pointOfContactPhoneNumber")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("gender")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER,
+										parser.nextText());
+							} else if (tagName.equalsIgnoreCase("memberships")) {
+								pullOutMemberships(parser);
+							} else if (tagName.equalsIgnoreCase("residencies")) {
+								cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
+										(parser = pullOutResidencies(parser)).nextText());
+							}
+						}
 					}
+					parser.next();
 				}
 
-				individualsParsed += 1;
-
-				parser.nextTag(); // </individual>
-				parser.nextTag(); // </individuals> or <individual>
-
-				if (individualsParsed % 100 == 0) {
-					persistParsedIndividuals(individualSocialGroups);
-					values.clear();
-					individualSocialGroups.clear();
-					publishProgress(individualsParsed);
-				}
 			} catch (Exception e) {
 				Log.e(getClass().getName(), e.getMessage());
 			}
+
 		}
 
-		persistParsedIndividuals(individualSocialGroups);
-	}
-
-	private void persistParsedIndividuals(
-			List<ContentValues> individualSocialGroups) {
-		if (!values.isEmpty()) {
-			resolver.bulkInsert(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
+		int test = 0;
+		if (values.size() > 0) {
+			test = resolver.bulkInsert(OpenHDS.Individuals.CONTENT_ID_URI_BASE,
 					values.toArray(emptyArray));
 		}
+		if (membershipValues.size() > 0) {
+			test = resolver.bulkInsert(OpenHDS.Memberships.CONTENT_ID_URI_BASE,
+					membershipValues.toArray(emptyArray));
+		}
+		test = 0;
+	}
 
-		if (!individualSocialGroups.isEmpty()) {
-			resolver.bulkInsert(OpenHDS.Memberships.CONTENT_ID_URI_BASE,
-					individualSocialGroups.toArray(emptyArray));
+	private void pullOutMemberships(XmlPullParser parser)
+			throws XmlPullParserException, IOException {
+
+		ContentValues membershipsCv = new ContentValues();
+
+		while (true) {
+			if (null != parser.getName()) {
+
+				if (parser.getName().equalsIgnoreCase("membership")
+						&& parser.getEventType() == XmlPullParser.END_TAG) {
+					membershipValues.add(membershipsCv);
+					parser.next();
+					break;
+				} else if (parser.getName().equalsIgnoreCase("memberships")
+						&& parser.getEventType() == XmlPullParser.END_TAG) {
+					return;
+
+				} else if (parser.getName().equalsIgnoreCase("individual")) {
+					while (true) {
+
+						if (null != parser.getName()
+								&& parser.getName().equalsIgnoreCase("extId")) {
+							membershipsCv
+									.put(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
+											parser.nextText());
+							parser.next();
+							break;
+						}
+						parser.next();
+
+					}
+				} else if (parser.getName().equalsIgnoreCase("socialGroup")) {
+					while (true) {
+
+						if (null != parser.getName()
+								&& parser.getName().equalsIgnoreCase("extId")) {
+							membershipsCv
+									.put(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
+											parser.nextText());
+							parser.next();
+							break;
+						}
+						parser.next();
+
+					}
+				} else if (parser.getName().equalsIgnoreCase("bIsToA")) {
+					membershipsCv
+							.put(OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD,
+									parser.nextText());
+				}
+			}
+			parser.next();
+		}
+	}
+
+	private XmlPullParser pullOutResidencies(XmlPullParser parser)
+			throws XmlPullParserException, IOException {
+		while (true) {
+			if (null != parser.getName()
+					&& parser.getName().equalsIgnoreCase("location")) {
+				while (true) {
+					if (null != parser.getName()
+							&& parser.getName().equalsIgnoreCase("extId")) {
+						return parser;
+					}
+					parser.next();
+				}
+			}
+			parser.next();
 		}
 	}
 
@@ -612,12 +682,18 @@ public class SyncEntitiesTask extends
 			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID,
 					parser.nextText());
 
-			parser.nextTag(); // <groupHead>
-			parser.nextTag(); // <memberships>
-			parser.nextTag(); // </memberships>
-			parser.nextTag(); // <residencies>
-			parser.nextTag(); // </residencies>
-			parser.nextTag(); // <extId>
+			parser.next(); // <groupHead>
+			parser.next(); 
+			parser.next(); 
+			parser.next(); 
+			parser.next(); // <memberships>
+			parser.next(); // </memberships>
+			parser.next(); // <residencies>
+			parser.next(); // </residencies>
+			parser.next(); 
+			parser.next(); 
+			parser.next(); 
+			parser.next(); // <extId>
 			cv.put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID,
 					parser.nextText());
 			parser.nextTag(); // </groupHead>
@@ -646,37 +722,50 @@ public class SyncEntitiesTask extends
 		while (notEndOfXmlDoc("relationships", parser)) {
 			ContentValues cv = new ContentValues();
 
-			parser.nextTag(); // <individualA>
-			parser.nextTag(); // <memberships>
-			parser.nextTag(); // </memberships>
-			parser.nextTag(); // <residencies>
-			parser.nextTag(); // <residencies>
-			parser.nextTag(); // <extId>
+			parser.next(); // <individualA>
+			parser.next();// <age>
+			parser.next();
+			parser.next(); // </age>
+			parser.next(); // <memberships>
+			parser.next(); // <residencies>
+			parser.next(); // <memberships>
+			parser.next(); // <residencies>
+			parser.next();// <dip>
+			parser.next();
+			parser.next(); // </dip>
+			parser.next(); // <extId>
 			cv.put(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A,
 					parser.nextText());
-			parser.nextTag(); // </individualA>
+			parser.next(); // </individualA>
 
-			parser.nextTag(); // <individualB>
-			parser.nextTag(); // <memberships>
-			parser.nextTag(); // </memberships>
-			parser.nextTag(); // <residencies>
-			parser.nextTag(); // <residencies>
-			parser.nextTag();
+			parser.next(); // <individualB>
+			parser.next();// <age>
+			parser.next();
+			parser.next(); // </age>
+			parser.next(); // <memberships>
+			parser.next(); // <residencies>
+			parser.next(); // <memberships>
+			parser.next(); // <residencies>
+			parser.next();// <dip>
+			parser.next();
+			parser.next(); // </dip>
+			parser.next();
 			cv.put(OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B,
 					parser.nextText());
-			parser.nextTag(); // </individualB>
+			parser.next(); // </individualB>
 
-			parser.nextTag();
+			parser.next();
 			cv.put(OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE,
 					parser.nextText());
 
-			parser.nextTag(); // <aIsToB>
-			parser.nextText();
+			parser.next(); // <aIsToB>
+			cv.put(OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE,
+					parser.nextText());
 
 			values.add(cv);
 
-			parser.nextTag(); // </relationship>
-			parser.nextTag(); // </relationships> or <relationship>
+			parser.next(); // </relationship>
+			parser.next(); // </relationships> or <relationship>
 		}
 
 		if (!values.isEmpty()) {
