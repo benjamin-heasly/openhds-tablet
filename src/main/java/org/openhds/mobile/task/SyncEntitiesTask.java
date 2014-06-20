@@ -147,26 +147,26 @@ public class SyncEntitiesTask extends
 
 		try {
 
-//			entity = Entity.ROUND;
-//			processUrl(baseurl + API_PATH + "/rounds");
-//
-//			entity = Entity.VISIT;
-//			processUrl(baseurl + API_PATH + "/visits/cached");
-//
-//			entity = Entity.RELATIONSHIP;
-//			processUrl(baseurl + API_PATH + "/relationships/cached");
+			entity = Entity.ROUND;
+			processUrl(baseurl + API_PATH + "/rounds");
+
+			entity = Entity.VISIT;
+			processUrl(baseurl + API_PATH + "/visits/cached");
+
+			entity = Entity.RELATIONSHIP;
+			processUrl(baseurl + API_PATH + "/relationships/cached");
 
 			entity = Entity.INDIVIDUAL;
 			processUrl(baseurl + API_PATH + "/individuals/cached");
 
-//			entity = Entity.SOCIALGROUP;
-//			processUrl(baseurl + API_PATH + "/socialgroups/cached");
-//
-//			entity = Entity.LOCATION_HIERARCHY;
-//			processUrl(baseurl + API_PATH + "/locationhierarchies");
-//
-//			entity = Entity.LOCATION;
-//			processUrl(baseurl + API_PATH + "/locations/cached");
+			entity = Entity.SOCIALGROUP;
+			processUrl(baseurl + API_PATH + "/socialgroups/cached");
+
+			entity = Entity.LOCATION_HIERARCHY;
+			processUrl(baseurl + API_PATH + "/locationhierarchies");
+
+			entity = Entity.LOCATION;
+			processUrl(baseurl + API_PATH + "/locations/cached");
 
 		} catch (Exception e) {
 			return HttpTask.EndResult.FAILURE;
@@ -178,14 +178,14 @@ public class SyncEntitiesTask extends
 	private void deleteAllTables() {
 		// ordering is somewhat important during delete. a few tables have
 		// foreign keys
-//		resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null, null);
-//		resolver.delete(OpenHDS.Rounds.CONTENT_ID_URI_BASE, null, null);
-//		resolver.delete(OpenHDS.Visits.CONTENT_ID_URI_BASE, null, null);
-//		resolver.delete(OpenHDS.Relationships.CONTENT_ID_URI_BASE, null, null);
-//		resolver.delete(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, null, null);
-//		resolver.delete(OpenHDS.HierarchyItems.CONTENT_ID_URI_BASE, null, null);
+		resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null, null);
+		resolver.delete(OpenHDS.Rounds.CONTENT_ID_URI_BASE, null, null);
+		resolver.delete(OpenHDS.Visits.CONTENT_ID_URI_BASE, null, null);
+		resolver.delete(OpenHDS.Relationships.CONTENT_ID_URI_BASE, null, null);
+		resolver.delete(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, null, null);
+		resolver.delete(OpenHDS.HierarchyItems.CONTENT_ID_URI_BASE, null, null);
 		resolver.delete(OpenHDS.Individuals.CONTENT_ID_URI_BASE, null, null);
-//		resolver.delete(OpenHDS.Locations.CONTENT_ID_URI_BASE, null, null);
+		resolver.delete(OpenHDS.Locations.CONTENT_ID_URI_BASE, null, null);
 	}
 
 	private void processUrl(String url) throws Exception {
@@ -238,18 +238,18 @@ public class SyncEntitiesTask extends
 
 				} else if (name.equalsIgnoreCase("individuals")) {
 					processIndividualParams(parser);
-//				} else if (name.equalsIgnoreCase("locations")) {
-//					processLocationParams(parser);
-//				} else if (name.equalsIgnoreCase("locationhierarchies")) {
-//					processHierarchyParams(parser);
-//				} else if (name.equalsIgnoreCase("rounds")) {
-//					processRoundParams(parser);
-//				} else if (name.equalsIgnoreCase("visits")) {
-//					processVisitParams(parser);
-//				} else if (name.equalsIgnoreCase("socialgroups")) {
-//					processSocialGroupParams(parser);
-//				} else if (name.equalsIgnoreCase("relationships")) {
-//					processRelationshipParams(parser);
+				} else if (name.equalsIgnoreCase("locations")) {
+					processLocationParams(parser);
+				} else if (name.equalsIgnoreCase("locationhierarchies")) {
+					processHierarchyParams(parser);
+				} else if (name.equalsIgnoreCase("rounds")) {
+					processRoundParams(parser);
+				} else if (name.equalsIgnoreCase("visits")) {
+					processVisitParams(parser);
+				} else if (name.equalsIgnoreCase("socialgroups")) {
+					processSocialGroupParams(parser);
+				} else if (name.equalsIgnoreCase("relationships")) {
+					processRelationshipParams(parser);
 				}
 				break;
 			}
