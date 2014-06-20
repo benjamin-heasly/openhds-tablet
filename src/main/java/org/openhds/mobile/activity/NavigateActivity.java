@@ -30,8 +30,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	private HierarchySelectionFragment selectionFragment;
 	private HierarchyValueFragment valueFragment;
 	private HierarchyFormFragment formFragment;
-	
-	
 
 	private static final String SELECTION_FRAGMENT_TAG = "hierarchySelectionFragment";
 	private static final String VALUE_FRAGMENT_TAG = "hierarchyValueFragment";
@@ -287,8 +285,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		if (resultCode == RESULT_OK) {
 			FormBehaviour form = formHelper.getForm();
 			formHelper.checkFormInstanceStatus();
-			form.getFormPayloadConsumer().consumeFormPayload(
-					formHelper.getFormInstanceData(), this);
+			if (null != formHelper.getFinalizedFormFilePath()) {
+				form.getFormPayloadConsumer().consumeFormPayload(
+						formHelper.getFormInstanceData(), this);
+			}
 
 		}
 		if (resultCode == RESULT_CANCELED) {
