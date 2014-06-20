@@ -19,17 +19,19 @@ import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder.ActivityBuilderModule;
-import org.openhds.mobile.projectdata.QueryHelper;
+import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class Skeletor extends Activity implements HierarchyNavigator {
+public class NavigateActivity extends Activity implements HierarchyNavigator {
 
 	private HierarchySelectionFragment selectionFragment;
 	private HierarchyValueFragment valueFragment;
 	private HierarchyFormFragment formFragment;
+	
+	
 
 	private static final String SELECTION_FRAGMENT_TAG = "hierarchySelectionFragment";
 	private static final String VALUE_FRAGMENT_TAG = "hierarchyValueFragment";
@@ -185,7 +187,7 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 
 		QueryResult selected = hierarchyPath.get(state);
 		if (null == selected) {
-			String stateLabel = getResourceString(Skeletor.this,
+			String stateLabel = getResourceString(NavigateActivity.this,
 					stateLabels.get(state));
 			selectionFragment.setButtonLabel(state, stateLabel, null);
 			selectionFragment.setButtonHighlighted(state, true);
@@ -308,7 +310,7 @@ public class Skeletor extends Activity implements HierarchyNavigator {
 			List<FormBehaviour> validForms = new ArrayList<FormBehaviour>();
 
 			for (FormBehaviour form : filteredForms) {
-				if (form.getFormFilter().amIValid(Skeletor.this)) {
+				if (form.getFormFilter().amIValid(NavigateActivity.this)) {
 					validForms.add(form);
 				}
 			}

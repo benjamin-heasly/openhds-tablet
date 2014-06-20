@@ -8,6 +8,11 @@ import java.util.Map;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.FormBehaviour;
+import org.openhds.mobile.projectdata.FormFilters.CensusFormFilters;
+import org.openhds.mobile.projectdata.FormPayloadBuilders.CensusFormPayloadBuilders;
+import org.openhds.mobile.projectdata.FormPayloadConsumers.CensusFormPayloadConsumers;
+import org.openhds.mobile.projectdata.QueryHelpers.CensusQueryHelper;
+import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 
 public class ProjectActivityBuilder {
 

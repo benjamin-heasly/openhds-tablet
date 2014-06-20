@@ -1,8 +1,8 @@
 package org.openhds.mobile.model;
 
-import org.openhds.mobile.projectdata.FormFilter;
-import org.openhds.mobile.projectdata.FormPayloadBuilder;
-import org.openhds.mobile.projectdata.FormPayloadConsumer;
+import org.openhds.mobile.projectdata.FormFilters.FormFilter;
+import org.openhds.mobile.projectdata.FormPayloadBuilders.FormPayloadBuilder;
+import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
 
 public class FormBehaviour {
 

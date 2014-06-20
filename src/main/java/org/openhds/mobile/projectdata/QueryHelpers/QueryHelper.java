@@ -1,4 +1,4 @@
-package org.openhds.mobile.projectdata;
+package org.openhds.mobile.projectdata.QueryHelpers;
 
 import java.util.List;
 

@@ -4,7 +4,7 @@ import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.CensusActivity;
-import org.openhds.mobile.activity.Skeletor;
+import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.model.FieldWorker;
@@ -81,7 +81,7 @@ public class FieldWorkerLoginFragment extends Fragment implements
 
 	private void launchCensusActivity(FieldWorker fieldWorker) {
 
-		Intent intent = new Intent(getActivity(), Skeletor.class);
+		Intent intent = new Intent(getActivity(), NavigateActivity.class);
 
 		// TODO: get a new instance of CensusActivityBuilder and put it into the
 		// intent and send'er'over to skeletor

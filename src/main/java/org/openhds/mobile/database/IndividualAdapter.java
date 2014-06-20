@@ -98,6 +98,7 @@ public class IndividualAdapter {
 		formFields.put(ProjectFormFields.Individuals.OTHER_PHONE_NUMBER, individual.getOtherPhoneNumber());
 		formFields.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, individual.getPointOfContactName());
 		formFields.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, individual.getPointOfContactPhoneNumber());
+		formFields.put(ProjectFormFields.Individuals.MEMBER_STATUS, individual.getMemberStatus());
 		formFields.put(ProjectFormFields.Individuals.LANGUAGE_PREFERENCE, individual.getLanguagePreference());
 		
 

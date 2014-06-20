@@ -1,12 +1,14 @@
-package org.openhds.mobile.projectdata;
+package org.openhds.mobile.projectdata.FormFilters;
 
 import java.util.Map;
 
-import org.openhds.mobile.activity.Skeletor;
+import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.SocialGroup;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityBuilder;
 
 import android.database.Cursor;
 
@@ -16,7 +18,7 @@ import android.database.Cursor;
 // button (aka it's amIValid() == false).
 public class CensusFormFilters {
 
-	private static boolean hasHeadOfHousehold(Skeletor skeletor,
+	private static boolean hasHeadOfHousehold(NavigateActivity navigateActivity,
 			Map<String, QueryResult> hierarchyPath) {
 
 		String socialGroupExtId = hierarchyPath.get(
@@ -24,7 +26,7 @@ public class CensusFormFilters {
 				.getExtId();
 
 		Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
-				skeletor.getContentResolver(), socialGroupExtId);
+				navigateActivity.getContentResolver(), socialGroupExtId);
 
 		if (socialGroupCursor.moveToFirst()) {
 
@@ -42,27 +44,27 @@ public class CensusFormFilters {
 	public static class AddHeadOfHousehold implements FormFilter {
 
 		@Override
-		public boolean amIValid(Skeletor skeletor) {
+		public boolean amIValid(NavigateActivity navigateActivity) {
 
-			return !CensusFormFilters.hasHeadOfHousehold(skeletor,
-					skeletor.getHierarchyPath());
+			return !CensusFormFilters.hasHeadOfHousehold(navigateActivity,
+					navigateActivity.getHierarchyPath());
 		}
 	}
 
 	public static class AddMemberOfHousehold implements FormFilter {
 
 		@Override
-		public boolean amIValid(Skeletor skeletor) {
+		public boolean amIValid(NavigateActivity navigateActivity) {
 
-			return CensusFormFilters.hasHeadOfHousehold(skeletor,
-					skeletor.getHierarchyPath());
+			return CensusFormFilters.hasHeadOfHousehold(navigateActivity,
+					navigateActivity.getHierarchyPath());
 		}
 	}
 
 	public static class EditIndividual implements FormFilter {
 
 		@Override
-		public boolean amIValid(Skeletor skeletor) {
+		public boolean amIValid(NavigateActivity navigateActivity) {
 
 			return true;
 		}

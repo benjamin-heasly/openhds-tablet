@@ -1,4 +1,4 @@
-package org.openhds.mobile.projectdata;
+package org.openhds.mobile.projectdata.QueryHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,10 @@ import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.projectdata.ProjectFormFields.Individuals;
+import org.openhds.mobile.projectdata.ProjectResources.Relationship;
 
 import android.content.ContentResolver;
 import android.content.Context;
