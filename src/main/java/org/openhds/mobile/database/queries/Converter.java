@@ -110,7 +110,13 @@ public class Converter {
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE)));
 		location.setName(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_NAME)));
-	}
+        location.setCommunityName(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME)));
+        location.setLocalityName(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME)));
+        location.setSectorName(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME)));
+    }
 
 	public static LocationHierarchy toHierarchy(Cursor cursor, boolean close) {
 		LocationHierarchy hierarchy = new LocationHierarchy();
