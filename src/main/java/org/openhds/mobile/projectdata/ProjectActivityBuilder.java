@@ -1,12 +1,14 @@
 package org.openhds.mobile.projectdata;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.fragment.DetailFragment;
+import org.openhds.mobile.fragment.HouseholdDetailFragment;
+import org.openhds.mobile.fragment.IndividualDetailFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.projectdata.FormFilters.CensusFormFilters;
 import org.openhds.mobile.projectdata.FormPayloadBuilders.CensusFormPayloadBuilders;
@@ -17,7 +19,7 @@ import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 public class ProjectActivityBuilder {
 
 	public static final String ACTIVITY_MODULE_EXTRA = "ACTIVITY_MODULE_EXTRA";
-	
+
 	private static final String CENSUS_ACTIVITY_MODULE = "CensusActivityModule";
 	private static final ArrayList<String> activityModules = new ArrayList<String>();
 	static {
@@ -38,6 +40,7 @@ public class ProjectActivityBuilder {
 		private static final Map<String, Integer> stateLabels = new HashMap<String, Integer>();
 		private static final List<String> stateSequence = new ArrayList<String>();
 		private static final Map<String, List<FormBehaviour>> formsForStates = new HashMap<String, List<FormBehaviour>>();
+		private static final Map<String, DetailFragment> detailFragsForStates = new HashMap<String, DetailFragment>();
 
 		static {
 
@@ -95,6 +98,19 @@ public class ProjectActivityBuilder {
 			formsForStates.put(INDIVIDUAL_STATE, individualFormList);
 			formsForStates.put(BOTTOM_STATE, bottomFormList);
 
+			// these details are off by 1: details for an individual should be
+			// shown when you click a specific individual which is technically
+			// in the bottom state.
+			detailFragsForStates.put(REGION_STATE, null);
+			detailFragsForStates.put(PROVINCE_STATE, null);
+			detailFragsForStates.put(DISTRICT_STATE, null);
+			detailFragsForStates.put(MAP_AREA_STATE, null);
+			detailFragsForStates.put(SECTOR_STATE, null);
+			detailFragsForStates.put(HOUSEHOLD_STATE, null);
+			detailFragsForStates.put(INDIVIDUAL_STATE, new HouseholdDetailFragment());
+			detailFragsForStates.put(BOTTOM_STATE,
+					new IndividualDetailFragment());
+
 		}
 
 		@Override
@@ -105,6 +121,11 @@ public class ProjectActivityBuilder {
 		@Override
 		public List<String> getStateSequence() {
 			return stateSequence;
+		}
+
+		@Override
+		public Map<String, DetailFragment> getDetailFragsForStates() {
+			return detailFragsForStates;
 		}
 
 		@Override

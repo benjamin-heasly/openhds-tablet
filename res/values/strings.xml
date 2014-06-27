@@ -124,6 +124,9 @@
     <string name="language_preference_label">Language Preference</string>
     <string name="dip_label">DIP</string>
     <string name="member_status_label">Member Status</string>
+    <string name="toggle_fragment_button_show_details">Show Details</string>
+    <string name="toggle_fragment_button_none">None</string>
+    <string name="toggle_fragment_button_show_children">Show Children</string>
 
     <!-- Database/Form Values -->
     <string name="db_val_age_units_years">Years</string>
