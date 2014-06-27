@@ -163,7 +163,7 @@ public class CensusFormPayloadConsumers {
 
 		@Override
 		public void postFillFormPayload(Map<String, String> formPayload) {
-			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD, "Head");
+			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD, "1");
 			
 		}
 

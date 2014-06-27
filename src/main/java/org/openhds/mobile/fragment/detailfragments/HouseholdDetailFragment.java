@@ -41,26 +41,31 @@ public class HouseholdDetailFragment extends DetailFragment {
 		SocialGroup socialGroup = getHousehold(navigateActivity
 				.getCurrentSelection().getExtId(), navigateActivity);
 
-		LinearLayout socialGroupBasicInfoContainer = (LinearLayout) detailContainer
-				.findViewById(R.id.household_detail_frag_basic_info);
+		if (null != socialGroup) {
+			LinearLayout socialGroupBasicInfoContainer = (LinearLayout) detailContainer
+					.findViewById(R.id.household_detail_frag_basic_info);
 
-		TextView extIdTextView = (TextView) detailContainer
-				.findViewById(R.id.household_detail_frag_extid);
-		extIdTextView.setText(socialGroup.getExtId());
+			TextView extIdTextView = (TextView) detailContainer
+					.findViewById(R.id.household_detail_frag_extid);
+			extIdTextView.setText(socialGroup.getExtId());
 
-		socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
-				getActivity(), getString(R.string.household_name),
-				socialGroup.getGroupName(), greenLabel, greenValue));
+			socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
+					getActivity(), getString(R.string.household_name),
+					socialGroup.getGroupName(), greenLabel, greenValue));
 
-		socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
-				getActivity(), getString(R.string.household_head_extid),
-				socialGroup.getGroupHead(), greenLabel, greenValue));
+			socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
+					getActivity(), getString(R.string.household_head_extid),
+					socialGroup.getGroupHead(), greenLabel, greenValue));
 
-		socialGroupBasicInfoContainer
-				.addView(makeDetailFragmentTextView(getActivity(),
-						getString(R.string.household_member_count),
-						getMemberCount(socialGroup.getExtId()), greenLabel,
-						greenValue));
+			socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
+					getActivity(), getString(R.string.household_member_count),
+					getMemberCount(socialGroup.getExtId()), greenLabel,
+					greenValue));
+		} else {
+			TextView extIdTextView = (TextView) detailContainer
+					.findViewById(R.id.household_detail_frag_extid);
+			extIdTextView.setText(getString(R.string.details_not_available));
+		}
 
 	}
 

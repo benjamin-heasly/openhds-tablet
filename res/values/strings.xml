@@ -118,6 +118,7 @@
     <string name="toggle_fragment_button_none">None</string>
     <string name="toggle_fragment_button_show_children">Show Children</string>
     <string name="not_available">N/A</string>
+        <string name="details_not_available">Details Not Available</string>
 
     <!-- Database/Form Values -->
     <string name="db_val_age_units_years">Years</string>
