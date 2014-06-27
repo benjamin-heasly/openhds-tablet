@@ -10,6 +10,7 @@ public class Individual implements Serializable {
 	private String firstName;
 	private String middleName;// not used.
 	private String lastName;
+	
 	private String gender;
 	private String dob;
 	private String mother;

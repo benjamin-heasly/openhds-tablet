@@ -9,7 +9,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/individual_detail_frag_extid"
+        android:id="@+id/household_detail_frag_extid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -18,25 +18,7 @@
         android:textSize="50sp" />
 
     <LinearLayout
-        android:id="@+id/individual_detail_frag_personal_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@color/DarkerAcidGray"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/individual_detail_frag_contact_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@color/DarkerAcidGray"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/individual_detail_frag_membership_info"
+        android:id="@+id/household_detail_frag_basic_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"

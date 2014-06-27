@@ -383,7 +383,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 											.toRelationship(relationshipCursor,
 													true);
 									qr.getStringsPayLoad()
-											.put(R.string.relationship_to_head_label,
+											.put(R.string.individual_relationship_to_head_label,
 													getString(ProjectResources.Relationship
 															.getRelationshipStringId((relationship
 																	.getType()))));
@@ -411,9 +411,9 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						hierarchyPath.get(INDIVIDUAL_STATE).getExtId());
 				currentResults = new ArrayList<QueryResult>();
 
-				currentResults.add(CensusQueryHelper
-						.createCompleteIndividualQueryResult(formFieldNames,
-								state));
+//				currentResults.add(CensusQueryHelper
+//						.createCompleteIndividualQueryResult(formFieldNames,
+//								state));
 
 				formFragment.createFormButtons(formsForStates.get(state));
 

@@ -3,7 +3,7 @@ package org.openhds.mobile.projectdata;
 import java.util.List;
 import java.util.Map;
 
-import org.openhds.mobile.fragment.DetailFragment;
+import org.openhds.mobile.fragment.detailfragments.DetailFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 

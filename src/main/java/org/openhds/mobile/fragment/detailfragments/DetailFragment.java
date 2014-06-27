@@ -1,4 +1,4 @@
-package org.openhds.mobile.fragment;
+package org.openhds.mobile.fragment.detailfragments;
 
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.queries.QueryResult;

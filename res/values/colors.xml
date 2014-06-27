@@ -143,5 +143,14 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="LabelGreen">#47B247</color>
+    <color name="ValueGreen">#A3FFA3</color>
+    <color name="LabelYellow">#CCCC52</color>
+    <color name="ValueYellow">#FFFF66</color>
+    <color name="LabelPink">#995C99</color>
+    <color name="ValuePink">#E68AE6</color>
+    <color name="NA_Gray">#4D4D4D</color>
+    <color name="AcidGray">#303030</color>
+    <color name="DarkerAcidGray">#222222</color>
 
 </resources>

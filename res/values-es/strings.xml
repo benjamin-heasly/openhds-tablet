@@ -97,17 +97,17 @@
     <string name="add_member_of_household_label">Añadir un Miembro del Domicilio</string>
     <string name="edit_individual_label">Editar Individuo</string>
     <string name="house_of_prefix">Casa de</string>
-    <string name="other_names_label">Otros Nombres</string>
-    <string name="age_label">Edad</string>
-    <string name="date_of_birth_label">Fecha de Nacimiento</string>
-    <string name="relationship_to_head_label">Relación con la Cabeza del Domicilio</string>
-    <string name="personal_phone_number_label">Numero de Teléfono Personal</string>
-    <string name="other_phone_number_label">Otro Numero de Teléfono</string>
-    <string name="point_of_contact_label">Punto de Contacto</string>
-    <string name="point_of_contact_phone_number_label">Punto de Contacto Numero de Teléfono</string>
-    <string name="language_preference_label">Preferencia de Idioma</string>
-    <string name="dip_label">DIP</string>
-    <string name="member_status_label">Estado del Miembro</string>
+    <string name="individual_other_names_label">Otros Nombres</string>
+    <string name="individual_age_label">Edad</string>
+    <string name="individual_date_of_birth_label">Fecha de Nacimiento</string>
+    <string name="individual_relationship_to_head_label">Relación con la Cabeza del Domicilio</string>
+    <string name="individual_personal_phone_number_label">Numero de Teléfono Personal</string>
+    <string name="individual_other_phone_number_label">Otro Numero de Teléfono</string>
+    <string name="individual_point_of_contact_label">Punto de Contacto</string>
+    <string name="individual_point_of_contact_phone_number_label">Punto de Contacto Numero de Teléfono</string>
+    <string name="individual_language_preference_label">Preferencia de Idioma</string>
+    <string name="individual_dip_label">DIP</string>
+    <string name="individual_member_status_label">Estado del Miembro</string>
 
     <!-- Database/Form Values -->
     <string name="db_val_age_units_years">Años</string>

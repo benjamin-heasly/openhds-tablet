@@ -114,20 +114,10 @@
     <string name="add_member_of_household_label">Add Member of Household</string>
     <string name="edit_individual_label">Edit Individual</string>
     <string name="house_of_prefix">House of</string>
-    <string name="other_names_label">Other Names</string>
-    <string name="age_label">Age</string>
-    <string name="date_of_birth_label">Date of Birth</string>
-    <string name="relationship_to_head_label">Relationship to Head</string>
-    <string name="personal_phone_number_label">Personal Phone Number</string>
-    <string name="other_phone_number_label">Other Phone Number</string>
-    <string name="point_of_contact_label">Point of Contact</string>
-    <string name="point_of_contact_phone_number_label">Point of Contact Phone Number</string>
-    <string name="language_preference_label">Language Preference</string>
-    <string name="dip_label">DIP</string>
-    <string name="member_status_label">Member Status</string>
     <string name="toggle_fragment_button_show_details">Show Details</string>
     <string name="toggle_fragment_button_none">None</string>
     <string name="toggle_fragment_button_show_children">Show Children</string>
+    <string name="not_available">N/A</string>
 
     <!-- Database/Form Values -->
     <string name="db_val_age_units_years">Years</string>
@@ -150,5 +140,25 @@
     <string name="db_val_relation_to_head_type_not_related">Not Related</string>
     <string name="db_val_relation_to_head_type_other_relative">Other Relative</string>
     <string name="db_val_relation_to_head_type_dont_know">Don\'t Know</string>
+
+    <!-- IndividualDetailFragment Labels -->
+    <string name="individual_name_label">Name </string>
+    <string name="individual_other_names_label">Other Names</string>
+    <string name="individual_age_label">Age</string>
+    <string name="individual_date_of_birth_label">Date of Birth</string>
+    <string name="individual_relationship_to_head_label">Relationship to Head</string>
+    <string name="individual_personal_phone_number_label">Personal Phone Number</string>
+    <string name="individual_other_phone_number_label">Other Phone Number</string>
+    <string name="individual_point_of_contact_label">Point of Contact</string>
+    <string name="individual_point_of_contact_phone_number_label">Point of Contact Phone Number</string>
+    <string name="individual_language_preference_label">Language Preference</string>
+    <string name="individual_dip_label">DIP</string>
+    <string name="individual_member_status_label">Member Status</string>
+    <string name="individual_socialgroup_extid_label">SocialGroup Ext ID</string>
+
+    <!-- HouseHoldDetailFragment Labels -->
+    <string name="household_name">Household Name</string>
+    <string name="household_head_extid">Head of Household Ext ID</string>
+    <string name="household_member_count">Number of Household Members</string>
 
 </resources>

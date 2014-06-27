@@ -100,8 +100,10 @@ public class Queries {
 				OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID, hierarchy);
 	}
 
-	public static Cursor getLocationsBySectorName(ContentResolver contentResolver, String sectorName) {
-		return getCursor(contentResolver, OpenHDS.Locations.CONTENT_ID_URI_BASE,
+	public static Cursor getLocationsBySectorName(
+			ContentResolver contentResolver, String sectorName) {
+		return getCursor(contentResolver,
+				OpenHDS.Locations.CONTENT_ID_URI_BASE,
 				OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, sectorName);
 	}
 
@@ -258,6 +260,12 @@ public class Queries {
 								+ extIdH + "' AND "
 								+ OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID
 								+ " = '" + extIdI + "'", null, null);
+	}
+
+	public static Cursor getMembershipsByIndividualExtId(
+			ContentResolver resolver, String extId) {
+		return getCursor(resolver, OpenHDS.Memberships.CONTENT_ID_URI_BASE,
+				OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, extId);
 	}
 
 	public static boolean hasMembershipByHouseholdAndIndividualExtId(

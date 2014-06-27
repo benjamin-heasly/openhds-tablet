@@ -10,12 +10,12 @@ import java.util.Map;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.QueryResult;
-import org.openhds.mobile.fragment.DefaultDetailFragment;
-import org.openhds.mobile.fragment.DetailFragment;
 import org.openhds.mobile.fragment.DetailToggleFragment;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
 import org.openhds.mobile.fragment.HierarchySelectionFragment;
 import org.openhds.mobile.fragment.HierarchyValueFragment;
+import org.openhds.mobile.fragment.detailfragments.DefaultDetailFragment;
+import org.openhds.mobile.fragment.detailfragments.DetailFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.StateMachine;
@@ -200,10 +200,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
 		String state = stateSequence.get(stateIndex);
 		if (0 == stateIndex) {
-			detailToggleFragment.setButtonEnabled(false);
 			selectionFragment.setButtonAllowed(state, true);
 			currentResults = queryHelper.getAll(getContentResolver(),
 					stateSequence.get(0));
+			updateToggleButton();
+
 		} else {
 			String previousState = stateSequence.get(stateIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
@@ -215,16 +216,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
 		stateMachine.transitionTo(stateSequence.get(0));
 		stateMachine.transitionTo(state);
-
-		// --initializes the middle fragment, sets up the detail fragment if
-		// valueFrag is null.
-		// and creates a new valueFrag for the next time it is needed.
-
-		// --if valueFrag isn't null it carries on and populates the middle
-		// column w/ the current results list.
-		//
-		// This may or may not be the right way to handle this, but for right
-		// now it is working and it isn't too gross.
 
 		if (valueFragment.isAdded()) {
 			valueFragment.populateValues(currentResults);
@@ -302,6 +293,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			// middle of the hierarchy
 			String previousState = stateSequence.get(targetIndex - 1);
 			QueryResult previousSelection = hierarchyPath.get(previousState);
+			currentSelection = previousSelection;
 			currentResults = queryHelper.getChildren(getContentResolver(),
 					previousSelection, targetState);
 		}
@@ -391,17 +383,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	}
 
 	private void updateToggleButton() {
-		String state;
-		int stateIndex = stateSequence.indexOf(getState());
 
-		if (stateIndex == stateSequence.size()) {
-			state = stateSequence.get(stateIndex + 1);
-		} else {
-			state = stateSequence.get(stateIndex);
-		}
-
-		if (shouldShowDetailFragment()
-				&& null != detailFragsForStates.get(state)) {
+		if (null != detailFragsForStates.get(getState())
+				&& !shouldShowDetailFragment()) {
 
 			detailToggleFragment.setButtonEnabled(true);
 		} else {
@@ -469,6 +453,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			} else {
 				valueFragment.populateValues(currentResults);
 			}
+			updateToggleButton();
 
 			formFragment.createFormButtons(validForms);
 
@@ -478,7 +463,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		public void onExitState() {
 			String state = getState();
 			showValueFragment();
-			updateToggleButton();
 			updateButtonLabel(state);
 
 		}

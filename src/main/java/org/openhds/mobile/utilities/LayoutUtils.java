@@ -3,7 +3,6 @@ package org.openhds.mobile.utilities;
 import java.util.Map;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.projectdata.ProjectResources;
 
 import android.app.Activity;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class LayoutUtils {
@@ -137,4 +137,44 @@ public class LayoutUtils {
 			payLoadContainer.setVisibility(View.VISIBLE);
 		}
 	}
+
+	public static RelativeLayout makeDetailFragmentTextView(Activity activity,
+			String labelText, String valueText, int labelColor, int valueColor) {
+
+		RelativeLayout layout = new RelativeLayout(activity);
+
+		TextView labelTextView = new TextView(activity);
+		labelTextView.setTextSize(20);
+		labelTextView.setText(labelText + ": ");
+
+		TextView valueTextView = new TextView(activity);
+		valueTextView.setTextSize(20);
+		valueTextView.setText(valueText);
+
+		if (null == valueText || valueText.isEmpty()) {
+			labelTextView.setTextColor(activity.getResources().getColor(
+					R.color.NA_Gray));
+			valueTextView.setTextColor(activity.getResources().getColor(
+					R.color.NA_Gray));
+			valueTextView.setText(activity.getResources().getString(
+					R.string.not_available));
+		} else {
+			labelTextView.setTextColor(labelColor);
+			valueTextView.setTextColor(valueColor);
+		}
+
+		layout.addView(labelTextView);
+
+		labelTextView.setId(1);
+
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.WRAP_CONTENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+		params.addRule(RelativeLayout.RIGHT_OF, labelTextView.getId());
+
+		layout.addView(valueTextView, params);
+
+		return layout;
+	}
+
 }

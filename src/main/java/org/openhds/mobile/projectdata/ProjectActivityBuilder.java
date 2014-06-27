@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.fragment.DetailFragment;
-import org.openhds.mobile.fragment.HouseholdDetailFragment;
-import org.openhds.mobile.fragment.IndividualDetailFragment;
+import org.openhds.mobile.fragment.detailfragments.DetailFragment;
+import org.openhds.mobile.fragment.detailfragments.HouseholdDetailFragment;
+import org.openhds.mobile.fragment.detailfragments.IndividualDetailFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.projectdata.FormFilters.CensusFormFilters;
 import org.openhds.mobile.projectdata.FormPayloadBuilders.CensusFormPayloadBuilders;

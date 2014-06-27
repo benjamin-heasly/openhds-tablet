@@ -65,7 +65,7 @@ public class Converter {
 		individual
 				.setLanguagePreference(cursor.getString(cursor
 						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE)));
-		
+
 		individual.setMemberStatus(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS)));
 		individual
@@ -110,13 +110,13 @@ public class Converter {
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE)));
 		location.setName(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_NAME)));
-        location.setCommunityName(cursor.getString(cursor
-                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME)));
-        location.setLocalityName(cursor.getString(cursor
-                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME)));
-        location.setSectorName(cursor.getString(cursor
-                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME)));
-    }
+		location.setCommunityName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME)));
+		location.setLocalityName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME)));
+		location.setSectorName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME)));
+	}
 
 	public static LocationHierarchy toHierarchy(Cursor cursor, boolean close) {
 		LocationHierarchy hierarchy = new LocationHierarchy();
@@ -330,25 +330,43 @@ public class Converter {
 		return relationships;
 	}
 
+	private static void populateMembership(Cursor cursor, Membership membership) {
+		membership
+				.setSocialGroupExtId(cursor.getString(cursor
+						.getColumnIndexOrThrow(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID)));
+		membership.setIndividualExtId(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID)));
+		membership
+				.setRelationshipToHead(cursor.getString(cursor
+						.getColumnIndex(OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD)));
+
+	}
+
 	public static Membership toMembership(Cursor cursor, boolean close) {
 		Membership membership = new Membership();
 
 		if (cursor.getPosition() > -1) {
-			membership
-					.setSocialGroupExtId(cursor.getString(cursor
-							.getColumnIndexOrThrow(OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID)));
-			membership
-					.setIndividualExtId(cursor.getString(cursor
-							.getColumnIndex(OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID)));
-			membership
-					.setRelationshipToHead(cursor.getString(cursor
-							.getColumnIndex(OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD)));
-
+			populateMembership(cursor, membership);
 		}
 		if (close) {
 			cursor.close();
 		}
 		return membership;
+	}
+
+	public static ArrayList<Membership> toMembershipList(Cursor cursor,
+			boolean close) {
+		ArrayList<Membership> memberships = new ArrayList<Membership>();
+
+		while (cursor.moveToNext()) {
+			Membership membership = new Membership();
+			populateMembership(cursor, membership);
+			memberships.add(membership);
+		}
+		if (close) {
+			cursor.close();
+		}
+		return memberships;
 	}
 
 }
