@@ -29,6 +29,7 @@ public class ProjectActivityBuilder {
 		public static final String REGION_STATE = "region";
 		public static final String PROVINCE_STATE = "province";
 		public static final String DISTRICT_STATE = "district";
+		public static final String LOCALITY_STATE = "locality";
 		public static final String MAP_AREA_STATE = "mapArea";
 		public static final String SECTOR_STATE = "sector";
 		public static final String HOUSEHOLD_STATE = "household";
@@ -44,6 +45,7 @@ public class ProjectActivityBuilder {
 			stateLabels.put(REGION_STATE, R.string.region_label);
 			stateLabels.put(PROVINCE_STATE, R.string.province_label);
 			stateLabels.put(DISTRICT_STATE, R.string.district_label);
+			stateLabels.put(LOCALITY_STATE, R.string.locality_label);
 			stateLabels.put(MAP_AREA_STATE, R.string.map_area_label);
 			stateLabels.put(SECTOR_STATE, R.string.sector_label);
 			stateLabels.put(HOUSEHOLD_STATE, R.string.household_label);
@@ -53,6 +55,7 @@ public class ProjectActivityBuilder {
 			stateSequence.add(REGION_STATE);
 			stateSequence.add(PROVINCE_STATE);
 			stateSequence.add(DISTRICT_STATE);
+			stateSequence.add(LOCALITY_STATE);
 			stateSequence.add(MAP_AREA_STATE);
 			stateSequence.add(SECTOR_STATE);
 			stateSequence.add(HOUSEHOLD_STATE);
@@ -62,6 +65,7 @@ public class ProjectActivityBuilder {
 			ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> districtFormList = new ArrayList<FormBehaviour>();
+			ArrayList<FormBehaviour> localityFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> mapAreaFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> sectorFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> householdFormList = new ArrayList<FormBehaviour>();
@@ -89,6 +93,7 @@ public class ProjectActivityBuilder {
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
 			formsForStates.put(DISTRICT_STATE, districtFormList);
+			formsForStates.put(LOCALITY_STATE, localityFormList);
 			formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
 			formsForStates.put(SECTOR_STATE, sectorFormList);
 			formsForStates.put(HOUSEHOLD_STATE, householdFormList);
