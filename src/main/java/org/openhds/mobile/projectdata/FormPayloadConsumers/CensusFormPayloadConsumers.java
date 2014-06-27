@@ -84,6 +84,12 @@ public class CensusFormPayloadConsumers {
 			socialGroupCursor.close();
 
 		}
+
+		@Override
+		public void postFillFormPayload(Map<String, String> formPayload) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 
 	public static class AddHeadOfHousehold implements FormPayloadConsumer {
@@ -91,7 +97,8 @@ public class CensusFormPayloadConsumers {
 		@Override
 		public void consumeFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
-			// TODO Auto-generated method stub
+			
+			postFillFormPayload(formPayload);
 
 			Map<String, QueryResult> hierarchyPath = navigateActivity
 					.getHierarchyPath();
@@ -154,6 +161,12 @@ public class CensusFormPayloadConsumers {
 
 		}
 
+		@Override
+		public void postFillFormPayload(Map<String, String> formPayload) {
+			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD, "Head");
+			
+		}
+
 	}
 
 	public static class EditIndividual implements FormPayloadConsumer {
@@ -163,6 +176,12 @@ public class CensusFormPayloadConsumers {
 				NavigateActivity navigateActivity) {
 			// TODO Auto-generated method stub
 			new AddMemberOfHousehold().consumeFormPayload(formPayload, navigateActivity);
+		}
+
+		@Override
+		public void postFillFormPayload(Map<String, String> formPayload) {
+			// TODO Auto-generated method stub
+			
 		}
 
 	}

@@ -7,4 +7,5 @@ import org.openhds.mobile.activity.NavigateActivity;
 public interface FormPayloadConsumer {
 	public void consumeFormPayload(Map<String, String> formPayload,
 			NavigateActivity navigateActivity);
+	public void postFillFormPayload(Map<String, String> formPayload);
 }
