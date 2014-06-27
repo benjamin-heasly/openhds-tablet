@@ -11,6 +11,9 @@ public class Location implements Serializable {
 	private String latitude;
 	private String longitude;
 	private String hierarchyExtId;
+    private String communityName;
+    private String localityName;
+    private String sectorName;
 
 	public String getExtId() {
 		return extId;
@@ -51,4 +54,28 @@ public class Location implements Serializable {
 	public void setHierarchyExtId(String hierarchyExtId) {
 		this.hierarchyExtId = hierarchyExtId;
 	}
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String getLocalityName() {
+        return localityName;
+    }
+
+    public void setLocalityName(String localityName) {
+        this.localityName = localityName;
+    }
+
+    public String getSectorName() {
+        return sectorName;
+    }
+
+    public void setSectorName(String sectorName) {
+        this.sectorName = sectorName;
+    }
 }

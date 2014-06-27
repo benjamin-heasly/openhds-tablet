@@ -5,20 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.activity.CensusActivity;
 import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
-import org.openhds.mobile.projectdata.ProjectFormFields.Individuals;
-import org.openhds.mobile.projectdata.ProjectResources.Relationship;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 
 public class CensusQueryHelper implements QueryHelper {
@@ -28,6 +25,7 @@ public class CensusQueryHelper implements QueryHelper {
 	public static final String REGION_HIERARCHY_LEVEL_NAME = "Region";
 	public static final String PROVINCE_HIERARCHY_LEVEL_NAME = "Province";
 	public static final String DISTRICT_HIERARCHY_LEVEL_NAME = "District";
+	public static final String LOCALITY_HIERARCHY_LEVEL_NAME = "Locality";
 	public static final String MAP_AREA_HIERARCHY_LEVEL_NAME = "MapArea";
 	public static final String SECTOR_HIERARCHY_LEVEL_NAME = "Sector";
 
@@ -38,30 +36,33 @@ public class CensusQueryHelper implements QueryHelper {
 	public List<QueryResult> getAll(ContentResolver contentResolver,
 			String state) {
 
-		if (state.equals(CensusActivity.REGION_STATE)) {
+		if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
 					REGION_HIERARCHY_LEVEL_NAME);
 			return getHierarchyQueryResultList(cursor, state);
-		} else if (state.equals(CensusActivity.PROVINCE_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
 					PROVINCE_HIERARCHY_LEVEL_NAME);
 			return getHierarchyQueryResultList(cursor, state);
-		} else if (state.equals(CensusActivity.DISTRICT_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
 					DISTRICT_HIERARCHY_LEVEL_NAME);
 			return getHierarchyQueryResultList(cursor, state);
-		} else if (state.equals(CensusActivity.MAP_AREA_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
+			Cursor cursor = Queries.getHierarchysByLevel(contentResolver, LOCALITY_HIERARCHY_LEVEL_NAME);
+			return getHierarchyQueryResultList(cursor, state);
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
 					MAP_AREA_HIERARCHY_LEVEL_NAME);
 			return getHierarchyQueryResultList(cursor, state);
-		} else if (state.equals(CensusActivity.SECTOR_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
 					SECTOR_HIERARCHY_LEVEL_NAME);
 			return getHierarchyQueryResultList(cursor, state);
-		} else if (state.equals(CensusActivity.HOUSEHOLD_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getAllLocations(contentResolver);
 			return getLocationQueryResultList(cursor, state);
-		} else if (state.equals(CensusActivity.INDIVIDUAL_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
 			Cursor cursor = Queries.getAllIndividuals(contentResolver);
 			return getIndividualQueryResultList(cursor, state);
 		}
@@ -71,31 +72,35 @@ public class CensusQueryHelper implements QueryHelper {
 	public QueryResult getIfExists(ContentResolver contentResolver,
 			String state, String extId) {
 
-		if (state.equals(CensusActivity.REGION_STATE)) {
+		if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
 			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
 			cursor.moveToFirst();
 			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state.equals(CensusActivity.PROVINCE_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)) {
 			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
 			cursor.moveToFirst();
 			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state.equals(CensusActivity.DISTRICT_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)) {
 			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
 			cursor.moveToFirst();
 			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state.equals(CensusActivity.MAP_AREA_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
 			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
 			cursor.moveToFirst();
 			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state.equals(CensusActivity.SECTOR_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
 			cursor.moveToFirst();
 			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state.equals(CensusActivity.HOUSEHOLD_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
+			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
+			cursor.moveToFirst();
+			return getHierarchyQueryResult(cursor, state, true);
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getLocationByExtId(contentResolver, extId);
 			cursor.moveToFirst();
 			return getLocationQueryResult(cursor, state, true);
-		} else if (state.equals(CensusActivity.INDIVIDUAL_STATE)) {
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
 			Cursor cursor = Queries
 					.getIndividualByExtId(contentResolver, extId);
 			cursor.moveToFirst();
@@ -109,18 +114,23 @@ public class CensusQueryHelper implements QueryHelper {
 			QueryResult qr, String childState) {
 		String state = qr.getState();
 
-		if (state.equals(CensusActivity.REGION_STATE)
-				|| state.equals(CensusActivity.PROVINCE_STATE)
-				|| state.equals(CensusActivity.DISTRICT_STATE)
-				|| state.equals(CensusActivity.MAP_AREA_STATE)) {
+		if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
+				|| state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
+				|| state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)
+				|| state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)
+				|| state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchysByParent(contentResolver,
 					qr.getExtId());
 			return getHierarchyQueryResultList(cursor, childState);
-		} else if (state.equals(CensusActivity.SECTOR_STATE)) {
-			Cursor cursor = Queries.getLocationsByHierachy(contentResolver,
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
+			Cursor cursor = Queries.getHierarchyByExtId(contentResolver,
 					qr.getExtId());
-			return getLocationQueryResultList(cursor, childState);
-		} else if (state.equals(CensusActivity.HOUSEHOLD_STATE)) {
+			cursor.moveToFirst();
+			LocationHierarchy sector = Converter.toHierarchy(cursor, true);
+			Cursor sectorCursor = Queries.getLocationsBySectorName(contentResolver, sector.getName());
+			sectorCursor.moveToFirst();
+			return getLocationQueryResultList(sectorCursor, childState);
+		} else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getIndividualsByResidency(contentResolver,
 					qr.getExtId());
 			return getIndividualQueryResultList(cursor, childState);
@@ -226,7 +236,7 @@ public class CensusQueryHelper implements QueryHelper {
 		qr.setState(state);
 		
 
-		if (state.equals(CensusActivity.BOTTOM_STATE)) {
+		if (state.equals(ProjectActivityBuilder.CensusActivityModule.BOTTOM_STATE)) {
 			// TODO: display detailed view of individual.
 
 		} else {

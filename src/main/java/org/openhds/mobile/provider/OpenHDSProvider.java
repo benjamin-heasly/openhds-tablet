@@ -188,6 +188,12 @@ public class OpenHDSProvider extends ContentProvider {
 				OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE);
 		locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_NAME,
 				OpenHDS.Locations.COLUMN_LOCATION_NAME);
+        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME,
+                OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME);
+        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME,
+                OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME);
+        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME,
+                OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME);
 
 		hierarchyitemsProjectionMap = new HashMap<String, String>();
 		hierarchyitemsProjectionMap.put(OpenHDS.HierarchyItems._ID,
@@ -369,7 +375,10 @@ public class OpenHDSProvider extends ContentProvider {
 					+ " TEXT NOT NULL,"
 					+ OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"
 					+ OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE + " TEXT,"
-					+ OpenHDS.Locations.COLUMN_LOCATION_NAME
+                    + OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME+ " TEXT,"
+                    + OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME + " TEXT,"
+                    + OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME + " TEXT,"
+                    + OpenHDS.Locations.COLUMN_LOCATION_NAME
 					+ " TEXT NOT NULL);"
 					+ " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON "
 					+ OpenHDS.Locations.TABLE_NAME + "("
