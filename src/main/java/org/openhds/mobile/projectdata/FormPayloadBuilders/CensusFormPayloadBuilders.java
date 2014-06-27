@@ -129,9 +129,8 @@ public class CensusFormPayloadBuilders {
 
 			addMinimalFormPayload(formPayload, navigateActivity);
 			addNewIndividualPayload(formPayload, navigateActivity);
-
-			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
-					ProjectResources.Relationship.RELATION_TO_HOH_TYPE_HEAD);
+			
+			formPayload.put(ProjectFormFields.Individuals.HEAD_PREFILLED_FLAG, "true");
 
 		}
 
