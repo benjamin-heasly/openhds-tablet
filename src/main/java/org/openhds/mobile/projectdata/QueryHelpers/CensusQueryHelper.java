@@ -10,7 +10,7 @@ import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
-import org.openhds.mobile.model.Relationship;
+import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectResources;
 
@@ -120,7 +120,8 @@ public class CensusQueryHelper implements QueryHelper {
 			Cursor cursor = Queries
 					.getIndividualByExtId(contentResolver, extId);
 			cursor.moveToFirst();
-			return getIndividualQueryResult(cursor, contentResolver, state, true);
+			return getIndividualQueryResult(cursor, contentResolver, state,
+					true);
 		}
 
 		return null;
@@ -269,17 +270,20 @@ public class CensusQueryHelper implements QueryHelper {
 
 		if (null != resolver) {
 
-			Cursor relationshipCursor = Queries.getRelationshipByIndividualB(
-					resolver, individual.getExtId());
+			Cursor membershipCursor = Queries
+					.getMembershipByHouseholdAndIndividualExtId(resolver,
+							individual.getCurrentResidence(),
+							individual.getExtId());
 
-			relationshipCursor.moveToFirst();
-			Relationship relationship = Converter.toRelationship(
-					relationshipCursor, close);
+			membershipCursor.moveToFirst();
+			Membership membership = Converter.toMembership(membershipCursor,
+					true);
 
 			qr.getStringIdsPayLoad().put(
 					R.string.individual_relationship_to_head_label,
 					ProjectResources.Relationship
-							.getRelationshipStringId(relationship.getType()));
+							.getRelationshipStringId(membership
+									.getRelationshipToHead()));
 		}
 
 		return qr;
