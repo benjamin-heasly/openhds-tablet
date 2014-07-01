@@ -23,7 +23,6 @@ import android.widget.TextView;
 public class IndividualDetailFragment extends DetailFragment {
 
 	LinearLayout detailContainer;
-
 	int greenLabel;
 	int greenValue;
 	int yellowLabel;
@@ -66,6 +65,10 @@ public class IndividualDetailFragment extends DetailFragment {
 		LinearLayout membershipInfoContainer = (LinearLayout) detailContainer
 				.findViewById(R.id.individual_detail_frag_membership_info);
 
+		personalInfoContainer.removeAllViews();
+		contactInfoContainer.removeAllViews();
+		membershipInfoContainer.removeAllViews();
+		
 		// Draw extId
 		TextView extIdTextView = (TextView) detailContainer
 				.findViewById(R.id.individual_detail_frag_extid);
@@ -165,4 +168,5 @@ public class IndividualDetailFragment extends DetailFragment {
 
 		return memberships;
 	}
+
 }

@@ -132,7 +132,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			valueFragment = (HierarchyValueFragment) fragmentManager
 					.findFragmentByTag(VALUE_FRAGMENT_TAG);
 
-			// draw details if valuefrag is null, the drawing of value frag is
+			// draw details if valuefrag is null, the drawing of valuefrag is
 			// handled in onResume().
 			if (null == valueFragment) {
 				valueFragment = new HierarchyValueFragment();
@@ -212,15 +212,18 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			currentResults = queryHelper.getChildren(getContentResolver(),
 					previousSelection, state);
 		}
-		// make sure that listeners will fire for the current state
 
+		boolean isAdded = valueFragment.isAdded();
+
+		// make sure that listeners will fire for the current state
 		stateMachine.transitionTo(stateSequence.get(0));
 		stateMachine.transitionTo(state);
 
-		if (valueFragment.isAdded()) {
+		if (isAdded) {
 			valueFragment.populateValues(currentResults);
 		} else {
-			detailFragment.setUpDetails();
+			showDetailFragment();
+			detailToggleFragment.setButtonHighlighted(true);
 		}
 	}
 
@@ -339,6 +342,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
 	private void showValueFragment() {
 
+		// there is only 1 value fragment that can be added
 		if (!valueFragment.isAdded()) {
 			getFragmentManager()
 					.beginTransaction()
@@ -351,6 +355,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	}
 
 	private void showDetailFragment() {
+
+		// we don't check if it is added here because there are detail fragments
+		// for each state
 
 		detailFragment = getDetailFragmentForCurrentState();
 		detailFragment.setNavigateActivity(this);
@@ -388,6 +395,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 				&& !shouldShowDetailFragment()) {
 
 			detailToggleFragment.setButtonEnabled(true);
+			if (!valueFragment.isAdded()) {
+				detailToggleFragment.setButtonHighlighted(true);
+			}
 		} else {
 			detailToggleFragment.setButtonEnabled(false);
 		}
@@ -451,6 +461,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			if (shouldShowDetailFragment()) {
 				showDetailFragment();
 			} else {
+				showValueFragment();
 				valueFragment.populateValues(currentResults);
 			}
 			updateToggleButton();
@@ -462,9 +473,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		@Override
 		public void onExitState() {
 			String state = getState();
-			showValueFragment();
 			updateButtonLabel(state);
-
 		}
 	}
 

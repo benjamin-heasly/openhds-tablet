@@ -1,7 +1,6 @@
 package org.openhds.mobile.fragment.detailfragments;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.database.queries.QueryResult;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 public class DetailFragment extends Fragment {
 
 	protected NavigateActivity navigateActivity;
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
@@ -33,10 +32,10 @@ public class DetailFragment extends Fragment {
 		super.onResume();
 	}
 
-	public void setUpDetails(){
-		
-	}
-	
+	public void setUpDetails() {
+
+	};
+
 	public void setNavigateActivity(NavigateActivity navigateActivity) {
 		this.navigateActivity = navigateActivity;
 	}

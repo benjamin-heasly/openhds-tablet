@@ -1,14 +1,13 @@
 package org.openhds.mobile.fragment.detailfragments;
 
+import static org.openhds.mobile.utilities.LayoutUtils.makeDetailFragmentTextView;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
-import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.SocialGroup;
 
-import static org.openhds.mobile.utilities.LayoutUtils.makeDetailFragmentTextView;
-import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class HouseholdDetailFragment extends DetailFragment {
-
 	LinearLayout detailContainer;
 	int greenLabel;
 	int greenValue;
@@ -45,6 +43,8 @@ public class HouseholdDetailFragment extends DetailFragment {
 			LinearLayout socialGroupBasicInfoContainer = (LinearLayout) detailContainer
 					.findViewById(R.id.household_detail_frag_basic_info);
 
+			socialGroupBasicInfoContainer.removeAllViews();
+
 			TextView extIdTextView = (TextView) detailContainer
 					.findViewById(R.id.household_detail_frag_extid);
 			extIdTextView.setText(socialGroup.getExtId());
@@ -61,6 +61,7 @@ public class HouseholdDetailFragment extends DetailFragment {
 					getActivity(), getString(R.string.household_member_count),
 					getMemberCount(socialGroup.getExtId()), greenLabel,
 					greenValue));
+
 		} else {
 			TextView extIdTextView = (TextView) detailContainer
 					.findViewById(R.id.household_detail_frag_extid);
@@ -95,4 +96,5 @@ public class HouseholdDetailFragment extends DetailFragment {
 		return memberCount;
 
 	}
+
 }

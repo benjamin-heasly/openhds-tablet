@@ -2,7 +2,6 @@ package org.openhds.mobile.projectdata.QueryHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.Converter;
@@ -11,8 +10,8 @@ import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 
 import android.content.ContentResolver;
@@ -73,7 +72,7 @@ public class CensusQueryHelper implements QueryHelper {
 		} else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
 			Cursor cursor = Queries.getAllIndividuals(contentResolver);
-			return getIndividualQueryResultList(cursor, state);
+			return getIndividualQueryResultList(cursor, contentResolver, state);
 		}
 		return new ArrayList<QueryResult>();
 	}
@@ -121,7 +120,7 @@ public class CensusQueryHelper implements QueryHelper {
 			Cursor cursor = Queries
 					.getIndividualByExtId(contentResolver, extId);
 			cursor.moveToFirst();
-			return getIndividualQueryResult(cursor, state, true);
+			return getIndividualQueryResult(cursor, contentResolver, state, true);
 		}
 
 		return null;
@@ -154,7 +153,9 @@ public class CensusQueryHelper implements QueryHelper {
 				.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getIndividualsByResidency(contentResolver,
 					qr.getExtId());
-			return getIndividualQueryResultList(cursor, childState);
+
+			return getIndividualQueryResultList(cursor, contentResolver,
+					childState);
 		}
 
 		return new ArrayList<QueryResult>();
@@ -227,7 +228,7 @@ public class CensusQueryHelper implements QueryHelper {
 	}
 
 	private static List<QueryResult> getIndividualQueryResultList(
-			Cursor cursor, String state) {
+			Cursor cursor, ContentResolver resolver, String state) {
 		List<QueryResult> results = new ArrayList<QueryResult>();
 
 		if (null == cursor || cursor.getCount() < 1) {
@@ -235,7 +236,7 @@ public class CensusQueryHelper implements QueryHelper {
 		}
 
 		while (cursor.moveToNext()) {
-			results.add(getIndividualQueryResult(cursor, state, false));
+			results.add(getIndividualQueryResult(cursor, resolver, state, false));
 		}
 
 		cursor.close();
@@ -244,13 +245,11 @@ public class CensusQueryHelper implements QueryHelper {
 	}
 
 	private static QueryResult getIndividualQueryResult(Cursor cursor,
-			String state, boolean close) {
+			ContentResolver resolver, String state, boolean close) {
 
 		if (null == cursor || cursor.getCount() < 1) {
 			return null;
 		}
-
-		// query for
 
 		Individual individual = Converter.toIndividual(cursor, close);
 		QueryResult qr = new QueryResult();
@@ -258,19 +257,29 @@ public class CensusQueryHelper implements QueryHelper {
 		qr.setName(Individual.getFullName(individual));
 		qr.setState(state);
 
-		if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.BOTTOM_STATE)) {
-			// TODO: display detailed view of individual.
+		// might be the gross way to do this...
 
-		} else {
+		qr.getStringsPayLoad().put(R.string.individual_other_names_label,
+				individual.getOtherNames());
+		qr.getStringsPayLoad().put(R.string.individual_age_label,
+				Individual.getAgeWithUnits(individual));
+		qr.getStringsPayLoad().put(
+				R.string.individual_language_preference_label,
+				individual.getLanguagePreference());
 
-			qr.getStringsPayLoad().put(R.string.individual_other_names_label,
-					individual.getOtherNames());
-			qr.getStringsPayLoad().put(R.string.individual_age_label,
-					Individual.getAgeWithUnits(individual));
-			qr.getStringsPayLoad().put(R.string.individual_language_preference_label,
-					individual.getLanguagePreference());
+		if (null != resolver) {
 
+			Cursor relationshipCursor = Queries.getRelationshipByIndividualB(
+					resolver, individual.getExtId());
+
+			relationshipCursor.moveToFirst();
+			Relationship relationship = Converter.toRelationship(
+					relationshipCursor, close);
+
+			qr.getStringIdsPayLoad().put(
+					R.string.individual_relationship_to_head_label,
+					ProjectResources.Relationship
+							.getRelationshipStringId(relationship.getType()));
 		}
 
 		return qr;

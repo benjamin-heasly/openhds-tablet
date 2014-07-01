@@ -57,7 +57,8 @@ public class CensusFormPayloadConsumers {
 					.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
 
 			Cursor cursor = Queries.getHeadOfHouseholdByHouseholdExtId(
-					navigateActivity.getContentResolver(), selectedLocation.getExtId());
+					navigateActivity.getContentResolver(),
+					selectedLocation.getExtId());
 			cursor.moveToFirst();
 			Individual currentHeadOfHousehold = Converter.toIndividual(cursor,
 					true);
@@ -66,20 +67,21 @@ public class CensusFormPayloadConsumers {
 			Relationship relationship = RelationshipAdapter.create(
 					currentHeadOfHousehold, individual, relationshipType,
 					startDate);
-			RelationshipAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
-					relationship);
+			RelationshipAdapter.insertOrUpdate(
+					navigateActivity.getContentResolver(), relationship);
 
 			// INSERT or UPDATE MEMBERSHIP
 			Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
-					navigateActivity.getContentResolver(), selectedLocation.getExtId());
+					navigateActivity.getContentResolver(),
+					selectedLocation.getExtId());
 			if (socialGroupCursor.moveToFirst()) {
 				SocialGroup socialGroup = Converter.toSocialGroup(
 						socialGroupCursor, true);
 				Membership membership = MembershipAdapter.create(individual,
 						socialGroup, relationshipType, membershipStatus);
 
-				MembershipAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
-						membership);
+				MembershipAdapter.insertOrUpdate(
+						navigateActivity.getContentResolver(), membership);
 			}
 			socialGroupCursor.close();
 
@@ -88,7 +90,7 @@ public class CensusFormPayloadConsumers {
 		@Override
 		public void postFillFormPayload(Map<String, String> formPayload) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
@@ -97,7 +99,7 @@ public class CensusFormPayloadConsumers {
 		@Override
 		public void consumeFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
-			
+
 			postFillFormPayload(formPayload);
 
 			Map<String, QueryResult> hierarchyPath = navigateActivity
@@ -117,54 +119,42 @@ public class CensusFormPayloadConsumers {
 
 			// Update the name of the location
 			Cursor locationCursor = Queries.getLocationByExtId(
-					navigateActivity.getContentResolver(), selectedLocation.getExtId());
+					navigateActivity.getContentResolver(),
+					selectedLocation.getExtId());
 			locationCursor.moveToNext();
 			Location location = Converter.toLocation(locationCursor, true);
 			String locationName = individual.getLastName();
 			location.setName(locationName);
 			selectedLocation.setName(locationName);
-			LocationAdapter.update(navigateActivity.getContentResolver(), location);
+			LocationAdapter.update(navigateActivity.getContentResolver(),
+					location);
 
-			// Insert or Create SocialGroup
-			Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
-					navigateActivity.getContentResolver(), selectedLocation.getExtId());
+			// create socialgroup
 			SocialGroup socialGroup;
+			socialGroup = SocialGroupAdapter.create(
+					selectedLocation.getExtId(), individual);
+			SocialGroupAdapter.insertOrUpdate(
+					navigateActivity.getContentResolver(), socialGroup);
 
-			if (socialGroupCursor.moveToFirst()) {
-				// update the SocialGroup
-				socialGroup = Converter.toSocialGroup(socialGroupCursor, true);
-				socialGroup.setGroupHead(individual.getExtId());
-				socialGroup.setGroupName(locationName);
-				SocialGroupAdapter.update(navigateActivity.getContentResolver(),
-						socialGroup);
-			} else {
-				// create the SocialGroup
-				socialGroup = SocialGroupAdapter.create(
-						selectedLocation.getExtId(), individual);
-				SocialGroupAdapter.insertOrUpdate(
-						navigateActivity.getContentResolver(), socialGroup);
-			}
-			socialGroupCursor.close();
-
-			// create membership of Head of Household in own
-			// household
+			// create membership
 			Membership membership = MembershipAdapter.create(individual,
 					socialGroup, relationshipType, membershipStatus);
-			MembershipAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
-					membership);
+			MembershipAdapter.insertOrUpdate(
+					navigateActivity.getContentResolver(), membership);
 
 			// Set head of household's relationship to himself.
 			Relationship relationship = RelationshipAdapter.create(individual,
 					individual, relationshipType, startDate);
-			RelationshipAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
-					relationship);
+			RelationshipAdapter.insertOrUpdate(
+					navigateActivity.getContentResolver(), relationship);
 
 		}
 
 		@Override
 		public void postFillFormPayload(Map<String, String> formPayload) {
-			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD, "1");
-			
+			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
+					"1");
+
 		}
 
 	}
@@ -175,13 +165,14 @@ public class CensusFormPayloadConsumers {
 		public void consumeFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
 			// TODO Auto-generated method stub
-			new AddMemberOfHousehold().consumeFormPayload(formPayload, navigateActivity);
+			new AddMemberOfHousehold().consumeFormPayload(formPayload,
+					navigateActivity);
 		}
 
 		@Override
 		public void postFillFormPayload(Map<String, String> formPayload) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}

@@ -32,7 +32,7 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 
 		LinearLayout toggleContainer = (LinearLayout) inflater.inflate(
-				R.layout.hierarchy_toggle_fragment, container, false);
+				R.layout.detail_toggle_fragment, container, false);
 
 		layout = makeNewGenericLayout(getActivity(), null, null, null, this,
 				toggleContainer, 0, null, null);

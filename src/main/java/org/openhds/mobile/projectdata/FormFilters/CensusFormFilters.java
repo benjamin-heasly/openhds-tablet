@@ -18,7 +18,8 @@ import android.database.Cursor;
 // button (aka it's amIValid() == false).
 public class CensusFormFilters {
 
-	private static boolean hasHeadOfHousehold(NavigateActivity navigateActivity,
+	private static boolean hasHeadOfHousehold(
+			NavigateActivity navigateActivity,
 			Map<String, QueryResult> hierarchyPath) {
 
 		String socialGroupExtId = hierarchyPath.get(
@@ -29,14 +30,7 @@ public class CensusFormFilters {
 				navigateActivity.getContentResolver(), socialGroupExtId);
 
 		if (socialGroupCursor.moveToFirst()) {
-
-			SocialGroup sg = Converter.toSocialGroup(socialGroupCursor, true);
-
-			if (!"UNK".equals(sg.getGroupHead())) {
-
-				return true;
-
-			}
+			return true;
 		}
 		return false;
 	}
