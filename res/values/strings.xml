@@ -114,11 +114,13 @@
     <string name="add_member_of_household_label">Add Member of Household</string>
     <string name="edit_individual_label">Edit Individual</string>
     <string name="house_of_prefix">House of</string>
+    
+        <!-- Details Fragment Values -->
     <string name="toggle_fragment_button_show_details">Show Details</string>
     <string name="toggle_fragment_button_none">None</string>
     <string name="toggle_fragment_button_show_children">Show Children</string>
     <string name="not_available">N/A</string>
-        <string name="details_not_available">Details Not Available</string>
+    <string name="details_not_available">Details Not Available</string>
 
     <!-- Database/Form Values -->
     <string name="db_val_age_units_years">Years</string>
