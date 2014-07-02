@@ -54,8 +54,7 @@ public class FormHelper {
 		return intent;
 	}
 
-	
-	//Pull out to ODKCollectHelper
+	// Pull out to ODKCollectHelper
 	public boolean checkFormInstanceStatus() {
 		Cursor cursor = resolver.query(contentUri, new String[] {
 				InstanceProviderAPI.InstanceColumns.STATUS,
@@ -77,10 +76,12 @@ public class FormHelper {
 
 	public Map<String, String> getFormInstanceData() {
 
+		formFieldNames.clear();
+		
 		if (null == finalizedFormFilePath) {
 			return null;
 		}
-		Map<String, String> finalizedFormData = new HashMap<String, String>();
+
 		SAXBuilder builder = new SAXBuilder();
 		try {
 
@@ -91,14 +92,48 @@ public class FormHelper {
 
 			while (itr.hasNext()) {
 				Element child = itr.next();
-				finalizedFormData.put(child.getName(), child.getText());
+				formFieldNames.put(child.getName(), child.getText());
 			}
 
 		} catch (Exception e) {
 			return null;
 		}
 
-		return finalizedFormData;
+		return formFieldNames;
+	}
+
+	// this method assumes/relies on finalizedFormFilePath is NOT null.
+	public boolean updateExistingFormInstance() {
+
+		try {
+			SAXBuilder builder = new SAXBuilder();
+
+			Document oldForm = builder.build(new File(finalizedFormFilePath));
+			Document newForm = new Document();
+			
+			Element root = oldForm.getRootElement();
+			root.detach();
+			root.removeContent();
+			newForm.setRootElement(root);
+
+			for (String elementName : formFieldNames.keySet()) {
+
+				Element child = new Element(elementName);
+				child.setText(formFieldNames.get(elementName));
+				newForm.getRootElement().addContent(child);
+			}
+
+			FileOutputStream fos = new FileOutputStream(finalizedFormFilePath);
+			XMLOutputter xmlOutput = new XMLOutputter();
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(newForm, fos);
+			fos.close();
+
+			return true;
+
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public boolean newFormInstance(FormBehaviour form,
@@ -120,11 +155,11 @@ public class FormHelper {
 			String jrFormId = cursor.getString(0);
 			String formFilePath = cursor.getString(1);
 
-			SAXBuilder builder = new SAXBuilder();
-
 			try {
+				SAXBuilder builder = new SAXBuilder();
 
 				// get reference to unfilled form
+
 				Document blankDoc = builder.build(new File(formFilePath));
 
 				Element root = blankDoc.getRootElement();
@@ -169,6 +204,7 @@ public class FormHelper {
 
 				contentUri = shareOdkFormInstance(editableFormFile,
 						editableFormFile.getName(), jrFormId);
+				return true;
 
 			} catch (Exception e) {
 				return false;
@@ -178,7 +214,7 @@ public class FormHelper {
 		return false;
 	}
 
-	//ODKCollectHelper
+	// ODKCollectHelper
 	private Uri shareOdkFormInstance(File targetFile, String displayName,
 			String formId) {
 		ContentValues values = new ContentValues();

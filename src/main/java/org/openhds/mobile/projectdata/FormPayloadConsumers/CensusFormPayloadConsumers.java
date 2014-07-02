@@ -18,9 +18,6 @@ import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityModule;
-import org.openhds.mobile.projectdata.ProjectFormFields.General;
-import org.openhds.mobile.projectdata.ProjectFormFields.Individuals;
 
 import android.database.Cursor;
 
@@ -39,7 +36,7 @@ public class CensusFormPayloadConsumers {
 	public static class AddMemberOfHousehold implements FormPayloadConsumer {
 
 		@Override
-		public void consumeFormPayload(Map<String, String> formPayload,
+		public boolean consumeFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
 
 			Map<String, QueryResult> hierarchyPath = navigateActivity
@@ -85,6 +82,8 @@ public class CensusFormPayloadConsumers {
 			}
 			socialGroupCursor.close();
 
+			return false;
+
 		}
 
 		@Override
@@ -97,10 +96,13 @@ public class CensusFormPayloadConsumers {
 	public static class AddHeadOfHousehold implements FormPayloadConsumer {
 
 		@Override
-		public void consumeFormPayload(Map<String, String> formPayload,
+		public boolean consumeFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
 
 			postFillFormPayload(formPayload);
+			boolean postFilled = true;
+
+
 
 			Map<String, QueryResult> hierarchyPath = navigateActivity
 					.getHierarchyPath();
@@ -148,6 +150,8 @@ public class CensusFormPayloadConsumers {
 			RelationshipAdapter.insertOrUpdate(
 					navigateActivity.getContentResolver(), relationship);
 
+			return postFilled;
+
 		}
 
 		@Override
@@ -162,11 +166,13 @@ public class CensusFormPayloadConsumers {
 	public static class EditIndividual implements FormPayloadConsumer {
 
 		@Override
-		public void consumeFormPayload(Map<String, String> formPayload,
+		public boolean consumeFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
 			// TODO Auto-generated method stub
 			new AddMemberOfHousehold().consumeFormPayload(formPayload,
 					navigateActivity);
+			return false;
+
 		}
 
 		@Override

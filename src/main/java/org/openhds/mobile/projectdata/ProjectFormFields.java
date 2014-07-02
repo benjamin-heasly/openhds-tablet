@@ -16,6 +16,7 @@ public class ProjectFormFields {
 		public static final String REGION_STATE_FIELD_NAME = "regionExtId";
 		public static final String PROVINCE_STATE_FIELD_NAME = "provinceExtId";
 		public static final String DISTRICT_STATE_FIELD_NAME = "districtExtId";
+		public static final String LOCALITY_STATE_FIELD_NAME = "localityExtId";
 		public static final String MAP_AREA_STATE_FIELD_NAME = "mapAreaExtId";
 		public static final String SECTOR_STATE_FIELD_NAME = "sectorExtId";
 		public static final String HOUSEHOLD_STATE_FIELD_NAME = "householdExtId";
@@ -25,21 +26,32 @@ public class ProjectFormFields {
 		private static final Map<String, String> stateFieldNames = new HashMap<String, String>();
 
 		static {
-			stateFieldNames.put(CensusActivity.REGION_STATE,
+			stateFieldNames.put(
+					ProjectActivityBuilder.CensusActivityModule.REGION_STATE,
 					REGION_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.PROVINCE_STATE,
+			stateFieldNames.put(
+					ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE,
 					PROVINCE_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.DISTRICT_STATE,
+			stateFieldNames.put(
+					ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE,
 					DISTRICT_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.MAP_AREA_STATE,
+			stateFieldNames.put(
+					ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE,
+					LOCALITY_STATE_FIELD_NAME);
+			stateFieldNames.put(
+					ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE,
 					MAP_AREA_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.SECTOR_STATE,
+			stateFieldNames.put(
+					ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE,
 					SECTOR_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.HOUSEHOLD_STATE,
-					HOUSEHOLD_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.INDIVIDUAL_STATE,
-					INDIVIDUAL_STATE_FIELD_NAME);
-			stateFieldNames.put(CensusActivity.BOTTOM_STATE,
+			stateFieldNames
+					.put(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE,
+							HOUSEHOLD_STATE_FIELD_NAME);
+			stateFieldNames
+					.put(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE,
+							INDIVIDUAL_STATE_FIELD_NAME);
+			stateFieldNames.put(
+					ProjectActivityBuilder.CensusActivityModule.BOTTOM_STATE,
 					BOTTOM_STATE_FIELD_NAME);
 
 		}
@@ -126,9 +138,9 @@ public class ProjectFormFields {
 					.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
 							HOUSEHOLD_EXTID);
 			columnsToFieldNames
-			.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
-					MEMBER_STATUS);
-			
+					.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
+							MEMBER_STATUS);
+
 		}
 
 		public static String getFieldNameFromColumn(String column) {

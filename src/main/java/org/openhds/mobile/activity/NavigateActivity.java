@@ -424,8 +424,13 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			FormBehaviour form = formHelper.getForm();
 			formHelper.checkFormInstanceStatus();
 			if (null != formHelper.getFinalizedFormFilePath()) {
-				form.getFormPayloadConsumer().consumeFormPayload(
-						formHelper.getFormInstanceData(), this);
+
+				if (form.getFormPayloadConsumer().consumeFormPayload(
+						formHelper.getFormInstanceData(), this)) {
+					
+					formHelper.updateExistingFormInstance();
+
+				}
 			}
 
 		}
