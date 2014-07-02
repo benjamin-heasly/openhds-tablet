@@ -1,6 +1,5 @@
 package org.openhds.mobile.fragment;
 
-import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
 
@@ -9,6 +8,7 @@ import org.openhds.mobile.activity.NavigateActivity;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,12 +60,15 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 			return;
 		}
 		if (!isEnabled) {
-			layout.setBackgroundColor(getResources().getColor(R.color.Gray));
-			configureGenericLayout(getActivity(), layout, getResources()
-					.getString(R.string.toggle_fragment_button_none), null,
-					null, null);
-			layout.setClickable(false);
+			// layout.setBackgroundColor(getResources().getColor(R.color.Gray));
+			// configureGenericLayout(getActivity(), layout, getResources()
+			// .getString(R.string.toggle_fragment_button_none), null,
+			// null, null);
+			// layout.setClickable(false);
+
+			layout.setVisibility(ViewGroup.INVISIBLE);
 		} else {
+			layout.setVisibility(ViewGroup.VISIBLE);
 			layout.setClickable(true);
 			setButtonHighlighted(false);
 		}

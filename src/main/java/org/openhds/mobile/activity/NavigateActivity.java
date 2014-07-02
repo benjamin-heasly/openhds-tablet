@@ -18,11 +18,14 @@ import org.openhds.mobile.fragment.detailfragments.DefaultDetailFragment;
 import org.openhds.mobile.fragment.detailfragments.DetailFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.model.FormHelper;
+import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
+import org.openhds.mobile.utilities.EncryptionHelper;
+import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -427,7 +430,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
 				if (form.getFormPayloadConsumer().consumeFormPayload(
 						formHelper.getFormInstanceData(), this)) {
-					
+
 					formHelper.updateExistingFormInstance();
 
 				}
@@ -437,6 +440,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		if (resultCode == RESULT_CANCELED) {
 			// Write your code if there's no result
 		}
+
+		//encrypt files regardless.
+		EncryptionHelper.encryptFiles(FormInstance
+				.toListOfFiles(OdkCollectHelper
+						.getAllFormInstances(getContentResolver())), this);
 	}
 
 	public QueryResult getCurrentSelection() {
