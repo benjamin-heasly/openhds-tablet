@@ -435,13 +435,13 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
 				}
 			}
-
+			showValueFragment();
 		}
 		if (resultCode == RESULT_CANCELED) {
 			// Write your code if there's no result
 		}
 
-		//encrypt files regardless.
+		// encrypt files regardless.
 		EncryptionHelper.encryptFiles(FormInstance
 				.toListOfFiles(OdkCollectHelper
 						.getAllFormInstances(getContentResolver())), this);

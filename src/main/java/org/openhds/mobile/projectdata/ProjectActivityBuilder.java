@@ -112,7 +112,7 @@ public class ProjectActivityBuilder {
 			detailFragsForStates.put(MAP_AREA_STATE, null);
 			detailFragsForStates.put(SECTOR_STATE, null);
 			detailFragsForStates.put(HOUSEHOLD_STATE, null);
-			detailFragsForStates.put(INDIVIDUAL_STATE, new HouseholdDetailFragment());
+			detailFragsForStates.put(INDIVIDUAL_STATE, null);
 			detailFragsForStates.put(BOTTOM_STATE,
 					new IndividualDetailFragment());
 
