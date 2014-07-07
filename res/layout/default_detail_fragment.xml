@@ -11,7 +11,10 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFC2FF"
-        android:text="NOTHING TO SEE HERE, MOVE ALONG." />
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:text=""
+        android:textColor="#A3FFA3"
+        android:textSize="50sp" />
 
 </LinearLayout>

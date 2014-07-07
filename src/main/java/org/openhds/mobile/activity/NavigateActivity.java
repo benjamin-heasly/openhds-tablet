@@ -451,6 +451,19 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		return currentSelection;
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		int currentStateIndex;
+		if (0 < (currentStateIndex = stateSequence.indexOf(getState()))) {
+
+			jumpUp(stateSequence.get(currentStateIndex - 1));
+
+		} else {
+			super.onBackPressed();
+		}
+	}
+
 	private class HierarchyStateListener implements StateListener {
 
 		@Override
