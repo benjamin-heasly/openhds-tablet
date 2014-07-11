@@ -30,8 +30,11 @@ public class CensusFormFilters {
 				navigateActivity.getContentResolver(), socialGroupExtId);
 
 		if (socialGroupCursor.moveToFirst()) {
+            socialGroupCursor.close();
 			return true;
+
 		}
+        socialGroupCursor.close();
 		return false;
 	}
 

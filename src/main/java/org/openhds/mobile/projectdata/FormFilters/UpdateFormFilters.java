@@ -22,4 +22,17 @@ public class UpdateFormFilters {
 		}
 	}
 
+    public static class RegisterOutMigration implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+
+            if (null != navigateActivity.getCurrentVisit()) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
 }

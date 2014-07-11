@@ -187,4 +187,11 @@ public class ProjectFormFields {
 		
 	}
 
+    public static final class OutMigrations {
+        public static final String OUT_MIGRATION_INDIVIDUAL_EXTID = "outMigrationIndividualExtId";
+        public static final String OUT_MIGRATION_DATE = "outMigrationDate";
+        public static final String OUT_MIGRATION_NAME_OF_DESITINATION = "outMigrationNameOfDestination";
+        public static final String OUT_MIGRATION_REASON = "outMigrationReason";
+    }
+
 }

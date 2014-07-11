@@ -171,5 +171,17 @@
     <!-- UpdateActivity FormBehaviour Labels -->
     <string name="start_a_visit">Start A Visit</string>
     <string name="finish_visit">Finish Visit</string>
+    <string name="out_migration">Register Out-Migration</string>
+
+
+    <!-- NavigateModuleInfo Strings -->
+    <string name="census_portal_label">Start Census Activity</string>
+    <string name="census_portal_description">Add new or edit existing data.</string>
+
+    <string name="update_portal_label">Start Update Activity</string>
+    <string name="update_portal_description">Conduct visits at locations and update changes since the last visit.</string>
+
+
+
 
 </resources>

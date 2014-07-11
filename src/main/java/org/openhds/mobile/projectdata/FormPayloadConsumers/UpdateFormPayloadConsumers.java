@@ -16,10 +16,11 @@ public class UpdateFormPayloadConsumers {
 				NavigateActivity navigateActivity) {
 			// TODO Auto-generated method stub
 
-			navigateActivity.startVisit(new Visit());
+            Visit visit = VisitAdapter.create(formPayload);
 
-			VisitAdapter.insert(navigateActivity.getContentResolver(),
-					VisitAdapter.create(formPayload));
+			navigateActivity.startVisit(visit);
+
+			VisitAdapter.insert(navigateActivity.getContentResolver(),visit);
 
 			return false;
 

@@ -40,4 +40,29 @@ public class UpdateFormPayloadBuilders {
 
 	}
 
+    public static class RegisterOutMigration implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+
+            String outMigrationDate = new SimpleDateFormat("yyyy-MM-dd").format(
+                    Calendar.getInstance().getTime()).toString();
+
+            String individualExtId = navigateActivity.getHierarchyPath()
+                    .get(UpdateActivityModule.INDIVIDUAL_STATE).getExtId();
+
+
+            formPayload.put(ProjectFormFields.OutMigrations.OUT_MIGRATION_DATE, outMigrationDate);
+            formPayload.put(ProjectFormFields.OutMigrations.OUT_MIGRATION_INDIVIDUAL_EXTID,
+                    individualExtId);
+
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+
+        }
+
+    }
+
 }

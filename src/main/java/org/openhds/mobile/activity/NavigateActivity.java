@@ -53,6 +53,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	private static final String DETAIL_FRAGMENT_TAG = "hierarchyDetailFragment";
 	private static final String VISIT_FRAGMENT_TAG = "hierarchyVisitFragment";
 
+    private static final String VISIT_KEY = "visitKey";
+
 	private static Map<String, List<FormBehaviour>> formsForStates;
 	private static Map<String, Integer> stateLabels;
 	private static List<String> stateSequence;
@@ -188,6 +190,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 				}
 			}
 
+            setCurrentVisit((Visit)savedInstanceState.get(VISIT_KEY));
+
 		}
 
 	}
@@ -208,6 +212,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			}
 		}
 
+        savedInstanceState.putSerializable(VISIT_KEY,getCurrentVisit());
 		super.onSaveInstanceState(savedInstanceState);
 	}
 
@@ -241,7 +246,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		boolean isAdded = valueFragment.isAdded();
 
 		// make sure that listeners will fire for the current state
-		refreshHierarchy(getState());
+		refreshHierarchy(state);
 
 		if (isAdded) {
 			showValueFragment();
@@ -250,6 +255,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			showDetailFragment();
 			detailToggleFragment.setButtonHighlighted(true);
 		}
+
+        if(null != getCurrentVisit()){
+            visitFragment.setButtonEnabled(true);
+        }
 	}
 
 	public Map<String, QueryResult> getHierarchyPath() {
@@ -453,14 +462,16 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			formHelper.checkFormInstanceStatus();
 			if (null != formHelper.getFinalizedFormFilePath()) {
 
-				if (form.getFormPayloadConsumer().consumeFormPayload(
+				if (null != form.getFormPayloadConsumer() && form.getFormPayloadConsumer().consumeFormPayload(
 						formHelper.getFormInstanceData(), this)) {
 
 					formHelper.updateExistingFormInstance();
 
 				}
 			}
-			showValueFragment();
+            if(!shouldShowDetailFragment()) {
+                showValueFragment();
+            }
 		}
 		if (resultCode == RESULT_CANCELED) {
 			// Write your code if there's no result

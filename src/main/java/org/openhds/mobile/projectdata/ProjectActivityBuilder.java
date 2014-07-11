@@ -17,6 +17,7 @@ import org.openhds.mobile.projectdata.FormPayloadBuilders.UpdateFormPayloadBuild
 import org.openhds.mobile.projectdata.FormPayloadConsumers.CensusFormPayloadConsumers;
 import org.openhds.mobile.projectdata.FormPayloadConsumers.UpdateFormPayloadConsumers;
 import org.openhds.mobile.projectdata.QueryHelpers.CensusQueryHelper;
+import org.openhds.mobile.projectdata.QueryHelpers.NavigateModuleInfo;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 
 public class ProjectActivityBuilder {
@@ -117,7 +118,7 @@ public class ProjectActivityBuilder {
 			detailFragsForStates.put(MAP_AREA_STATE, null);
 			detailFragsForStates.put(SECTOR_STATE, null);
 			detailFragsForStates.put(HOUSEHOLD_STATE, null);
-			detailFragsForStates.put(INDIVIDUAL_STATE, new HouseholdDetailFragment());
+			detailFragsForStates.put(INDIVIDUAL_STATE, null);
 			detailFragsForStates.put(BOTTOM_STATE,
 					new IndividualDetailFragment());
 
@@ -149,6 +150,23 @@ public class ProjectActivityBuilder {
 			return new CensusQueryHelper();
 		}
 
+        public static class CensusInfo implements NavigateModuleInfo{
+
+            @Override
+            public int getModuleLabelStringId() {
+                return R.string.census_portal_label;
+            }
+
+            @Override
+            public int getModuleDescriptionStringId() {
+                return R.string.census_portal_description;
+            }
+
+            @Override
+            public int getModuleColorId() {
+                return R.color.PowderBlue;
+            }
+        }
 	}
 
 	public static class UpdateActivityModule implements NavigatePluginModule {
@@ -204,8 +222,13 @@ public class ProjectActivityBuilder {
 					R.string.start_a_visit,
 					new UpdateFormFilters.StartAVisit(),
 					new UpdateFormPayloadBuilders.StartAVisit(),
-
 					new UpdateFormPayloadConsumers.StartAVisit()));
+
+            bottomFormList.add(new FormBehaviour("Out_migration",
+                    R.string.out_migration,
+                    new UpdateFormFilters.RegisterOutMigration(),
+                    new UpdateFormPayloadBuilders.RegisterOutMigration(),
+                    null));
 
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -258,6 +281,24 @@ public class ProjectActivityBuilder {
 			return new CensusQueryHelper();
 		}
 
+        public static class UpdateInfo implements NavigateModuleInfo{
+
+            @Override
+            public int getModuleLabelStringId() {
+                return R.string.update_portal_label;
+            }
+
+            @Override
+            public int getModuleDescriptionStringId() {
+                return R.string.update_portal_description;
+            }
+
+            @Override
+            public int getModuleColorId() {
+                return R.color.Blue;
+            }
+        }
+
 	}
 
 	public static NavigatePluginModule getModuleByName(String name) {
@@ -275,5 +316,16 @@ public class ProjectActivityBuilder {
 	public static ArrayList<String> getActivityModuleNames() {
 		return activityModules;
 	}
+
+
+
+    public static NavigateModuleInfo getModuleInfoByName(String name){
+        if (name.equals(CENSUS_ACTIVITY_MODULE)) {
+            return new CensusActivityModule.CensusInfo();
+        } else if (name.equals(UPDATE_ACTIVITY_MODULE)) {
+            return new UpdateActivityModule.UpdateInfo();
+        }
+        return null;
+    }
 
 }
