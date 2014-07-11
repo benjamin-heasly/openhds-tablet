@@ -11,16 +11,20 @@ import java.util.Map;
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.DetailToggleFragment;
+import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
 import org.openhds.mobile.fragment.HierarchySelectionFragment;
 import org.openhds.mobile.fragment.HierarchyValueFragment;
+import org.openhds.mobile.fragment.VisitFragment;
 import org.openhds.mobile.fragment.detailfragments.DefaultDetailFragment;
 import org.openhds.mobile.fragment.detailfragments.DetailFragment;
+import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
+import org.openhds.mobile.model.Visit;
 import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
@@ -40,12 +44,14 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	private DetailToggleFragment detailToggleFragment;
 	private DetailFragment defaultDetailFragment;
 	private DetailFragment detailFragment;
+	private VisitFragment visitFragment;
 
 	private static final String SELECTION_FRAGMENT_TAG = "hierarchySelectionFragment";
 	private static final String VALUE_FRAGMENT_TAG = "hierarchyValueFragment";
 	private static final String FORM_FRAGMENT_TAG = "hierarchyFormFragment";
 	private static final String TOGGLE_FRAGMENT_TAG = "hierarchyToggleFragment";
 	private static final String DETAIL_FRAGMENT_TAG = "hierarchyDetailFragment";
+	private static final String VISIT_FRAGMENT_TAG = "hierarchyVisitFragment";
 
 	private static Map<String, List<FormBehaviour>> formsForStates;
 	private static Map<String, Integer> stateLabels;
@@ -58,6 +64,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	private List<QueryResult> currentResults;
 	private QueryResult currentSelection;
 	private QueryHelper queryHelper;
+	private FieldWorker currentFieldWorker;
+	private Visit currentVisit;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +76,17 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		// ACTIVITY BUILDING ZONE~ //
 		// /////////////////////////////////////////////////////////////////////////////////////////////
 
+		FieldWorker fieldWorker = (FieldWorker) getIntent().getExtras().get(
+				FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
+		setCurrentFieldWorker(fieldWorker);
+
 		String builderName = (String) getIntent().getExtras().get(
 				ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA);
 
 		NavigatePluginModule builder = ProjectActivityBuilder
 				.getModuleByName(builderName);
+
+		setTitle(builderName);
 
 		stateLabels = builder.getStateLabels();
 		stateSequence = builder.getStateSequence();
@@ -104,15 +118,19 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			detailToggleFragment = new DetailToggleFragment();
 			detailToggleFragment.setNavigateActivity(this);
 			defaultDetailFragment = new DefaultDetailFragment();
-
+			visitFragment = new VisitFragment();
+			visitFragment.setNavigateActivity(this);
+	
 			getFragmentManager()
 					.beginTransaction()
-					.add(R.id.left_column, selectionFragment,
+					.add(R.id.left_column_top, selectionFragment,
 							SELECTION_FRAGMENT_TAG)
+					.add(R.id.left_column_bottom, detailToggleFragment,
+							TOGGLE_FRAGMENT_TAG)
 					.add(R.id.middle_column, valueFragment, VALUE_FRAGMENT_TAG)
 					.add(R.id.right_column_top, formFragment, FORM_FRAGMENT_TAG)
-					.add(R.id.right_column_bottom, detailToggleFragment,
-							TOGGLE_FRAGMENT_TAG).commit();
+					.add(R.id.right_column_bottom, visitFragment,
+							VISIT_FRAGMENT_TAG).commit();
 
 		} else {
 
@@ -129,6 +147,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 			detailToggleFragment = (DetailToggleFragment) fragmentManager
 					.findFragmentByTag(TOGGLE_FRAGMENT_TAG);
 			detailToggleFragment.setNavigateActivity(this);
+
+			visitFragment = (VisitFragment) fragmentManager
+					.findFragmentByTag(VISIT_FRAGMENT_TAG);
+			visitFragment.setNavigateActivity(this);
 
 			defaultDetailFragment = new DefaultDetailFragment();
 
@@ -171,6 +193,13 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		hierarchySetup();
+
+	}
+
+	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		for (String state : stateSequence) {
 			if (hierarchyPath.containsKey(state)) {
@@ -180,13 +209,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		}
 
 		super.onSaveInstanceState(savedInstanceState);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		hierarchySetup();
-
 	}
 
 	private void hierarchySetup() {
@@ -219,10 +241,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		boolean isAdded = valueFragment.isAdded();
 
 		// make sure that listeners will fire for the current state
-		stateMachine.transitionTo(stateSequence.get(0));
-		stateMachine.transitionTo(state);
+		refreshHierarchy(getState());
 
 		if (isAdded) {
+			showValueFragment();
 			valueFragment.populateValues(currentResults);
 		} else {
 			showDetailFragment();
@@ -333,13 +355,16 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
 	@Override
 	public void launchForm(FormBehaviour form) {
+
 		Map<String, String> formFieldMap = new HashMap<String, String>();
 
 		form.getFormPayloadBuilder().buildFormPayload(formFieldMap, this);
 
-		formHelper.newFormInstance(form, formFieldMap);
-		Intent intent = formHelper.buildEditFormInstanceIntent();
-		startActivityForResult(intent, 0);
+		if (null != form.getFormName()) {
+			formHelper.newFormInstance(form, formFieldMap);
+			Intent intent = formHelper.buildEditFormInstanceIntent();
+			startActivityForResult(intent, 0);
+		}
 
 	}
 
@@ -464,6 +489,40 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		}
 	}
 
+	public FieldWorker getCurrentFieldWorker() {
+		return currentFieldWorker;
+	}
+
+	public void setCurrentFieldWorker(FieldWorker currentFieldWorker) {
+		this.currentFieldWorker = currentFieldWorker;
+	}
+
+	public Visit getCurrentVisit() {
+		return currentVisit;
+	}
+
+	public void setCurrentVisit(Visit currentVisit) {
+		this.currentVisit = currentVisit;
+	}
+
+	public void startVisit(Visit visit) {
+		setCurrentVisit(visit);
+		visitFragment.setButtonEnabled(true);
+	}
+
+	public void finishVisit() {
+		setCurrentVisit(null);
+		visitFragment.setButtonEnabled(false);
+        refreshHierarchy(getState());
+		
+	}
+
+	// not working??
+	private void refreshHierarchy(String state){
+		stateMachine.transitionTo(stateSequence.get(0));
+		stateMachine.transitionTo(state);
+	}
+	
 	private class HierarchyStateListener implements StateListener {
 
 		@Override

@@ -114,8 +114,8 @@
     <string name="add_member_of_household_label">Add Member of Household</string>
     <string name="edit_individual_label">Edit Individual</string>
     <string name="house_of_prefix">House of</string>
-    
-        <!-- Details Fragment Values -->
+
+    <!-- Details Fragment Values -->
     <string name="toggle_fragment_button_show_details">Show Details</string>
     <string name="toggle_fragment_button_none">None</string>
     <string name="toggle_fragment_button_show_children">Hide Details</string>
@@ -163,5 +163,13 @@
     <string name="household_name">Household Name</string>
     <string name="household_head_extid">Head of Household Ext ID</string>
     <string name="household_member_count">Number of Household Members</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_portal">PortalActivity</string>
+
+    <!-- UpdateActivity FormBehaviour Labels -->
+    <string name="start_a_visit">Start A Visit</string>
+    <string name="finish_visit">Finish Visit</string>
 
 </resources>

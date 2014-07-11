@@ -29,7 +29,7 @@
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:name=".activity.OpeningActivity"
+            android:name="org.openhds.mobile.activity.OpeningActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>
@@ -39,35 +39,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.NavigateActivity"
+            android:name="org.openhds.mobile.activity.NavigateActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.WithActionBar" />
         <activity
-            android:name=".activity.CensusActivity"
+            android:name="org.openhds.mobile.activity.CensusActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.WithActionBar" />
         <activity
-            android:name=".activity.SupervisorMainActivity"
+            android:name="org.openhds.mobile.activity.SupervisorMainActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.WithActionBar" />
         <activity
-            android:name=".activity.FilterActivity"
+            android:name="org.openhds.mobile.activity.FilterActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name=".activity.FilterLocationActivity"
+            android:name="org.openhds.mobile.activity.FilterLocationActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name=".activity.FilterVisitActivity"
+            android:name="org.openhds.mobile.activity.FilterVisitActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name=".activity.FormListActivity"
+            android:name="org.openhds.mobile.activity.FormListActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name=".activity.FormViewActivity"
+            android:name="org.openhds.mobile.activity.FormViewActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="org.openhds.mobile.activity.PortalActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar" />
     </application>

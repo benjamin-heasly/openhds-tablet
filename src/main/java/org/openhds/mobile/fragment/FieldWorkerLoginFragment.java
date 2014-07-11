@@ -3,12 +3,10 @@ package org.openhds.mobile.fragment;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.activity.CensusActivity;
-import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.activity.PortalActivity;
 import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.model.FieldWorker;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -78,17 +76,17 @@ public class FieldWorkerLoginFragment extends Fragment implements
 			showLongToast(getActivity(), R.string.field_worker_bad_credentials);
 		}
 	}
-
+//
 	private void launchCensusActivity(FieldWorker fieldWorker) {
 
-		Intent intent = new Intent(getActivity(), NavigateActivity.class);
+		Intent intent = new Intent(getActivity(), PortalActivity.class);
 
 		// TODO: get a new instance of CensusActivityBuilder and put it into the
 		// intent and send'er'over to skeletor
 
 		intent.putExtra(FIELD_WORKER_EXTRA, fieldWorker);
-		intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA,
-				ProjectActivityBuilder.getActivityModuleNames().get(0));
+//		intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA,
+//				ProjectActivityBuilder.getActivityModuleNames().get(0));
 
 		startActivity(intent);
 	}
