@@ -41,7 +41,6 @@ public class OpenHDSProvider extends ContentProvider {
 	private static HashMap<String, String> individualsProjectionMap;
 	private static HashMap<String, String> locationsProjectionMap;
 	private static HashMap<String, String> hierarchyitemsProjectionMap;
-	private static HashMap<String, String> roundsProjectionMap;
 	private static HashMap<String, String> visitsProjectionMap;
 	private static HashMap<String, String> relationshipsProjectionMap;
 	private static HashMap<String, String> fieldworkersProjectionMap;
@@ -56,8 +55,6 @@ public class OpenHDSProvider extends ContentProvider {
 	private static final int LOCATION_ID = 4;
 	private static final int HIERARCHYITEMS = 5;
 	private static final int HIERARCHYITEM_ID = 6;
-	private static final int ROUNDS = 7;
-	private static final int ROUND_ID = 8;
 	private static final int VISITS = 9;
 	private static final int VISIT_ID = 10;
 	private static final int RELATIONSHIPS = 11;
@@ -88,8 +85,6 @@ public class OpenHDSProvider extends ContentProvider {
 		sUriMatcher.addURI(OpenHDS.AUTHORITY, "hierarchyitems", HIERARCHYITEMS);
 		sUriMatcher.addURI(OpenHDS.AUTHORITY, "hierarchyitems/#",
 				HIERARCHYITEM_ID);
-		sUriMatcher.addURI(OpenHDS.AUTHORITY, "rounds", ROUNDS);
-		sUriMatcher.addURI(OpenHDS.AUTHORITY, "rounds/#", ROUND_ID);
 		sUriMatcher.addURI(OpenHDS.AUTHORITY, "visits", VISITS);
 		sUriMatcher.addURI(OpenHDS.AUTHORITY, "visits/#", VISIT_ID);
 		sUriMatcher.addURI(OpenHDS.AUTHORITY, "relationships", RELATIONSHIPS);
@@ -188,12 +183,18 @@ public class OpenHDSProvider extends ContentProvider {
 				OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE);
 		locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_NAME,
 				OpenHDS.Locations.COLUMN_LOCATION_NAME);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME);
+		locationsProjectionMap.put(
+				OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME,
+				OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME);
+		locationsProjectionMap.put(
+				OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME,
+				OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME);
+		locationsProjectionMap.put(
+				OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME,
+				OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME);
+		locationsProjectionMap.put(
+				OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME,
+				OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME);
 
 		hierarchyitemsProjectionMap = new HashMap<String, String>();
 		hierarchyitemsProjectionMap.put(OpenHDS.HierarchyItems._ID,
@@ -211,25 +212,16 @@ public class OpenHDSProvider extends ContentProvider {
 				OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT,
 				OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT);
 
-		roundsProjectionMap = new HashMap<String, String>();
-		roundsProjectionMap.put(OpenHDS.Rounds._ID, OpenHDS.Rounds._ID);
-		roundsProjectionMap.put(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE,
-				OpenHDS.Rounds.COLUMN_ROUND_STARTDATE);
-		roundsProjectionMap.put(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE,
-				OpenHDS.Rounds.COLUMN_ROUND_ENDDATE);
-		roundsProjectionMap.put(OpenHDS.Rounds.COLUMN_ROUND_NUMBER,
-				OpenHDS.Rounds.COLUMN_ROUND_NUMBER);
-
 		visitsProjectionMap = new HashMap<String, String>();
 		visitsProjectionMap.put(OpenHDS.Visits._ID, OpenHDS.Visits._ID);
 		visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_DATE,
 				OpenHDS.Visits.COLUMN_VISIT_DATE);
 		visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_EXTID,
 				OpenHDS.Visits.COLUMN_VISIT_EXTID);
-		visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION,
-				OpenHDS.Visits.COLUMN_VISIT_LOCATION);
-		visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_ROUND,
-				OpenHDS.Visits.COLUMN_VISIT_ROUND);
+		visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID,
+				OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID);
+		visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID,
+				OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID);
 
 		relationshipsProjectionMap = new HashMap<String, String>();
 		relationshipsProjectionMap.put(OpenHDS.Relationships._ID,
@@ -375,10 +367,13 @@ public class OpenHDSProvider extends ContentProvider {
 					+ " TEXT NOT NULL,"
 					+ OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"
 					+ OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME+ " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_NAME
+					+ OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME
+					+ " TEXT,"
+					+ OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME
+					+ " TEXT,"
+					+ OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME
+					+ " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME
+					+ " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_NAME
 					+ " TEXT NOT NULL);"
 					+ " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON "
 					+ OpenHDS.Locations.TABLE_NAME + "("
@@ -396,19 +391,14 @@ public class OpenHDSProvider extends ContentProvider {
 					+ OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT
 					+ " TEXT NOT NULL);");
 
-			db.execSQL("CREATE TABLE " + OpenHDS.Rounds.TABLE_NAME + " ("
-					+ OpenHDS.Rounds._ID + " INTEGER PRIMARY KEY,"
-					+ OpenHDS.Rounds.COLUMN_ROUND_ENDDATE + " TEXT NOT NULL,"
-					+ OpenHDS.Rounds.COLUMN_ROUND_NUMBER + " TEXT NOT NULL,"
-					+ OpenHDS.Rounds.COLUMN_ROUND_STARTDATE
-					+ " TEXT NOT NULL);");
-
 			db.execSQL("CREATE TABLE " + OpenHDS.Visits.TABLE_NAME + " ("
 					+ OpenHDS.Visits._ID + " INTEGER PRIMARY KEY,"
 					+ OpenHDS.Visits.COLUMN_VISIT_DATE + " TEXT NOT NULL,"
 					+ OpenHDS.Visits.COLUMN_VISIT_EXTID + " TEXT NOT NULL,"
-					+ OpenHDS.Visits.COLUMN_VISIT_LOCATION + " TEXT NOT NULL,"
-					+ OpenHDS.Visits.COLUMN_VISIT_ROUND + " TEXT NOT NULL);");
+					+ OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID
+					+ " TEXT NOT NULL,"
+					+ OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID
+					+ " TEXT NOT NULL);");
 
 			db.execSQL("CREATE TABLE " + OpenHDS.Relationships.TABLE_NAME
 					+ " (" + OpenHDS.Relationships._ID
@@ -469,7 +459,6 @@ public class OpenHDSProvider extends ContentProvider {
 					+ OpenHDS.FieldWorkers.TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS "
 					+ OpenHDS.Relationships.TABLE_NAME);
-			db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Rounds.TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Individuals.TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Visits.TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS "
@@ -574,18 +563,7 @@ public class OpenHDSProvider extends ContentProvider {
 					+ "="
 					+ uri.getPathSegments().get(
 							OpenHDS.HierarchyItems.NOTE_ID_PATH_POSITION));
-			break;
-		case ROUNDS:
-			qb.setTables(OpenHDS.Rounds.TABLE_NAME);
-			qb.setProjectionMap(roundsProjectionMap);
-			break;
-		case ROUND_ID:
-			qb.setTables(OpenHDS.Rounds.TABLE_NAME);
-			qb.setProjectionMap(roundsProjectionMap);
-			qb.appendWhere(OpenHDS.Rounds._ID
-					+ "="
-					+ uri.getPathSegments()
-							.get(OpenHDS.Rounds.ID_PATH_POSITION));
+
 			break;
 		case VISITS:
 			qb.setTables(OpenHDS.Visits.TABLE_NAME);
@@ -751,10 +729,6 @@ public class OpenHDSProvider extends ContentProvider {
 			return OpenHDS.HierarchyItems.CONTENT_TYPE;
 		case HIERARCHYITEM_ID:
 			return OpenHDS.HierarchyItems.CONTENT_ITEM_TYPE;
-		case ROUNDS:
-			return OpenHDS.Rounds.CONTENT_TYPE;
-		case ROUND_ID:
-			return OpenHDS.Rounds.CONTENT_ITEM_TYPE;
 		case VISITS:
 			return OpenHDS.Visits.CONTENT_TYPE;
 		case VISIT_ID:
@@ -797,10 +771,6 @@ public class OpenHDSProvider extends ContentProvider {
 		case HIERARCHYITEMS:
 			table = OpenHDS.HierarchyItems.TABLE_NAME;
 			contentUriBase = OpenHDS.HierarchyItems.CONTENT_ID_URI_BASE;
-			break;
-		case ROUNDS:
-			table = OpenHDS.Rounds.TABLE_NAME;
-			contentUriBase = OpenHDS.Rounds.CONTENT_ID_URI_BASE;
 			break;
 		case VISITS:
 			table = OpenHDS.Visits.TABLE_NAME;
@@ -882,14 +852,6 @@ public class OpenHDSProvider extends ContentProvider {
 					OpenHDS.HierarchyItems.NOTE_ID_PATH_POSITION, where);
 			count = db.delete(OpenHDS.HierarchyItems.TABLE_NAME, finalWhere,
 					whereArgs);
-			break;
-		case ROUNDS:
-			count = db.delete(OpenHDS.Rounds.TABLE_NAME, where, whereArgs);
-			break;
-		case ROUND_ID:
-			finalWhere = buildFinalWhere(uri, OpenHDS.Rounds.ID_PATH_POSITION,
-					where);
-			count = db.delete(OpenHDS.Rounds.TABLE_NAME, finalWhere, whereArgs);
 			break;
 		case VISITS:
 			count = db.delete(OpenHDS.Visits.TABLE_NAME, where, whereArgs);
@@ -995,16 +957,6 @@ public class OpenHDSProvider extends ContentProvider {
 					OpenHDS.HierarchyItems.NOTE_ID_PATH_POSITION, where);
 			count = db.update(OpenHDS.HierarchyItems.TABLE_NAME, values,
 					finalWhere, whereArgs);
-			break;
-		case ROUNDS:
-			count = db.update(OpenHDS.Rounds.TABLE_NAME, values, where,
-					whereArgs);
-			break;
-		case ROUND_ID:
-			finalWhere = buildFinalWhere(uri, OpenHDS.Rounds.ID_PATH_POSITION,
-					where);
-			count = db.update(OpenHDS.Rounds.TABLE_NAME, values, finalWhere,
-					whereArgs);
 			break;
 		case VISITS:
 			count = db.update(OpenHDS.Visits.TABLE_NAME, values, where,

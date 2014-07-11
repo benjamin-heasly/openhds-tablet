@@ -92,19 +92,6 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
 		ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
-		individualFormList
-				.add(new FormBehaviour("Individual",
-						R.string.create_head_of_household_label, null, null,
-						null, null));
-
-		individualFormList
-				.add(new FormBehaviour("Individual",
-						R.string.add_member_of_household_label, null, null,
-						null, null));
-
-		bottomFormList.add(new FormBehaviour("Individual",
-				R.string.edit_individual_label, INDIVIDUAL_STATE, null, null,
-				null));
 
 		formsForStates.put(REGION_STATE, regionFormList);
 		formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -460,17 +447,17 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		Map<String, String> formFieldMap = getFormFieldNameMap(null);
 		String editState;
 
-		if (null != (editState = form.getEditForState())) {
-			String extId = hierarchyPath.get(form.getEditForState()).getExtId();
-
-			switch (editState) {
-			case INDIVIDUAL_STATE:
-				formFieldMap = makeIndividualFormMap(
-						hierarchyPath.get(HOUSEHOLD_STATE).getExtId(), extId);
-				break;
-			}
-
-		}
+//		if (null != (editState = form.getEditForState())) {
+//			String extId = hierarchyPath.get(form.getEditForState()).getExtId();
+//
+//			switch (editState) {
+//			case INDIVIDUAL_STATE:
+//				formFieldMap = makeIndividualFormMap(
+//						hierarchyPath.get(HOUSEHOLD_STATE).getExtId(), extId);
+//				break;
+//			}
+//
+//		}
 
 		formHelper.newFormInstance(form, formFieldMap);
 		Intent intent = formHelper.buildEditFormInstanceIntent();

@@ -35,36 +35,7 @@ public class CensusFormPayloadBuilders {
 	 * Helper methods for FormPayloadBuilders
 	 * 
 	 */
-	private static void addMinimalFormPayload(Map<String, String> formPayload,
-			NavigateActivity navigateActivity) {
-
-		List<String> stateSequence = navigateActivity.getStateSequence();
-		Map<String, QueryResult> hierarchyPath = navigateActivity.getHierarchyPath();
-
-		// Add all the extIds from the HierarchyPath
-		for (String state : stateSequence) {
-			if (null != hierarchyPath.get(state)) {
-				String fieldName = ProjectFormFields.General
-						.getExtIdFieldNameFromState(state);
-				formPayload.put(fieldName, hierarchyPath.get(state).getExtId());
-			}
-		}
-
-		// add the FieldWorker's extId
-		FieldWorker fieldWorker = (FieldWorker) navigateActivity.getIntent()
-				.getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
-		formPayload.put(
-				ProjectFormFields.General.COLLECTED_BY_FIELD_WORKER_EXTID,
-				fieldWorker.getExtId());
-
-		// add collected DateTime
-		formPayload.put(
-				ProjectFormFields.General.COLLECTED_DATE_TIME,
-				new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(
-						Calendar.getInstance().getTime()).toString());
-
-	}
-
+	
 	private static void addNewIndividualPayload(
 			Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
@@ -104,7 +75,7 @@ public class CensusFormPayloadBuilders {
 
 	/**
 	 * 
-	 * Form Payload Builders
+	 * Census Form Payload Builders
 	 *
 	 */
 
@@ -114,7 +85,7 @@ public class CensusFormPayloadBuilders {
 		public void buildFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
 
-			addMinimalFormPayload(formPayload, navigateActivity);
+			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
 			addNewIndividualPayload(formPayload, navigateActivity);
 
 		}
@@ -127,7 +98,7 @@ public class CensusFormPayloadBuilders {
 		public void buildFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
 
-			addMinimalFormPayload(formPayload, navigateActivity);
+			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
 			addNewIndividualPayload(formPayload, navigateActivity);
 			
 			formPayload.put(ProjectFormFields.Individuals.HEAD_PREFILLED_FLAG, "true");
@@ -142,7 +113,7 @@ public class CensusFormPayloadBuilders {
 		public void buildFormPayload(Map<String, String> formPayload,
 				NavigateActivity navigateActivity) {
 
-			addMinimalFormPayload(formPayload, navigateActivity);
+			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
 
 			// build complete individual form
 			Map<String, QueryResult> hierarchyPath = navigateActivity

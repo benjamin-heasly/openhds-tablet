@@ -114,6 +114,8 @@ public class Converter {
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME)));
 		location.setLocalityName(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME)));
+		location.setMapAreaName(cursor.getString(cursor
+				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME)));
 		location.setSectorName(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME)));
 	}

@@ -24,10 +24,10 @@ public class VisitUpdate implements Updatable {
             }
             
             ContentValues cv = new ContentValues();
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_EXTID, visit.getExtId());
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION, visit.getLocation());
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_DATE, visit.getDate());
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_ROUND, visit.getRound());
+//            cv.put(OpenHDS.Visits.COLUMN_VISIT_EXTID, visit.getExtId());
+//            cv.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION, visit.getLocation());
+//            cv.put(OpenHDS.Visits.COLUMN_VISIT_DATE, visit.getDate());
+//            cv.put(OpenHDS.Visits.COLUMN_VISIT_ROUND, visit.getRound());
 
             resolver.insert(OpenHDS.Visits.CONTENT_ID_URI_BASE, cv);
         } catch (FileNotFoundException e) {

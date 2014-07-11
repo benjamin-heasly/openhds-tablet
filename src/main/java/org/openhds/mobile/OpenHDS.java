@@ -81,6 +81,7 @@ public class OpenHDS {
 		public static final String COLUMN_LOCATION_HIERARCHY = "hierarchy";
         public static final String COLUMN_LOCATION_COMMUNITY_NAME = "communityName";
         public static final String COLUMN_LOCATION_LOCALITY_NAME = "localityName";
+        public static final String COLUMN_LOCATION_MAP_AREA_NAME = "mapAreaName";
         public static final String COLUMN_LOCATION_SECTOR_NAME = "sectorName";
 
     }
@@ -107,27 +108,6 @@ public class OpenHDS {
 		public static final String COLUMN_HIERARCHY_LEVEL = "level";
 	}
 
-	public static final class Rounds implements BaseColumns {
-		public static final String TABLE_NAME = "rounds";
-		private static final String SCHEME = "content://";
-
-		private static final String PATH_NOTES = "/rounds";
-		private static final String PATH_NOTE_ID = "/rounds/";
-
-		public static final int ID_PATH_POSITION = 1;
-
-		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY + PATH_NOTES);
-		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID);
-		public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID + "/#");
-
-		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.round";
-		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.round";
-
-		public static final String COLUMN_ROUND_STARTDATE = "startDate";
-		public static final String COLUMN_ROUND_ENDDATE = "endDate";
-		public static final String COLUMN_ROUND_NUMBER = "roundNumber";
-	}
-
 	public static final class Visits implements BaseColumns {
 		public static final String TABLE_NAME = "visits";
 		private static final String SCHEME = "content://";
@@ -145,10 +125,9 @@ public class OpenHDS {
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.visit";
 
 		public static final String COLUMN_VISIT_EXTID = "extId";
-		public static final String COLUMN_VISIT_ROUND = "round";
 		public static final String COLUMN_VISIT_DATE = "date";
-		public static final String COLUMN_VISIT_LOCATION = "location";
-		public static final String COLUMN_INTERVIEWEE = "interviewee";
+		public static final String COLUMN_VISIT_LOCATION_EXTID = "locationExtId";
+		public static final String COLUMN_VISIT_FIELDWORKER_EXTID = "fieldWorkerExtId";
 
 	}
 

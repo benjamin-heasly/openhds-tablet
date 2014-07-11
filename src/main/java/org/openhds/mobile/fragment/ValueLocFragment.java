@@ -43,8 +43,6 @@ public class ValueLocFragment extends ListFragment implements LoaderCallbacks<Cu
     // load
     private static final String[] HIERARCHY_COLUMNS = new String[] { OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME,
             OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID};
-    private static final String[] ROUNDS_COLUMNS = new String[] { OpenHDS.Rounds.COLUMN_ROUND_NUMBER,
-            OpenHDS.Rounds.COLUMN_ROUND_STARTDATE};
     private static final String[] LOCATION_COLUMNS = new String[] { OpenHDS.Locations.COLUMN_LOCATION_NAME,
             OpenHDS.Locations.COLUMN_LOCATION_EXTID};
 
@@ -166,9 +164,6 @@ public class ValueLocFragment extends ListFragment implements LoaderCallbacks<Cu
         case REGION_LOADER:
             adapter.changeCursorAndColumns(null, HIERARCHY_COLUMNS, VIEW_BINDINGS);
             return buildRegionCursorLoader(arg1);
-        case ROUND_LOADER:
-            adapter.changeCursorAndColumns(null, ROUNDS_COLUMNS, VIEW_BINDINGS);
-            return new CursorLoader(getActivity(), OpenHDS.Rounds.CONTENT_ID_URI_BASE, null, null, null, null);
         case LOCATION_LOADER:
             adapter.changeCursorAndColumns(null, LOCATION_COLUMNS, VIEW_BINDINGS);
             return buildLocationCursorLoader(arg1);

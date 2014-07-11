@@ -55,11 +55,10 @@ public class FormXmlReader {
         try {
             Visit visit = new Visit();
             Document doc = buildDocument(input);
-            visit.setDate(xpath.evaluate("/data/visitDate/text()", doc));
-            visit.setExtId(xpath.evaluate("/data/visitId/text()", doc));
-            visit.setLocation(xpath.evaluate("/data/locationId/text()", doc));
-            visit.setRound(xpath.evaluate("/data/roundNumber/text()", doc));
-            visit.setIntervieweeId(xpath.evaluate("/data/intervieweeId/text()", doc));
+            visit.setVisitDate(xpath.evaluate("/data/visitDate/text()", doc));
+            visit.setVisitExtId(xpath.evaluate("/data/visitId/text()", doc));
+            visit.setLocationExtId(xpath.evaluate("/data/locationId/text()", doc));
+            visit.setFieldWorkerExtid(xpath.evaluate("/data/intervieweeId/text()", doc));
             return visit;
         } catch (ParserConfigurationException e) {
         } catch (SAXException e) {

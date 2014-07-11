@@ -3,51 +3,44 @@ package org.openhds.mobile.model;
 import java.io.Serializable;
 
 public class Visit implements Serializable {
-	
-	private static final long serialVersionUID = -1429712555458116315L;
-	private String extId;
-	private String location;
-	private String date;
-	private String round;
-	private String intervieweeId;
-	
-	public String getIntervieweeId() {
-		return intervieweeId;
+
+	private static final long serialVersionUID = 4419294254197721658L;
+
+	private String visitExtId;
+	private String locationExtId;
+	private String visitDate;
+	private String fieldWorkerExtid;
+
+	public String getVisitExtId() {
+		return visitExtId;
 	}
 
-	public void setIntervieweeId(String intervieweeId) {
-		this.intervieweeId = intervieweeId;
+	public void setVisitExtId(String visitExtId) {
+		this.visitExtId = visitExtId;
 	}
 
-	public String getExtId() {
-		return extId;
+	public String getLocationExtId() {
+		return locationExtId;
 	}
-	
-	public void setExtId(String extId) {
-		this.extId = extId;
+
+	public void setLocationExtId(String locationExtId) {
+		this.locationExtId = locationExtId;
 	}
-	
-	public String getLocation() {
-		return location;
+
+	public String getVisitDate() {
+		return visitDate;
 	}
-	
-	public void setLocation(String location) {
-		this.location = location;
+
+	public void setVisitDate(String visitDate) {
+		this.visitDate = visitDate;
 	}
-	
-	public String getDate() {
-		return date;
+
+	public String getFieldWorkerExtid() {
+		return fieldWorkerExtid;
 	}
-	
-	public void setDate(String date) {
-		this.date = date;
+
+	public void setFieldWorkerExtid(String fieldWorkerExtid) {
+		this.fieldWorkerExtid = fieldWorkerExtid;
 	}
-	
-	public String getRound() {
-		return round;
-	}
-	
-	public void setRound(String round) {
-		this.round = round;
-	}
+
 }

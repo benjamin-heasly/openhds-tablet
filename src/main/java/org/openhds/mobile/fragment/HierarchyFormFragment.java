@@ -28,38 +28,45 @@ public class HierarchyFormFragment extends Fragment {
 	HierarchyFormAdapter formListAdapter;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		LinearLayout formContainer = (LinearLayout) inflater.inflate(R.layout.hierarchy_form_fragment,
-				container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		LinearLayout formContainer = (LinearLayout) inflater.inflate(
+				R.layout.hierarchy_form_fragment, container, false);
 
 		return formContainer;
 	}
-	
+
 	public void setNavigator(HierarchyNavigator navigator) {
 		this.navigator = navigator;
 	}
 
 	public void createFormButtons(List<FormBehaviour> values) {
 
-		formListAdapter = new HierarchyFormAdapter(getActivity(), R.layout.generic_list_item, values);
+		formListAdapter = new HierarchyFormAdapter(getActivity(),
+				R.layout.generic_list_item, values);
 
-		ListView listView = (ListView) getActivity().findViewById(R.id.form_fragment_listview);
+		ListView listView = (ListView) getActivity().findViewById(
+				R.id.form_fragment_listview);
 		listView.setAdapter(formListAdapter);
 		listView.setOnItemClickListener(new HierarchyFormListener());
 
 	}
-	
+
 	private class HierarchyFormListener implements OnItemClickListener {
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			FormBehaviour form = formListAdapter.getItem(position);	
-				navigator.launchForm(form);	
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			FormBehaviour form = formListAdapter.getItem(position);
+
+			navigator.launchForm(form);
+
 		}
 	}
 
 	private class HierarchyFormAdapter extends ArrayAdapter<FormBehaviour> {
 
-		public HierarchyFormAdapter(Context context, int resource, List<FormBehaviour> objects) {
+		public HierarchyFormAdapter(Context context, int resource,
+				List<FormBehaviour> objects) {
 			super(context, resource, objects);
 		}
 
@@ -69,11 +76,14 @@ public class HierarchyFormFragment extends Fragment {
 			FormBehaviour form = formListAdapter.getItem(position);
 
 			if (convertView == null) {
-				convertView = makeNewGenericLayout(getActivity(), getString(form.getFormLabelId()), null, form.getFormLabelId(), null, null,
+				convertView = makeNewGenericLayout(getActivity(),
+						getString(form.getFormLabelId()), null,
+						form.getFormLabelId(), null, null,
 						R.drawable.form_frag_selector, null, null);
 			}
 
-			configureGenericLayout(getActivity(), (RelativeLayout) convertView, getString(form.getFormLabelId()), null, null, null);
+			configureGenericLayout(getActivity(), (RelativeLayout) convertView,
+					getString(form.getFormLabelId()), null, null, null);
 			return convertView;
 
 		}

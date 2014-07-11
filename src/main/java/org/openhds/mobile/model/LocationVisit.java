@@ -247,8 +247,8 @@ public class LocationVisit implements Serializable {
         String date = df.format(new Date());
 
         visit = new Visit();
-        visit.setExtId(generatedId);
-        visit.setDate(date);
+//        visit.setExtId(generatedId);
+//        visit.setDate(date);
     }
 
     public PregnancyOutcome createPregnancyOutcome(ContentResolver resolver, int liveBirthCount) {

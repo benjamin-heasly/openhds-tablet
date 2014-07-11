@@ -13,6 +13,7 @@ public class Location implements Serializable {
 	private String hierarchyExtId;
     private String communityName;
     private String localityName;
+    private String mapAreaName;
     private String sectorName;
 
 	public String getExtId() {
@@ -78,4 +79,12 @@ public class Location implements Serializable {
     public void setSectorName(String sectorName) {
         this.sectorName = sectorName;
     }
+
+	public String getMapAreaName() {
+		return mapAreaName;
+	}
+
+	public void setMapAreaName(String mapAreaName) {
+		this.mapAreaName = mapAreaName;
+	}
 }

@@ -151,5 +151,40 @@ public class ProjectFormFields {
 			}
 		}
 	}
+	
+	public static final class Visits {
+		public static final String VISIT_EXTID = "visitExtId";
+		public static final String VISIT_DATE = "visitDate";
+		public static final String LOCATION_EXTID = "locationExtId";
+		public static final String FIELDWORKER_EXTID = "fieldWorkerExtId";
+		
+		private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
+		
+		static {
+			columnsToFieldNames.put(
+					OpenHDS.Visits.COLUMN_VISIT_EXTID,
+					VISIT_EXTID);
+			columnsToFieldNames.put(
+					OpenHDS.Visits.COLUMN_VISIT_DATE,
+					VISIT_DATE);
+			columnsToFieldNames.put(
+					OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID,
+					LOCATION_EXTID);
+			columnsToFieldNames.put(
+					OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID,
+					FIELDWORKER_EXTID);
+		}
+		
+		
+		
+		public static String getFieldNameFromColumn(String column) {
+			if (columnsToFieldNames.containsKey(column)) {
+				return columnsToFieldNames.get(column);
+			} else {
+				return null;
+			}
+		}
+		
+	}
 
 }

@@ -178,7 +178,6 @@ public class SyncEntitiesTask extends
         // ordering is somewhat important during delete. a few tables have
         // foreign keys
         resolver.delete(OpenHDS.Memberships.CONTENT_ID_URI_BASE, null, null);
-        resolver.delete(OpenHDS.Rounds.CONTENT_ID_URI_BASE, null, null);
         resolver.delete(OpenHDS.Visits.CONTENT_ID_URI_BASE, null, null);
         resolver.delete(OpenHDS.Relationships.CONTENT_ID_URI_BASE, null, null);
         resolver.delete(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, null, null);
@@ -241,8 +240,6 @@ public class SyncEntitiesTask extends
                         processLocationParams(parser);
                     } else if (name.equalsIgnoreCase("locationhierarchies")) {
                         processHierarchyParams(parser);
-                    } else if (name.equalsIgnoreCase("rounds")) {
-                        processRoundParams(parser);
                     } else if (name.equalsIgnoreCase("visits")) {
                         processVisitParams(parser);
                     } else if (name.equalsIgnoreCase("socialgroups")) {
@@ -357,6 +354,9 @@ public class SyncEntitiesTask extends
                                         parser.nextText());
                             } else if (tagName.equalsIgnoreCase("sectorName")) {
                                 cv.put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("mapAreaName")) {
+                                cv.put(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME,
                                         parser.nextText());
                             } else if (tagName.equalsIgnoreCase("localityName")) {
                                 cv.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME,
@@ -630,42 +630,6 @@ public class SyncEntitiesTask extends
         return groups;
     }
 
-    private void processRoundParams(XmlPullParser parser)
-            throws XmlPullParserException, IOException {
-        parser.nextTag();
-
-        values.clear();
-        while (notEndOfXmlDoc("rounds", parser)) {
-            ContentValues cv = new ContentValues();
-
-            parser.nextTag();
-            cv.put(OpenHDS.Rounds.COLUMN_ROUND_ENDDATE, parser.nextText());
-
-            // skip <remarks />
-            parser.nextTag();
-            parser.nextText();
-
-            parser.nextTag();
-            cv.put(OpenHDS.Rounds.COLUMN_ROUND_NUMBER, parser.nextText());
-
-            parser.nextTag();
-            cv.put(OpenHDS.Rounds.COLUMN_ROUND_STARTDATE, parser.nextText());
-
-            // skip <uuid />
-            parser.nextTag();
-            parser.nextText();
-
-            values.add(cv);
-
-            parser.nextTag(); // </round>
-            parser.nextTag(); // </rounds> or <round>
-        }
-
-        if (!values.isEmpty()) {
-            resolver.bulkInsert(OpenHDS.Rounds.CONTENT_ID_URI_BASE,
-                    values.toArray(emptyArray));
-        }
-    }
 
     private void processVisitParams(XmlPullParser parser)
             throws XmlPullParserException, IOException {
@@ -685,14 +649,11 @@ public class SyncEntitiesTask extends
             cv.put(OpenHDS.Visits.COLUMN_VISIT_EXTID, parser.nextText());
 
             parser.nextTag();
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_ROUND, parser.nextText());
-
-            parser.nextTag();
             cv.put(OpenHDS.Visits.COLUMN_VISIT_DATE, parser.nextText());
 
             parser.nextTag(); // <visitLocation>
             parser.nextTag();
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION, parser.nextText());
+            cv.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID, parser.nextText());
             parser.nextTag(); // </visitLocation>
 
             values.add(cv);

@@ -100,11 +100,20 @@ public class Queries {
 				OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID, hierarchy);
 	}
 
-	public static Cursor getLocationsBySectorName(
-			ContentResolver contentResolver, String sectorName) {
-		return getCursor(contentResolver,
-				OpenHDS.Locations.CONTENT_ID_URI_BASE,
-				OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, sectorName);
+	public static Cursor getLocationsBySectorNameAndMapAreaName(
+			ContentResolver contentResolver, String sectorName, String mapAreaName) {
+		
+		return contentResolver
+				.query(OpenHDS.Locations.CONTENT_ID_URI_BASE,
+						null,
+						OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME
+								+ " = '"
+								+ sectorName
+								+ "' AND "
+								+ OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME
+								+ " = '" + mapAreaName + "'", null, null);
+		
+		
 	}
 
 	public static Cursor getHierarchysByLevel(ContentResolver contentResolver,
