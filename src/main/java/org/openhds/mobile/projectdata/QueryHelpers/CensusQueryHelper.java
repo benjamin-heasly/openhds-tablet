@@ -147,7 +147,7 @@ public class CensusQueryHelper implements QueryHelper {
 					qr.getExtId());
 			cursor.moveToFirst();
 			LocationHierarchy sector = Converter.toHierarchy(cursor, true);
-			//TODO: STUFF!!
+
 			
 			Cursor mapAreaCursor = Queries.getHierarchyByExtId(contentResolver, sector.getParent());
 			mapAreaCursor.moveToFirst();
@@ -155,7 +155,7 @@ public class CensusQueryHelper implements QueryHelper {
 			
 			Cursor locationCursor = Queries.getLocationsBySectorNameAndMapAreaName(
 					contentResolver, sector.getName(), mapArea.getName());
-			//locationCursor.moveToFirst();
+
 			return getLocationQueryResultList(locationCursor, childState);
 		} else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
