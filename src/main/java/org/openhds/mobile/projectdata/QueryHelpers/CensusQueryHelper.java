@@ -152,11 +152,11 @@ public class CensusQueryHelper implements QueryHelper {
 			Cursor mapAreaCursor = Queries.getHierarchyByExtId(contentResolver, sector.getParent());
 			mapAreaCursor.moveToFirst();
 			LocationHierarchy mapArea = Converter.toHierarchy(mapAreaCursor, true);
-			
-			Cursor locationCursor = Queries.getLocationsBySectorNameAndMapAreaName(
+
+            Cursor locationCursor = Queries.getLocationsBySectorNameAndMapAreaName(
 					contentResolver, sector.getName(), mapArea.getName());
 
-			return getLocationQueryResultList(locationCursor, childState);
+            return getLocationQueryResultList(locationCursor, childState);
 		} else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getIndividualsByResidency(contentResolver,

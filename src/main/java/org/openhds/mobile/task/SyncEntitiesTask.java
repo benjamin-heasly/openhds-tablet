@@ -630,7 +630,6 @@ public class SyncEntitiesTask extends
         return groups;
     }
 
-
     private void processVisitParams(XmlPullParser parser)
             throws XmlPullParserException, IOException {
         parser.nextTag();
