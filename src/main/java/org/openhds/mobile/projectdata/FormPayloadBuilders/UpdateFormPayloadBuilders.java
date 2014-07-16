@@ -29,7 +29,7 @@ public class UpdateFormPayloadBuilders {
 					Calendar.getInstance().getTime()).toString();
 			String locationExtId = navigateActivity.getHierarchyPath()
 					.get(UpdateActivityModule.HOUSEHOLD_STATE).getExtId();
-			String visitExtId = visitDate + " " + locationExtId;
+			String visitExtId = visitDate + "_" + locationExtId;
 
 			formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
 			formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,

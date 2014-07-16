@@ -62,7 +62,7 @@ public class CensusFormPayloadConsumers {
 
 			// INSERT or UPDATE RELATIONSHIP
 			Relationship relationship = RelationshipAdapter.create(
-					currentHeadOfHousehold, individual, relationshipType,
+                    individual, currentHeadOfHousehold, relationshipType,
 					startDate);
 			RelationshipAdapter.insertOrUpdate(
 					navigateActivity.getContentResolver(), relationship);
