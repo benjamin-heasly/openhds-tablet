@@ -23,9 +23,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9326701a-8437-4cdb-b241-016cd0762fe9" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/ProjectResources.java" afterPath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/ProjectResources.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values-es/strings.xml" afterPath="$PROJECT_DIR$/res/values-es/strings.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__android_android_3_0_r2.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__android_support_compatibility_v4_10.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_android_maps_maps_11_r1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_r09.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_3.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_10.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__net_sqlcipher_sqlcipher_3_0_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_1.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jdom_jdom2_2_0_5.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/QueryHelpers/CensusQueryHelper.java" afterPath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/QueryHelpers/CensusQueryHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/database/queries/Queries.java" afterPath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/database/queries/Queries.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/task/SyncEntitiesTask.java" afterPath="$PROJECT_DIR$/src/main/java/org/openhds/mobile/task/SyncEntitiesTask.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="openhds-tablet.iws" />
@@ -52,10 +69,10 @@
       <file leaf-file-name="CensusQueryHelper.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/QueryHelpers/CensusQueryHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4211" max-vertical-offset="4947">
-              <caret line="280" column="0" selection-start-line="280" selection-start-column="0" selection-end-line="294" selection-end-column="63" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="4177" max-vertical-offset="4913">
+              <caret line="278" column="0" selection-start-line="278" selection-start-column="0" selection-end-line="292" selection-end-column="63" />
               <folding>
-                <element signature="e#10221#10267#0" expanded="true" />
+                <element signature="e#10237#10283#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -74,8 +91,8 @@
       <file leaf-file-name="PayloadTools.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/FormPayloadBuilders/PayloadTools.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4373928" vertical-offset="153" max-vertical-offset="748">
-              <caret line="33" column="35" selection-start-line="33" selection-start-column="35" selection-end-line="33" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.3207547" vertical-offset="153" max-vertical-offset="748">
+              <caret line="29" column="9" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -177,6 +194,10 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="openhds-tablet" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewLibrariesNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -453,7 +474,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/QueryHelpers/CensusQueryHelper.java</url>
-          <line>160</line>
+          <line>158</line>
           <properties />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
@@ -471,7 +492,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="2233" max-vertical-offset="4947">
           <caret line="165" column="0" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
           <folding>
-            <element signature="e#10221#10267#0" expanded="true" />
+            <element signature="e#10237#10283#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -482,9 +503,9 @@
           <caret line="102" column="43" selection-start-line="102" selection-start-column="43" selection-end-line="102" selection-end-column="43" />
           <folding>
             <element signature="docComment;class#Queries#0" expanded="false" />
-            <element signature="method#Queries#0;class#Queries#0" expanded="false" />
             <element signature="method#hasIndividualByExtId#0;class#Queries#0" expanded="false" />
             <element signature="method#getCursor#0;class#Queries#0" expanded="false" />
+            <element signature="method#getCursor#1;class#Queries#0" expanded="false" />
             <element signature="method#getAllIndividuals#0;class#Queries#0" expanded="false" />
             <element signature="method#getAllLocations#0;class#Queries#0" expanded="false" />
             <element signature="method#getAllHierarchys#0;class#Queries#0" expanded="false" />
@@ -530,7 +551,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4913">
           <caret line="144" column="12" selection-start-line="144" selection-start-column="12" selection-end-line="144" selection-end-column="12" />
           <folding>
-            <element signature="e#10221#10267#0" expanded="true" />
+            <element signature="e#10237#10283#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -541,9 +562,9 @@
           <caret line="118" column="63" selection-start-line="118" selection-start-column="63" selection-end-line="118" selection-end-column="63" />
           <folding>
             <element signature="docComment;class#Queries#0" expanded="false" />
-            <element signature="method#Queries#0;class#Queries#0" expanded="false" />
             <element signature="method#hasIndividualByExtId#0;class#Queries#0" expanded="false" />
             <element signature="method#getCursor#0;class#Queries#0" expanded="false" />
+            <element signature="method#getCursor#1;class#Queries#0" expanded="false" />
             <element signature="method#getAllIndividuals#0;class#Queries#0" expanded="false" />
             <element signature="method#getAllLocations#0;class#Queries#0" expanded="false" />
             <element signature="method#getAllHierarchys#0;class#Queries#0" expanded="false" />
@@ -729,9 +750,9 @@
           <caret line="215" column="53" selection-start-line="215" selection-start-column="25" selection-end-line="215" selection-end-column="53" />
           <folding>
             <element signature="docComment;class#Queries#0" expanded="false" />
-            <element signature="method#Queries#0;class#Queries#0" expanded="false" />
             <element signature="method#hasIndividualByExtId#0;class#Queries#0" expanded="false" />
             <element signature="method#getCursor#0;class#Queries#0" expanded="false" />
+            <element signature="method#getCursor#1;class#Queries#0" expanded="false" />
             <element signature="method#getAllIndividuals#0;class#Queries#0" expanded="false" />
             <element signature="method#getAllLocations#0;class#Queries#0" expanded="false" />
             <element signature="method#getAllHierarchys#0;class#Queries#0" expanded="false" />
@@ -798,10 +819,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/QueryHelpers/CensusQueryHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4211" max-vertical-offset="4947">
-          <caret line="280" column="0" selection-start-line="280" selection-start-column="0" selection-end-line="294" selection-end-column="63" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="4177" max-vertical-offset="4913">
+          <caret line="278" column="0" selection-start-line="278" selection-start-column="0" selection-end-line="292" selection-end-column="63" />
           <folding>
-            <element signature="e#10221#10267#0" expanded="true" />
+            <element signature="e#10237#10283#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -856,8 +877,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/openhds/mobile/projectdata/FormPayloadBuilders/PayloadTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4373928" vertical-offset="153" max-vertical-offset="748">
-          <caret line="33" column="35" selection-start-line="33" selection-start-column="35" selection-end-line="33" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.3207547" vertical-offset="153" max-vertical-offset="748">
+          <caret line="29" column="9" selection-start-line="29" selection-start-column="9" selection-end-line="29" selection-end-column="9" />
           <folding />
         </state>
       </provider>

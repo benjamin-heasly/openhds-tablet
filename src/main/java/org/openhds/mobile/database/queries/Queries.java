@@ -27,6 +27,13 @@ public class Queries {
                 new String[]{value}, orderBy);
     }
 
+    private static Cursor getCursor(ContentResolver resolver, Uri uri, String column1,
+                                    String value1, String column2, String value2, String orderBy) {
+
+        final String whereClause = column1 + " = ? AND " + column2 + " = ?";
+        return resolver.query(uri, null, whereClause, new String[]{value1, value2}, orderBy);
+    }
+
     public static Cursor getAllIndividuals(ContentResolver resolver) {
         return getCursorForAll(resolver,
                 OpenHDS.Individuals.CONTENT_ID_URI_BASE);
@@ -103,17 +110,10 @@ public class Queries {
     public static Cursor getLocationsBySectorNameAndMapAreaName(
             ContentResolver contentResolver, String sectorName, String mapAreaName) {
 
-        return contentResolver
-                .query(OpenHDS.Locations.CONTENT_ID_URI_BASE,
-                        null,
-                        OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME
-                                + " = '"
-                                + sectorName
-                                + "' AND "
-                                + OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME
-                                + " = '" + mapAreaName + "'", null, null);
-
-
+        return getCursor(contentResolver, OpenHDS.Locations.CONTENT_ID_URI_BASE,
+                OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, sectorName,
+                OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME, mapAreaName,
+                null);
     }
 
     public static Cursor getHierarchysByLevel(ContentResolver contentResolver,
