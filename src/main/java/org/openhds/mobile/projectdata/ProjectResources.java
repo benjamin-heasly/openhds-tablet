@@ -23,7 +23,7 @@ public class ProjectResources {
 
 		public static final String LANGUAGE_PREF_SPANISH = "Spanish";
 		public static final String LANGUAGE_PREF_FANG = "Fang";
-		public static final String LANGUAGE_PREF_BUBE = "Bube";
+		public static final String LANGUAGE_PREF_BUBE = "Bubi";
 		public static final String LANGUAGE_PREF_ENGLISH = "English";
 		public static final String LANGUAGE_PREF_FRENCH = "French";
 
@@ -39,7 +39,7 @@ public class ProjectResources {
 			Individual.put(LANGUAGE_PREF_FANG,
 					R.string.db_val_language_pref_fang);
 			Individual.put(LANGUAGE_PREF_BUBE,
-					R.string.db_val_language_pref_bube);
+					R.string.db_val_language_pref_bubi);
 			Individual.put(LANGUAGE_PREF_ENGLISH,
 					R.string.db_val_language_pref_english);
 			Individual.put(LANGUAGE_PREF_FRENCH,
