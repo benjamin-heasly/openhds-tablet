@@ -248,7 +248,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		// make sure that listeners will fire for the current state
 		refreshHierarchy(state);
 
-		if (isAdded) {
+		if (isAdded || !currentResults.isEmpty()) {
 			showValueFragment();
 			valueFragment.populateValues(currentResults);
 		} else {
