@@ -62,7 +62,7 @@ public class Queries {
                                                    String extId) {
         return getCursor(resolver, OpenHDS.Individuals.CONTENT_ID_URI_BASE,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-                extId, null);
+                extId, OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, "NA",null);
     }
 
     private static boolean isFound(Cursor cursor) {

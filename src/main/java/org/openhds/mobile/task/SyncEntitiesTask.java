@@ -514,8 +514,7 @@ public class SyncEntitiesTask extends
                             } else if (tagName.equalsIgnoreCase("memberships")) {
                                 pullOutMemberships(parser);
                             } else if (tagName.equalsIgnoreCase("residencies")) {
-                                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-                                        (parser = pullOutResidencies(parser)).nextText());
+                                        pullOutResidencies(parser, cv);
                             }
                         }
                     }
@@ -595,15 +594,22 @@ public class SyncEntitiesTask extends
         }
     }
 
-    private XmlPullParser pullOutResidencies(XmlPullParser parser)
+    private void pullOutResidencies(XmlPullParser parser, ContentValues cv)
             throws XmlPullParserException, IOException {
         while (true) {
+            if (null != parser.getName() && parser.getName().equalsIgnoreCase("endType")) {
+
+                cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, parser.nextText());
+
+            }
+
             if (null != parser.getName()
                     && parser.getName().equalsIgnoreCase("location")) {
                 while (true) {
                     if (null != parser.getName()
                             && parser.getName().equalsIgnoreCase("extId")) {
-                        return parser;
+                        cv.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, parser.nextText());
+                        return;
                     }
                     parser.next();
                 }

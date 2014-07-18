@@ -37,6 +37,9 @@ public class Converter {
 		individual
 				.setCurrentResidence(cursor.getString(cursor
 						.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID)));
+        individual
+                .setEndType(cursor.getString(cursor
+                        .getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE)));
 		individual.setDob(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB)));
 		individual.setExtId(cursor.getString(cursor
