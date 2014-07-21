@@ -38,7 +38,16 @@ public class CensusFormFilters {
 		return false;
 	}
 
-	public static class AddHeadOfHousehold implements FormFilter {
+    public static class AddLocation implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+
+            return true;
+        }
+    }
+
+    public static class AddHeadOfHousehold implements FormFilter {
 
 		@Override
 		public boolean amIValid(NavigateActivity navigateActivity) {

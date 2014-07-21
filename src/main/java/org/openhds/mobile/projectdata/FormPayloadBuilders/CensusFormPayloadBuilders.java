@@ -1,12 +1,6 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
-import static org.openhds.mobile.database.queries.Queries.getIndividualsExtIdsByPrefix;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-
+import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.IndividualAdapter;
@@ -16,140 +10,188 @@ import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.LocationHierarchy;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectResources;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityModule;
-import org.openhds.mobile.projectdata.ProjectFormFields.General;
-import org.openhds.mobile.projectdata.ProjectFormFields.Individuals;
-import org.openhds.mobile.projectdata.ProjectResources.Relationship;
 import org.openhds.mobile.utilities.LuhnValidator;
 
-import android.database.Cursor;
+import java.util.Map;
+
+import static org.openhds.mobile.database.queries.Queries.getIndividualsExtIdsByPrefix;
 
 public class CensusFormPayloadBuilders {
 
-	/**
-	 * 
-	 * Helper methods for FormPayloadBuilders
-	 * 
-	 */
-	
-	private static void addNewIndividualPayload(
-			Map<String, String> formPayload, NavigateActivity navigateActivity) {
+    /**
+     *
+     * Helper methods for FormPayloadBuilders
+     *
+     */
 
-		FieldWorker fieldWorker = (FieldWorker) navigateActivity.getIntent()
-				.getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
+    private static void addNewLocationPayload(
+            Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
-		String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
+        // sector extId -> <hierarchyExtId />
+        // sector name -> <sectorName />
+        QueryResult sectorQueryResult =
+                navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE);
+        Cursor cursor =
+                Queries.getHierarchyByExtId(navigateActivity.getContentResolver(), sectorQueryResult.getExtId());
+        if( !cursor.moveToFirst()) {
+            cursor.close();
+            return;
+        }
+        LocationHierarchy sector = Converter.toHierarchy(cursor, true);
+        formPayload.put(ProjectFormFields.Locations.HIERERCHY_EXTID, sector.getExtId());
+        formPayload.put(ProjectFormFields.Locations.SECTOR_NAME, sector.getName());
 
-		Cursor cursor = getIndividualsExtIdsByPrefix(
-				navigateActivity.getContentResolver(), generatedIdPrefix);
-		int nextSequence = 0;
-		if (cursor.moveToLast()) {
-			String lastExtId = cursor
-					.getString(cursor
-							.getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
-			int prefixLength = generatedIdPrefix.length();
-			int checkDigitLength = 1;
-			String lastSequenceNumber = lastExtId.substring(prefixLength + 1,
-					lastExtId.length() - checkDigitLength);
-			nextSequence = Integer.parseInt(lastSequenceNumber) + 1;
-		}
-		cursor.close();
+        // <mapAreaName /> mapArea name, not extId
+        cursor =
+                Queries.getHierarchyByExtId(navigateActivity.getContentResolver(), sector.getParent());
+        if( !cursor.moveToFirst()) {
+            cursor.close();
+            return;
+        }
+        LocationHierarchy mapArea = Converter.toHierarchy(cursor, true);
+        formPayload.put(ProjectFormFields.Locations.MAP_AREA_NAME, mapArea.getName());
 
-		// TODO: break out 5-digit number format, don't use string literal here.
-		String generatedIdSeqNum = String.format("%05d", nextSequence);
 
-		Character generatedIdCheck = LuhnValidator
-				.generateCheckCharacter(generatedIdSeqNum + generatedIdSeqNum);
+        // <localityName /> locality name, not extId
+        cursor =
+                Queries.getHierarchyByExtId(navigateActivity.getContentResolver(), mapArea.getParent());
+        if( !cursor.moveToFirst()) {
+            cursor.close();
+            return;
+        }
+        LocationHierarchy locality = Converter.toHierarchy(cursor, true);
+        formPayload.put(ProjectFormFields.Locations.LOCALITY_NAME, locality.getName());
+    }
 
-		String individualExtId = generatedIdPrefix + generatedIdSeqNum
-				+ generatedIdCheck.toString();
+    private static void addNewIndividualPayload(
+            Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
-		formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
-				individualExtId);
+        FieldWorker fieldWorker = (FieldWorker) navigateActivity.getIntent()
+                .getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
 
-	}
+        String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
 
-	/**
-	 * 
-	 * Census Form Payload Builders
-	 *
-	 */
+        Cursor cursor = getIndividualsExtIdsByPrefix(
+                navigateActivity.getContentResolver(), generatedIdPrefix);
+        int nextSequence = 0;
+        if (cursor.moveToLast()) {
+            String lastExtId = cursor
+                    .getString(cursor
+                            .getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
+            int prefixLength = generatedIdPrefix.length();
+            int checkDigitLength = 1;
+            String lastSequenceNumber = lastExtId.substring(prefixLength + 1,
+                    lastExtId.length() - checkDigitLength);
+            nextSequence = Integer.parseInt(lastSequenceNumber) + 1;
+        }
+        cursor.close();
 
-	public static class AddMemberOfHousehold implements FormPayloadBuilder {
+        // TODO: break out 5-digit number format, don't use string literal here.
+        String generatedIdSeqNum = String.format("%05d", nextSequence);
 
-		@Override
-		public void buildFormPayload(Map<String, String> formPayload,
-				NavigateActivity navigateActivity) {
+        Character generatedIdCheck = LuhnValidator
+                .generateCheckCharacter(generatedIdSeqNum + generatedIdSeqNum);
 
-			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
-			addNewIndividualPayload(formPayload, navigateActivity);
+        String individualExtId = generatedIdPrefix + generatedIdSeqNum
+                + generatedIdCheck.toString();
 
-		}
+        formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
+                individualExtId);
 
-	}
+    }
 
-	public static class AddHeadOfHousehold implements FormPayloadBuilder {
+    /**
+     *
+     * Census Form Payload Builders
+     *
+     */
 
-		@Override
-		public void buildFormPayload(Map<String, String> formPayload,
-				NavigateActivity navigateActivity) {
+    public static class AddLocation implements FormPayloadBuilder {
 
-			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
-			addNewIndividualPayload(formPayload, navigateActivity);
-			
-			formPayload.put(ProjectFormFields.Individuals.HEAD_PREFILLED_FLAG, "true");
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
 
-		}
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            addNewLocationPayload(formPayload, navigateActivity);
+        }
+    }
 
-	}
+    public static class AddMemberOfHousehold implements FormPayloadBuilder {
 
-	public static class EditIndividual implements FormPayloadBuilder {
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
 
-		@Override
-		public void buildFormPayload(Map<String, String> formPayload,
-				NavigateActivity navigateActivity) {
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            addNewIndividualPayload(formPayload, navigateActivity);
 
-			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+        }
 
-			// build complete individual form
-			Map<String, QueryResult> hierarchyPath = navigateActivity
-					.getHierarchyPath();
+    }
 
-			String individualExtId = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)
-					.getExtId();
-			String householdExtId = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
-					.getExtId();
+    public static class AddHeadOfHousehold implements FormPayloadBuilder {
 
-			Cursor cursor = Queries.getIndividualByExtId(
-					navigateActivity.getContentResolver(), individualExtId);
-			cursor.moveToFirst();
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
 
-			Individual individual = Converter.toIndividual(cursor, true);
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            addNewIndividualPayload(formPayload, navigateActivity);
 
-			formPayload.putAll(IndividualAdapter
-					.individualToFormFields(individual));
-			
-			//TODO: Change the birthday to either a simple date object or find a better way to handle this functionality.
-			String truncatedDate = formPayload.get(ProjectFormFields.Individuals.DATE_OF_BIRTH).substring(0, 10);
-			formPayload.remove(ProjectFormFields.Individuals.DATE_OF_BIRTH);
-			formPayload.put(ProjectFormFields.Individuals.DATE_OF_BIRTH, truncatedDate);
-			
-			cursor = Queries.getMembershipByHouseholdAndIndividualExtId(
-					navigateActivity.getContentResolver(), householdExtId,
-					individualExtId);
-			cursor.moveToFirst();
+            formPayload.put(ProjectFormFields.Individuals.HEAD_PREFILLED_FLAG, "true");
 
-			Membership membership = Converter.toMembership(cursor, true);
-			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
-					membership.getRelationshipToHead());
+        }
 
-		}
-	}
+    }
+
+    public static class EditIndividual implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+
+            // build complete individual form
+            Map<String, QueryResult> hierarchyPath = navigateActivity
+                    .getHierarchyPath();
+
+            String individualExtId = hierarchyPath
+                    .get(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)
+                    .getExtId();
+            String householdExtId = hierarchyPath
+                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
+                    .getExtId();
+
+            Cursor cursor = Queries.getIndividualByExtId(
+                    navigateActivity.getContentResolver(), individualExtId);
+            cursor.moveToFirst();
+
+            Individual individual = Converter.toIndividual(cursor, true);
+
+            formPayload.putAll(IndividualAdapter
+                    .individualToFormFields(individual));
+
+            //TODO: Change the birthday to either a simple date object or find a better way to handle this functionality.
+            String truncatedDate = formPayload.get(ProjectFormFields.Individuals.DATE_OF_BIRTH).substring(0, 10);
+            formPayload.remove(ProjectFormFields.Individuals.DATE_OF_BIRTH);
+            formPayload.put(ProjectFormFields.Individuals.DATE_OF_BIRTH, truncatedDate);
+
+            cursor = Queries.getMembershipByHouseholdAndIndividualExtId(
+                    navigateActivity.getContentResolver(), householdExtId,
+                    individualExtId);
+            cursor.moveToFirst();
+
+            Membership membership = Converter.toMembership(cursor, true);
+            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
+                    membership.getRelationshipToHead());
+
+        }
+    }
 
 }

@@ -1,7 +1,6 @@
 package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
-import java.util.Map;
-
+import android.database.Cursor;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.IndividualAdapter;
 import org.openhds.mobile.database.LocationAdapter;
@@ -19,167 +18,191 @@ import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 
-import android.database.Cursor;
+import java.util.Map;
 
 public class CensusFormPayloadConsumers {
 
-	private static Individual insertOrUpdateIndividual(
-			Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
-		// Insert or Update the Individual
-		Individual individual = IndividualAdapter.create(formPayLoad);
-		IndividualAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
-				individual);
+    private static Location insertOrUpdateLocation(
+            Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
+        // Insert or Update the Location
+        Location location = LocationAdapter.create(formPayLoad);
+        LocationAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
+                location);
+        return location;
+    }
 
-		return individual;
-	}
+    private static Individual insertOrUpdateIndividual(
+            Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
+        // Insert or Update the Individual
+        Individual individual = IndividualAdapter.create(formPayLoad);
+        IndividualAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
+                individual);
 
-	public static class AddMemberOfHousehold implements FormPayloadConsumer {
+        return individual;
+    }
 
-		@Override
-		public boolean consumeFormPayload(Map<String, String> formPayload,
-				NavigateActivity navigateActivity) {
+    public static class AddLocation implements FormPayloadConsumer {
 
-			Map<String, QueryResult> hierarchyPath = navigateActivity
-					.getHierarchyPath();
-			QueryResult selectedLocation = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
+        @Override
+        public boolean consumeFormPayload(Map<String, String> formPayload,
+                                          NavigateActivity navigateActivity) {
+            insertOrUpdateLocation(formPayload, navigateActivity);
+            return false;
+        }
 
-			String relationshipType = formPayload
-					.get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
-			String membershipStatus = formPayload
-					.get(ProjectFormFields.Individuals.MEMBER_STATUS);
-			Individual individual = insertOrUpdateIndividual(formPayload,
-					navigateActivity);
-			String startDate = formPayload
-					.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+            // TODO Auto-generated method stub
 
-			Cursor cursor = Queries.getHeadOfHouseholdByHouseholdExtId(
-					navigateActivity.getContentResolver(),
-					selectedLocation.getExtId());
-			cursor.moveToFirst();
-			Individual currentHeadOfHousehold = Converter.toIndividual(cursor,
-					true);
+        }
+    }
 
-			// INSERT or UPDATE RELATIONSHIP
-			Relationship relationship = RelationshipAdapter.create(
+    public static class AddMemberOfHousehold implements FormPayloadConsumer {
+
+        @Override
+        public boolean consumeFormPayload(Map<String, String> formPayload,
+                                          NavigateActivity navigateActivity) {
+
+            Map<String, QueryResult> hierarchyPath = navigateActivity
+                    .getHierarchyPath();
+            QueryResult selectedLocation = hierarchyPath
+                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
+
+            String relationshipType = formPayload
+                    .get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
+            String membershipStatus = formPayload
+                    .get(ProjectFormFields.Individuals.MEMBER_STATUS);
+            Individual individual = insertOrUpdateIndividual(formPayload,
+                    navigateActivity);
+            String startDate = formPayload
+                    .get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+
+            Cursor cursor = Queries.getHeadOfHouseholdByHouseholdExtId(
+                    navigateActivity.getContentResolver(),
+                    selectedLocation.getExtId());
+            cursor.moveToFirst();
+            Individual currentHeadOfHousehold = Converter.toIndividual(cursor,
+                    true);
+
+            // INSERT or UPDATE RELATIONSHIP
+            Relationship relationship = RelationshipAdapter.create(
                     individual, currentHeadOfHousehold, relationshipType,
-					startDate);
-			RelationshipAdapter.insertOrUpdate(
-					navigateActivity.getContentResolver(), relationship);
+                    startDate);
+            RelationshipAdapter.insertOrUpdate(
+                    navigateActivity.getContentResolver(), relationship);
 
-			// INSERT or UPDATE MEMBERSHIP
-			Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
-					navigateActivity.getContentResolver(),
-					selectedLocation.getExtId());
-			if (socialGroupCursor.moveToFirst()) {
-				SocialGroup socialGroup = Converter.toSocialGroup(
-						socialGroupCursor, true);
-				Membership membership = MembershipAdapter.create(individual,
-						socialGroup, relationshipType, membershipStatus);
+            // INSERT or UPDATE MEMBERSHIP
+            Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
+                    navigateActivity.getContentResolver(),
+                    selectedLocation.getExtId());
+            if (socialGroupCursor.moveToFirst()) {
+                SocialGroup socialGroup = Converter.toSocialGroup(
+                        socialGroupCursor, true);
+                Membership membership = MembershipAdapter.create(individual,
+                        socialGroup, relationshipType, membershipStatus);
 
-				MembershipAdapter.insertOrUpdate(
-						navigateActivity.getContentResolver(), membership);
-			}
-			socialGroupCursor.close();
+                MembershipAdapter.insertOrUpdate(
+                        navigateActivity.getContentResolver(), membership);
+            }
+            socialGroupCursor.close();
 
-			return false;
+            return false;
 
-		}
+        }
 
-		@Override
-		public void postFillFormPayload(Map<String, String> formPayload) {
-			// TODO Auto-generated method stub
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+            // TODO Auto-generated method stub
 
-		}
-	}
+        }
+    }
 
-	public static class AddHeadOfHousehold implements FormPayloadConsumer {
+    public static class AddHeadOfHousehold implements FormPayloadConsumer {
 
-		@Override
-		public boolean consumeFormPayload(Map<String, String> formPayload,
-				NavigateActivity navigateActivity) {
+        @Override
+        public boolean consumeFormPayload(Map<String, String> formPayload,
+                                          NavigateActivity navigateActivity) {
 
-			postFillFormPayload(formPayload);
-			boolean postFilled = true;
+            postFillFormPayload(formPayload);
+            boolean postFilled = true;
 
 
 
-			Map<String, QueryResult> hierarchyPath = navigateActivity
-					.getHierarchyPath();
-			QueryResult selectedLocation = hierarchyPath
-					.get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
+            Map<String, QueryResult> hierarchyPath = navigateActivity
+                    .getHierarchyPath();
+            QueryResult selectedLocation = hierarchyPath
+                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
 
-			// Pull out useful strings from the formPayload
-			String relationshipType = formPayload
-					.get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
-			String membershipStatus = formPayload
-					.get(ProjectFormFields.Individuals.MEMBER_STATUS);
-			String startDate = formPayload
-					.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
-			Individual individual = insertOrUpdateIndividual(formPayload,
-					navigateActivity);
+            // Pull out useful strings from the formPayload
+            String relationshipType = formPayload
+                    .get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
+            String membershipStatus = formPayload
+                    .get(ProjectFormFields.Individuals.MEMBER_STATUS);
+            String startDate = formPayload
+                    .get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+            Individual individual = insertOrUpdateIndividual(formPayload,
+                    navigateActivity);
 
-			// Update the name of the location
-			Cursor locationCursor = Queries.getLocationByExtId(
-					navigateActivity.getContentResolver(),
-					selectedLocation.getExtId());
-			locationCursor.moveToNext();
-			Location location = Converter.toLocation(locationCursor, true);
-			String locationName = individual.getLastName();
-			location.setName(locationName);
-			selectedLocation.setName(locationName);
-			LocationAdapter.update(navigateActivity.getContentResolver(),
-					location);
+            // Update the name of the location
+            Cursor locationCursor = Queries.getLocationByExtId(
+                    navigateActivity.getContentResolver(),
+                    selectedLocation.getExtId());
+            locationCursor.moveToNext();
+            Location location = Converter.toLocation(locationCursor, true);
+            String locationName = individual.getLastName();
+            location.setName(locationName);
+            selectedLocation.setName(locationName);
+            LocationAdapter.update(navigateActivity.getContentResolver(),
+                    location);
 
-			// create socialgroup
-			SocialGroup socialGroup;
-			socialGroup = SocialGroupAdapter.create(
-					selectedLocation.getExtId(), individual);
-			SocialGroupAdapter.insertOrUpdate(
-					navigateActivity.getContentResolver(), socialGroup);
+            // create socialgroup
+            SocialGroup socialGroup;
+            socialGroup = SocialGroupAdapter.create(
+                    selectedLocation.getExtId(), individual);
+            SocialGroupAdapter.insertOrUpdate(
+                    navigateActivity.getContentResolver(), socialGroup);
 
-			// create membership
-			Membership membership = MembershipAdapter.create(individual,
-					socialGroup, relationshipType, membershipStatus);
-			MembershipAdapter.insertOrUpdate(
-					navigateActivity.getContentResolver(), membership);
+            // create membership
+            Membership membership = MembershipAdapter.create(individual,
+                    socialGroup, relationshipType, membershipStatus);
+            MembershipAdapter.insertOrUpdate(
+                    navigateActivity.getContentResolver(), membership);
 
-			// Set head of household's relationship to himself.
-			Relationship relationship = RelationshipAdapter.create(individual,
-					individual, relationshipType, startDate);
-			RelationshipAdapter.insertOrUpdate(
-					navigateActivity.getContentResolver(), relationship);
+            // Set head of household's relationship to himself.
+            Relationship relationship = RelationshipAdapter.create(individual,
+                    individual, relationshipType, startDate);
+            RelationshipAdapter.insertOrUpdate(
+                    navigateActivity.getContentResolver(), relationship);
 
-			return postFilled;
+            return postFilled;
 
-		}
+        }
 
-		@Override
-		public void postFillFormPayload(Map<String, String> formPayload) {
-			formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
-					"1");
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
+                    "1");
 
-		}
+        }
 
-	}
+    }
 
-	public static class EditIndividual implements FormPayloadConsumer {
+    public static class EditIndividual implements FormPayloadConsumer {
 
-		@Override
-		public boolean consumeFormPayload(Map<String, String> formPayload,
-				NavigateActivity navigateActivity) {
-			// TODO Auto-generated method stub
-			new AddMemberOfHousehold().consumeFormPayload(formPayload,
-					navigateActivity);
-			return false;
+        @Override
+        public boolean consumeFormPayload(Map<String, String> formPayload,
+                                          NavigateActivity navigateActivity) {
+            new AddMemberOfHousehold().consumeFormPayload(formPayload,
+                    navigateActivity);
+            return false;
 
-		}
+        }
 
-		@Override
-		public void postFillFormPayload(Map<String, String> formPayload) {
-			// TODO Auto-generated method stub
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+            // TODO Auto-generated method stub
 
-		}
+        }
 
-	}
+    }
 }

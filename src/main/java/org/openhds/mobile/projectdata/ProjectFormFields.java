@@ -65,6 +65,38 @@ public class ProjectFormFields {
 		}
 	}
 
+    public static final class Locations {
+        public static final String HIERERCHY_EXTID = "hierarchyExtId";
+        public static final String LOCATION_EXTID = "locationExtId";
+        public static final String LOCATION_NAME = "locationName";
+        public static final String LOCATION_TYPE = "locationType";
+        public static final String COMMUNITY_NAME = "communityName";
+        public static final String MAP_AREA_NAME = "mapAreaName";
+        public static final String LOCALITY_NAME = "localityName";
+        public static final String SECTOR_NAME = "sectorName";
+
+
+        private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
+
+        static {
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, HIERERCHY_EXTID);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID, LOCATION_EXTID);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_NAME, LOCATION_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME, COMMUNITY_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME, MAP_AREA_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME, LOCALITY_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, SECTOR_NAME);
+        }
+
+        public static String getFieldNameFromColumn(String column) {
+            if (columnsToFieldNames.containsKey(column)) {
+                return columnsToFieldNames.get(column);
+            } else {
+                return null;
+            }
+        }
+    }
+
 	public static final class Individuals {
 
 		// for individuals table

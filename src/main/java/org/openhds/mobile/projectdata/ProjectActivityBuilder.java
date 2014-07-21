@@ -1,13 +1,7 @@
 package org.openhds.mobile.projectdata;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.detailfragments.DetailFragment;
-import org.openhds.mobile.fragment.detailfragments.HouseholdDetailFragment;
 import org.openhds.mobile.fragment.detailfragments.IndividualDetailFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.projectdata.FormFilters.CensusFormFilters;
@@ -19,6 +13,11 @@ import org.openhds.mobile.projectdata.FormPayloadConsumers.UpdateFormPayloadCons
 import org.openhds.mobile.projectdata.QueryHelpers.CensusQueryHelper;
 import org.openhds.mobile.projectdata.QueryHelpers.NavigateModuleInfo;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProjectActivityBuilder {
 
@@ -80,6 +79,12 @@ public class ProjectActivityBuilder {
 			ArrayList<FormBehaviour> householdFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
+
+            householdFormList.add(new FormBehaviour("Location",
+                    R.string.create_location,
+                    new CensusFormFilters.AddLocation(),
+                    new CensusFormPayloadBuilders.AddLocation(),
+                    new CensusFormPayloadConsumers.AddLocation()));
 
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.create_head_of_household_label,
@@ -150,7 +155,7 @@ public class ProjectActivityBuilder {
 			return new CensusQueryHelper();
 		}
 
-        public static class CensusInfo implements NavigateModuleInfo{
+        public static class CensusInfo implements NavigateModuleInfo {
 
             @Override
             public int getModuleLabelStringId() {

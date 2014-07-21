@@ -110,6 +110,7 @@
     <string name="household_label">Household</string>
     <string name="individual_label">Individual</string>
     <string name="bottom_label">Bottom</string>
+    <string name="create_location">Create new Household</string>
     <string name="create_head_of_household_label">Create Head of Household</string>
     <string name="add_member_of_household_label">Add Member of Household</string>
     <string name="edit_individual_label">Edit Individual</string>
