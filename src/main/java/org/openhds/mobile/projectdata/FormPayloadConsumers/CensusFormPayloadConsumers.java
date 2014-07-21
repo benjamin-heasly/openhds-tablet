@@ -75,7 +75,7 @@ public class CensusFormPayloadConsumers {
             Individual individual = insertOrUpdateIndividual(formPayload,
                     navigateActivity);
             String startDate = formPayload
-                    .get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+                    .get(ProjectFormFields.General.COLLECTION_DATE_TIME);
 
             Cursor cursor = Queries.getHeadOfHouseholdByHouseholdExtId(
                     navigateActivity.getContentResolver(),
@@ -139,7 +139,7 @@ public class CensusFormPayloadConsumers {
             String membershipStatus = formPayload
                     .get(ProjectFormFields.Individuals.MEMBER_STATUS);
             String startDate = formPayload
-                    .get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+                    .get(ProjectFormFields.General.COLLECTION_DATE_TIME);
             Individual individual = insertOrUpdateIndividual(formPayload,
                     navigateActivity);
 

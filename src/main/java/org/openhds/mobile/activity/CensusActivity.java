@@ -553,7 +553,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 								membership);
 
 						String startDate = formInstanceData
-								.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+								.get(ProjectFormFields.General.COLLECTION_DATE_TIME);
 
 						// Set head of household's relationship to himself.
 						Relationship relationship = RelationshipAdapter.create(
@@ -566,7 +566,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 					} else {
 
 						String startDate = formInstanceData
-								.get(ProjectFormFields.General.COLLECTED_DATE_TIME);
+								.get(ProjectFormFields.General.COLLECTION_DATE_TIME);
 
 						// INSERT or UPDATE RELATIONSHIP
 						Relationship relationship = RelationshipAdapter.create(
@@ -629,7 +629,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 				fieldWorker.getExtId());
 
 		Calendar c = Calendar.getInstance();
-		formFieldNames.put(ProjectFormFields.General.COLLECTED_DATE_TIME, c
+		formFieldNames.put(ProjectFormFields.General.COLLECTION_DATE_TIME, c
 				.getTime().toString());
 		
 		if (currentHeadOfHousehold == null) {
