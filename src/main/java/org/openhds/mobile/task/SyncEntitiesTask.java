@@ -514,7 +514,7 @@ public class SyncEntitiesTask extends
                             } else if (tagName.equalsIgnoreCase("memberships")) {
                                 pullOutMemberships(parser);
                             } else if (tagName.equalsIgnoreCase("residencies")) {
-                                        pullOutResidencies(parser, cv);
+                                pullOutResidencies(parser, cv);
                             }
                         }
                     }
@@ -638,39 +638,91 @@ public class SyncEntitiesTask extends
 
     private void processVisitParams(XmlPullParser parser)
             throws XmlPullParserException, IOException {
-        parser.nextTag();
 
+        int count = 0;
+        String tagName;
         values.clear();
+
+        parser.nextTag();
         while (notEndOfXmlDoc("visits", parser)) {
-            // skip collected by
-            parser.nextTag(); // <collectedBy>
-            parser.nextTag(); // <extId>
-            parser.nextText();
-            parser.nextTag(); // </collectedBy>
 
-            ContentValues cv = new ContentValues();
+            try {
+                ContentValues cv = new ContentValues();
+                while (true) {
+                    tagName = parser.getName();
+                    if (null != tagName) {
 
-            parser.nextTag();
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_EXTID, parser.nextText());
+                        if (tagName.equalsIgnoreCase("visit")
+                                && parser.getEventType() == XmlPullParser.END_TAG) {
+                            parser.next();
+                            values.add(cv);
+                            break;
+                        }
 
-            parser.nextTag();
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_DATE, parser.nextText());
+                        if (parser.getEventType() == XmlPullParser.START_TAG) {
+                            if (tagName.equalsIgnoreCase("extId")) {
+                                cv.put(OpenHDS.Visits.COLUMN_VISIT_EXTID,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("visitDate")) {
+                                cv.put(OpenHDS.Visits.COLUMN_VISIT_DATE,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("visitLocation")) {
+                                //<visitLocation>
+                                //    <extId>M401S83E01P1</extId>
+                                //</visitLocation>
+                                while (true) {
+                                    tagName = parser.getName();
+                                    if (null == tagName) {
+                                        parser.next();
+                                        continue;
 
-            parser.nextTag(); // <visitLocation>
-            parser.nextTag();
-            cv.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID, parser.nextText());
-            parser.nextTag(); // </visitLocation>
+                                    } else if (tagName.equalsIgnoreCase("visitLocation")
+                                            && parser.getEventType() == XmlPullParser.END_TAG) {
+                                        break;
 
-            values.add(cv);
+                                    } else if (tagName.equalsIgnoreCase("extId")) {
+                                        cv.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID,
+                                                parser.nextText());
+                                    }
+                                    parser.next();
+                                }
+                            } else if (tagName.equalsIgnoreCase("collectedBy")) {
+                                //<collectedBy>
+                                //    <extId>UNK</extId>
+                                //</collectedBy>
+                                while (true) {
+                                    tagName = parser.getName();
+                                    if (null == tagName) {
+                                        parser.next();
+                                        continue;
 
-            parser.nextTag(); // </visit>
-            parser.nextTag(); // </visits> or <visit>
+                                    } else if (tagName.equalsIgnoreCase("collectedBy")
+                                            && parser.getEventType() == XmlPullParser.END_TAG) {
+                                        break;
+
+                                    } else if (tagName.equalsIgnoreCase("extId")) {
+                                        cv.put(OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID,
+                                                parser.nextText());
+                                    }
+                                    parser.next();
+                                }
+                            }
+                        }
+                    }
+                    parser.next();
+                }
+
+            } catch (Exception e) {
+                Log.e(getClass().getName(), e.getMessage());
+            }
+
+            if (values.size() >= 100) {
+                count += values.size();
+                publishProgress(count);
+                persistValues(OpenHDS.Visits.CONTENT_URI);
+            }
         }
-
-        if (!values.isEmpty()) {
-            resolver.bulkInsert(OpenHDS.Visits.CONTENT_ID_URI_BASE,
-                    values.toArray(emptyArray));
-        }
+        persistValues(OpenHDS.Visits.CONTENT_URI);
     }
 
     private void processSocialGroupParams(XmlPullParser parser)
