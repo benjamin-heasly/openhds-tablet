@@ -17,6 +17,7 @@ import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.projectdata.ProjectResources;
 
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class CensusFormPayloadConsumers {
             Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
         // Insert or Update the Individual
         Individual individual = IndividualAdapter.create(formPayLoad);
+        individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
         IndividualAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
                 individual);
 

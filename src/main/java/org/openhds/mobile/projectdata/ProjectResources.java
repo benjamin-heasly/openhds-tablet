@@ -15,6 +15,9 @@ public class ProjectResources {
 
 		public static final Map<String, Integer> Individual = new HashMap<String, Integer>();
 
+        public static final String RESIDENCY_END_TYPE_NA = "NA";
+        public static final String RESIDENCY_END_TYPE_OMG = "OMG";
+
 		public static final String AGE_UNITS_YEARS = "Years";
 		public static final String AGE_UNITS_MONTHS = "Months";
 

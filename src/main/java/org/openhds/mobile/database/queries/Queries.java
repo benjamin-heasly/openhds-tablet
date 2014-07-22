@@ -5,6 +5,7 @@ import org.openhds.mobile.OpenHDS;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import org.openhds.mobile.projectdata.ProjectResources;
 
 /**
  * Centralized location to put queries on data to reduce duplication
@@ -62,7 +63,7 @@ public class Queries {
                                                    String extId) {
         return getCursor(resolver, OpenHDS.Individuals.CONTENT_ID_URI_BASE,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-                extId, OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, "NA",null);
+                extId, OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, ProjectResources.Individual.RESIDENCY_END_TYPE_NA, null);
     }
 
     private static boolean isFound(Cursor cursor) {
