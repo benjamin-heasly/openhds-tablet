@@ -1,4 +1,4 @@
 openhds-tablet
 ==============
 
-Server application for Health and Demographic Data collection and management
+Android Tablet application for Health and Demographic Data collection and management
