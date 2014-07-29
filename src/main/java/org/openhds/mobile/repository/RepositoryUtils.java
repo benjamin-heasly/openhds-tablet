@@ -75,5 +75,13 @@ public class RepositoryUtils {
         final String whereStatement = buildWhereStatement(columnNames, operator);
         return whereStatement + " " + LIMIT + " " + start + " " + OFFSET + " " + maxResults;
     }
+
+    public static String extractString(Cursor cursor, String columnName) {
+        int columnIndex = cursor.getColumnIndex(columnName);
+        if (columnIndex < 0) {
+            return null;
+        }
+        return cursor.getString(columnIndex);
+    }
 }
 
