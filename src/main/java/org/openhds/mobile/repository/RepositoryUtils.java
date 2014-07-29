@@ -11,21 +11,21 @@ import android.net.Uri;
  * BSH
  */
 public class RepositoryUtils {
-    public static final String OPERATOR_EQUALS = "=";
-    public static final String OPERATOR_LIKE = "LIKE";
-    public static final String WHERE_AND = "AND";
-    public static final String WHERE_PLACEHOLDER = "?";
-    public static final String WHERE_TRUE = "1";
-
+    private static final String EQUALS = "=";
+    private static final String AND = "AND";
+    private static final String LIMIT = "LIMIT";
+    private static final String OFFSET = "OFFSET";
+    private static final String WHERE_PLACEHOLDER = "?";
+    private static final String WHERE_TRUE = "1";
 
     public static Uri insert(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues) {
         return contentResolver.insert(tableUri, contentValues);
     }
 
     public static Cursor query(ContentResolver contentResolver, Uri tableUri,
-                               String whereClause, String[] columnValues, String columnSortBy) {
+                               String whereStatement, String[] columnValues, String columnSortBy) {
 
-        return contentResolver.query(tableUri, null, whereClause, columnValues, columnSortBy);
+        return contentResolver.query(tableUri, null, whereStatement, columnValues, columnSortBy);
     }
 
     public static int update(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues,
@@ -33,7 +33,7 @@ public class RepositoryUtils {
 
         final String[] columnNames = {columnName};
         final String[] columnValues = {columnValue};
-        final String whereStatement = buildWhereStatement(columnNames, OPERATOR_EQUALS);
+        final String whereStatement = buildWhereStatement(columnNames, EQUALS);
 
         return contentResolver.update(tableUri, contentValues, whereStatement, columnValues);
     }
@@ -42,7 +42,7 @@ public class RepositoryUtils {
 
         final String[] columnNames = {columnName};
         final String[] columnValues = {columnValue};
-        final String whereStatement = buildWhereStatement(columnNames, OPERATOR_EQUALS);
+        final String whereStatement = buildWhereStatement(columnNames, EQUALS);
 
         return contentResolver.delete(tableUri, whereStatement, columnValues);
     }
@@ -60,7 +60,7 @@ public class RepositoryUtils {
         }
 
         for (int i = 2; i < columnNames.length; i++) {
-            stringBuilder.append(" " + WHERE_AND + " ");
+            stringBuilder.append(" " + AND + " ");
             stringBuilder.append(buildWhereClause(columnNames[i], operator));
         }
 
@@ -70,4 +70,10 @@ public class RepositoryUtils {
     private static String buildWhereClause(String columnName, String operator) {
         return columnName + " " + operator + " ' " + WHERE_PLACEHOLDER + " '";
     }
+
+    public static String buildWhereRangedStatement(String[] columnNames, String operator, int start, int maxResults) {
+        final String whereStatement = buildWhereStatement(columnNames, operator);
+        return whereStatement + " " + LIMIT + " " + start + " " + OFFSET + " " + maxResults;
+    }
 }
+
