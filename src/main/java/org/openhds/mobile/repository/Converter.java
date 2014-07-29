@@ -12,4 +12,6 @@ public interface Converter<T> {
 
     public ContentValues toContentValues(T entity);
 
+    public String getId(T entity);
+
 }

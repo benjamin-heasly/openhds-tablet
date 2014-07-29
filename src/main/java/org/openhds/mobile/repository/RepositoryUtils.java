@@ -11,7 +11,9 @@ import android.net.Uri;
  * BSH
  */
 public class RepositoryUtils {
-    private static final String EQUALS = "=";
+    public static final String EQUALS = "=";
+    public static final String LIKE = "LIKE";
+
     private static final String AND = "AND";
     private static final String LIMIT = "LIMIT";
     private static final String OFFSET = "OFFSET";
@@ -22,12 +24,6 @@ public class RepositoryUtils {
         return contentResolver.insert(tableUri, contentValues);
     }
 
-    public static Cursor query(ContentResolver contentResolver, Uri tableUri,
-                               String whereStatement, String[] columnValues, String columnSortBy) {
-
-        return contentResolver.query(tableUri, null, whereStatement, columnValues, columnSortBy);
-    }
-
     public static int update(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues,
                              String columnName, String columnValue) {
 
@@ -36,6 +32,12 @@ public class RepositoryUtils {
         final String whereStatement = buildWhereStatement(columnNames, EQUALS);
 
         return contentResolver.update(tableUri, contentValues, whereStatement, columnValues);
+    }
+
+    public static Cursor query(ContentResolver contentResolver, Uri tableUri,
+                               String whereStatement, String[] columnValues, String columnSortBy) {
+
+        return contentResolver.query(tableUri, null, whereStatement, columnValues, columnSortBy);
     }
 
     public static int delete(ContentResolver contentResolver, Uri tableUri, String columnName, String columnValue) {

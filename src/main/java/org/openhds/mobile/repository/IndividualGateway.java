@@ -1,9 +1,11 @@
 package org.openhds.mobile.repository;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.Location;
 
 import java.util.List;
 
@@ -26,53 +28,34 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS;
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
+
 /**
- * Expose queries and CRUD for Individuals.
+ * Convert Individuals to and from database.  Individual-specific queries.
  */
 public class IndividualGateway extends Gateway<Individual> {
 
     public IndividualGateway() {
-        super(OpenHDS.Individuals.CONTENT_ID_URI_BASE, null);
+        super(OpenHDS.Individuals.CONTENT_ID_URI_BASE, COLUMN_INDIVIDUAL_EXTID, new IndividualConverter());
     }
 
-    @Override
-    public boolean insertOrUpdate() {
-        return false;
+    public List<Individual> findByResidency(ContentResolver contentResolver, Location residency) {
+        Query query = new Query(tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residency.getExtId());
+        Cursor cursor = query.select(contentResolver);
+        return toList(cursor);
     }
 
-    @Override
-    public boolean deleteById(String id) {
-        return false;
+    public List<Individual> findByExtIdPrefix(ContentResolver contentResolver, String extIdPrefix) {
+        final String[] columnNames = {COLUMN_INDIVIDUAL_EXTID};
+        final String[] columnValues = {extIdPrefix};
+        Query query = new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID, LIKE);
+        Cursor cursor = query.select(contentResolver);
+        return toList(cursor);
     }
 
-    @Override
-    public boolean exists(String id) {
-        return false;
-    }
-
-    @Override
-    public Individual findById(String id) {
-        return null;
-    }
-
-    @Override
-    public List<Individual> findAll() {
-        return null;
-    }
-
-    @Override
-    public List<Individual> findByCriteriaEqual(String[] columnNames, String[] columnValues) {
-        return null;
-    }
-
-    @Override
-    public List<Individual> findByCriteriaLike(String[] columnNames, String[] columnValues) {
-        return null;
-    }
-
-    private class IndividualConverter implements Converter<Individual> {
+    private static class IndividualConverter implements Converter<Individual> {
 
         @Override
         public Individual fromCursor(Cursor cursor) {
@@ -126,6 +109,11 @@ public class IndividualGateway extends Gateway<Individual> {
             contentValues.put(COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE, individual.getLanguagePreference());
 
             return contentValues;
+        }
+
+        @Override
+        public String getId(Individual individual) {
+            return individual.getExtId();
         }
     }
 }
