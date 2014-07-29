@@ -86,6 +86,12 @@ public class ProjectActivityBuilder {
                     new CensusFormPayloadBuilders.AddLocation(),
                     new CensusFormPayloadConsumers.AddLocation()));
 
+            individualFormList.add(new FormBehaviour("Bed_net",
+                    R.string.distribute_bednets,
+                    new CensusFormFilters.DistributeBednets(),
+                    new CensusFormPayloadBuilders.DistributeBednets(),
+                    new CensusFormPayloadConsumers.DistributeBednets()));
+
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.create_head_of_household_label,
 					new CensusFormFilters.AddHeadOfHousehold(),

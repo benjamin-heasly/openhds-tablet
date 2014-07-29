@@ -11,6 +11,7 @@ public class ProjectFormFields {
 
 	public static final class General {
 		public static final String COLLECTION_DATE_TIME = "collectionDateTime";
+        public static final String DISTRIBUTION_DATE_TIME = "distributionDateTime";
 		public static final String COLLECTED_BY_FIELD_WORKER_EXTID = "fieldWorkerExtId";
 
 		public static final String REGION_STATE_FIELD_NAME = "regionExtId";

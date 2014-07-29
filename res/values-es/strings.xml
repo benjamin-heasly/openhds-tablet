@@ -162,4 +162,8 @@
     <string name="update_portal_label">Iniciar Actividad de Actualización</string>
     <string name="update_portal_description">Conducir visitas en locaciónes y actualizar los datos desde la ultima visita</string>
 
+    <!-- Bednet Strings -->
+    <string name="distribute_bednets">Distribuir Telas Mosquiteras </string>
+
+
 </resources>

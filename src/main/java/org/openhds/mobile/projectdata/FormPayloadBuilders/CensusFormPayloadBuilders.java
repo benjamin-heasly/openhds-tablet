@@ -110,6 +110,27 @@ public class CensusFormPayloadBuilders {
      *
      */
 
+    public static class DistributeBednets implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+
+            //rename the current datetime to be the bednet's distribution datetime
+            String distributionDateTime = formPayload.get(ProjectFormFields.General.COLLECTION_DATE_TIME);
+            formPayload.remove(ProjectFormFields.General.COLLECTION_DATE_TIME);
+            formPayload.put(ProjectFormFields.General.DISTRIBUTION_DATE_TIME, distributionDateTime);
+
+            String locationExtId = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE).getExtId();
+            formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+
+        }
+
+    }
+
     public static class AddLocation implements FormPayloadBuilder {
 
         @Override
