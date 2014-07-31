@@ -20,7 +20,7 @@ public class Query {
     public Query(Uri tableUri, String columnName, String columnValue) {
         this.tableUri = tableUri;
         this.columnNames = new String[] {columnName};
-        this.columnValues = new String[] {columnValue};
+        this.columnValues = null == columnValue ? null : new String[] {columnValue};
         this.columnOrderBy = columnName;
         this.operator = EQUALS;
     }

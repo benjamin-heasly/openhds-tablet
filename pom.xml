@@ -67,17 +67,19 @@
 			<artifactId>sqlcipher</artifactId>
 			<version>3.0.1</version>
 		</dependency>
+
 		<!-- This dependencies are required for sqlcipher -->
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.3</version>
-		</dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>r09</version>
+			<version>17.0</version>
 		</dependency>
+
 		<!-- In theory, the sqlcipher .so files should be here as well -->
 		<!-- But the android m2e connector doesn't support them yet -->
 		<!-- So they are embedded in the libs/armeabi folder -->

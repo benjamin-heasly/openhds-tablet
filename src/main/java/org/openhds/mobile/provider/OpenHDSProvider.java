@@ -494,7 +494,11 @@ public class OpenHDSProvider extends ContentProvider {
             }
         } catch (UnsupportedOperationException e) {
             // shared preferences unavailable during integration tests
-            password = UUID.randomUUID().toString();
+            // TODO: instead of this try/catch, integration test should
+            // TODO: inject a context capable of returning a shared preferences
+            // TODO: for example:
+            // TODO: http://stackoverflow.com/questions/5267671/unsupportedoperationexception-while-calling-getsharedpreferences-from-unit-tes
+            password = "";
         }
 
         // Assumes that any failures will be reported by a thrown exception.
