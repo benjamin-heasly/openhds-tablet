@@ -43,22 +43,6 @@ public class CensusFormPayloadConsumers {
         return individual;
     }
 
-    public static class DistributeBednets implements FormPayloadConsumer {
-
-        @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload,
-                                          NavigateActivity navigateActivity) {
-            return true;
-        }
-
-        @Override
-        public void postFillFormPayload(Map<String, String> formPayload) {
-            // TODO Auto-generated method stub
-
-        }
-
-    }
-
     public static class AddLocation implements FormPayloadConsumer {
 
         @Override
