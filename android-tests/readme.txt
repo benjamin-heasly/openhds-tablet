@@ -1,6 +1,6 @@
 Getting Android instrumentation tests running was a huge pain!
 
-I started with teh Android command line tool for creating a test project.  It didn't quire work as advertised.  I had
+I started with the Android command line tool for creating a test project.  It didn't quire work as advertised.  I had
 to create the folder for the test project first, then run the command from inside.  Something like
 
 cd openhds-tablet
@@ -42,7 +42,11 @@ cd openhds-tablet/android-tests
 mvn -Dandroid.sdk.path="/home/optiplex-710-b/adt-bundle-linux-x86_64-20140321/sdk" -Dandroid.device=usb clean install
 
 For now they android tests are in a separate maven project in the android-tests folder.  We should probably make this a
-module of the main project so that the tests run automatically.  This should also allow the IDE to do magic like
-auto-import, auto-complete, etc.  I think this would just boil down to Maven config, now that the basics are in place.
+module of the main project so that the tests run automatically.  Since the tests declare a dependency on the main app,
+I think Maven will correctly rebuild and install the main app before trying to build and run the tests:
+http://maven.apache.org/guides/mini/guide-multiple-modules.html
+
+We want to make sure both apps are uninstalled each time, to keep the tests in sync with the main app:
+                <undeployBeforeDeploy>true</undeployBeforeDeploy>
 
  --BSH
