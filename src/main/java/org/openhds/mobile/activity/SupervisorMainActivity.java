@@ -79,7 +79,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.login_menu, menu);
+		inflater.inflate(R.menu.supervisor_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -88,13 +88,19 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean isShowingPreferences = View.VISIBLE == prefContainer
-				.getVisibility();
-		if (isShowingPreferences) {
-			prefContainer.setVisibility(View.GONE);
-		} else {
-			prefContainer.setVisibility(View.VISIBLE);
-		}
+        if (item.getItemId() == R.id.configure_server) {
+            boolean isShowingPreferences = View.VISIBLE == prefContainer
+                    .getVisibility();
+            if (isShowingPreferences) {
+                prefContainer.setVisibility(View.GONE);
+            } else {
+                prefContainer.setVisibility(View.VISIBLE);
+            }
+        } else if (item.getItemId() == R.id.logout_menu_button) {
+            Intent intent = new Intent();
+            intent.setClass(this, OpeningActivity.class);
+            startActivity(intent);
+        }
 		return true;
 	}
 
