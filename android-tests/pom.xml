@@ -65,6 +65,7 @@
                         <instrumentationPackage>org.openhds.mobile.tests</instrumentationPackage>
                         <instrumentationRunner>android.test.InstrumentationTestRunner</instrumentationRunner>
                     </test>
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
                 <extensions>true</extensions>
             </plugin>

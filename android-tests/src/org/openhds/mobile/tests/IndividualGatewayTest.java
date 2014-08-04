@@ -26,7 +26,7 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
         List<Individual> allIndividuals = individualGateway.findAll(getMockContentResolver());
         assertEquals(0, allIndividuals.size());
 
-        Individual individual = individualGateway.findById("INVALID");
+        Individual individual = individualGateway.findById(getMockContentResolver(), "INVALID");
         assertNull(individual);
     }
 
@@ -48,7 +48,7 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
         individual.setEndType("N/A");
         individual.setOtherId("OTHER");
         individual.setOtherNames(name);
-        individual.setAge(50);
+        individual.setAge("50");
         individual.setAgeUnits("YEARS");
         individual.setPhoneNumber("1234567890");
         individual.setOtherPhoneNumber("0987654321");

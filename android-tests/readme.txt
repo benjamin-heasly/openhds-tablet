@@ -49,4 +49,9 @@ http://maven.apache.org/guides/mini/guide-multiple-modules.html
 We want to make sure both apps are uninstalled each time, to keep the tests in sync with the main app:
                 <undeployBeforeDeploy>true</undeployBeforeDeploy>
 
+I think we actually need two side-by-side projecte: openhds-tablet and openhds-tablet-android-tests.  Then we can
+aggregate the builds with a parent project.
+
+Debugging the app or test suites might mean launching an android session from intellij and not using Maven.
+
  --BSH
