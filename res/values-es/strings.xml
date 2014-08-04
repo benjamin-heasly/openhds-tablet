@@ -173,8 +173,11 @@
     <string name="form_type_visit">Visita</string>
     <string name="form_type_out_migration">Migración</string>
     <string name="form_type_bed_net">Tela Mosquitera</string>
-    <string name="field_worker_home_menu_text">Field Worker Home</string>
-    <string name="logout_menu_text">Logout</string>
+
+    <string name="field_worker_home_menu_text">Investigador de Campo Inicio</string>
+    <string name="logout_menu_text">Cerrar Sesión</string>
+    <string name="form_instance_list_header">Impresos Recientes</string>
+
 
 
 </resources>

@@ -63,6 +63,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         formInstanceLayout.addHeaderView(header);
 
         populateFormInstanceListView();
+        setTitle(this.getResources().getString(R.string.field_worker_home_menu_text));
 
         if (null != savedInstanceState) {
             return;
@@ -87,11 +88,6 @@ public class PortalActivity extends Activity implements OnClickListener {
                 intent.setClass(this, OpeningActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.field_worker_home_menu_button:
-                intent.setClass(this, PortalActivity.class);
-                intent.putExtra(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA, currentFieldWorker);
-                startActivity(intent);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -99,7 +95,7 @@ public class PortalActivity extends Activity implements OnClickListener {
 
     private void populateFormInstanceListView() {
 
-        unsyncedFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
+        unsyncedFormInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
 
         if (!unsyncedFormInstances.isEmpty()) {
             FormInstanceArrayAdapter adapter = new FormInstanceArrayAdapter(this, R.id.form_instance_list_item,
