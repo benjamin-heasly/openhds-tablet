@@ -108,4 +108,33 @@ public class ProjectResources {
 
 	}
 
+    public static final class FormType {
+
+        //provides a mapping between JR form id and android string resource id
+
+        private static final Map<String, Integer> FormType = new HashMap();
+
+        private static final String FORM_TYPE_INDIVIDUAL = "individual";
+        private static final String FORM_TYPE_LOCATION = "location";
+        private static final String FORM_TYPE_VISIT = "visit";
+        private static final String FORM_TYPE_OUT_MIGRATION = "out_migration";
+        private static final String FORM_TYPE_BED_NET = "bed_net";
+
+        static {
+
+            FormType.put(FORM_TYPE_INDIVIDUAL, R.string.form_type_individual);
+            FormType.put(FORM_TYPE_LOCATION, R.string.form_type_location);
+            FormType.put(FORM_TYPE_VISIT, R.string.form_type_visit);
+            FormType.put(FORM_TYPE_OUT_MIGRATION, R.string.form_type_out_migration);
+            FormType.put(FORM_TYPE_BED_NET, R.string.form_type_bed_net);
+
+        }
+        public static int getFormTypeStringId(String key) {
+            if (FormType.containsKey(key)) {
+                return FormType.get(key);
+            } else {
+                return 0;
+            }
+        }
+    }
 }

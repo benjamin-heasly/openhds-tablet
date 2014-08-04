@@ -160,10 +160,21 @@
     <string name="census_portal_description">Añadir o editar dato existense</string>
 
     <string name="update_portal_label">Iniciar Actividad de Actualización</string>
-    <string name="update_portal_description">Conducir visitas en locaciónes y actualizar los datos desde la ultima visita</string>
+    <string name="update_portal_description">Conducir visitas en ubicaciónes y actualizar los datos desde la ultima visita</string>
 
     <!-- Bednet Strings -->
     <string name="distribute_bednets">Distribuir Telas Mosquiteras </string>
+    <string name="bioko_portal_label">Iniciar Actividad de Telas Mosquiteras</string>
+    <string name="bioko_portal_description">Registrar la distribución de telas mosquiteras</string>
+
+    <!-- Form Types -->
+    <string name="form_type_individual">Individuo</string>
+    <string name="form_type_location">Ubicación</string>
+    <string name="form_type_visit">Visita</string>
+    <string name="form_type_out_migration">Migración</string>
+    <string name="form_type_bed_net">Tela Mosquitera</string>
+    <string name="field_worker_home_menu_text">Field Worker Home</string>
+    <string name="logout_menu_text">Logout</string>
 
 
 </resources>

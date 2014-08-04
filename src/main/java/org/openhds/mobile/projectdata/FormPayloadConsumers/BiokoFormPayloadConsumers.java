@@ -4,9 +4,6 @@ import org.openhds.mobile.activity.NavigateActivity;
 
 import java.util.Map;
 
-/**
- * Created by motech on 7/31/14.
- */
 public class BiokoFormPayloadConsumers {
 
     public static class DistributeBednets implements FormPayloadConsumer {

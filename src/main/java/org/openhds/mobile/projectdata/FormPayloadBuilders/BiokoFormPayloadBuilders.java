@@ -6,9 +6,6 @@ import org.openhds.mobile.projectdata.ProjectFormFields;
 
 import java.util.Map;
 
-/**
- * Created by motech on 7/31/14.
- */
 public class BiokoFormPayloadBuilders {
 
     public static class DistributeBednets implements FormPayloadBuilder {

@@ -1,0 +1,57 @@
+package org.openhds.mobile.adapter;
+
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import org.openhds.mobile.R;
+import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.projectdata.ProjectResources;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class FormInstanceArrayAdapter extends ArrayAdapter {
+
+    private Object[] formInstances;
+    private Context context;
+    private LayoutInflater inflater;
+
+
+    public FormInstanceArrayAdapter(Context context, int resource, Object[] formInstances) {
+        super(context, resource, formInstances);
+        this.context = context;
+        this.formInstances = formInstances;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        FormInstance instance = (FormInstance) formInstances[position];
+        String formType = instance.getFormName();
+        String fileName = instance.getFileName();
+
+        int formTypeLocalizedId= ProjectResources.FormType.getFormTypeStringId(formType);
+
+        if (convertView == null) {
+
+            convertView = inflater.inflate(R.layout.form_instance_list_item, null);
+        }
+
+        TextView formTypeView = (TextView) convertView.findViewById(R.id.form_instance_list_type);
+        formTypeView.setText(super.getContext().getResources().getString(formTypeLocalizedId));
+
+        TextView fileNameView = (TextView) convertView.findViewById(R.id.form_instance_list_filename);
+        fileNameView.setText(fileName);
+
+        return convertView;
+
+    }
+
+
+
+}
