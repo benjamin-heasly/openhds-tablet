@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import org.openhds.mobile.R;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.DetailToggleFragment;
@@ -69,7 +72,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 	private FieldWorker currentFieldWorker;
 	private Visit currentVisit;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.navigate_activity);
@@ -215,6 +218,34 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         savedInstanceState.putSerializable(VISIT_KEY,getCurrentVisit());
 		super.onSaveInstanceState(savedInstanceState);
 	}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent = new Intent();
+        switch (item.getItemId()) {
+            case R.id.logout_menu_button:
+                intent.setClass(this, OpeningActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.field_worker_home_menu_button:
+                intent.setClass(this, PortalActivity.class);
+                intent.putExtra(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA, getCurrentFieldWorker());
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 	private void hierarchySetup() {
 		int stateIndex = 0;

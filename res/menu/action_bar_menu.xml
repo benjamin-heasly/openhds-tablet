@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+            android:id="@+id/field_worker_home_menu_button"
+            android:title="@string/field_worker_home_menu_text"
+            android:showAsAction="ifRoom|withText" />
+    <item
+            android:id="@+id/logout_menu_button"
+            android:title="@string/logout_menu_text"
+            android:showAsAction="ifRoom|withText" />
+
+</menu>

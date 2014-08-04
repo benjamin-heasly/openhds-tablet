@@ -10,7 +10,12 @@ public class FormInstance {
 
 	private String formName;
 	private String filePath;
+    private String fileName;
 	private Uri uri;
+
+    public String getFileName() { return fileName; }
+
+    public void setFileName(String fileName) {this.fileName = fileName;}
 
 	public String getFormName() {
 		return formName;
