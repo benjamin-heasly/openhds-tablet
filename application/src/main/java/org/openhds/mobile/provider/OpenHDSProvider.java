@@ -30,13 +30,13 @@ import android.util.Log;
  * This class is based on the NotPadProvider sample in the Android SDK
  */
 public class OpenHDSProvider extends ContentProvider {
+    public static final String DATABASE_NAME = "openhds.db";
+    public static final int DATABASE_VERSION = 13;
+
     private static final String TAG = "OpenHDSProvider";
 
     private static final String DATABASE_PASSWORD_KEY = "database-password";
     private static final String DATABASE_SHARED_PREF = "openhds-provider";
-
-    private static final String DATABASE_NAME = "openhds.db";
-    private static final int DATABASE_VERSION = 12;
 
     private static HashMap<String, String> individualsProjectionMap;
     private static HashMap<String, String> locationsProjectionMap;
@@ -69,6 +69,7 @@ public class OpenHDSProvider extends ContentProvider {
     private static final int MEMBERSHIPS_ID = 18;
 
     private static final UriMatcher sUriMatcher;
+
     private DatabaseHelper mOpenHelper;
 
     private String password;
@@ -1021,5 +1022,10 @@ public class OpenHDSProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
+    }
+
+
+    public DatabaseHelper getDatabaseHelper() {
+        return mOpenHelper;
     }
 }

@@ -1,6 +1,9 @@
 package org.openhds.mobile.tests;
 
+import android.content.ContentResolver;
 import android.test.ProviderTestCase2;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.provider.OpenHDSProvider;
@@ -11,6 +14,8 @@ import java.util.List;
 public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
 
     private IndividualGateway individualGateway;
+    private OpenHDSProvider provider;
+    private ContentResolver contentResolver;
 
     public IndividualGatewayTest () {
         super(OpenHDSProvider.class, OpenHDS.AUTHORITY);
@@ -20,21 +25,51 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
     protected void setUp() throws Exception {
         super.setUp();
         this.individualGateway = new IndividualGateway();
+        this.provider = (OpenHDSProvider) getProvider();
+        this.contentResolver = getMockContentResolver();
+
+        // make sure we have a fresh database for each test
+        // TODO: coordinate test database password by injecting
+        // TODO: a context capable of returning a shared preferences with a known password configured here
+        // TODO: for example:
+        // TODO: http://stackoverflow.com/questions/5267671/unsupportedoperationexception-while-calling-getsharedpreferences-from-unit-tes
+        SQLiteOpenHelper databaseHelper = provider.getDatabaseHelper();
+        SQLiteDatabase.loadLibs(getContext());
+        SQLiteDatabase db = databaseHelper.getWritableDatabase("");
+        databaseHelper.onUpgrade(db, 0, 0);
     }
 
+
     public void testSafeToFindWhenEmpty() {
-        List<Individual> allIndividuals = individualGateway.findAll(getMockContentResolver());
+        List<Individual> allIndividuals = individualGateway.findAll(contentResolver);
         assertEquals(0, allIndividuals.size());
 
-        Individual individual = individualGateway.findById(getMockContentResolver(), "INVALID");
+        Individual individual = individualGateway.findById(contentResolver, "INVALID");
         assertNull(individual);
     }
 
     public void testAdd() {
-        Individual individual = getTestindividual("TEST", "mr. test");
+        Individual individual = getTestIndividual("TEST", "mr. test");
+
+        boolean wasInserted = individualGateway.insertOrUpdate(contentResolver, individual);
+        assertEquals(true, wasInserted);
+
+        Individual savedIndividual = individualGateway.findById(contentResolver, individual.getExtId());
+        assertNotNull(savedIndividual);
+        assertEquals(individual.getExtId(), savedIndividual.getExtId());
+
+        wasInserted = individualGateway.insertOrUpdate(contentResolver, individual);
+        assertEquals(false, wasInserted);
+
+        savedIndividual = individualGateway.findById(contentResolver, individual.getExtId());
+        assertNotNull(savedIndividual);
+        assertEquals(individual.getExtId(), savedIndividual.getExtId());
+
+        List<Individual> allIndividuals = individualGateway.findAll(contentResolver);
+        assertEquals(1, allIndividuals.size());
     }
 
-    private static Individual getTestindividual(String extId, String name) {
+    private static Individual getTestIndividual(String extId, String name) {
         Individual individual = new Individual();
 
         individual.setExtId(extId);
