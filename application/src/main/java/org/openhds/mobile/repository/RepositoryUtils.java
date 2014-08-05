@@ -18,7 +18,6 @@ public class RepositoryUtils {
     private static final String LIMIT = "LIMIT";
     private static final String OFFSET = "OFFSET";
     private static final String WHERE_PLACEHOLDER = "?";
-    private static final String WHERE_TRUE = "1";
 
     public static Uri insert(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues) {
         return contentResolver.insert(tableUri, contentValues);
@@ -51,7 +50,7 @@ public class RepositoryUtils {
 
     public static String buildWhereStatement(String[] columnNames, String operator) {
         if (null == columnNames || 0 == columnNames.length) {
-            return WHERE_TRUE;
+            return null;
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -70,7 +69,7 @@ public class RepositoryUtils {
     }
 
     private static String buildWhereClause(String columnName, String operator) {
-        return columnName + " " + operator + " ' " + WHERE_PLACEHOLDER + " '";
+        return columnName + " " + operator + " " + WHERE_PLACEHOLDER;
     }
 
     public static String buildWhereRangedStatement(String[] columnNames, String operator, int start, int maxResults) {
