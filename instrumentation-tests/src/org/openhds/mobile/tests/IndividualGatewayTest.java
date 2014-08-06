@@ -1,8 +1,6 @@
 package org.openhds.mobile.tests;
 
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.test.ProviderTestCase2;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
@@ -14,76 +12,27 @@ import org.openhds.mobile.repository.IndividualGateway;
 
 import java.util.List;
 
-public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
+public class IndividualGatewayTest extends GatewayTest<Individual> {
 
     private IndividualGateway individualGateway;
-    private OpenHDSProvider provider;
-    private ContentResolver contentResolver;
 
-    private final String TEST_PASSWORD = "";
-
-    public IndividualGatewayTest () {
-        super(OpenHDSProvider.class, OpenHDS.AUTHORITY);
+    public IndividualGatewayTest() {
+        super(new IndividualGateway());
+        this.individualGateway = (IndividualGateway) this.gateway;
     }
+
+//    + testFindByExtIdPrefix(String) // expect sizes when empty, no matches, matches
+//    + testFindByResidency(Residency) // expect sizes when empty, no matches, matches
+//    + testFindByCriteriaEqual(columnNames[], columnValues[]) // use criteria like testFindByResidency
+//    + testFindByCriteriaLike(columnNames[], columnValues[]) // use criteria like testFindByExtIdPrefix
+//    + testFindByCriteriaEqualAsIterator(columnNames[], columnValues[]) // use criteria like testFindByResidency
+//    + testFindByCriteriaLikeAsIterator(columnNames[], columnValues[]) // use criteria like testFindByExtIdPrefix
 
     @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        this.individualGateway = new IndividualGateway();
-        this.provider = (OpenHDSProvider) getProvider();
-        this.contentResolver = getMockContentResolver();
-
-        // inject a password helper that uses a known password and
-        // doesn't use shared preferences, which are not enabled under ProviderTestCase2
-        provider.setPasswordHelper(new ConstantPasswordHelper());
-
-        // make sure we have a fresh database for each test
-        SQLiteOpenHelper databaseHelper = provider.getDatabaseHelper();
-        SQLiteDatabase.loadLibs(getContext());
-        SQLiteDatabase db = databaseHelper.getWritableDatabase(TEST_PASSWORD);
-        databaseHelper.onUpgrade(db, 0, 0);
-    }
-
-    @Override
-    protected void tearDown() {
-        SQLiteOpenHelper databaseHelper = provider.getDatabaseHelper();
-        SQLiteDatabase db = databaseHelper.getWritableDatabase(TEST_PASSWORD);
-        db.close();
-    }
-
-    public void testSafeToFindWhenEmpty() {
-        List<Individual> allIndividuals = individualGateway.findAll(contentResolver);
-        assertEquals(0, allIndividuals.size());
-
-        Individual individual = individualGateway.findById(contentResolver, "INVALID");
-        assertNull(individual);
-    }
-
-    public void testAdd() {
-        Individual individual = getTestIndividual("TEST", "mr. test");
-
-        boolean wasInserted = individualGateway.insertOrUpdate(contentResolver, individual);
-        assertEquals(true, wasInserted);
-
-        Individual savedIndividual = individualGateway.findById(contentResolver, individual.getExtId());
-        assertNotNull(savedIndividual);
-        assertEquals(individual.getExtId(), savedIndividual.getExtId());
-
-        wasInserted = individualGateway.insertOrUpdate(contentResolver, individual);
-        assertEquals(false, wasInserted);
-
-        savedIndividual = individualGateway.findById(contentResolver, individual.getExtId());
-        assertNotNull(savedIndividual);
-        assertEquals(individual.getExtId(), savedIndividual.getExtId());
-
-        List<Individual> allIndividuals = individualGateway.findAll(contentResolver);
-        assertEquals(1, allIndividuals.size());
-    }
-
-    private static Individual getTestIndividual(String extId, String name) {
+    protected Individual makeTestEntity(String id, String name) {
         Individual individual = new Individual();
 
-        individual.setExtId(extId);
+        individual.setExtId(id);
         individual.setFirstName(name);
         individual.setLastName(name);
         individual.setDob("2000-01-01 00:00:00");
@@ -105,13 +54,4 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
 
         return individual;
     }
-
-    private class ConstantPasswordHelper implements PasswordHelper {
-
-        @Override
-        public String getPassword() {
-            return TEST_PASSWORD;
-        }
-    }
-
 }

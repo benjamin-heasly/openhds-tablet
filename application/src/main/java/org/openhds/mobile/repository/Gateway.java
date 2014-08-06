@@ -23,13 +23,14 @@ public abstract class Gateway<T> {
     protected final String idColumnName;
     protected Converter<T> converter;
 
-    // subclass must supply implementation details
+    // subclass constructor must supply implementation details
     public Gateway(Uri tableUri, String idColumnName, Converter<T> converter) {
         this.tableUri = tableUri;
         this.idColumnName = idColumnName;
         this.converter = converter;
     }
 
+    // true if entity was inserted, false if updated
     public boolean insertOrUpdate(ContentResolver contentResolver, T entity) {
         ContentValues contentValues = converter.toContentValues(entity);
         String id = converter.getId(entity);
@@ -41,32 +42,38 @@ public abstract class Gateway<T> {
         }
     }
 
+    // true if entity was deleted
     public boolean deleteById(ContentResolver contentResolver, String id){
         return delete(contentResolver, tableUri, idColumnName, id) > 0;
     }
 
+    // true if entity was found with given id
     public boolean exists(ContentResolver contentResolver, String id) {
         return null != findById(contentResolver, id);
     }
 
+    // find first entity with given id
     public T findById(ContentResolver contentResolver, String id) {
         Query query = new Query(tableUri, idColumnName, id);
         Cursor cursor = query.select(contentResolver);
         return toEntity(cursor);
     }
 
+    // list of all entities, might be huge
     public List<T> findAll(ContentResolver contentResolver) {
         Query query = new Query(tableUri, null, null);
         Cursor cursor = query.select(contentResolver);
         return toList(cursor);
     }
 
+    // all entities where each given column equals the corresponding given value
     public List<T> findByCriteriaEqual(ContentResolver contentResolver, String[] columnNames, String[] columnValues, String columnOrderBy) {
         Query query = new Query(tableUri, columnNames, columnValues, columnOrderBy, EQUALS);
         Cursor cursor = query.select(contentResolver);
         return toList(cursor);
     }
 
+    // all entities where each given column is "LIKE" the corresponding given value
     public List<T> findByCriteriaLike(ContentResolver contentResolver, String[] columnNames, String[] columnValues, String columnOrderBy) {
         Query query = new Query(tableUri, columnNames, columnValues, columnOrderBy, LIKE);
         Cursor cursor = query.select(contentResolver);
@@ -92,5 +99,9 @@ public abstract class Gateway<T> {
         }
         cursor.close();
         return list;
+    }
+
+    public Converter<T> getConverter() {
+        return converter;
     }
 }
