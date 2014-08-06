@@ -49,7 +49,7 @@ public class IndividualGateway extends Gateway<Individual> {
 
     public List<Individual> findByExtIdPrefix(ContentResolver contentResolver, String extIdPrefix) {
         final String[] columnNames = {COLUMN_INDIVIDUAL_EXTID};
-        final String[] columnValues = {extIdPrefix};
+        final String[] columnValues = {extIdPrefix + "%"};
         Query query = new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID, LIKE);
         Cursor cursor = query.select(contentResolver);
         return toList(cursor);

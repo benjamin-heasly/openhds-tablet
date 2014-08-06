@@ -60,7 +60,7 @@ public class RepositoryUtils {
             return stringBuilder.toString();
         }
 
-        for (int i = 2; i < columnNames.length; i++) {
+        for (int i = 1; i < columnNames.length; i++) {
             stringBuilder.append(" " + AND + " ");
             stringBuilder.append(buildWhereClause(columnNames[i], operator));
         }

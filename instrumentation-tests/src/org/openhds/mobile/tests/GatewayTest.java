@@ -17,9 +17,8 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
     private static final String TEST_PASSWORD = "";
 
-    private OpenHDSProvider provider;
-    private ContentResolver contentResolver;
-
+    protected OpenHDSProvider provider;
+    protected ContentResolver contentResolver;
     protected Gateway<T> gateway;
 
     private class ConstantPasswordHelper implements PasswordHelper {
