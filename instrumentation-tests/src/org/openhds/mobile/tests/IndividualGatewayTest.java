@@ -44,6 +44,12 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
         databaseHelper.onUpgrade(db, 0, 0);
     }
 
+    @Override
+    protected void tearDown() {
+        SQLiteOpenHelper databaseHelper = provider.getDatabaseHelper();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase(TEST_PASSWORD);
+        db.close();
+    }
 
     public void testSafeToFindWhenEmpty() {
         List<Individual> allIndividuals = individualGateway.findAll(contentResolver);

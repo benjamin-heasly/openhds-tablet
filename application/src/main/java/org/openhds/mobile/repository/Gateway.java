@@ -76,6 +76,7 @@ public abstract class Gateway<T> {
     // convert first result and close cursor
     protected T toEntity(Cursor cursor) {
         if(!cursor.moveToFirst()) {
+            cursor.close();
             return null;
         }
         T entity = converter.fromCursor(cursor);
