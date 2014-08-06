@@ -112,20 +112,25 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         ResultsIterator<T> allIterator = gateway.findAllAsIterator(contentResolver);
         assertFalse(allIterator.hasNext());
 
-        T entity1 = makeTestEntity("TEST1", "first person");
-        T entity2 = makeTestEntity("TEST2", "second person");
-        gateway.insertOrUpdate(contentResolver, entity1);
-        gateway.insertOrUpdate(contentResolver, entity2);
+        // insert more entities than the iterator window size
+        //  (peeking at the iterator implementation)
+        int nEntities = (int) (1.5 * ResultsIterator.DEFAULT_WINDOW_SIZE);
+        for (int i = 0; i < nEntities; i++) {
+            String id = String.format("%05d", i);
+            T entity = makeTestEntity(id, "test person");
+            gateway.insertOrUpdate(contentResolver, entity);
+        }
 
         allIterator = gateway.findAllAsIterator(contentResolver);
-        T savedEntity1 = allIterator.next();
-        T savedEntity2 = allIterator.next();
-        assertNotNull(savedEntity1);
-        assertNotNull(savedEntity2);
 
-        // results should be ordered by extId
-        assertEquals("TEST1", gateway.getConverter().getId(savedEntity1));
-        assertEquals("TEST2", gateway.getConverter().getId(savedEntity2));
+        // expect all entities to come out, ordered by id
+        for (int i = 0; i < nEntities; i++) {
+            assertTrue(allIterator.hasNext());
+
+            String id = String.format("%05d", i);
+            T entity = allIterator.next();
+            assertEquals(id, gateway.getConverter().getId(entity));
+        }
 
         assertFalse(allIterator.hasNext());
     }
