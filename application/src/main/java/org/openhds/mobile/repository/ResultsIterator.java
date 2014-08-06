@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
  */
 public class ResultsIterator<T> implements Iterator<T> {
 
-    private static final int DEFAULT_WINDOW_SIZE = 10;
+    public static final int DEFAULT_WINDOW_SIZE = 10;
 
     private final ContentResolver contentResolver;
     private final Query query;
