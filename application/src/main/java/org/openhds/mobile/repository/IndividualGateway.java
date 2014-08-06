@@ -42,7 +42,8 @@ public class IndividualGateway extends Gateway<Individual> {
     }
 
     public List<Individual> findByResidency(ContentResolver contentResolver, Location residency) {
-        Query query = new Query(tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residency.getExtId());
+        Query query = new Query(
+                tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residency.getExtId(), COLUMN_INDIVIDUAL_EXTID);
         Cursor cursor = query.select(contentResolver);
         return toList(cursor);
     }

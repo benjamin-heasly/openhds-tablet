@@ -10,6 +10,7 @@ import org.openhds.mobile.provider.OpenHDSProvider;
 import org.openhds.mobile.provider.PasswordHelper;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.Gateway;
+import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.List;
 
@@ -108,7 +109,25 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
     }
 
     public void testFindAllAsIterator() {
-        // TODO: implement iterators!
+        ResultsIterator<T> allIterator = gateway.findAllAsIterator(contentResolver);
+        assertFalse(allIterator.hasNext());
+
+        T entity1 = makeTestEntity("TEST1", "first person");
+        T entity2 = makeTestEntity("TEST2", "second person");
+        gateway.insertOrUpdate(contentResolver, entity1);
+        gateway.insertOrUpdate(contentResolver, entity2);
+
+        allIterator = gateway.findAllAsIterator(contentResolver);
+        T savedEntity1 = allIterator.next();
+        T savedEntity2 = allIterator.next();
+        assertNotNull(savedEntity1);
+        assertNotNull(savedEntity2);
+
+        // results should be ordered by extId
+        assertEquals("TEST1", gateway.getConverter().getId(savedEntity1));
+        assertEquals("TEST2", gateway.getConverter().getId(savedEntity2));
+
+        assertFalse(allIterator.hasNext());
     }
 
     public void testDelete() {

@@ -18,6 +18,7 @@ public class RepositoryUtils {
     private static final String LIMIT = "LIMIT";
     private static final String OFFSET = "OFFSET";
     private static final String WHERE_PLACEHOLDER = "?";
+    private static final String WHERE_ALL = "1";
 
     public static Uri insert(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues) {
         return contentResolver.insert(tableUri, contentValues);
@@ -33,24 +34,30 @@ public class RepositoryUtils {
         return contentResolver.update(tableUri, contentValues, whereStatement, columnValues);
     }
 
-    public static Cursor query(ContentResolver contentResolver, Uri tableUri,
-                               String whereStatement, String[] columnValues, String columnSortBy) {
+    public static Cursor query(ContentResolver contentResolver, Uri tableUri, String whereStatement,
+                               String[] columnValues, String columnOrderBy) {
 
-        return contentResolver.query(tableUri, null, whereStatement, columnValues, columnSortBy);
+        return contentResolver.query(tableUri, null, whereStatement, columnValues, columnOrderBy);
+    }
+
+    public static Cursor queryRange(ContentResolver contentResolver, Uri tableUri, String whereStatement,
+                                    String[] columnValues, String columnOrderBy, int start, int maxResults) {
+
+        final String rangeStatement = buildRangeStatement(start, maxResults);
+        final String orderByPlusRange = columnOrderBy + " " + rangeStatement;
+        return contentResolver.query(tableUri, null, whereStatement, columnValues, orderByPlusRange);
     }
 
     public static int delete(ContentResolver contentResolver, Uri tableUri, String columnName, String columnValue) {
-
         final String[] columnNames = {columnName};
         final String[] columnValues = {columnValue};
         final String whereStatement = buildWhereStatement(columnNames, EQUALS);
-
         return contentResolver.delete(tableUri, whereStatement, columnValues);
     }
 
     public static String buildWhereStatement(String[] columnNames, String operator) {
         if (null == columnNames || 0 == columnNames.length) {
-            return null;
+            return WHERE_ALL;
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -72,9 +79,8 @@ public class RepositoryUtils {
         return columnName + " " + operator + " " + WHERE_PLACEHOLDER;
     }
 
-    public static String buildWhereRangedStatement(String[] columnNames, String operator, int start, int maxResults) {
-        final String whereStatement = buildWhereStatement(columnNames, operator);
-        return whereStatement + " " + LIMIT + " " + start + " " + OFFSET + " " + maxResults;
+    public static String buildRangeStatement(int start, int maxResults) {
+        return LIMIT + " " + maxResults + " " + OFFSET + " " + start;
     }
 
     public static String extractString(Cursor cursor, String columnName) {

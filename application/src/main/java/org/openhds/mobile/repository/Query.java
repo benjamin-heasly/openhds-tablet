@@ -17,11 +17,11 @@ public class Query {
     private final String operator;
 
     // simple query on one column equals value
-    public Query(Uri tableUri, String columnName, String columnValue) {
+    public Query(Uri tableUri, String columnName, String columnValue, String columnOrderBy) {
         this.tableUri = tableUri;
         this.columnNames = null == columnName ? null : new String[] {columnName};
         this.columnValues = null == columnValue ? null : new String[] {columnValue};
-        this.columnOrderBy = columnName;
+        this.columnOrderBy = columnOrderBy;
         this.operator = EQUALS;
     }
 
@@ -40,7 +40,8 @@ public class Query {
     }
 
     public Cursor selectRange(ContentResolver contentResolver, int start, int maxResults) {
-        final String whereStatement = RepositoryUtils.buildWhereRangedStatement(columnNames, operator, start, maxResults);
-        return RepositoryUtils.query(contentResolver, tableUri, whereStatement, columnValues, columnOrderBy);
+        final String whereStatement = RepositoryUtils.buildWhereStatement(columnNames, operator);
+        return RepositoryUtils.queryRange(contentResolver, tableUri, whereStatement, columnValues,
+                columnOrderBy, start, maxResults);
     }
 }

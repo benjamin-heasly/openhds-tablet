@@ -30,6 +30,10 @@ public abstract class Gateway<T> {
         this.converter = converter;
     }
 
+    public Converter<T> getConverter() {
+        return converter;
+    }
+
     // true if entity was inserted, false if updated
     public boolean insertOrUpdate(ContentResolver contentResolver, T entity) {
         ContentValues contentValues = converter.toContentValues(entity);
@@ -54,16 +58,22 @@ public abstract class Gateway<T> {
 
     // find first entity with given id
     public T findById(ContentResolver contentResolver, String id) {
-        Query query = new Query(tableUri, idColumnName, id);
+        Query query = new Query(tableUri, idColumnName, id, idColumnName);
         Cursor cursor = query.select(contentResolver);
         return toEntity(cursor);
     }
 
-    // list of all entities, might be huge
+    // list of all entities ordered by id, might be huge
     public List<T> findAll(ContentResolver contentResolver) {
-        Query query = new Query(tableUri, null, null);
+        Query query = new Query(tableUri, null, null, idColumnName);
         Cursor cursor = query.select(contentResolver);
         return toList(cursor);
+    }
+
+    // iterator over all entities ordered by id
+    public ResultsIterator<T> findAllAsIterator(ContentResolver contentResolver) {
+        Query query = new Query(tableUri, null, null, idColumnName);
+        return new ResultsIterator<T>(contentResolver, query, converter);
     }
 
     // all entities where each given column equals the corresponding given value
@@ -99,9 +109,5 @@ public abstract class Gateway<T> {
         }
         cursor.close();
         return list;
-    }
-
-    public Converter<T> getConverter() {
-        return converter;
     }
 }
