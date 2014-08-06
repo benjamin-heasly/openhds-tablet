@@ -1,12 +1,15 @@
 package org.openhds.mobile.tests;
 
 import android.content.ContentResolver;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.test.ProviderTestCase2;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.provider.OpenHDSProvider;
+import org.openhds.mobile.provider.PasswordHelper;
 import org.openhds.mobile.repository.IndividualGateway;
 
 import java.util.List;
@@ -16,6 +19,8 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
     private IndividualGateway individualGateway;
     private OpenHDSProvider provider;
     private ContentResolver contentResolver;
+
+    private final String TEST_PASSWORD = "";
 
     public IndividualGatewayTest () {
         super(OpenHDSProvider.class, OpenHDS.AUTHORITY);
@@ -28,14 +33,14 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
         this.provider = (OpenHDSProvider) getProvider();
         this.contentResolver = getMockContentResolver();
 
+        // inject a password helper that uses a known password and
+        // doesn't use shared preferences, which are not enabled under ProviderTestCase2
+        provider.setPasswordHelper(new ConstantPasswordHelper());
+
         // make sure we have a fresh database for each test
-        // TODO: coordinate test database password by injecting
-        // TODO: a context capable of returning a shared preferences with a known password configured here
-        // TODO: for example:
-        // TODO: http://stackoverflow.com/questions/5267671/unsupportedoperationexception-while-calling-getsharedpreferences-from-unit-tes
         SQLiteOpenHelper databaseHelper = provider.getDatabaseHelper();
         SQLiteDatabase.loadLibs(getContext());
-        SQLiteDatabase db = databaseHelper.getWritableDatabase("");
+        SQLiteDatabase db = databaseHelper.getWritableDatabase(TEST_PASSWORD);
         databaseHelper.onUpgrade(db, 0, 0);
     }
 
@@ -94,4 +99,13 @@ public class IndividualGatewayTest extends ProviderTestCase2<OpenHDSProvider> {
 
         return individual;
     }
+
+    private class ConstantPasswordHelper implements PasswordHelper {
+
+        @Override
+        public String getPassword() {
+            return TEST_PASSWORD;
+        }
+    }
+
 }
