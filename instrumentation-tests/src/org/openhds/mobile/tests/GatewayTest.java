@@ -112,6 +112,31 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         ResultsIterator<T> allIterator = gateway.findAllAsIterator(contentResolver);
         assertFalse(allIterator.hasNext());
 
+        T entity1 = makeTestEntity("TEST1", "test person");
+        T entity2 = makeTestEntity("TEST2", "test person");
+        gateway.insertOrUpdate(contentResolver, entity1);
+        gateway.insertOrUpdate(contentResolver, entity2);
+
+        allIterator = gateway.findAllAsIterator(contentResolver);
+
+        assertTrue(allIterator.hasNext());
+
+        // expect both to come out, ordered by id
+        T savedEntity1 = allIterator.next();
+        assertNotNull(savedEntity1);
+        assertEquals("TEST1", gateway.getConverter().getId(savedEntity1));
+
+        T savedEntity2 = allIterator.next();
+        assertNotNull(savedEntity2);
+        assertEquals("TEST2", gateway.getConverter().getId(savedEntity2));
+
+        assertFalse(allIterator.hasNext());
+    }
+
+    public void testFindManyEntitiesAsIterator() {
+        ResultsIterator<T> allIterator = gateway.findAllAsIterator(contentResolver);
+        assertFalse(allIterator.hasNext());
+
         // insert more entities than the iterator window size
         //  (peeking at the iterator implementation)
         int nEntities = (int) (1.5 * ResultsIterator.DEFAULT_WINDOW_SIZE);
