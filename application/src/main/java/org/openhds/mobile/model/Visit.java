@@ -39,7 +39,7 @@ public class Visit implements Serializable {
 		return fieldWorkerExtid;
 	}
 
-	public void setFieldWorkerExtid(String fieldWorkerExtid) {
+	public void setFieldWorkerExtId(String fieldWorkerExtid) {
 		this.fieldWorkerExtid = fieldWorkerExtid;
 	}
 

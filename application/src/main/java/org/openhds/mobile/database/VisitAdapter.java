@@ -38,8 +38,8 @@ public class VisitAdapter {
 				.getFieldNameFromColumn(COLUMN_VISIT_EXTID)));
 		visit.setVisitDate(formInstanceData.get(ProjectFormFields.Visits
 				.getFieldNameFromColumn(COLUMN_VISIT_DATE)));
-		visit.setFieldWorkerExtid(formInstanceData.get(ProjectFormFields.Visits
-				.getFieldNameFromColumn(COLUMN_VISIT_FIELDWORKER_EXTID)));
+		visit.setFieldWorkerExtId(formInstanceData.get(ProjectFormFields.Visits
+                .getFieldNameFromColumn(COLUMN_VISIT_FIELDWORKER_EXTID)));
 		visit.setLocationExtId(formInstanceData.get(ProjectFormFields.Visits
 				.getFieldNameFromColumn(COLUMN_VISIT_LOCATION_EXTID)));
 		
