@@ -1,9 +1,10 @@
-package org.openhds.mobile.repository;
+package org.openhds.mobile.repository.gateway;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.repository.Converter;
 
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME;

@@ -1,7 +1,7 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.Visit;
-import org.openhds.mobile.repository.VisitGateway;
+import org.openhds.mobile.repository.gateway.VisitGateway;
 
 
 public class VisitGatewayTest extends GatewayTest<Visit> {

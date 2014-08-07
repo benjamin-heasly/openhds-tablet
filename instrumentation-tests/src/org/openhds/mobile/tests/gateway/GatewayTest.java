@@ -1,15 +1,13 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import android.content.ContentResolver;
 import android.test.ProviderTestCase2;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.provider.OpenHDSProvider;
 import org.openhds.mobile.provider.PasswordHelper;
-import org.openhds.mobile.repository.Converter;
-import org.openhds.mobile.repository.Gateway;
+import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.List;

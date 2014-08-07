@@ -1,8 +1,8 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
-import org.openhds.mobile.repository.IndividualGateway;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
 
 import java.util.List;
 

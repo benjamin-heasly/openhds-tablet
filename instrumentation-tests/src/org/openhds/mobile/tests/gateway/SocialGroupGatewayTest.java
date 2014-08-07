@@ -1,7 +1,7 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.SocialGroup;
-import org.openhds.mobile.repository.SocialGroupGateway;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 
 public class SocialGroupGatewayTest extends GatewayTest<SocialGroup> {

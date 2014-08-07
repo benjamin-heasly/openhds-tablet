@@ -1,7 +1,7 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.Relationship;
-import org.openhds.mobile.repository.RelationshipGateway;
+import org.openhds.mobile.repository.gateway.RelationshipGateway;
 
 
 public class RelationshipGatewayTest extends GatewayTest<Relationship> {

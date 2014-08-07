@@ -1,9 +1,10 @@
-package org.openhds.mobile.repository;
+package org.openhds.mobile.repository.gateway;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Relationship;
+import org.openhds.mobile.repository.Converter;
 
 import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A;
 import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B;

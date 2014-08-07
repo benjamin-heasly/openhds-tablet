@@ -1,9 +1,12 @@
-package org.openhds.mobile.repository;
+package org.openhds.mobile.repository.gateway;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.Query;
+import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +48,8 @@ public abstract class Gateway<T> {
             return null != insert(contentResolver, tableUri, contentValues);
         }
     }
+
+    // insert many entities, return number of new rows
 
     // true if entity was deleted
     public boolean deleteById(ContentResolver contentResolver, String id){

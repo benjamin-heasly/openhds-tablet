@@ -1,7 +1,7 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.Location;
-import org.openhds.mobile.repository.LocationGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
 
 
 public class LocationGatewayTest extends GatewayTest<Location> {

@@ -1,7 +1,7 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.FieldWorker;
-import org.openhds.mobile.repository.FieldWorkerGateway;
+import org.openhds.mobile.repository.gateway.FieldWorkerGateway;
 
 
 public class FieldWorkerGatewayTest extends GatewayTest<FieldWorker> {

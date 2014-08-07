@@ -1,4 +1,4 @@
-package org.openhds.mobile.repository;
+package org.openhds.mobile.repository.gateway;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -6,6 +6,8 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
+import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.Query;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package org.openhds.mobile.tests;
+package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.LocationHierarchy;
-import org.openhds.mobile.repository.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
 
 
 public class LocationHierarchyGatewayTest extends GatewayTest<LocationHierarchy> {
