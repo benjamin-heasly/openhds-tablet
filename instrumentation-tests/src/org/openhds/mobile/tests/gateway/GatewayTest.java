@@ -11,6 +11,7 @@ import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> {
@@ -62,10 +63,10 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
     }
 
     public void testSafeToFindWhenEmpty() {
-        List<T> allEntities = gateway.findAll(contentResolver);
+        List<T> allEntities = gateway.getList(contentResolver, gateway.findAll());
         assertEquals(0, allEntities.size());
 
-        T entity = gateway.findById(contentResolver, "INVALID");
+        T entity = gateway.getFirst(contentResolver, gateway.findById("INVALID"));
         assertNull(entity);
     }
 
@@ -76,7 +77,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         boolean wasInserted = gateway.insertOrUpdate(contentResolver, entity);
         assertEquals(true, wasInserted);
 
-        T savedEntity = gateway.findById(contentResolver, id);
+        T savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNotNull(savedEntity);
         String savedId = gateway.getConverter().getId(savedEntity);
         assertEquals(id, savedId);
@@ -84,12 +85,12 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         wasInserted = gateway.insertOrUpdate(contentResolver, entity);
         assertEquals(false, wasInserted);
 
-        savedEntity = gateway.findById(contentResolver, id);
+        savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNotNull(savedEntity);
         savedId = gateway.getConverter().getId(savedEntity);
         assertEquals(id, savedId);
 
-        List<T> allEntities = gateway.findAll(contentResolver);
+        List<T> allEntities = gateway.getList(contentResolver, gateway.findAll());
         assertEquals(1, allEntities.size());
     }
 
@@ -109,7 +110,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         insertedCount = gateway.insertMany(contentResolver, manyEntities);
         assertEquals(nEntities, insertedCount);
 
-        List<T> allEntities = gateway.findAll(contentResolver);
+        List<T> allEntities = gateway.getList(contentResolver, gateway.findAll());
         assertEquals(nEntities, allEntities.size());
     }
 
@@ -119,7 +120,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         gateway.insertOrUpdate(contentResolver, entity1);
         gateway.insertOrUpdate(contentResolver, entity2);
 
-        List<T> allEntities = gateway.findAll(contentResolver);
+        List<T> allEntities = gateway.getList(contentResolver, gateway.findAll());
         assertEquals(2, allEntities.size());
 
         String id1 = gateway.getConverter().getId(allEntities.get(0));
@@ -128,7 +129,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
     }
 
     public void testFindAllAsIterator() {
-        ResultsIterator<T> allIterator = gateway.findAllAsIterator(contentResolver);
+        Iterator<T> allIterator = gateway.getIterator(contentResolver, gateway.findAll());
         assertFalse(allIterator.hasNext());
 
         T entity1 = makeTestEntity("TEST1", "test person");
@@ -136,7 +137,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         gateway.insertOrUpdate(contentResolver, entity1);
         gateway.insertOrUpdate(contentResolver, entity2);
 
-        allIterator = gateway.findAllAsIterator(contentResolver);
+        allIterator = gateway.getIterator(contentResolver, gateway.findAll());
 
         assertTrue(allIterator.hasNext());
 
@@ -152,20 +153,20 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         assertFalse(allIterator.hasNext());
     }
 
-    public void testFindManyEntitiesAsIterator() {
-        ResultsIterator<T> allIterator = gateway.findAllAsIterator(contentResolver);
+    public void testFindAllAsIteratorMany() {
+        Iterator<T> allIterator = gateway.getIterator(contentResolver, gateway.findAll());
         assertFalse(allIterator.hasNext());
 
         // insert more entities than the iterator window size
-        //  (peeking at the iterator implementation)
-        int nEntities = (int) (1.5 * ResultsIterator.DEFAULT_WINDOW_SIZE);
+        int windowSize = 10;
+        int nEntities = 15;
         for (int i = 0; i < nEntities; i++) {
             String id = String.format("%05d", i);
             T entity = makeTestEntity(id, "test person");
             gateway.insertOrUpdate(contentResolver, entity);
         }
 
-        allIterator = gateway.findAllAsIterator(contentResolver);
+        allIterator = gateway.getIterator(contentResolver, gateway.findAll(), windowSize);
 
         // expect all entities to come out, ordered by id
         for (int i = 0; i < nEntities; i++) {
@@ -185,7 +186,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
         boolean wasInserted = gateway.insertOrUpdate(contentResolver, entity);
 
-        T savedEntity = gateway.findById(contentResolver, id);
+        T savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNotNull(savedEntity);
         String savedId = gateway.getConverter().getId(savedEntity);
         assertEquals(id, savedId);
@@ -196,7 +197,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         wasDeleted = gateway.deleteById(contentResolver, id);
         assertFalse(wasDeleted);
 
-        savedEntity = gateway.findById(contentResolver, id);
+        savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNull(savedEntity);
     }
 }

@@ -1,6 +1,5 @@
 package org.openhds.mobile.repository.gateway;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
@@ -8,8 +7,6 @@ import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.Query;
-
-import java.util.List;
 
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS;
@@ -43,19 +40,15 @@ public class IndividualGateway extends Gateway<Individual> {
         super(OpenHDS.Individuals.CONTENT_ID_URI_BASE, COLUMN_INDIVIDUAL_EXTID, new IndividualConverter());
     }
 
-    public List<Individual> findByResidency(ContentResolver contentResolver, Location residency) {
-        Query query = new Query(
+    public Query findByResidency(Location residency) {
+        return new Query(
                 tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residency.getExtId(), COLUMN_INDIVIDUAL_EXTID);
-        Cursor cursor = query.select(contentResolver);
-        return toList(cursor);
     }
 
-    public List<Individual> findByExtIdPrefix(ContentResolver contentResolver, String extIdPrefix) {
+    public Query findByExtIdPrefix(String extIdPrefix) {
         final String[] columnNames = {COLUMN_INDIVIDUAL_EXTID};
         final String[] columnValues = {extIdPrefix + "%"};
-        Query query = new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID, LIKE);
-        Cursor cursor = query.select(contentResolver);
-        return toList(cursor);
+        return new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID, LIKE);
     }
 
     private static class IndividualConverter implements Converter<Individual> {

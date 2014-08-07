@@ -9,6 +9,7 @@ import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
@@ -63,41 +64,50 @@ public abstract class Gateway<T> {
 
     // true if entity was found with given id
     public boolean exists(ContentResolver contentResolver, String id) {
-        return null != findById(contentResolver, id);
+        Query query = findById(id);
+        return null != getFirst(contentResolver, query);
     }
 
-    // find first entity with given id
-    public T findById(ContentResolver contentResolver, String id) {
-        Query query = new Query(tableUri, idColumnName, id, idColumnName);
+    // get the first result from a query as an entity or null
+    public T getFirst(ContentResolver contentResolver, Query query) {
         Cursor cursor = query.select(contentResolver);
         return toEntity(cursor);
     }
 
-    // list of all entities ordered by id, might be huge
-    public List<T> findAll(ContentResolver contentResolver) {
-        Query query = new Query(tableUri, null, null, idColumnName);
+    // get all results from a query as a list
+    public List<T> getList(ContentResolver contentResolver, Query query) {
         Cursor cursor = query.select(contentResolver);
         return toList(cursor);
     }
 
-    // iterator over all entities ordered by id
-    public ResultsIterator<T> findAllAsIterator(ContentResolver contentResolver) {
-        Query query = new Query(tableUri, null, null, idColumnName);
+    // get an iterator over all results from a query
+    public Iterator<T> getIterator(ContentResolver contentResolver, Query query) {
         return new ResultsIterator<T>(contentResolver, query, converter);
     }
 
-    // all entities where each given column equals the corresponding given value
-    public List<T> findByCriteriaEqual(ContentResolver contentResolver, String[] columnNames, String[] columnValues, String columnOrderBy) {
-        Query query = new Query(tableUri, columnNames, columnValues, columnOrderBy, EQUALS);
-        Cursor cursor = query.select(contentResolver);
-        return toList(cursor);
+    // get an iterator over all results from a query, with given iterator window size
+    public Iterator<T> getIterator(ContentResolver contentResolver, Query query, int windowSize) {
+        return new ResultsIterator<T>(contentResolver, query, converter, windowSize);
     }
 
-    // all entities where each given column is "LIKE" the corresponding given value
-    public List<T> findByCriteriaLike(ContentResolver contentResolver, String[] columnNames, String[] columnValues, String columnOrderBy) {
-        Query query = new Query(tableUri, columnNames, columnValues, columnOrderBy, LIKE);
-        Cursor cursor = query.select(contentResolver);
-        return toList(cursor);
+    // find entities with given id
+    public Query findById(String id) {
+        return new Query(tableUri, idColumnName, id, idColumnName);
+    }
+
+    // find entities ordered by id, might be huge
+    public Query findAll() {
+        return new Query(tableUri, null, null, idColumnName);
+    }
+
+    // find entities where given columns equal corresponding values
+    public Query findByCriteriaEqual(String[] columnNames, String[] columnValues, String columnOrderBy) {
+        return new Query(tableUri, columnNames, columnValues, columnOrderBy, EQUALS);
+    }
+
+    // find entities where given columns are SQL "LIKE" corresponding value
+    public Query findByCriteriaLike(String[] columnNames, String[] columnValues, String columnOrderBy) {
+        return new Query(tableUri, columnNames, columnValues, columnOrderBy, LIKE);
     }
 
     // convert first result and close cursor
@@ -121,7 +131,7 @@ public abstract class Gateway<T> {
         return list;
     }
 
-    // read all entities into a big content values
+    // read all entities into content values
     protected ContentValues[] fromList(List<T> entities) {
         List<ContentValues> allContentValues = new ArrayList<ContentValues>();
         for (T entity : entities) {

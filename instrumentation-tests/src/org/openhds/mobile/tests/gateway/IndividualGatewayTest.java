@@ -2,6 +2,7 @@ package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
+import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
 
     // find individuals with similar ids
     public void testFindByExtIdPrefix() {
-        List<Individual> shouldBeEmpty = individualGateway.findByExtIdPrefix(contentResolver, "TEST");
+        Query query = individualGateway.findByExtIdPrefix("TEST");
+        List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
         Individual individual1 = makeTestEntity("TEST1", "test 1");
@@ -31,13 +33,16 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         individualGateway.insertOrUpdate(contentResolver, individual2);
         individualGateway.insertOrUpdate(contentResolver, individual3);
 
-        shouldBeEmpty = individualGateway.findByExtIdPrefix(contentResolver, "DOESNOTEXIST");
+        query = individualGateway.findByExtIdPrefix("DOESNOTEXIST");
+        shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
-        List<Individual> byPrefix = individualGateway.findByExtIdPrefix(contentResolver, "TEST");
+        query = individualGateway.findByExtIdPrefix("TEST");
+        List<Individual> byPrefix = individualGateway.getList(contentResolver, query);
         assertEquals(2, byPrefix.size());
 
-        byPrefix = individualGateway.findByExtIdPrefix(contentResolver, "TRIAL");
+        query = individualGateway.findByExtIdPrefix("TRIAL");
+        byPrefix = individualGateway.getList(contentResolver, query);
         assertEquals(1, byPrefix.size());
         assertEquals("TRIAL3", byPrefix.get(0).getExtId());
     }
@@ -46,7 +51,8 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
     public void testFindByResidency() {
         Location residency = new Location();
         residency.setExtId("FINDME");
-        List<Individual> shouldBeEmpty = individualGateway.findByResidency(contentResolver, residency);
+        Query query = individualGateway.findByResidency(residency);
+        List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
         Individual individual1 = makeTestEntity("TEST1", "test 1");
@@ -62,10 +68,12 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
 
         Location nobodyLivesHere = new Location();
         nobodyLivesHere.setExtId("DOESNOTEXIST");
-        shouldBeEmpty = individualGateway.findByResidency(contentResolver, nobodyLivesHere);
+        query = individualGateway.findByResidency(nobodyLivesHere);
+        shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
-        List<Individual> byResidency = individualGateway.findByResidency(contentResolver, residency);
+        query = individualGateway.findByResidency(residency);
+        List<Individual> byResidency = individualGateway.getList(contentResolver, query);
         assertEquals(2, byResidency.size());
     }
 
@@ -73,8 +81,9 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
     public void testFindByCriteriaEqual() {
         final String[] columnNames = {COLUMN_INDIVIDUAL_FIRST_NAME, COLUMN_INDIVIDUAL_LAST_NAME};
         final String[] columnValues = {"Sam", "Smith"};
-        List<Individual> shouldBeEmpty = individualGateway.findByCriteriaEqual(
-                contentResolver, columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+        Query query = individualGateway.findByCriteriaEqual(columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+
+        List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
         Individual individual1 = makeTestEntity("TEST1", "test 1");
@@ -93,15 +102,10 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         individualGateway.insertOrUpdate(contentResolver, individual2);
         individualGateway.insertOrUpdate(contentResolver, individual3);
 
-        List<Individual> byCriteria = individualGateway.findByCriteriaEqual(
-                contentResolver, columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+        List<Individual> byCriteria = individualGateway.getList(contentResolver, query);
         assertEquals(1, byCriteria.size());
         assertEquals("Sam", byCriteria.get(0).getFirstName());
         assertEquals("Smith", byCriteria.get(0).getLastName());
-    }
-
-    public void testFindByCriteriaEqualAsIterator() {
-        // TODO: implement itarators!
     }
 
     // find individuals by pattern matching some individual-specific criteria: first and last name
@@ -109,8 +113,9 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         // expect _a_ to match Sam and Sal.  Expect S% to match Smith
         final String[] columnNames = {COLUMN_INDIVIDUAL_FIRST_NAME, COLUMN_INDIVIDUAL_LAST_NAME};
         final String[] columnValues = {"_a_", "S%"};
-        List<Individual> shouldBeEmpty = individualGateway.findByCriteriaLike(
-                contentResolver, columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+        Query query = individualGateway.findByCriteriaLike(columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+
+        List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
         Individual individual1 = makeTestEntity("TEST1", "test 1");
@@ -129,13 +134,8 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         individualGateway.insertOrUpdate(contentResolver, individual2);
         individualGateway.insertOrUpdate(contentResolver, individual3);
 
-        List<Individual> byCriteria = individualGateway.findByCriteriaLike(
-                contentResolver, columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+        List<Individual> byCriteria = individualGateway.getList(contentResolver, query);
         assertEquals(2, byCriteria.size());
-    }
-
-    public void testFindByCriteriaLikeAsIterator() {
-        // TODO: implement itarators!
     }
 
     @Override
