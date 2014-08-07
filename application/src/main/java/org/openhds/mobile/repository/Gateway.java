@@ -21,7 +21,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.delete;
 public abstract class Gateway<T> {
     protected final Uri tableUri;
     protected final String idColumnName;
-    protected Converter<T> converter;
+    protected final Converter<T> converter;
 
     // subclass constructor must supply implementation details
     public Gateway(Uri tableUri, String idColumnName, Converter<T> converter) {
