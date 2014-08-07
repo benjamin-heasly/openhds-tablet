@@ -10,6 +10,7 @@ import org.openhds.mobile.provider.PasswordHelper;
 import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.ResultsIterator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> {
@@ -90,6 +91,26 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
         List<T> allEntities = gateway.findAll(contentResolver);
         assertEquals(1, allEntities.size());
+    }
+
+    public void testAddMany() {
+        List<T> manyEntities = new ArrayList<T>();
+        int insertedCount = gateway.insertMany(contentResolver, manyEntities);
+        assertEquals(0, insertedCount);
+
+        // many entities to insert
+        int nEntities = 10;
+        for (int i = 0; i < nEntities; i++) {
+            String id = String.format("%05d", i);
+            T entity = makeTestEntity(id, "test person");
+            manyEntities.add(entity);
+        }
+
+        insertedCount = gateway.insertMany(contentResolver, manyEntities);
+        assertEquals(nEntities, insertedCount);
+
+        List<T> allEntities = gateway.findAll(contentResolver);
+        assertEquals(nEntities, allEntities.size());
     }
 
     public void testFindAll() {

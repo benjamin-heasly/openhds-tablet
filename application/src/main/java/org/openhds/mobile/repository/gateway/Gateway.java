@@ -14,6 +14,7 @@ import java.util.List;
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
 import static org.openhds.mobile.repository.RepositoryUtils.insert;
+import static org.openhds.mobile.repository.RepositoryUtils.bulkInsert;
 import static org.openhds.mobile.repository.RepositoryUtils.update;
 import static org.openhds.mobile.repository.RepositoryUtils.delete;
 
@@ -50,6 +51,10 @@ public abstract class Gateway<T> {
     }
 
     // insert many entities, return number of new rows
+    public int insertMany(ContentResolver contentResolver, List<T> entities) {
+        ContentValues[] allContentValues = fromList(entities);
+        return bulkInsert(contentResolver, tableUri, allContentValues);
+    }
 
     // true if entity was deleted
     public boolean deleteById(ContentResolver contentResolver, String id){
@@ -114,5 +119,14 @@ public abstract class Gateway<T> {
         }
         cursor.close();
         return list;
+    }
+
+    // read all entities into a big content values
+    protected ContentValues[] fromList(List<T> entities) {
+        List<ContentValues> allContentValues = new ArrayList<ContentValues>();
+        for (T entity : entities) {
+            allContentValues.add(converter.toContentValues(entity));
+        }
+        return allContentValues.toArray(new ContentValues[allContentValues.size()]);
     }
 }

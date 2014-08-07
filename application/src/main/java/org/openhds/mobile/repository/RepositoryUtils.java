@@ -24,6 +24,10 @@ public class RepositoryUtils {
         return contentResolver.insert(tableUri, contentValues);
     }
 
+    public static int bulkInsert(ContentResolver contentResolver, Uri tableUri, ContentValues[] allContentValues) {
+        return contentResolver.bulkInsert(tableUri, allContentValues);
+    }
+
     public static int update(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues,
                              String columnName, String columnValue) {
 
