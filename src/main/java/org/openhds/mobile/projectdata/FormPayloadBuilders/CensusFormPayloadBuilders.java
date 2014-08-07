@@ -117,6 +117,7 @@ public class CensusFormPayloadBuilders {
                                      NavigateActivity navigateActivity) {
 
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
             addNewLocationPayload(formPayload, navigateActivity);
         }
     }
@@ -128,6 +129,7 @@ public class CensusFormPayloadBuilders {
                                      NavigateActivity navigateActivity) {
 
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
             addNewIndividualPayload(formPayload, navigateActivity);
 
         }
@@ -141,6 +143,7 @@ public class CensusFormPayloadBuilders {
                                      NavigateActivity navigateActivity) {
 
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
             addNewIndividualPayload(formPayload, navigateActivity);
 
             formPayload.put(ProjectFormFields.Individuals.HEAD_PREFILLED_FLAG, "true");
@@ -156,6 +159,7 @@ public class CensusFormPayloadBuilders {
                                      NavigateActivity navigateActivity) {
 
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, true);
 
             // build complete individual form
             Map<String, QueryResult> hierarchyPath = navigateActivity

@@ -10,7 +10,10 @@ import org.openhds.mobile.activity.CensusActivity;
 public class ProjectFormFields {
 
 	public static final class General {
-		public static final String COLLECTION_DATE_TIME = "collectionDateTime";
+
+        public static final String NEEDS_REVIEW = "needsReview";
+
+        public static final String COLLECTION_DATE_TIME = "collectionDateTime";
         public static final String DISTRIBUTION_DATE_TIME = "distributionDateTime";
 		public static final String COLLECTED_BY_FIELD_WORKER_EXTID = "fieldWorkerExtId";
 
@@ -57,7 +60,7 @@ public class ProjectFormFields {
 
 		}
 
-		public static String getExtIdFieldNameFromState(String state) {
+        public static String getExtIdFieldNameFromState(String state) {
 			if (stateFieldNames.containsKey(state)) {
 				return stateFieldNames.get(state);
 			} else {

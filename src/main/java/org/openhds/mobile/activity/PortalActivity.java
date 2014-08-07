@@ -3,7 +3,6 @@ package org.openhds.mobile.activity;
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.List;
 
 import android.net.Uri;
@@ -12,7 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.*;
 import org.openhds.mobile.R;
-import org.openhds.mobile.adapter.FormInstanceArrayAdapter;
+import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormInstance;
@@ -98,7 +97,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         unsyncedFormInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
 
         if (!unsyncedFormInstances.isEmpty()) {
-            FormInstanceArrayAdapter adapter = new FormInstanceArrayAdapter(this, R.id.form_instance_list_item,
+            FormInstanceAdapter adapter = new FormInstanceAdapter(this, R.id.form_instance_list_item,
                     unsyncedFormInstances.toArray());
 
             formInstanceLayout.setAdapter(adapter);

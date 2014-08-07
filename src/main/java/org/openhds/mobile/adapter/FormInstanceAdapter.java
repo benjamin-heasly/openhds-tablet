@@ -14,14 +14,14 @@ import org.openhds.mobile.projectdata.ProjectResources;
 import java.util.Arrays;
 import java.util.List;
 
-public class FormInstanceArrayAdapter extends ArrayAdapter {
+public class FormInstanceAdapter extends ArrayAdapter {
 
     private Object[] formInstances;
     private Context context;
     private LayoutInflater inflater;
 
 
-    public FormInstanceArrayAdapter(Context context, int resource, Object[] formInstances) {
+    public FormInstanceAdapter(Context context, int resource, Object[] formInstances) {
         super(context, resource, formInstances);
         this.context = context;
         this.formInstances = formInstances;
@@ -34,6 +34,9 @@ public class FormInstanceArrayAdapter extends ArrayAdapter {
         FormInstance instance = (FormInstance) formInstances[position];
         String formType = instance.getFormName();
         String fileName = instance.getFileName();
+
+        //trim the file extension
+        fileName = fileName.substring(0, fileName.length() - 4);
 
         int formTypeLocalizedId= ProjectResources.FormType.getFormTypeStringId(formType);
 

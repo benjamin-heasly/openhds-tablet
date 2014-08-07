@@ -4,12 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -26,6 +21,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.utilities.EncryptionHelper;
+import org.openhds.mobile.utilities.OdkCollectHelper;
 
 public class FormHelper {
 
@@ -74,6 +73,80 @@ public class FormHelper {
 		}
 	}
 
+    public static String getFormTagValue(String tag, String formFilePath) {
+
+        return FormHelper.getFormInstanceData(formFilePath).get(ProjectFormFields.General.NEEDS_REVIEW);
+
+    }
+
+    public static boolean setFormTagValue(String tag, String value, String formFilePath) {
+
+        Map<String, String> formFieldMap = FormHelper.getFormInstanceData(formFilePath);
+        formFieldMap.put(tag, value);
+        return FormHelper.updateExistingFormInstance(formFieldMap, formFilePath);
+    }
+
+    private static boolean updateExistingFormInstance(Map<String, String> formFieldMap, String formFilePath) {
+
+        try {
+            SAXBuilder builder = new SAXBuilder();
+
+            Document oldForm = builder.build(new File(formFilePath));
+            Document newForm = new Document();
+
+            Element root = oldForm.getRootElement();
+            root.detach();
+            root.removeContent();
+            newForm.setRootElement(root);
+
+            for (String elementName : formFieldMap.keySet()) {
+
+                Element child = new Element(elementName);
+                child.setText(formFieldMap.get(elementName));
+                newForm.getRootElement().addContent(child);
+            }
+
+            FileOutputStream fos = new FileOutputStream(formFilePath);
+            XMLOutputter xmlOutput = new XMLOutputter();
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            xmlOutput.output(newForm, fos);
+            fos.close();
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+//    TODO: Convert FormHelper to a static class
+//    Static implementation of getFormInstanceData()
+    public static Map<String, String> getFormInstanceData(String formFilePath) {
+
+        Map<String, String> formFields = new HashMap<>();
+        if (null == formFilePath) {
+            return null;
+        }
+        SAXBuilder builder = new SAXBuilder();
+        try {
+            Document finalizedDoc = builder.build(new File(
+                    formFilePath));
+            Element root = finalizedDoc.getRootElement();
+            Iterator<Element> itr = root.getDescendants(new ElementFilter());
+
+            while (itr.hasNext()) {
+                Element child = itr.next();
+                formFields.put(child.getName(), child.getText());
+            }
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        formFields = formFields;
+        return formFields;
+
+    }
 	public Map<String, String> getFormInstanceData() {
 
 		formFieldNames.clear();
@@ -204,6 +277,7 @@ public class FormHelper {
 
 				contentUri = shareOdkFormInstance(editableFormFile,
 						editableFormFile.getName(), jrFormId);
+
 				return true;
 
 			} catch (Exception e) {

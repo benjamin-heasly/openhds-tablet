@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 	public final class InstanceProviderAPI {
 	    public static final String AUTHORITY = "org.odk.collect.android.provider.odk.instances";
 
-	    // This class cannot be instantiated
+    // This class cannot be instantiated
 	    private InstanceProviderAPI() {}
 	    
 	    // status for instances
@@ -21,10 +21,9 @@ import android.provider.BaseColumns;
 	    /**
 	     * Notes table
 	     */
-	    
-	    
-	    
-	    
+
+        public static final String NOTE_EDITED = "edited";
+
 	    public static final class InstanceColumns implements BaseColumns {
 	        // This class cannot be instantiated
 	        private InstanceColumns() {}
@@ -51,7 +50,7 @@ import android.provider.BaseColumns;
 
 //	        public static final String DEFAULT_SORT_ORDER = "modified DESC";
 //	        public static final String TITLE = "title";
-//	        public static final String NOTE = "note";
+	        public static final String NOTE = "note";
 //	        public static final String CREATED_DATE = "created";
 //	        public static final String MODIFIED_DATE = "modified";
 	    }

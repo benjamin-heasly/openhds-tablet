@@ -7,6 +7,13 @@ import org.openhds.mobile.R;
 
 public class ProjectResources {
 
+    public static class General {
+
+        public static final String FORM_NEEDS_REVIEW = "0";
+        public static final String FORM_NO_REVIEW_NEEDED = "1";
+
+    }
+
 	public static final class Individual {
 
 		/*

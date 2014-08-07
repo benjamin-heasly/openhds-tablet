@@ -5,13 +5,23 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.projectdata.ProjectResources;
 
 public class PayloadTools {
+
+    public static void flagForReview(Map<String, String> formPayload, boolean shouldReview) {
+        if (shouldReview) {
+            formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NEEDS_REVIEW);
+        } else {
+            formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NO_REVIEW_NEEDED);
+        }
+    }
 
 	public static void addMinimalFormPayload(Map<String, String> formPayload,
 			NavigateActivity navigateActivity) {

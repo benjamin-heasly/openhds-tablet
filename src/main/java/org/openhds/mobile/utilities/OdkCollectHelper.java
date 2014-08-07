@@ -42,6 +42,10 @@ public class OdkCollectHelper {
             uri = Uri.withAppendedPath(CONTENT_URI, cursor.getString(cursor
                     .getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
 
+            String formStatus = cursor
+                    .getString(cursor
+                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
+
             formName = cursor
                     .getString(cursor
                             .getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
@@ -106,4 +110,5 @@ public class OdkCollectHelper {
 		cursor.close();
 		return formInstances;
 	}
+
 }

@@ -90,7 +90,7 @@ public class ProjectActivityBuilder {
                     R.string.distribute_bednets,
                     new BiokoFormFilters.DistributeBednets(),
                     new BiokoFormPayloadBuilders.DistributeBednets(),
-                    new BiokoFormPayloadConsumers.DistributeBednets()));
+                    new BiokoFormPayloadConsumers.DistributeBednets(), false));
 
             formsForStates.put(REGION_STATE, regionFormList);
             formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -214,25 +214,25 @@ public class ProjectActivityBuilder {
                     R.string.create_location,
                     new CensusFormFilters.AddLocation(),
                     new CensusFormPayloadBuilders.AddLocation(),
-                    new CensusFormPayloadConsumers.AddLocation()));
+                    new CensusFormPayloadConsumers.AddLocation(), false));
 
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.create_head_of_household_label,
 					new CensusFormFilters.AddHeadOfHousehold(),
 					new CensusFormPayloadBuilders.AddHeadOfHousehold(),
-					new CensusFormPayloadConsumers.AddHeadOfHousehold()));
+					new CensusFormPayloadConsumers.AddHeadOfHousehold(), false));
 
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.add_member_of_household_label,
 					new CensusFormFilters.AddMemberOfHousehold(),
 					new CensusFormPayloadBuilders.AddMemberOfHousehold(),
-					new CensusFormPayloadConsumers.AddMemberOfHousehold()));
+					new CensusFormPayloadConsumers.AddMemberOfHousehold(), false));
 
 			bottomFormList.add(new FormBehaviour("Individual",
 					R.string.edit_individual_label,
 					new CensusFormFilters.EditIndividual(),
 					new CensusFormPayloadBuilders.EditIndividual(),
-					new CensusFormPayloadConsumers.EditIndividual()));
+					new CensusFormPayloadConsumers.EditIndividual(), true));
 
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -357,13 +357,13 @@ public class ProjectActivityBuilder {
 					R.string.start_a_visit,
 					new UpdateFormFilters.StartAVisit(),
 					new UpdateFormPayloadBuilders.StartAVisit(),
-					new UpdateFormPayloadConsumers.StartAVisit()));
+					new UpdateFormPayloadConsumers.StartAVisit(), false));
 
             bottomFormList.add(new FormBehaviour("Out_migration",
                     R.string.out_migration,
                     new UpdateFormFilters.RegisterOutMigration(),
                     new UpdateFormPayloadBuilders.RegisterOutMigration(),
-                    null));
+                    null, false));
 
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
