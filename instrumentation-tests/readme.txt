@@ -55,4 +55,7 @@ Running this from the command line makes it hard to attach the debugger.  But af
 then debug the app or tests like you would normally, from Eclipse or IntelliJ.  Debug and make changes, and re-run the
 full Maven build from the command line when you need to makes sure the app and tests are in sync.
 
+Also, sometimes the Maven command fails with "Run failed: Instrumentation run failed due to 'Process crashed.'".
+I haven't figured out why.  But often it works just to re-run the command.
+
  --BSH
