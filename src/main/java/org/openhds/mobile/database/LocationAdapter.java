@@ -9,16 +9,7 @@ import org.openhds.mobile.projectdata.ProjectFormFields;
 
 import java.util.Map;
 
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LATITUDE;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.CONTENT_ID_URI_BASE;
+import static org.openhds.mobile.OpenHDS.Locations.*;
 
 public class LocationAdapter {
 
@@ -39,6 +30,18 @@ public class LocationAdapter {
                 .getFieldNameFromColumn(COLUMN_LOCATION_SECTOR_NAME)));
         location.setMapAreaName(formInstanceData.get(ProjectFormFields.Locations
                 .getFieldNameFromColumn(COLUMN_LOCATION_MAP_AREA_NAME)));
+        location.setBuildingNumber(formInstanceData.get(ProjectFormFields.Locations
+                .getFieldNameFromColumn(COLUMN_LOCATION_BUILDING_NUMBER)));
+        location.setFloorNumber(formInstanceData.get(ProjectFormFields.Locations
+                .getFieldNameFromColumn(COLUMN_LOCATION_FLOOR_NUMBER)));
+        location.setRegionName(formInstanceData.get(ProjectFormFields.Locations
+                .getFieldNameFromColumn(COLUMN_LOCATION_REGION_NAME)));
+        location.setProvinceName(formInstanceData.get(ProjectFormFields.Locations
+                .getFieldNameFromColumn(COLUMN_LOCATION_PROVINCE_NAME)));
+        location.setSubDistrictName(formInstanceData.get(ProjectFormFields.Locations
+                .getFieldNameFromColumn(COLUMN_LOCATION_SUB_DISTRICT_NAME)));
+        location.setDistrictName(formInstanceData.get(ProjectFormFields.Locations
+                .getFieldNameFromColumn(COLUMN_LOCATION_DISTRICT_NAME)));
 
         return location;
     }
@@ -55,6 +58,12 @@ public class LocationAdapter {
         cv.put(COLUMN_LOCATION_MAP_AREA_NAME, location.getMapAreaName());
         cv.put(COLUMN_LOCATION_LOCALITY_NAME, location.getLocalityName());
         cv.put(COLUMN_LOCATION_COMMUNITY_NAME, location.getCommunityName());
+        cv.put(COLUMN_LOCATION_BUILDING_NUMBER, location.getBuildingNumber());
+        cv.put(COLUMN_LOCATION_FLOOR_NUMBER, location.getFloorNumber());
+        cv.put(COLUMN_LOCATION_REGION_NAME, location.getRegionName());
+        cv.put(COLUMN_LOCATION_PROVINCE_NAME, location.getProvinceName());
+        cv.put(COLUMN_LOCATION_SUB_DISTRICT_NAME, location.getSubDistrictName());
+        cv.put(COLUMN_LOCATION_DISTRICT_NAME, location.getDistrictName());
 
         return cv;
     }

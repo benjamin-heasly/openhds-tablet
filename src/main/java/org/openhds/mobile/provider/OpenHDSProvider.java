@@ -195,6 +195,24 @@ public class OpenHDSProvider extends ContentProvider {
 		locationsProjectionMap.put(
 				OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME,
 				OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME);
+        locationsProjectionMap.put(
+                OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER,
+                OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER);
+        locationsProjectionMap.put(
+                OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER,
+                OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER);
+        locationsProjectionMap.put(
+                OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME,
+                OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME);
+        locationsProjectionMap.put(
+                OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME,
+                OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME);
+        locationsProjectionMap.put(
+                OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME,
+                OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME);
+        locationsProjectionMap.put(
+                OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME,
+                OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME);
 
 		hierarchyitemsProjectionMap = new HashMap<String, String>();
 		hierarchyitemsProjectionMap.put(OpenHDS.HierarchyItems._ID,
@@ -373,8 +391,14 @@ public class OpenHDSProvider extends ContentProvider {
 					+ " TEXT,"
 					+ OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME
 					+ " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME
-					+ " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_NAME
-					+ " TEXT NOT NULL);"
+                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER
+                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER
+                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME
+                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME
+                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME
+                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME
+                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_NAME
+                    + " TEXT NOT NULL);"
 					+ " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON "
 					+ OpenHDS.Locations.TABLE_NAME + "("
 					+ OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY + ")");

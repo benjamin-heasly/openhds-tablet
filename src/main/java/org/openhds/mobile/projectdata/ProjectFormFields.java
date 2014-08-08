@@ -79,6 +79,12 @@ public class ProjectFormFields {
         public static final String LOCALITY_NAME = "localityName";
         public static final String SECTOR_NAME = "sectorName";
 
+        public static final String BUILDING_NUMBER = "buildingNumber";
+        public static final String FLOOR_NUMBER = "floorNumber";
+        public static final String REGION_NAME = "regionName";
+        public static final String PROVINCE_NAME = "provinceName";
+        public static final String SUB_DISTRICT_NAME = "subDistrictName";
+        public static final String DISTRICT_NAME = "districtName";
 
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
@@ -90,6 +96,13 @@ public class ProjectFormFields {
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME, MAP_AREA_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME, LOCALITY_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, SECTOR_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER, BUILDING_NUMBER);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER, FLOOR_NUMBER);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME, REGION_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME, PROVINCE_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME, SUB_DISTRICT_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME, DISTRICT_NAME);
+
         }
 
         public static String getFieldNameFromColumn(String column) {

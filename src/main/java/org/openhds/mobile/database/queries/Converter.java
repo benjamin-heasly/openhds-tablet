@@ -121,6 +121,19 @@ public class Converter {
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME)));
 		location.setSectorName(cursor.getString(cursor
 				.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME)));
+        location.setBuildingNumber(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER)));
+        location.setFloorNumber(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER)));
+        location.setRegionName(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME)));
+        location.setProvinceName(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME)));
+        location.setSubDistrictName(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME)));
+        location.setDistrictName(cursor.getString(cursor
+                .getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME)));
+
 	}
 
 	public static LocationHierarchy toHierarchy(Cursor cursor, boolean close) {

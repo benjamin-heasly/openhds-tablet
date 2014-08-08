@@ -361,6 +361,24 @@ public class SyncEntitiesTask extends
                             } else if (tagName.equalsIgnoreCase("localityName")) {
                                 cv.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME,
                                         parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("buildingNumber")) {
+                                cv.put(OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("floorNumber")) {
+                                cv.put(OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("regionName")) {
+                                cv.put(OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("provinceName")) {
+                                cv.put(OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("subDistrictName")) {
+                                cv.put(OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME,
+                                        parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("districtName")) {
+                                cv.put(OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME,
+                                        parser.nextText());
                             } else if (tagName.equalsIgnoreCase("locationLevel")) {
                                 //<locationLevel>
                                 //    <extId>BA15M1000S056</extId>

@@ -203,9 +203,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
                 OdkCollectHelper.setStatusIncomplete(getContentResolver(), instance.getUri());
                 EncryptionHelper.encryptFile(instanceFile, this);
             }
-
         }
-
         startActivity(new Intent(Intent.ACTION_EDIT));
     }
 
