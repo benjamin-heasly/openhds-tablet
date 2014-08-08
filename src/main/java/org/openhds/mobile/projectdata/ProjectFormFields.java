@@ -79,8 +79,8 @@ public class ProjectFormFields {
         public static final String LOCALITY_NAME = "localityName";
         public static final String SECTOR_NAME = "sectorName";
 
-        public static final String BUILDING_NUMBER = "buildingNumber";
-        public static final String FLOOR_NUMBER = "floorNumber";
+        public static final String BUILDING_NUMBER = "locationBuildingNumber";
+        public static final String FLOOR_NUMBER = "locationFloorNumber";
         public static final String REGION_NAME = "regionName";
         public static final String PROVINCE_NAME = "provinceName";
         public static final String SUB_DISTRICT_NAME = "subDistrictName";

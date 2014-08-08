@@ -95,10 +95,11 @@ public class Queries {
                 OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, extId, null);
     }
 
-    public static Cursor getLocationsByLevel(ContentResolver resolver,
-                                             String extId) {
-        return getCursor(resolver, OpenHDS.Locations.CONTENT_ID_URI_BASE,
-                OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, extId, null);
+    public static Cursor getLocationsOrderedByBuildingNumber(ContentResolver resolver, String hierarchyExtId) {
+
+        return resolver.query(OpenHDS.Locations.CONTENT_ID_URI_BASE, new String[]{OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER}, OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY + " = ?",
+                new String[]{hierarchyExtId}, "CAST ("+OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER+" AS INT)"+" DESC");
+
     }
 
     public static Cursor getHierarchyByExtId(ContentResolver contentResolver,

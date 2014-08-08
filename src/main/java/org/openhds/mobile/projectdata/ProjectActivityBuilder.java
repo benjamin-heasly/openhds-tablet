@@ -42,6 +42,7 @@ public class ProjectActivityBuilder {
         public static final String REGION_STATE = "region";
         public static final String PROVINCE_STATE = "province";
         public static final String DISTRICT_STATE = "district";
+        public static final String SUB_DISTRICT_STATE = "subDistrict";
         public static final String LOCALITY_STATE = "locality";
         public static final String MAP_AREA_STATE = "mapArea";
         public static final String SECTOR_STATE = "sector";
@@ -59,6 +60,7 @@ public class ProjectActivityBuilder {
             stateLabels.put(REGION_STATE, R.string.region_label);
             stateLabels.put(PROVINCE_STATE, R.string.province_label);
             stateLabels.put(DISTRICT_STATE, R.string.district_label);
+            stateLabels.put(SUB_DISTRICT_STATE, R.string.sub_district_label);
             stateLabels.put(LOCALITY_STATE, R.string.locality_label);
             stateLabels.put(MAP_AREA_STATE, R.string.map_area_label);
             stateLabels.put(SECTOR_STATE, R.string.sector_label);
@@ -69,6 +71,7 @@ public class ProjectActivityBuilder {
             stateSequence.add(REGION_STATE);
             stateSequence.add(PROVINCE_STATE);
             stateSequence.add(DISTRICT_STATE);
+            stateSequence.add(SUB_DISTRICT_STATE);
             stateSequence.add(LOCALITY_STATE);
             stateSequence.add(MAP_AREA_STATE);
             stateSequence.add(SECTOR_STATE);
@@ -79,6 +82,7 @@ public class ProjectActivityBuilder {
             ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> districtFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> subDistrictFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> localityFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> mapAreaFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> sectorFormList = new ArrayList<FormBehaviour>();
@@ -95,6 +99,7 @@ public class ProjectActivityBuilder {
             formsForStates.put(REGION_STATE, regionFormList);
             formsForStates.put(PROVINCE_STATE, provinceFormList);
             formsForStates.put(DISTRICT_STATE, districtFormList);
+            formsForStates.put(SUB_DISTRICT_STATE, subDistrictFormList);
             formsForStates.put(LOCALITY_STATE, localityFormList);
             formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
             formsForStates.put(SECTOR_STATE, sectorFormList);
@@ -108,6 +113,7 @@ public class ProjectActivityBuilder {
             detailFragsForStates.put(REGION_STATE, null);
             detailFragsForStates.put(PROVINCE_STATE, null);
             detailFragsForStates.put(DISTRICT_STATE, null);
+            detailFragsForStates.put(SUB_DISTRICT_STATE, null);
             detailFragsForStates.put(MAP_AREA_STATE, null);
             detailFragsForStates.put(SECTOR_STATE, null);
             detailFragsForStates.put(HOUSEHOLD_STATE, null);
@@ -166,7 +172,8 @@ public class ProjectActivityBuilder {
 		public static final String REGION_STATE = "region";
 		public static final String PROVINCE_STATE = "province";
 		public static final String DISTRICT_STATE = "district";
-		public static final String LOCALITY_STATE = "locality";
+        public static final String SUB_DISTRICT_STATE = "subDistrict";
+        public static final String LOCALITY_STATE = "locality";
 		public static final String MAP_AREA_STATE = "mapArea";
 		public static final String SECTOR_STATE = "sector";
 		public static final String HOUSEHOLD_STATE = "household";
@@ -180,30 +187,33 @@ public class ProjectActivityBuilder {
 
 		static {
 
-			stateLabels.put(REGION_STATE, R.string.region_label);
-			stateLabels.put(PROVINCE_STATE, R.string.province_label);
-			stateLabels.put(DISTRICT_STATE, R.string.district_label);
-			stateLabels.put(LOCALITY_STATE, R.string.locality_label);
-			stateLabels.put(MAP_AREA_STATE, R.string.map_area_label);
-			stateLabels.put(SECTOR_STATE, R.string.sector_label);
-			stateLabels.put(HOUSEHOLD_STATE, R.string.household_label);
-			stateLabels.put(INDIVIDUAL_STATE, R.string.individual_label);
-			stateLabels.put(BOTTOM_STATE, R.string.bottom_label);
+            stateLabels.put(REGION_STATE, R.string.region_label);
+            stateLabels.put(PROVINCE_STATE, R.string.province_label);
+            stateLabels.put(DISTRICT_STATE, R.string.district_label);
+            stateLabels.put(SUB_DISTRICT_STATE, R.string.sub_district_label);
+            stateLabels.put(LOCALITY_STATE, R.string.locality_label);
+            stateLabels.put(MAP_AREA_STATE, R.string.map_area_label);
+            stateLabels.put(SECTOR_STATE, R.string.sector_label);
+            stateLabels.put(HOUSEHOLD_STATE, R.string.household_label);
+            stateLabels.put(INDIVIDUAL_STATE, R.string.individual_label);
+            stateLabels.put(BOTTOM_STATE, R.string.bottom_label);
 
-			stateSequence.add(REGION_STATE);
-			stateSequence.add(PROVINCE_STATE);
-			stateSequence.add(DISTRICT_STATE);
-			stateSequence.add(LOCALITY_STATE);
-			stateSequence.add(MAP_AREA_STATE);
-			stateSequence.add(SECTOR_STATE);
-			stateSequence.add(HOUSEHOLD_STATE);
-			stateSequence.add(INDIVIDUAL_STATE);
-			stateSequence.add(BOTTOM_STATE);
+            stateSequence.add(REGION_STATE);
+            stateSequence.add(PROVINCE_STATE);
+            stateSequence.add(DISTRICT_STATE);
+            stateSequence.add(SUB_DISTRICT_STATE);
+            stateSequence.add(LOCALITY_STATE);
+            stateSequence.add(MAP_AREA_STATE);
+            stateSequence.add(SECTOR_STATE);
+            stateSequence.add(HOUSEHOLD_STATE);
+            stateSequence.add(INDIVIDUAL_STATE);
+            stateSequence.add(BOTTOM_STATE);
 
 			ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> districtFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> localityFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> subDistrictFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> localityFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> mapAreaFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> sectorFormList = new ArrayList<FormBehaviour>();
 			ArrayList<FormBehaviour> householdFormList = new ArrayList<FormBehaviour>();
@@ -237,7 +247,8 @@ public class ProjectActivityBuilder {
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
 			formsForStates.put(DISTRICT_STATE, districtFormList);
-			formsForStates.put(LOCALITY_STATE, localityFormList);
+            formsForStates.put(SUB_DISTRICT_STATE, subDistrictFormList);
+            formsForStates.put(LOCALITY_STATE, localityFormList);
 			formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
 			formsForStates.put(SECTOR_STATE, sectorFormList);
 			formsForStates.put(HOUSEHOLD_STATE, householdFormList);
@@ -250,7 +261,8 @@ public class ProjectActivityBuilder {
 			detailFragsForStates.put(REGION_STATE, null);
 			detailFragsForStates.put(PROVINCE_STATE, null);
 			detailFragsForStates.put(DISTRICT_STATE, null);
-			detailFragsForStates.put(MAP_AREA_STATE, null);
+            detailFragsForStates.put(SUB_DISTRICT_STATE, null);
+            detailFragsForStates.put(MAP_AREA_STATE, null);
 			detailFragsForStates.put(SECTOR_STATE, null);
 			detailFragsForStates.put(HOUSEHOLD_STATE, null);
 			detailFragsForStates.put(INDIVIDUAL_STATE, null);
@@ -309,7 +321,8 @@ public class ProjectActivityBuilder {
 		public static final String REGION_STATE = "region";
 		public static final String PROVINCE_STATE = "province";
 		public static final String DISTRICT_STATE = "district";
-		public static final String LOCALITY_STATE = "locality";
+        public static final String SUB_DISTRICT_STATE = "subDistrict";
+        public static final String LOCALITY_STATE = "locality";
 		public static final String MAP_AREA_STATE = "mapArea";
 		public static final String SECTOR_STATE = "sector";
 		public static final String HOUSEHOLD_STATE = "household";
@@ -323,35 +336,38 @@ public class ProjectActivityBuilder {
 
 		static {
 
-			stateLabels.put(REGION_STATE, R.string.region_label);
-			stateLabels.put(PROVINCE_STATE, R.string.province_label);
-			stateLabels.put(DISTRICT_STATE, R.string.district_label);
-			stateLabels.put(LOCALITY_STATE, R.string.locality_label);
-			stateLabels.put(MAP_AREA_STATE, R.string.map_area_label);
-			stateLabels.put(SECTOR_STATE, R.string.sector_label);
-			stateLabels.put(HOUSEHOLD_STATE, R.string.household_label);
-			stateLabels.put(INDIVIDUAL_STATE, R.string.individual_label);
-			stateLabels.put(BOTTOM_STATE, R.string.bottom_label);
+            stateLabels.put(REGION_STATE, R.string.region_label);
+            stateLabels.put(PROVINCE_STATE, R.string.province_label);
+            stateLabels.put(DISTRICT_STATE, R.string.district_label);
+            stateLabels.put(SUB_DISTRICT_STATE, R.string.sub_district_label);
+            stateLabels.put(LOCALITY_STATE, R.string.locality_label);
+            stateLabels.put(MAP_AREA_STATE, R.string.map_area_label);
+            stateLabels.put(SECTOR_STATE, R.string.sector_label);
+            stateLabels.put(HOUSEHOLD_STATE, R.string.household_label);
+            stateLabels.put(INDIVIDUAL_STATE, R.string.individual_label);
+            stateLabels.put(BOTTOM_STATE, R.string.bottom_label);
 
-			stateSequence.add(REGION_STATE);
-			stateSequence.add(PROVINCE_STATE);
-			stateSequence.add(DISTRICT_STATE);
-			stateSequence.add(LOCALITY_STATE);
-			stateSequence.add(MAP_AREA_STATE);
-			stateSequence.add(SECTOR_STATE);
-			stateSequence.add(HOUSEHOLD_STATE);
-			stateSequence.add(INDIVIDUAL_STATE);
-			stateSequence.add(BOTTOM_STATE);
+            stateSequence.add(REGION_STATE);
+            stateSequence.add(PROVINCE_STATE);
+            stateSequence.add(DISTRICT_STATE);
+            stateSequence.add(SUB_DISTRICT_STATE);
+            stateSequence.add(LOCALITY_STATE);
+            stateSequence.add(MAP_AREA_STATE);
+            stateSequence.add(SECTOR_STATE);
+            stateSequence.add(HOUSEHOLD_STATE);
+            stateSequence.add(INDIVIDUAL_STATE);
+            stateSequence.add(BOTTOM_STATE);
 
-			ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> districtFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> localityFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> mapAreaFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> sectorFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> householdFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
-			ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> districtFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> subDistrictFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> localityFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> mapAreaFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> sectorFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> householdFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
+            ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
 			individualFormList.add(new FormBehaviour("Visit",
 					R.string.start_a_visit,
@@ -368,7 +384,8 @@ public class ProjectActivityBuilder {
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
 			formsForStates.put(DISTRICT_STATE, districtFormList);
-			formsForStates.put(LOCALITY_STATE, localityFormList);
+            formsForStates.put(SUB_DISTRICT_STATE, subDistrictFormList);
+            formsForStates.put(LOCALITY_STATE, localityFormList);
 			formsForStates.put(MAP_AREA_STATE, mapAreaFormList);
 			formsForStates.put(SECTOR_STATE, sectorFormList);
 			formsForStates.put(HOUSEHOLD_STATE, householdFormList);
@@ -381,7 +398,8 @@ public class ProjectActivityBuilder {
 			detailFragsForStates.put(REGION_STATE, null);
 			detailFragsForStates.put(PROVINCE_STATE, null);
 			detailFragsForStates.put(DISTRICT_STATE, null);
-			detailFragsForStates.put(MAP_AREA_STATE, null);
+            detailFragsForStates.put(SUB_DISTRICT_STATE, null);
+            detailFragsForStates.put(MAP_AREA_STATE, null);
 			detailFragsForStates.put(SECTOR_STATE, null);
 			detailFragsForStates.put(HOUSEHOLD_STATE, null);
 			detailFragsForStates.put(INDIVIDUAL_STATE, null);

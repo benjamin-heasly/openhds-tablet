@@ -32,6 +32,7 @@ public class CensusFormPayloadBuilders {
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
         // sector extId -> <hierarchyExtId />
+
         // sector name -> <sectorName />
         QueryResult sectorQueryResult =
                 navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE);
@@ -65,6 +66,26 @@ public class CensusFormPayloadBuilders {
         }
         LocationHierarchy locality = Converter.toHierarchy(cursor, true);
         formPayload.put(ProjectFormFields.Locations.LOCALITY_NAME, locality.getName());
+
+
+
+        // <locationFloorNumber />
+        formPayload.put(ProjectFormFields.Locations.FLOOR_NUMBER, "1");
+
+        // <locationBuildingNumber />
+        cursor =
+                Queries.getLocationsOrderedByBuildingNumber(navigateActivity.getContentResolver(), sector.getExtId());
+        if(!cursor.moveToFirst()) {
+            cursor.close();
+            formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, "1");
+            return;
+        }
+
+        int buildingNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER)));
+
+        buildingNumber++;
+
+        formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, String.format("%02d", buildingNumber));
     }
 
     private static void addNewIndividualPayload(

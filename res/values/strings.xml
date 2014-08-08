@@ -200,6 +200,7 @@
     <string name="supervisor_checkbox_header">Approved</string>
     <string name="supervisor_approve_all">Approve All</string>
     <string name="supervisor_approve_selected">Approve Selected</string>
+    <string name="sub_district_label">SubDistrict</string>
 
 
 </resources>
