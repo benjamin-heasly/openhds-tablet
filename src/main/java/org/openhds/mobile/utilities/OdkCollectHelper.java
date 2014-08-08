@@ -5,12 +5,14 @@ import static org.openhds.mobile.InstanceProviderAPI.InstanceColumns.CONTENT_URI
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentValues;
 import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.model.FormInstance;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import org.openhds.mobile.projectdata.ProjectResources;
 
 public class OdkCollectHelper {
 
@@ -111,4 +113,11 @@ public class OdkCollectHelper {
 		return formInstances;
 	}
 
+    public static void setStatusIncomplete(ContentResolver resolver, Uri uri) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+        resolver.update(uri, cv, null, null);
+
+    }
 }

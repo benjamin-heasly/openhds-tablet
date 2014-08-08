@@ -10,9 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
 
 import java.io.File;
@@ -24,24 +26,17 @@ import java.util.List;
 public class SupervisorFormInstanceAdapter extends ArrayAdapter {
 
     private ArrayList<FormInstance> formInstanceList;
-    private ArrayList<CheckBox> checkBoxList;
+    private ArrayList<Boolean> checkList;
     private Context context;
     private LayoutInflater inflater;
 
-    public SupervisorFormInstanceAdapter(Context context, int resource, Object[] formInstances) {
+    public SupervisorFormInstanceAdapter(Context context, int resource, ArrayList<FormInstance> formInstances) {
         super(context, resource, formInstances);
         this.context = context;
-        formInstanceList = new ArrayList<FormInstance>();
-        checkBoxList = new ArrayList<CheckBox>();
+        this.formInstanceList = formInstances;
+        checkList = new ArrayList<>();
 
-        FormInstance tempInstance;
-        CheckBox tempCheckBox;
-        for (int i = 0; i < formInstances.length; i++) {
-            tempInstance = (FormInstance) formInstances[i];
-            formInstanceList.add(tempInstance);
-            tempCheckBox = new CheckBox(context);
-            checkBoxList.add(tempCheckBox);
-        }
+        checkList = clearCheckListState();
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -57,21 +52,20 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
 
         final ViewHolder holder;
 
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.form_instance_with_checkbox, null);
-            holder = new ViewHolder();
-            holder.formType = (TextView) convertView.findViewById(R.id.form_instance_list_type);
-            holder.fileName = (TextView) convertView.findViewById(R.id.form_instance_list_filename);
-            holder.fileName.setTag(formInstanceList.get(position));
-            holder.checkBox = (CheckBox) convertView.findViewById(R.id.form_instance_check_box);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+        convertView = inflater.inflate(R.layout.form_instance_with_checkbox, null);
+        holder = new ViewHolder();
+        holder.formType = (TextView) convertView.findViewById(R.id.form_instance_list_type);
+        holder.fileName = (TextView) convertView.findViewById(R.id.form_instance_list_filename);
+        holder.fileName.setTag(formInstanceList.get(position));
+        holder.checkBox = (CheckBox) convertView.findViewById(R.id.form_instance_check_box);
+        holder.checkBox.setChecked(checkList.get(position));
 
         FormInstance instance = (FormInstance) formInstanceList.get(position);
-        holder.formType.setText(instance.getFileName());
-        holder.fileName.setText(instance.getFormName());
+        String formType = instance.getFormName();
+        int resourceId = ProjectResources.FormType.getFormTypeStringId(formType);
+        holder.formType.setText(context.getResources().getString(resourceId));
+
+        holder.fileName.setText(instance.getFileName());
         holder.fileName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,43 +81,66 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
             }
         });
 
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (holder.checkBox.isChecked()) {
-                    checkBoxList.get(position).setChecked(true);
+                checkList.set(position, isChecked);
 
-                } else {
-                    checkBoxList.get(position).setChecked(false);
-                }
             }
         });
 
+        convertView.setTag(holder);
         return convertView;
 
     }
 
     public List<FormInstance> registerApproveSelectedAction() {
-        ArrayList<CheckBox> unselectedCheckBoxes = checkBoxList;
+        ArrayList<Integer> indexesToRemove = new ArrayList<>();
         ArrayList<FormInstance> approvedFormInstanceList = new ArrayList<>();
-        for (int i = 0; i < checkBoxList.size(); i++) {
-            if (checkBoxList.get(i).isChecked()) {
-                unselectedCheckBoxes.remove(checkBoxList.get(i));
-                formInstanceList.remove(i);
+
+        //collect list of instances that were checked for approval
+        for (int i = 0; i < checkList.size(); i++) {
+            if (checkList.get(i)) {
+                approvedFormInstanceList.add(formInstanceList.get(i));
+                indexesToRemove.add(i);
             }
         }
-        checkBoxList = unselectedCheckBoxes;
-        //notifyChange();
-        return formInstanceList;
+
+        //remove the approved instances from the adapter's list
+        for (Integer index: indexesToRemove) {
+            FormInstance removed = formInstanceList.get(index);
+            formInstanceList.remove(index);
+            this.remove(removed);
+        }
+
+        //reset all checkboxes to unchecked
+        checkList = clearCheckListState();
+
+        notifyDataSetChanged();
+        return approvedFormInstanceList;
+    }
+
+    private ArrayList<Boolean> clearCheckListState() {
+
+        ArrayList<Boolean> newCheckList = new ArrayList<>();
+        for (FormInstance instance : formInstanceList) {
+            newCheckList.add(false);
+        }
+        return newCheckList;
     }
 
     public List<FormInstance> registerApproveAllAction() {
 
         ArrayList<FormInstance> allInstances = formInstanceList;
         formInstanceList.clear();
-        checkBoxList.clear();
-        //notifyChange();
+        checkList.clear();
+        this.clear();
+        notifyDataSetChanged();
         return allInstances;
+    }
+
+    public ArrayList<FormInstance> getListOfEditedForms() {
+        return formInstanceList;
     }
 }

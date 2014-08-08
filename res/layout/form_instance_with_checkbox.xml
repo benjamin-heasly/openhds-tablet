@@ -11,16 +11,16 @@
 
     <TextView
             android:id="@+id/form_instance_list_type"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:text="Form Type"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" />
 
     <TextView
             android:id="@+id/form_instance_list_filename"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
             android:text="File Name"
             android:layout_below="@id/form_instance_list_type"
             android:textAppearance="?android:attr/textAppearanceLargeInverse" />
@@ -29,8 +29,9 @@
             android:id="@+id/form_instance_check_box"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:focusable="false"
-            android:background="@color/SandyBrown"
-            android:layout_toRightOf="@id/form_instance_list_filename"/>
+            android:layout_toRightOf="@id/form_instance_list_filename"
+            />
 
 </RelativeLayout>

@@ -9,11 +9,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.net.Uri;
 import android.widget.*;
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
-import org.openhds.mobile.adapter.CheckBoxListAdapter;
-import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.adapter.SupervisorFormInstanceAdapter;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.model.FormHelper;
@@ -41,9 +39,10 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 	private FrameLayout prefContainer;
 	private LinearLayout supervisorOptionsList;
     private ListView editFormListView;
+    private SupervisorFormInstanceAdapter adapter;
 
 	private SyncDatabaseHelper syncDatabaseHelper;
-    private List<FormInstance> editedForms;
+    private ArrayList<FormInstance> editedForms;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -125,8 +124,8 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 
         fillEditedFormsList();
         if (!editedForms.isEmpty()) {
-            SupervisorFormInstanceAdapter adapter = new SupervisorFormInstanceAdapter(this, R.id.form_instance_list_item,
-                    editedForms.toArray());
+            adapter = new SupervisorFormInstanceAdapter(this, R.id.form_instance_list_item,
+                    editedForms);
 
             editFormListView.setAdapter(adapter);
         }
@@ -183,20 +182,34 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 			syncFieldWorkers();
 		} else if (tag.equals((getResourceString(this,
 				R.string.send_finalized_forms_name)))) {
-			decryptAllForms();
-			startActivity(new Intent(Intent.ACTION_EDIT));
+            sendApprovedForms();
 		} else if (tag.equals((getResourceString(this, R.string.supervisor_approve_all)))) {
-            SupervisorFormInstanceAdapter adapter = (SupervisorFormInstanceAdapter)editFormListView.getAdapter();
-            approveAll(adapter.registerApproveAllAction());
-            notifyInstanceDataChange();
+            approveListOfForms(adapter.registerApproveAllAction());
+            editedForms = adapter.getListOfEditedForms();
         } else if (tag.equals((getResourceString(this, R.string.supervisor_approve_selected)))) {
-            SupervisorFormInstanceAdapter adapter = (SupervisorFormInstanceAdapter)editFormListView.getAdapter();
-            approveAll(adapter.registerApproveSelectedAction());
-            notifyInstanceDataChange();
+            approveListOfForms(adapter.registerApproveSelectedAction());
+            editedForms = adapter.getListOfEditedForms();
         }
 	}
 
-    private void approveAll(List<FormInstance> formInstances) {
+    private void sendApprovedForms() {
+
+        List<FormInstance> allFormInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
+        EncryptionHelper.decryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
+        for (FormInstance instance: allFormInstances) {
+            File instanceFile = new File(instance.getFilePath());
+            EncryptionHelper.decryptFile(instanceFile, this);
+            if (!FormHelper.isFormReviewed(instance.getFilePath())) {
+                OdkCollectHelper.setStatusIncomplete(getContentResolver(), instance.getUri());
+                EncryptionHelper.encryptFile(instanceFile, this);
+            }
+
+        }
+
+        startActivity(new Intent(Intent.ACTION_EDIT));
+    }
+
+    private void approveListOfForms(List<FormInstance> formInstances) {
 
         for (FormInstance instance: formInstances) {
             File instanceFile = new File(instance.getFilePath());
@@ -205,10 +218,6 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
                     instance.getFilePath());
             EncryptionHelper.encryptFile(instanceFile, this);
         }
-    }
-
-    private void notifyInstanceDataChange() {
-
     }
 
     @Override
