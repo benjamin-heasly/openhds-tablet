@@ -2,25 +2,37 @@ package org.openhds.mobile.tests;
 
 import android.content.ContentResolver;
 import android.test.ProviderTestCase2;
-import com.google.common.base.Charsets;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.model.Relationship;
+import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.model.Visit;
 import org.openhds.mobile.provider.OpenHDSProvider;
 import org.openhds.mobile.provider.PasswordHelper;
 import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
+import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.RelationshipGateway;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 import org.openhds.mobile.repository.gateway.VisitGateway;
 import org.openhds.mobile.task.SyncEntitiesTask;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
 /**
- * Feed XML documents to SyncEntitiesTask and verify entities in database.
+ * Feed XML documents to SyncEntitiesTask and verify that entities were created in the database.
+ *
+ * Note, the XML parsing in SyncEntitiesTask is quite brittle.  The XML in assets/testXml must
+ * not contain extra whitespace.  Otherwise the SyncEntitiesTask might get caught in an infinite
+ * loop.  SyncEntitiesTask is past due for refactoring!
+ *
+ * BSH
  */
 public class SyncEntitiesTaskTest extends ProviderTestCase2<OpenHDSProvider> {
 
@@ -69,18 +81,26 @@ public class SyncEntitiesTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         db.close();
     }
 
-    public void testProcessVisitXML() throws Exception {
-//        final String visitXML = "No Dice Baby!";
-//        InputStream inputStream = new ByteArrayInputStream(visitXML.getBytes(Charsets.UTF_8));
-//        syncEntitiesTask.processXMLDocument(inputStream);
-//
-//        VisitGateway visitGateway = GatewayRegistry.getVisitGateway();
-//        List<Visit> visits = visitGateway.getList(contentResolver, visitGateway.findAll());
-//        assertEquals(2, visits.size());
+    public void testProcessIndividualXML() throws Exception {
+        InputStream inputStream = getContext().getAssets().open("testXml/individuals.xml");
+        syncEntitiesTask.processXMLDocument(inputStream);
+
+        IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+        List<Individual> individuals = individualGateway.getList(contentResolver, individualGateway.findAll());
+        assertEquals(2, individuals.size());
+    }
+
+    public void testProcessLocationHierarchyXML() throws Exception {
+        InputStream inputStream = getContext().getAssets().open("testXml/location-hierarchies.xml");
+        syncEntitiesTask.processXMLDocument(inputStream);
+
+        LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+        List<LocationHierarchy> locationHierarchies = locationHierarchyGateway.getList(contentResolver, locationHierarchyGateway.findAll());
+        assertEquals(2, locationHierarchies.size());
     }
 
     public void testProcessLocationXML() throws Exception {
-        InputStream inputStream = new ByteArrayInputStream(getLocationXml().getBytes(Charsets.UTF_8));
+        InputStream inputStream = getContext().getAssets().open("testXml/locations.xml");
         syncEntitiesTask.processXMLDocument(inputStream);
 
         LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
@@ -88,51 +108,30 @@ public class SyncEntitiesTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         assertEquals(2, locations.size());
     }
 
-    private static String getLocationXml() {
-        final String xml = "<?xml version=\"1.0\" ?>"
-                + "<locations>"
-                + "<location>"
-                + "<collectedBy><extId>FWIMPORT</extId></collectedBy>"
-                + "<accuracy></accuracy>"
-                + "<altitude></altitude>"
-                + "<buildingNumber>1</buildingNumber>"
-                + "<communityName>Batoicopo</communityName>"
-                + "<districtName>Malabo</districtName>"
-                + "<extId>M1027S20E01P1</extId>"
-                + "<floorNumber>1</floorNumber>"
-                + "<latitude></latitude>"
-                + "<localityName>7 Batoicopo</localityName>"
-                + "<locationLevel><extId>M1027S020</extId></locationLevel>"
-                + " <locationName>M1027S20E01P1</locationName>"
-                + " <locationType>Household</locationType>"
-                + " <longitude></longitude>"
-                + " <mapAreaName>M1027</mapAreaName>"
-                + " <provinceName>Bioko Norte</provinceName>"
-                + " <regionName></regionName>"
-                + " <sectorName>S020</sectorName>"
-                + " <subDistrictName>Consejo de Poblado</subDistrictName>"
-                + " </location>"
-                + " <location><collectedBy><extId>FWIMPORT</extId></collectedBy>"
-                + " <accuracy></accuracy>"
-                + " <altitude></altitude>"
-                + " <buildingNumber>2</buildingNumber>"
-                + " <communityName>Batoicopo</communityName>"
-                + " <districtName>Malabo</districtName>"
-                + " <extId>M1027S20E02P1</extId>"
-                + " <floorNumber>1</floorNumber>"
-                + " <latitude></latitude>"
-                + " <localityName>7 Batoicopo</localityName>"
-                + " <locationLevel><extId>M1027S020</extId></locationLevel>"
-                + " <locationName>M1027S20E02P1</locationName>"
-                + " <locationType>Household</locationType>"
-                + " <longitude></longitude>"
-                + " <mapAreaName>M1027</mapAreaName>"
-                + " <provinceName>Bioko Norte</provinceName>"
-                + " <regionName></regionName>"
-                + " <sectorName>S020</sectorName>"
-                + " <subDistrictName>Consejo de Poblado</subDistrictName>"
-                + " </location>"
-                + "</locations>";
-        return xml;
+    public void testProcessRelationshipXML() throws Exception {
+        InputStream inputStream = getContext().getAssets().open("testXml/relationships.xml");
+        syncEntitiesTask.processXMLDocument(inputStream);
+
+        RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
+        List<Relationship> relationships = relationshipGateway.getList(contentResolver, relationshipGateway.findAll());
+        assertEquals(2, relationships.size());
+    }
+
+    public void testProcessSocialGroupXML() throws Exception {
+        InputStream inputStream = getContext().getAssets().open("testXml/social-groups.xml");
+        syncEntitiesTask.processXMLDocument(inputStream);
+
+        SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
+        List<SocialGroup> socialGroups = socialGroupGateway.getList(contentResolver, socialGroupGateway.findAll());
+        assertEquals(2, socialGroups.size());
+    }
+
+    public void testProcessVisitXML() throws Exception {
+        InputStream inputStream = getContext().getAssets().open("testXml/visits.xml");
+        syncEntitiesTask.processXMLDocument(inputStream);
+
+        VisitGateway visitGateway = GatewayRegistry.getVisitGateway();
+        List<Visit> visits = visitGateway.getList(contentResolver, visitGateway.findAll());
+        assertEquals(2, visits.size());
     }
 }

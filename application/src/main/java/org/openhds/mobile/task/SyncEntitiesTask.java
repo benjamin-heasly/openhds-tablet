@@ -307,9 +307,12 @@ public class SyncEntitiesTask extends
 
     private boolean notEndOfXmlDoc(String element, XmlPullParser parser)
             throws XmlPullParserException {
-        return !element.equals(parser.getName())
-                && parser.getEventType() != XmlPullParser.END_TAG
-                && !isCancelled();
+
+        String name = parser.getName();
+        return !isCancelled()
+                && parser.getEventType() != XmlPullParser.END_DOCUMENT
+                && !element.equals(name)
+                && parser.getEventType() != XmlPullParser.END_TAG;
     }
 
     private void processLocationParams(XmlPullParser parser)
@@ -522,16 +525,19 @@ public class SyncEntitiesTask extends
     private void pullOutMemberships(XmlPullParser parser, List<Membership> memberships)
             throws XmlPullParserException, IOException {
 
-        while (true) {
-            if (null != parser.getName()) {
+        Membership membership = new Membership();
 
-                Membership membership = new Membership();
+        while (true) {
+
+            if (null != parser.getName()) {
 
                 if (parser.getName().equalsIgnoreCase("membership")
                         && parser.getEventType() == XmlPullParser.END_TAG) {
                     memberships.add(membership);
+                    membership = new Membership();
                     parser.next();
-                    break;
+                    continue;
+
                 } else if (parser.getName().equalsIgnoreCase("memberships")
                         && parser.getEventType() == XmlPullParser.END_TAG) {
                     return;
