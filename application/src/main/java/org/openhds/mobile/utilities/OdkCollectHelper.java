@@ -5,14 +5,69 @@ import static org.openhds.mobile.InstanceProviderAPI.InstanceColumns.CONTENT_URI
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentValues;
+import org.jdom2.Content;
 import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.model.FormInstance;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import org.openhds.mobile.projectdata.ProjectResources;
 
 public class OdkCollectHelper {
+
+    public static List<FormInstance> getAllUnsentFormInstances(ContentResolver resolver) {
+
+        ArrayList<FormInstance> formInstances = new ArrayList<FormInstance>();
+
+        Cursor cursor = resolver.query(CONTENT_URI, new String[] {
+                InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH,
+                InstanceProviderAPI.InstanceColumns._ID,
+                InstanceProviderAPI.InstanceColumns.JR_FORM_ID,
+                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME,
+                InstanceProviderAPI.InstanceColumns.STATUS}, InstanceProviderAPI.InstanceColumns.STATUS+" != ?",
+                            new String[] {InstanceProviderAPI.STATUS_SUBMITTED}, null, null);
+
+        while (cursor.moveToNext()) {
+
+            FormInstance formInstance = new FormInstance();
+            String filePath;
+            String formName;
+            String fileName;
+
+            Uri uri;
+
+            filePath = cursor
+                    .getString(cursor
+                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+
+            uri = Uri.withAppendedPath(CONTENT_URI, cursor.getString(cursor
+                    .getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
+
+            String formStatus = cursor
+                    .getString(cursor
+                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.STATUS));
+
+            formName = cursor
+                    .getString(cursor
+                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+
+            fileName = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
+
+            formInstance.setFilePath(filePath);
+            formInstance.setUri(uri);
+            formInstance.setFormName(formName);
+            formInstance.setFileName(fileName);
+
+            formInstances.add(formInstance);
+
+        }
+        cursor.close();
+        return formInstances;
+    }
+
+
 
 	public static List<FormInstance> getAllFormInstances(
 			ContentResolver resolver) {
@@ -21,26 +76,57 @@ public class OdkCollectHelper {
 
 		Cursor cursor = resolver.query(CONTENT_URI, new String[] {
 				InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH,
-				InstanceProviderAPI.InstanceColumns._ID }, null, null, null);
+				InstanceProviderAPI.InstanceColumns._ID,
+                InstanceProviderAPI.InstanceColumns.JR_FORM_ID,
+                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME}, null, null, null);
 
 		while (cursor.moveToNext()) {
 
 			FormInstance formInstance = new FormInstance();
 			String filePath;
+            String formName;
+            String fileName;
+
 			Uri uri;
 
 			filePath = cursor
 					.getString(cursor
 							.getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+
 			uri = Uri.withAppendedPath(CONTENT_URI, cursor.getString(cursor
 					.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID)));
 
+            formName = cursor
+                    .getString(cursor
+                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.JR_FORM_ID));
+
+            fileName = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
+
 			formInstance.setFilePath(filePath);
 			formInstance.setUri(uri);
+            formInstance.setFormName(formName);
+            formInstance.setFileName(fileName);
+
 			formInstances.add(formInstance);
 
 		}
 		cursor.close();
 		return formInstances;
 	}
+
+    public static void setStatusIncomplete(ContentResolver resolver, Uri uri) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+        resolver.update(uri, cv, null, null);
+
+    }
+
+    public static void setStatusComplete(ContentResolver resolver, Uri uri) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
+        resolver.update(uri, cv, null, null);
+
+    }
 }

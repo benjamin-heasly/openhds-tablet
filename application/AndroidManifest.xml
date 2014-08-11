@@ -51,29 +51,9 @@
             android:label="@string/app_name"
             android:theme="@android:style/Theme.WithActionBar" />
         <activity
-            android:name="org.openhds.mobile.activity.FilterActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name="org.openhds.mobile.activity.FilterLocationActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name="org.openhds.mobile.activity.FilterVisitActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name="org.openhds.mobile.activity.FormListActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name="org.openhds.mobile.activity.FormViewActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
             android:name="org.openhds.mobile.activity.PortalActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.WithActionBar" />
     </application>
 
 </manifest>

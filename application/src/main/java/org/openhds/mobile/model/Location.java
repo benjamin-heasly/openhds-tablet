@@ -15,8 +15,62 @@ public class Location implements Serializable {
     private String localityName;
     private String mapAreaName;
     private String sectorName;
+    private String buildingNumber;
+    private String floorNumber;
+    private String regionName;
+    private String provinceName;
+    private String subDistrictName;
+    private String districtName;
 
-	public String getExtId() {
+    public String getBuildingNumber() {
+        return buildingNumber;
+    }
+
+    public void setBuildingNumber(String buildingNumber) {
+        this.buildingNumber = buildingNumber;
+    }
+
+    public String getFloorNumber() {
+        return floorNumber;
+    }
+
+    public void setFloorNumber(String floorNumber) {
+        this.floorNumber = floorNumber;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getSubDistrictName() {
+        return subDistrictName;
+    }
+
+    public void setSubDistrictName(String subDistrictName) {
+        this.subDistrictName = subDistrictName;
+    }
+
+    public String getDistrictName() {
+        return districtName;
+    }
+
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
+    }
+
+    public String getExtId() {
 		return extId;
 	}
 

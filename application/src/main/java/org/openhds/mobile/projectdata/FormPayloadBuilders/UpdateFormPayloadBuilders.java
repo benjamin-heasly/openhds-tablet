@@ -24,8 +24,9 @@ public class UpdateFormPayloadBuilders {
 				NavigateActivity navigateActivity) {
 
 			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
 
-			String visitDate = new SimpleDateFormat("yyyy-MM-dd").format(
+            String visitDate = new SimpleDateFormat("yyyy-MM-dd").format(
 					Calendar.getInstance().getTime()).toString();
 			String locationExtId = navigateActivity.getHierarchyPath()
 					.get(UpdateActivityModule.HOUSEHOLD_STATE).getExtId();
@@ -47,6 +48,7 @@ public class UpdateFormPayloadBuilders {
                                      NavigateActivity navigateActivity) {
 
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
 
             String outMigrationDate = new SimpleDateFormat("yyyy-MM-dd").format(
                     Calendar.getInstance().getTime()).toString();

@@ -6,11 +6,19 @@ import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
 import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.openhds.mobile.InstanceProviderAPI;
+import android.os.Parcelable;
+import android.widget.*;
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
+import org.openhds.mobile.adapter.SupervisorFormInstanceAdapter;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
+import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.task.HttpTask.RequestContext;
 import org.openhds.mobile.task.SyncEntitiesTask;
 import org.openhds.mobile.task.SyncFieldworkersTask;
@@ -20,21 +28,23 @@ import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 public class SupervisorMainActivity extends Activity implements OnClickListener {
 
 	private FrameLayout prefContainer;
 	private LinearLayout supervisorOptionsList;
+    private ListView editFormListView;
+    private SupervisorFormInstanceAdapter adapter;
+    private ArrayList<Boolean> approveCheckList;
+
 	private SyncDatabaseHelper syncDatabaseHelper;
+    private ArrayList<FormInstance> editedForms;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +54,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 		prefContainer = (FrameLayout) findViewById(R.id.login_pref_container);
 		supervisorOptionsList = (LinearLayout) findViewById(R.id.supervisor_activity_options);
 		syncDatabaseHelper = new SyncDatabaseHelper(this);
+        editedForms = new ArrayList<FormInstance>();
 
 		makeNewGenericButton(this,
 				getResourceString(this, R.string.sync_database_description),
@@ -66,6 +77,23 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 				getResourceString(this, R.string.send_finalized_forms_name),
 				this, supervisorOptionsList);
 
+        makeNewGenericButton(this, getResourceString(this, R.string.supervisor_approve_selected),
+                getResourceString(this, R.string.supervisor_approve_selected),
+                getResourceString(this, R.string.supervisor_approve_selected), this, supervisorOptionsList);
+
+        makeNewGenericButton(this, getResourceString(this, R.string.supervisor_approve_all),
+                getResourceString(this, R.string.supervisor_approve_all),
+                getResourceString(this, R.string.supervisor_approve_all), this, supervisorOptionsList);
+
+        editFormListView = (ListView) findViewById(R.id.supervisor_edit_form_list);
+        TextView headerForms = (TextView) this.getLayoutInflater().inflate(R.layout.generic_header, null);
+        headerForms.setText(R.string.supervisor_edit_form_list_header);
+        editFormListView.addHeaderView(headerForms);
+
+        populateEditFormListView(savedInstanceState);
+
+        setupApprovalButtons();
+
 		if (null != savedInstanceState) {
 			return;
 		}
@@ -76,10 +104,67 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 
 	}
 
+    @Override
+    public void onSaveInstanceState(Bundle savingInstanceState) {
+
+        savingInstanceState.putSerializable("approveCheckList", adapter.getCheckList());
+        savingInstanceState.putSerializable("editedForms", adapter.getListOfEditedForms());
+
+    }
+
+    private void setupApprovalButtons() {
+
+        TextView approveAllButton = (TextView) findViewById(R.id.supervisor_approve_all_button);
+        if (editedForms.size() > 0) {
+            approveAllButton.setVisibility(View.VISIBLE);
+        } else {
+            approveAllButton.setVisibility(View.GONE);
+        }
+        TextView approveSelectedButton = (TextView) findViewById(R.id.supervisor_approve_selected_button);
+        if (editedForms.size() > 0) {
+            approveSelectedButton.setVisibility(View.VISIBLE);
+        } else {
+            approveAllButton.setVisibility(View.GONE);
+        }
+
+    }
+
+
+    private void populateEditFormListView(Bundle savedInstanceState) {
+
+        if (null != savedInstanceState) {
+            approveCheckList = (ArrayList<Boolean>) savedInstanceState.get("approveCheckList");
+            editedForms = (ArrayList<FormInstance>) savedInstanceState.get("editedForms");
+        } else {
+            fillEditedFormsList();
+            approveCheckList = null;
+        }
+
+        if (!editedForms.isEmpty()) {
+            adapter = new SupervisorFormInstanceAdapter(this, R.id.form_instance_list_item,
+                    editedForms, approveCheckList);
+            editFormListView.setAdapter(adapter);
+        }
+    }
+
+    private void fillEditedFormsList() {
+        List<FormInstance> allFormInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
+        for (FormInstance instance : allFormInstances ) {
+            File instanceFile = new File(instance.getFilePath());
+            EncryptionHelper.decryptFile(instanceFile, getApplicationContext());
+            String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, instance.getFilePath());
+
+            if (needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NEEDS_REVIEW)) {
+                editedForms.add(instance);
+            }
+            EncryptionHelper.encryptFile(instanceFile, getApplicationContext());
+        }
+    }
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.login_menu, menu);
+		inflater.inflate(R.menu.supervisor_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -88,13 +173,19 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean isShowingPreferences = View.VISIBLE == prefContainer
-				.getVisibility();
-		if (isShowingPreferences) {
-			prefContainer.setVisibility(View.GONE);
-		} else {
-			prefContainer.setVisibility(View.VISIBLE);
-		}
+        if (item.getItemId() == R.id.configure_server) {
+            boolean isShowingPreferences = View.VISIBLE == prefContainer
+                    .getVisibility();
+            if (isShowingPreferences) {
+                prefContainer.setVisibility(View.GONE);
+            } else {
+                prefContainer.setVisibility(View.VISIBLE);
+            }
+        } else if (item.getItemId() == R.id.logout_menu_button) {
+            Intent intent = new Intent();
+            intent.setClass(this, OpeningActivity.class);
+            startActivity(intent);
+        }
 		return true;
 	}
 
@@ -107,12 +198,45 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 			syncFieldWorkers();
 		} else if (tag.equals((getResourceString(this,
 				R.string.send_finalized_forms_name)))) {
-			decryptAllForms();
-			startActivity(new Intent(Intent.ACTION_EDIT));
-		}
+            sendApprovedForms();
+		} else if (tag.equals((getResourceString(this, R.string.supervisor_approve_all)))) {
+            List<FormInstance> approved = adapter.registerApproveAllAction();
+            approveListOfForms(approved);
+            adapter.clearInstanceList();
+            editedForms.clear();
+        } else if (tag.equals((getResourceString(this, R.string.supervisor_approve_selected)))) {
+            approveListOfForms(adapter.registerApproveSelectedAction());
+            editedForms = adapter.getListOfEditedForms();
+        }
 	}
 
-	@Override
+    private void sendApprovedForms() {
+
+        List<FormInstance> allFormInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
+        EncryptionHelper.decryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
+        for (FormInstance instance: allFormInstances) {
+            File instanceFile = new File(instance.getFilePath());
+            if (!FormHelper.isFormReviewed(instance.getFilePath())) {
+                OdkCollectHelper.setStatusIncomplete(getContentResolver(), instance.getUri());
+                EncryptionHelper.encryptFile(instanceFile, this);
+            }
+        }
+        startActivity(new Intent(Intent.ACTION_EDIT));
+    }
+
+    private void approveListOfForms(List<FormInstance> formInstances) {
+
+        for (FormInstance instance: formInstances) {
+            File instanceFile = new File(instance.getFilePath());
+            EncryptionHelper.decryptFile(instanceFile, this);
+            FormHelper.setFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NO_REVIEW_NEEDED,
+                    instance.getFilePath());
+            OdkCollectHelper.setStatusComplete(getContentResolver(), instance.getUri());
+            EncryptionHelper.encryptFile(instanceFile, this);
+        }
+    }
+
+    @Override
 	protected void onResume() {
 		super.onResume();
 		encryptAllForms();

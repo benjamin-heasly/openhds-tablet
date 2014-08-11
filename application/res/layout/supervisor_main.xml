@@ -1,26 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/supervisor_main_activity"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:animateLayoutChanges="true"
-    android:baselineAligned="false"
-    android:gravity="center"
-    android:orientation="horizontal"
     android:tag="@string/portrait_layout_tag" >
+
+    <ListView
+            android:id="@+id/supervisor_edit_form_list"
+            android:layout_width="450dp"
+            android:layout_height="800dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:paddingTop="45dp"
+            android:layout_marginBottom="200dp"/>
+
+    <Button
+            android:id="@+id/supervisor_approve_all_button"
+            android:text="@string/supervisor_approve_all"
+            android:tag="@string/supervisor_approve_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/supervisor_edit_form_list"
+            android:background="@color/SandyBrown"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+
+    <Button
+            android:id="@+id/supervisor_approve_selected_button"
+            android:text="@string/supervisor_approve_selected"
+            android:tag="@string/supervisor_approve_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/supervisor_edit_form_list"
+            android:layout_toRightOf="@id/supervisor_approve_all_button"
+            android:layout_alignParentBottom="true"
+            android:background="@color/SandyBrown"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
 
     <LinearLayout
         android:id="@+id/supervisor_activity_options"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:baselineAligned="false"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/supervisor_edit_form_list"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="50dp">
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/login_pref_container"
-        android:layout_width="350dp"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:visibility="gone"/>
 
-</LinearLayout>
+</RelativeLayout>

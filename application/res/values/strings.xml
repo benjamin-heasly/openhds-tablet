@@ -174,7 +174,6 @@
     <string name="finish_visit">Finish Visit</string>
     <string name="out_migration">Register Out-Migration</string>
 
-
     <!-- NavigateModuleInfo Strings -->
     <string name="census_portal_label">Start Census Activity</string>
     <string name="census_portal_description">Add new or edit existing data.</string>
@@ -182,7 +181,26 @@
     <string name="update_portal_label">Start Update Activity</string>
     <string name="update_portal_description">Conduct visits at locations and update changes since the last visit.</string>
 
+    <!-- Bednet Strings -->
+    <string name="distribute_bednets">Distribute Bednets</string>
+    <string name="bioko_portal_label">Start Bednet Activity</string>
+    <string name="bioko_portal_description">Record the distribution of bednets</string>
 
+    <!-- Form Types -->
+    <string name="form_type_individual">Individual</string>
+    <string name="form_type_location">Location</string>
+    <string name="form_type_visit">Visit</string>
+    <string name="form_type_out_migration">Out Migration</string>
+    <string name="form_type_bed_net">Bed Net</string>
+    <string name="form_instance_list_header">Recent Forms</string>
+    <string name="field_worker_home_menu_text">Field Worker Home</string>
+    <string name="logout_menu_text">Logout</string>
+    <string name="supervisor_edit_form_list_header">Edited Forms</string>
+    <string name="form_instance_supervisor_approval">Approve</string>
+    <string name="supervisor_checkbox_header">Approved</string>
+    <string name="supervisor_approve_all">Approve All</string>
+    <string name="supervisor_approve_selected">Approve Selected</string>
+    <string name="sub_district_label">SubDistrict</string>
 
 
 </resources>

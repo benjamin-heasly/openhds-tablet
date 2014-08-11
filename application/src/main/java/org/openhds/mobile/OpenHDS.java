@@ -83,7 +83,12 @@ public class OpenHDS {
         public static final String COLUMN_LOCATION_LOCALITY_NAME = "localityName";
         public static final String COLUMN_LOCATION_MAP_AREA_NAME = "mapAreaName";
         public static final String COLUMN_LOCATION_SECTOR_NAME = "sectorName";
-
+        public static final String COLUMN_LOCATION_BUILDING_NUMBER = "buildingNumber";
+        public static final String COLUMN_LOCATION_FLOOR_NUMBER = "floorNumber";
+        public static final String COLUMN_LOCATION_REGION_NAME = "regionName";
+        public static final String COLUMN_LOCATION_PROVINCE_NAME = "provinceName";
+        public static final String COLUMN_LOCATION_SUB_DISTRICT_NAME = "subDistrictName";
+        public static final String COLUMN_LOCATION_DISTRICT_NAME = "districtName";
     }
 
 	public static final class HierarchyItems implements BaseColumns {

@@ -24,7 +24,8 @@ public class CensusQueryHelper implements QueryHelper {
 	public static final String REGION_HIERARCHY_LEVEL_NAME = "Region";
 	public static final String PROVINCE_HIERARCHY_LEVEL_NAME = "Province";
 	public static final String DISTRICT_HIERARCHY_LEVEL_NAME = "District";
-	public static final String LOCALITY_HIERARCHY_LEVEL_NAME = "Locality";
+    public static final String SUB_DISTRICT_HIERARCHY_LEVEL_NAME = "SubDistrict";
+    public static final String LOCALITY_HIERARCHY_LEVEL_NAME = "Locality";
 	public static final String MAP_AREA_HIERARCHY_LEVEL_NAME = "MapArea";
 	public static final String SECTOR_HIERARCHY_LEVEL_NAME = "Sector";
 
@@ -51,6 +52,12 @@ public class CensusQueryHelper implements QueryHelper {
 					DISTRICT_HIERARCHY_LEVEL_NAME);
 			return getHierarchyQueryResultList(cursor, state);
 		} else if (state
+                .equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)) {
+            Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
+                    SUB_DISTRICT_HIERARCHY_LEVEL_NAME);
+            return getHierarchyQueryResultList(cursor, state);
+
+        } else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
 			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
 					LOCALITY_HIERARCHY_LEVEL_NAME);
@@ -96,6 +103,11 @@ public class CensusQueryHelper implements QueryHelper {
 			cursor.moveToFirst();
 			return getHierarchyQueryResult(cursor, state, true);
 		} else if (state
+                .equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)) {
+            Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
+            cursor.moveToFirst();
+            return getHierarchyQueryResult(cursor, state, true);
+        } else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
 			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
 			cursor.moveToFirst();
@@ -135,31 +147,17 @@ public class CensusQueryHelper implements QueryHelper {
 				.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
 				|| state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
 				|| state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)
-				|| state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)
 				|| state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
 			Cursor cursor = Queries.getHierarchysByParent(contentResolver,
 					qr.getExtId());
 			return getHierarchyQueryResultList(cursor, childState);
 		} else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
-			
-			Cursor cursor = Queries.getHierarchyByExtId(contentResolver,
-					qr.getExtId());
-			cursor.moveToFirst();
-			LocationHierarchy sector = Converter.toHierarchy(cursor, true);
-
-            Cursor sillyCursor = Queries.getLocationsByHierachy(
-                    contentResolver, sector.getExtId());
-            List<QueryResult> sillyResult = getLocationQueryResultList(sillyCursor, childState);
-
-            Cursor mapAreaCursor = Queries.getHierarchyByExtId(contentResolver, sector.getParent());
-			mapAreaCursor.moveToFirst();
-			LocationHierarchy mapArea = Converter.toHierarchy(mapAreaCursor, true);
-
-            Cursor locationCursor = Queries.getLocationsBySectorNameAndMapAreaName(
-					contentResolver, sector.getName(), mapArea.getName());
-
-            return getLocationQueryResultList(locationCursor, childState);
+            Cursor cursor = Queries.getLocationsByHierarchy(
+                    contentResolver, qr.getExtId());
+            return getLocationQueryResultList(cursor, childState);
 		} else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
 			Cursor cursor = Queries.getIndividualsByResidency(contentResolver,
