@@ -107,21 +107,22 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
     @Override
     public void onSaveInstanceState(Bundle savingInstanceState) {
 
-        savingInstanceState.putSerializable("approveCheckList", adapter.getCheckList());
-        savingInstanceState.putSerializable("editedForms", adapter.getListOfEditedForms());
-
+        if (null != adapter) {
+            savingInstanceState.putSerializable("approveCheckList", adapter.getCheckList());
+            savingInstanceState.putSerializable("editedForms", adapter.getListOfEditedForms());
+        }
     }
 
     private void setupApprovalButtons() {
 
         TextView approveAllButton = (TextView) findViewById(R.id.supervisor_approve_all_button);
-        if (editedForms.size() > 0) {
+        if (null != editedForms && editedForms.size() > 0) {
             approveAllButton.setVisibility(View.VISIBLE);
         } else {
             approveAllButton.setVisibility(View.GONE);
         }
         TextView approveSelectedButton = (TextView) findViewById(R.id.supervisor_approve_selected_button);
-        if (editedForms.size() > 0) {
+        if (null != editedForms && editedForms.size() > 0) {
             approveSelectedButton.setVisibility(View.VISIBLE);
         } else {
             approveAllButton.setVisibility(View.GONE);
@@ -140,7 +141,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
             approveCheckList = null;
         }
 
-        if (!editedForms.isEmpty()) {
+        if (null != editedForms && !editedForms.isEmpty()) {
             adapter = new SupervisorFormInstanceAdapter(this, R.id.form_instance_list_item,
                     editedForms, approveCheckList);
             editFormListView.setAdapter(adapter);
