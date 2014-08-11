@@ -155,7 +155,7 @@ public class CensusQueryHelper implements QueryHelper {
 			return getHierarchyQueryResultList(cursor, childState);
 		} else if (state
 				.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
-            Cursor cursor = Queries.getLocationsByHierachy(
+            Cursor cursor = Queries.getLocationsByHierarchy(
                     contentResolver, qr.getExtId());
             return getLocationQueryResultList(cursor, childState);
 		} else if (state

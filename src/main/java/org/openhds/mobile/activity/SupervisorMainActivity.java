@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.os.Parcelable;
 import android.widget.*;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
@@ -40,6 +41,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 	private LinearLayout supervisorOptionsList;
     private ListView editFormListView;
     private SupervisorFormInstanceAdapter adapter;
+    private ArrayList<Boolean> approveCheckList;
 
 	private SyncDatabaseHelper syncDatabaseHelper;
     private ArrayList<FormInstance> editedForms;
@@ -88,7 +90,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         headerForms.setText(R.string.supervisor_edit_form_list_header);
         editFormListView.addHeaderView(headerForms);
 
-        populateEditFormListView();
+        populateEditFormListView(savedInstanceState);
 
         setupApprovalButtons();
 
@@ -101,6 +103,14 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 				.commit();
 
 	}
+
+    @Override
+    public void onSaveInstanceState(Bundle savingInstanceState) {
+
+        savingInstanceState.putSerializable("approveCheckList", adapter.getCheckList());
+        savingInstanceState.putSerializable("editedForms", adapter.getListOfEditedForms());
+
+    }
 
     private void setupApprovalButtons() {
 
@@ -120,13 +130,19 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
     }
 
 
-    private void populateEditFormListView() {
+    private void populateEditFormListView(Bundle savedInstanceState) {
 
-        fillEditedFormsList();
+        if (null != savedInstanceState) {
+            approveCheckList = (ArrayList<Boolean>) savedInstanceState.get("approveCheckList");
+            editedForms = (ArrayList<FormInstance>) savedInstanceState.get("editedForms");
+        } else {
+            fillEditedFormsList();
+            approveCheckList = null;
+        }
+
         if (!editedForms.isEmpty()) {
             adapter = new SupervisorFormInstanceAdapter(this, R.id.form_instance_list_item,
-                    editedForms);
-
+                    editedForms, approveCheckList);
             editFormListView.setAdapter(adapter);
         }
     }
@@ -184,8 +200,10 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 				R.string.send_finalized_forms_name)))) {
             sendApprovedForms();
 		} else if (tag.equals((getResourceString(this, R.string.supervisor_approve_all)))) {
-            approveListOfForms(adapter.registerApproveAllAction());
-            editedForms = adapter.getListOfEditedForms();
+            List<FormInstance> approved = adapter.registerApproveAllAction();
+            approveListOfForms(approved);
+            adapter.clearInstanceList();
+            editedForms.clear();
         } else if (tag.equals((getResourceString(this, R.string.supervisor_approve_selected)))) {
             approveListOfForms(adapter.registerApproveSelectedAction());
             editedForms = adapter.getListOfEditedForms();
@@ -198,7 +216,6 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         EncryptionHelper.decryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
         for (FormInstance instance: allFormInstances) {
             File instanceFile = new File(instance.getFilePath());
-            EncryptionHelper.decryptFile(instanceFile, this);
             if (!FormHelper.isFormReviewed(instance.getFilePath())) {
                 OdkCollectHelper.setStatusIncomplete(getContentResolver(), instance.getUri());
                 EncryptionHelper.encryptFile(instanceFile, this);
@@ -214,6 +231,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
             EncryptionHelper.decryptFile(instanceFile, this);
             FormHelper.setFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NO_REVIEW_NEEDED,
                     instance.getFilePath());
+            OdkCollectHelper.setStatusComplete(getContentResolver(), instance.getUri());
             EncryptionHelper.encryptFile(instanceFile, this);
         }
     }

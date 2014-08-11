@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
+import org.jdom2.Content;
 import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.model.FormInstance;
 
@@ -117,6 +118,14 @@ public class OdkCollectHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
+        resolver.update(uri, cv, null, null);
+
+    }
+
+    public static void setStatusComplete(ContentResolver resolver, Uri uri) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_COMPLETE);
         resolver.update(uri, cv, null, null);
 
     }

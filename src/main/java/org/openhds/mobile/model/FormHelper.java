@@ -82,7 +82,8 @@ public class FormHelper {
     public static boolean isFormReviewed(String formFilePath) {
 
         String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, formFilePath);
-        return needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NO_REVIEW_NEEDED);
+        boolean value = needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NO_REVIEW_NEEDED);
+        return value;
 
     }
 

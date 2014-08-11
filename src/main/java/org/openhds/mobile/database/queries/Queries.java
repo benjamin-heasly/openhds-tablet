@@ -89,8 +89,8 @@ public class Queries {
                 OpenHDS.Locations.COLUMN_LOCATION_EXTID, extId, null);
     }
 
-    public static Cursor getLocationsByHierachy(ContentResolver resolver,
-                                                String extId) {
+    public static Cursor getLocationsByHierarchy(ContentResolver resolver,
+                                                 String extId) {
         return getCursor(resolver, OpenHDS.Locations.CONTENT_ID_URI_BASE,
                 OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, extId, null);
     }

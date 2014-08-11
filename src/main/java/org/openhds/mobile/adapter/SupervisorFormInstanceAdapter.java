@@ -30,13 +30,15 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
     private Context context;
     private LayoutInflater inflater;
 
-    public SupervisorFormInstanceAdapter(Context context, int resource, ArrayList<FormInstance> formInstances) {
+    public SupervisorFormInstanceAdapter(Context context, int resource, ArrayList<FormInstance> formInstances, ArrayList<Boolean> checkList) {
         super(context, resource, formInstances);
         this.context = context;
         this.formInstanceList = formInstances;
-        checkList = new ArrayList<>();
-
-        checkList = clearCheckListState();
+        if (null != checkList) {
+            this.checkList = checkList;
+        } else {
+            this.checkList = clearCheckListState();
+        }
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -122,25 +124,30 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
     }
 
     private ArrayList<Boolean> clearCheckListState() {
-
         ArrayList<Boolean> newCheckList = new ArrayList<>();
-        for (FormInstance instance : formInstanceList) {
+        for (int i = 0; i < formInstanceList.size(); i++) {
             newCheckList.add(false);
         }
         return newCheckList;
     }
 
     public List<FormInstance> registerApproveAllAction() {
-
         ArrayList<FormInstance> allInstances = formInstanceList;
+        return allInstances;
+    }
+
+    public void clearInstanceList() {
         formInstanceList.clear();
         checkList.clear();
         this.clear();
         notifyDataSetChanged();
-        return allInstances;
     }
 
     public ArrayList<FormInstance> getListOfEditedForms() {
         return formInstanceList;
+    }
+
+    public ArrayList<Boolean> getCheckList() {
+        return checkList;
     }
 }
