@@ -217,7 +217,7 @@ public class SyncEntitiesTask extends
         return entity.getContent();
     }
 
-    private void processXMLDocument(InputStream content) throws Exception {
+    public void processXMLDocument(InputStream content) throws Exception {
         state = State.SAVING;
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -231,6 +231,9 @@ public class SyncEntitiesTask extends
             String name = null;
 
             switch (eventType) {
+                case XmlPullParser.START_DOCUMENT:
+                    break;
+
                 case XmlPullParser.START_TAG:
                     name = parser.getName();
                     if (name.equalsIgnoreCase("count")) {
