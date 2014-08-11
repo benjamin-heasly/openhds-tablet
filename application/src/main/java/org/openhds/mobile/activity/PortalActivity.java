@@ -59,6 +59,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         formInstanceLayout = (ListView) findViewById(R.id.portal_right_column);
         TextView header = (TextView) this.getLayoutInflater().inflate(R.layout.generic_header, null);
         header.setText(R.string.form_instance_list_header);
+        header.setVisibility(View.VISIBLE);
         formInstanceLayout.addHeaderView(header);
 
         populateFormInstanceListView();

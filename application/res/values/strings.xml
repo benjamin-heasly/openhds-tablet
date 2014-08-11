@@ -196,10 +196,8 @@
     <string name="field_worker_home_menu_text">Field Worker Home</string>
     <string name="logout_menu_text">Logout</string>
     <string name="supervisor_edit_form_list_header">Edited Forms</string>
-    <string name="form_instance_supervisor_approval">Approve</string>
-    <string name="supervisor_checkbox_header">Approved</string>
-    <string name="supervisor_approve_all">Approve All</string>
-    <string name="supervisor_approve_selected">Approve Selected</string>
+    <string name="supervisor_approve_all"> Approve All </string>
+    <string name="supervisor_approve_selected"> Approve Selected </string>
     <string name="sub_district_label">SubDistrict</string>
 
 

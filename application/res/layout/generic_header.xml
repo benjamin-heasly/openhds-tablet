@@ -6,6 +6,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:textAlignment="center"
+        android:visibility="gone"
         android:textAppearance="?android:attr/textAppearanceLargeInverse"
         android:background="@color/SandyBrown"
         />
