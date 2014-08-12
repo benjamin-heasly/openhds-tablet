@@ -2,8 +2,8 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.database.IndividualAdapter;
-import org.openhds.mobile.database.queries.QueryResult;
+import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
+import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Individual;
@@ -181,7 +181,7 @@ public class CensusFormPayloadBuilders {
             Individual individual = individualGateway.getFirst(contentResolver,
                     individualGateway.findById(individualExtId));
 
-            formPayload.putAll(IndividualAdapter.individualToFormFields(individual));
+            formPayload.putAll(IndividualFormAdapter.toForm(individual));
 
             //TODO: Change the birthday to either a simple date object or find a better way to handle this functionality.
             String truncatedDate = formPayload.get(ProjectFormFields.Individuals.DATE_OF_BIRTH).substring(0, 10);

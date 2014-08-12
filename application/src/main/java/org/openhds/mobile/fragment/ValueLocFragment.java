@@ -39,7 +39,7 @@ public class ValueLocFragment extends ListFragment implements LoaderCallbacks<Cu
     private static final int LOCATION_FILTER_LOADER = 5;
 
 
-    // create the column mappings so they don't need to be recreated on every
+    // fromForm the column mappings so they don't need to be recreated on every
     // load
     private static final String[] HIERARCHY_COLUMNS = new String[] { OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME,
             OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID};

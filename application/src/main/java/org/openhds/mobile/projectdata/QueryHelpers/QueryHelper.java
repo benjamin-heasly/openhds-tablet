@@ -2,8 +2,6 @@ package org.openhds.mobile.projectdata.QueryHelpers;
 
 import java.util.List;
 
-import org.openhds.mobile.database.queries.QueryResult;
-
 import android.content.ContentResolver;
 
 public interface QueryHelper {

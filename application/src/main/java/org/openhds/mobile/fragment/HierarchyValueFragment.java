@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.HierarchyNavigator;
-import org.openhds.mobile.database.queries.QueryResult;
+import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
 
 import android.app.Fragment;
 import android.content.Context;

@@ -11,6 +11,15 @@ public class Relationship implements Serializable {
 	private String startDate;
 	private String type;
 
+    public Relationship() {}
+
+    public Relationship(Individual individualA, Individual individualB, String type, String startDate) {
+        this.individualA = individualA.getExtId();
+        this.individualB = individualB.getExtId();
+        this.type = type;
+        this.startDate = startDate;
+    }
+
 	public String getType() {
 		return type;
 	}

@@ -33,8 +33,13 @@ public class RepositoryUtils {
 
         final String[] columnNames = {columnName};
         final String[] columnValues = {columnValue};
-        final String whereStatement = buildWhereStatement(columnNames, EQUALS);
+        return update(contentResolver, tableUri, contentValues, columnNames, columnValues);
+    }
 
+    public static int update(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues,
+                             String[] columnNames, String[] columnValues) {
+
+        final String whereStatement = buildWhereStatement(columnNames, EQUALS);
         return contentResolver.update(tableUri, contentValues, whereStatement, columnValues);
     }
 

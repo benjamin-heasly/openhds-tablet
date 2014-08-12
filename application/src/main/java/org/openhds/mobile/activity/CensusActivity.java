@@ -12,14 +12,14 @@ import java.util.Map;
 
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
-import org.openhds.mobile.database.IndividualAdapter;
-import org.openhds.mobile.database.LocationAdapter;
-import org.openhds.mobile.database.MembershipAdapter;
+import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
+import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
+import org.openhds.mobile.database.MembershipFormAdapter;
 import org.openhds.mobile.database.RelationshipAdapter;
 import org.openhds.mobile.database.SocialGroupAdapter;
 import org.openhds.mobile.database.queries.Converter;
 import org.openhds.mobile.database.queries.Queries;
-import org.openhds.mobile.database.queries.QueryResult;
+import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
 import org.openhds.mobile.fragment.HierarchySelectionFragment;
@@ -134,7 +134,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		formHelper = new FormHelper(getContentResolver());
 
 		if (null == savedInstanceState) {
-			// create fresh activity
+			// fromForm fresh activity
 			selectionFragment = new HierarchySelectionFragment();
 			selectionFragment.setNavigator(this);
 			valueFragment = new HierarchyValueFragment();
@@ -428,8 +428,8 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 		cursor.moveToFirst();
 		Individual individualToEdit = Converter.toIndividual(cursor, true);
 
-		formFieldMap = getFormFieldNameMap(IndividualAdapter
-				.individualToFormFields(individualToEdit));
+		formFieldMap = getFormFieldNameMap(IndividualFormAdapter
+				.toForm(individualToEdit));
 
 		cursor = Queries.getMembershipByHouseholdAndIndividualExtId(
 				getContentResolver(), householdExtID, individualExtId);
@@ -492,10 +492,10 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 									this);
 
 					// INSERT or UPDATE INDIVIDUAL
-					Individual individual = IndividualAdapter
-							.create(formInstanceData);
-					IndividualAdapter.insertOrUpdate(getContentResolver(),
-							individual);
+					Individual individual = IndividualFormAdapter
+							.fromForm(formInstanceData);
+					IndividualFormAdapter.insertOrUpdate(getContentResolver(),
+                            individual);
 
 					// Pull relevant strings from the FormRecord.
 					FormBehaviour formBehaviors = formHelper.getForm();
@@ -518,7 +518,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						String locationName = individual.getLastName();
 						location.setName(locationName);
 						selectedLocation.setName(locationName);
-						LocationAdapter.update(getContentResolver(), location);
+						LocationFormAdapter.update(getContentResolver(), location);
 
 						// get the social group associated with current location
 						Cursor socialGroupCursor = Queries
@@ -533,7 +533,7 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 							socialGroup.setGroupName(locationName);
 							SocialGroupAdapter.update(getContentResolver(),
 									socialGroup);
-							// if socialGroup doesn't exist, create it and
+							// if socialGroup doesn't exist, fromForm it and
 							// insert it.
 						} else {
 							socialGroup = SocialGroupAdapter.create(
@@ -544,13 +544,13 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						}
 						socialGroupCursor.close();
 
-						// create membership of Head of Household in own
+						// fromForm membership of Head of Household in own
 						// household
-						Membership membership = MembershipAdapter.create(
-								individual, socialGroup, relationshipType,
-								membershipStatus);
-						MembershipAdapter.insertOrUpdate(getContentResolver(),
-								membership);
+						Membership membership = MembershipFormAdapter.fromForm(
+                                individual, socialGroup, relationshipType,
+                                membershipStatus);
+						MembershipFormAdapter.insertOrUpdate(getContentResolver(),
+                                membership);
 
 						String startDate = formInstanceData
 								.get(ProjectFormFields.General.COLLECTION_DATE_TIME);
@@ -582,12 +582,12 @@ public class CensusActivity extends Activity implements HierarchyNavigator {
 						if (socialGroupCursor.moveToFirst()) {
 							SocialGroup socialGroup = Converter.toSocialGroup(
 									socialGroupCursor, true);
-							Membership membership = MembershipAdapter.create(
-									individual, socialGroup, relationshipType,
-									membershipStatus);
+							Membership membership = MembershipFormAdapter.fromForm(
+                                    individual, socialGroup, relationshipType,
+                                    membershipStatus);
 
-							MembershipAdapter.insertOrUpdate(
-									getContentResolver(), membership);
+							MembershipFormAdapter.insertOrUpdate(
+                                    getContentResolver(), membership);
 						}
 						socialGroupCursor.close();
 					}

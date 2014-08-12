@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import org.openhds.mobile.R;
-import org.openhds.mobile.database.queries.QueryResult;
+import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
 import org.openhds.mobile.fragment.DetailToggleFragment;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.HierarchyFormFragment;
@@ -113,7 +113,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 		// /////////////////////////////////////////////////////////////////////////////////////////////
 
 		if (null == savedInstanceState) {
-			// create fresh activity
+			// fromForm fresh activity
 			selectionFragment = new HierarchySelectionFragment();
 			selectionFragment.setNavigator(this);
 			valueFragment = new HierarchyValueFragment();

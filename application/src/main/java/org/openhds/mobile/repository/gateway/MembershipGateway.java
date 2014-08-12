@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository.gateway;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
@@ -12,6 +13,8 @@ import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONS
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID;
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
+import static org.openhds.mobile.repository.RepositoryUtils.insert;
+import static org.openhds.mobile.repository.RepositoryUtils.update;
 
 /**
  * Convert Membership to and from database.  Membership-specific queries.
@@ -23,6 +26,27 @@ public class MembershipGateway extends Gateway<Membership> {
 
     public MembershipGateway() {
         super(OpenHDS.Memberships.CONTENT_ID_URI_BASE, COLUMN_INDIVIDUAL_EXTID, new MembershipConverter());
+    }
+
+    // true if membership was inserted, false if updated
+    // take care to update at the correct social group AND individual
+    @Override
+    public boolean insertOrUpdate(ContentResolver contentResolver, Membership membership) {
+        ContentValues contentValues = converter.toContentValues(membership);
+
+        String socialGroupId = membership.getSocialGroupExtId();
+        String individualId = membership.getIndividualExtId();
+        Membership existingMembership = getFirst(contentResolver,
+                findBySocialGroupAndIndividual(socialGroupId, individualId));
+
+        if (null == existingMembership) {
+            return null != insert(contentResolver, tableUri, contentValues);
+        } else {
+            final String[] columnNames = {COLUMN_SOCIAL_GROUP_EXTID, COLUMN_INDIVIDUAL_EXTID};
+            final String[] columnValues = {socialGroupId, individualId};
+            update(contentResolver, tableUri, contentValues, columnNames, columnValues);
+            return false;
+        }
     }
 
     public Query findBySocialGroupAndIndividual(String socialGroupId, String individualId) {

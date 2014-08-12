@@ -41,7 +41,7 @@ public final class FormsProviderAPI {
         public static final String FORM_MEDIA_PATH = "formMediaPath";      
         
         
-        // this is null on create, and can only be set on an update.
+        // this is null on fromForm, and can only be set on an update.
         public static final String LANGUAGE = "language";
         
         

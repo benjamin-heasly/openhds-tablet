@@ -1,4 +1,4 @@
-package org.openhds.mobile.database.queries;
+package org.openhds.mobile.projectdata.QueryHelpers;
 
 import java.util.HashMap;
 import java.util.Map;

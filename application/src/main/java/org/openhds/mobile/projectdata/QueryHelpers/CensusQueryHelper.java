@@ -2,7 +2,6 @@ package org.openhds.mobile.projectdata.QueryHelpers;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.R;
-import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
@@ -139,7 +138,7 @@ public class CensusQueryHelper implements QueryHelper {
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver,
-                    locationGateway.findByHierarchy(qr.getExtId()));
+                    locationGateway.findByHierarchyDescendingBuildingNumber(qr.getExtId()));
             return getLocationQueryResultList(locationIterator, childState, contentResolver);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {

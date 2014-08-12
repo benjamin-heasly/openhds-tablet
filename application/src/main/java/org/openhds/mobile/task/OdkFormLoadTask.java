@@ -15,7 +15,7 @@ import android.os.Environment;
 
 /**
  * Async Task that will attempt to write the form instance data to disk, and
- * then use the ODK Content Provider to create a form instance record
+ * then use the ODK Content Provider to fromForm a form instance record
  */
 public class OdkFormLoadTask extends
 		AsyncTask<Void, Void, OdkFormLoadTask.EndResult> {

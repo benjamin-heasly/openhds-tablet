@@ -1,13 +1,5 @@
 package org.openhds.mobile.database;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.model.FieldWorker;
-import org.openhds.mobile.model.FormSubmissionRecord;
-import org.openhds.mobile.model.Supervisor;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -17,6 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
+import org.openhds.mobile.model.FormSubmissionRecord;
+import org.openhds.mobile.model.Supervisor;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DatabaseAdapter {
 	private static final String DATABASE_NAME = "entityData";

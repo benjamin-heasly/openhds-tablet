@@ -2,12 +2,12 @@ package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.database.IndividualAdapter;
-import org.openhds.mobile.database.LocationAdapter;
-import org.openhds.mobile.database.MembershipAdapter;
+import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
+import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
+import org.openhds.mobile.database.MembershipFormAdapter;
 import org.openhds.mobile.database.RelationshipAdapter;
 import org.openhds.mobile.database.SocialGroupAdapter;
-import org.openhds.mobile.database.queries.QueryResult;
+import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.Membership;
@@ -30,7 +30,7 @@ public class CensusFormPayloadConsumers {
     private static Location insertOrUpdateLocation(
             Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
 
-        Location location = LocationAdapter.create(formPayLoad);
+        Location location = LocationFormAdapter.fromForm(formPayLoad);
 
         LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
         ContentResolver contentResolver = navigateActivity.getContentResolver();
@@ -42,7 +42,7 @@ public class CensusFormPayloadConsumers {
     private static Individual insertOrUpdateIndividual(
             Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
 
-        Individual individual = IndividualAdapter.create(formPayLoad);
+        Individual individual = IndividualFormAdapter.fromForm(formPayLoad);
         individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
 
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
@@ -106,7 +106,7 @@ public class CensusFormPayloadConsumers {
 
             // INSERT or UPDATE MEMBERSHIP
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
-            Membership membership = MembershipAdapter.create(individual,
+            Membership membership = MembershipFormAdapter.fromForm(individual,
                     socialGroup, relationshipType, membershipStatus);
             membershipGateway.insertOrUpdate(contentResolver, membership);
 
@@ -155,15 +155,15 @@ public class CensusFormPayloadConsumers {
             selectedLocation.setName(locationName);
             locationGateway.insertOrUpdate(contentResolver, location);
 
-            // create social group
+            // fromForm social group
             SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
             SocialGroup socialGroup = SocialGroupAdapter.create(
                     selectedLocation.getExtId(), individual);
             socialGroupGateway.insertOrUpdate(contentResolver, socialGroup);
 
-            // create membership
+            // fromForm membership
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
-            Membership membership = MembershipAdapter.create(individual,
+            Membership membership = MembershipFormAdapter.fromForm(individual,
                     socialGroup, relationshipType, membershipStatus);
             membershipGateway.insertOrUpdate(contentResolver, membership);
 

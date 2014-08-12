@@ -19,8 +19,8 @@ import android.database.Cursor;
  * A LocationVisit represents a single visit to a specific location. This class
  * is built incrementally, meaning first the user constructs the location
  * hierarchy selection (region, sub-region, village, and round), one item at a
- * time. Then they must either set or create a location. After a location is
- * set, they can proceed to create a visit. Once a visit is created, the
+ * time. Then they must either set or fromForm a location. After a location is
+ * set, they can proceed to fromForm a visit. Once a visit is created, the
  * LocationVisit cannot be changed, that is, a visit is considered started. Only
  * new events can be added to the location visit at this point. Once the user
  * completes a visit, a new LocationVisit is returned that contains pre-filled
@@ -288,7 +288,7 @@ public class LocationVisit implements Serializable {
         return ids;
     }
 
-    // an option to create a new social group rather than to reference an
+    // an option to fromForm a new social group rather than to reference an
     // existing one
     public SocialGroup createSocialGroup(ContentResolver resolver) {
         SocialGroup sg = new SocialGroup();
