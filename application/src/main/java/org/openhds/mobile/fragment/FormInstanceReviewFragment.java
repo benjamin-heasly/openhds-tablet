@@ -92,7 +92,7 @@ public class FormInstanceReviewFragment extends Fragment {
             EncryptionHelper.decryptFile(instanceFile, getActivity());
             String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, instance.getFilePath());
 
-            if (needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NEEDS_REVIEW)) {
+            if (ProjectResources.General.FORM_NEEDS_REVIEW.equalsIgnoreCase(needsReview)) {
                 editedForms.add(instance);
             }
             EncryptionHelper.encryptFile(instanceFile, getActivity());

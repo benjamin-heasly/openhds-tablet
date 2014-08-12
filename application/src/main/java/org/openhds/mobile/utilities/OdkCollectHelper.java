@@ -25,7 +25,7 @@ public class OdkCollectHelper {
                 InstanceProviderAPI.InstanceColumns.JR_FORM_ID,
                 InstanceProviderAPI.InstanceColumns.DISPLAY_NAME,
                 InstanceProviderAPI.InstanceColumns.STATUS}, InstanceProviderAPI.InstanceColumns.STATUS+" != ?",
-                            new String[] {InstanceProviderAPI.STATUS_SUBMITTED}, null, null);
+                            new String[] {InstanceProviderAPI.STATUS_SUBMITTED}, null);
 
         while (cursor.moveToNext()) {
 

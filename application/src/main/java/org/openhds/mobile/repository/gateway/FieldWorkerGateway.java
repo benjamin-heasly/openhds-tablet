@@ -33,6 +33,11 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             fieldWorker.setLastName(extractString(cursor, COLUMN_FIELD_WORKER_LAST_NAME));
             fieldWorker.setPassword(extractString(cursor, COLUMN_FIELD_WORKER_PASSWORD));
 
+            // for Bioko
+            int id = cursor.getInt(cursor.getColumnIndex(OpenHDS.FieldWorkers._ID));
+            String idString = String.format("%02d", id);
+            fieldWorker.setCollectedIdPrefix(idString);
+
             return fieldWorker;
         }
 
