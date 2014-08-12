@@ -1,13 +1,12 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
+import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder.UpdateActivityModule;
+import org.openhds.mobile.projectdata.ProjectFormFields;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
-
-import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.UpdateActivityModule;
-import org.openhds.mobile.projectdata.ProjectFormFields;
 
 public class UpdateFormPayloadBuilders {
 
@@ -36,9 +35,7 @@ public class UpdateFormPayloadBuilders {
 			formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,
 					locationExtId);
 			formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
-
 		}
-
 	}
 
     public static class RegisterOutMigration implements FormPayloadBuilder {
@@ -62,9 +59,6 @@ public class UpdateFormPayloadBuilders {
                     individualExtId);
 
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
-
         }
-
     }
-
 }

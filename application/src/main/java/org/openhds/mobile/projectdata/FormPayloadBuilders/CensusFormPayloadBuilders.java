@@ -1,24 +1,26 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
-import android.database.Cursor;
-import org.openhds.mobile.OpenHDS;
+import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.IndividualAdapter;
-import org.openhds.mobile.database.queries.Converter;
-import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
+import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.MembershipGateway;
 import org.openhds.mobile.utilities.LuhnValidator;
 
+import java.util.Iterator;
 import java.util.Map;
-
-import static org.openhds.mobile.database.queries.Queries.getIndividualsExtIdsByPrefix;
 
 public class CensusFormPayloadBuilders {
 
@@ -31,59 +33,40 @@ public class CensusFormPayloadBuilders {
     private static void addNewLocationPayload(
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
-        // sector extId -> <hierarchyExtId />
-
-        // sector name -> <sectorName />
         QueryResult sectorQueryResult =
                 navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE);
-        Cursor cursor =
-                Queries.getHierarchyByExtId(navigateActivity.getContentResolver(), sectorQueryResult.getExtId());
-        if( !cursor.moveToFirst()) {
-            cursor.close();
-            return;
-        }
-        LocationHierarchy sector = Converter.toHierarchy(cursor, true);
+        ContentResolver contentResolver = navigateActivity.getContentResolver();
+
+        // sector extid is <hierarchyExtId>
+        // sector name is <sectorname>
+        LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+        LocationHierarchy sector = locationHierarchyGateway.getFirst(contentResolver,
+                locationHierarchyGateway.findById(sectorQueryResult.getExtId()));
         formPayload.put(ProjectFormFields.Locations.HIERERCHY_EXTID, sector.getExtId());
         formPayload.put(ProjectFormFields.Locations.SECTOR_NAME, sector.getName());
 
-        // <mapAreaName /> mapArea name, not extId
-        cursor =
-                Queries.getHierarchyByExtId(navigateActivity.getContentResolver(), sector.getParent());
-        if( !cursor.moveToFirst()) {
-            cursor.close();
-            return;
-        }
-        LocationHierarchy mapArea = Converter.toHierarchy(cursor, true);
+        // map area name is <mapAreaName>
+        LocationHierarchy mapArea = locationHierarchyGateway.getFirst(contentResolver,
+                locationHierarchyGateway.findById(sector.getParent()));
         formPayload.put(ProjectFormFields.Locations.MAP_AREA_NAME, mapArea.getName());
 
-
-        // <localityName /> locality name, not extId
-        cursor =
-                Queries.getHierarchyByExtId(navigateActivity.getContentResolver(), mapArea.getParent());
-        if( !cursor.moveToFirst()) {
-            cursor.close();
-            return;
-        }
-        LocationHierarchy locality = Converter.toHierarchy(cursor, true);
+        // locality is <localityName>
+        LocationHierarchy locality = locationHierarchyGateway.getFirst(contentResolver,
+                locationHierarchyGateway.findById(mapArea.getParent()));
         formPayload.put(ProjectFormFields.Locations.LOCALITY_NAME, locality.getName());
 
-
-
-        // <locationFloorNumber />
+        // default to 1 for <locationFloorNumber />
         formPayload.put(ProjectFormFields.Locations.FLOOR_NUMBER, "1");
 
-        // <locationBuildingNumber />
-        cursor =
-                Queries.getLocationsOrderedByBuildingNumber(navigateActivity.getContentResolver(), sector.getExtId());
-        if(!cursor.moveToFirst()) {
-            cursor.close();
-            formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, "1");
-            return;
+        LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+
+        // location with largest building number <locationBuildingNumber />
+        int buildingNumber = 1;
+        Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver,
+                locationGateway.findByHierarchyDescendingBuildingNumber(sector.getExtId()));
+        if (locationIterator.hasNext()) {
+            buildingNumber += locationIterator.next().getBuildingNumber();
         }
-
-        int buildingNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex(OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER)));
-
-        buildingNumber++;
 
         formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, String.format("%02d", buildingNumber));
     }
@@ -96,20 +79,20 @@ public class CensusFormPayloadBuilders {
 
         String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
 
-        Cursor cursor = getIndividualsExtIdsByPrefix(
-                navigateActivity.getContentResolver(), generatedIdPrefix);
+        IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+        ContentResolver contentResolver = navigateActivity.getContentResolver();
+
+        Iterator<Individual> individualIterator = individualGateway.getIterator(contentResolver,
+                individualGateway.findByExtIdPrefixDescending(generatedIdPrefix));
         int nextSequence = 0;
-        if (cursor.moveToLast()) {
-            String lastExtId = cursor
-                    .getString(cursor
-                            .getColumnIndex(OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID));
+        if (individualIterator.hasNext()) {
+            String lastExtId = individualIterator.next().getExtId();
             int prefixLength = generatedIdPrefix.length();
             int checkDigitLength = 1;
             String lastSequenceNumber = lastExtId.substring(prefixLength + 1,
                     lastExtId.length() - checkDigitLength);
             nextSequence = Integer.parseInt(lastSequenceNumber) + 1;
         }
-        cursor.close();
 
         // TODO: break out 5-digit number format, don't use string literal here.
         String generatedIdSeqNum = String.format("%05d", nextSequence);
@@ -193,30 +176,23 @@ public class CensusFormPayloadBuilders {
                     .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
                     .getExtId();
 
-            Cursor cursor = Queries.getIndividualByExtId(
-                    navigateActivity.getContentResolver(), individualExtId);
-            cursor.moveToFirst();
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            ContentResolver contentResolver = navigateActivity.getContentResolver();
+            Individual individual = individualGateway.getFirst(contentResolver,
+                    individualGateway.findById(individualExtId));
 
-            Individual individual = Converter.toIndividual(cursor, true);
-
-            formPayload.putAll(IndividualAdapter
-                    .individualToFormFields(individual));
+            formPayload.putAll(IndividualAdapter.individualToFormFields(individual));
 
             //TODO: Change the birthday to either a simple date object or find a better way to handle this functionality.
             String truncatedDate = formPayload.get(ProjectFormFields.Individuals.DATE_OF_BIRTH).substring(0, 10);
             formPayload.remove(ProjectFormFields.Individuals.DATE_OF_BIRTH);
             formPayload.put(ProjectFormFields.Individuals.DATE_OF_BIRTH, truncatedDate);
 
-            cursor = Queries.getMembershipByHouseholdAndIndividualExtId(
-                    navigateActivity.getContentResolver(), householdExtId,
-                    individualExtId);
-            cursor.moveToFirst();
-
-            Membership membership = Converter.toMembership(cursor, true);
+            MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
+            Membership membership = membershipGateway.getFirst(contentResolver,
+                    membershipGateway.findBySocialGroupAndIndividual(householdExtId, individualExtId));
             formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
                     membership.getRelationshipToHead());
-
         }
     }
-
 }

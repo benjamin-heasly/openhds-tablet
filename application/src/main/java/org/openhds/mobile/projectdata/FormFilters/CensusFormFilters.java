@@ -1,16 +1,12 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
-import java.util.Map;
-
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.database.queries.Converter;
-import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.database.queries.QueryResult;
-import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.CensusActivityModule;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
-import android.database.Cursor;
+import java.util.Map;
 
 // These are not necessarily 1 to 1 with the form types, 
 // but instead filter when a form's behaviour may or may not be appropriate
@@ -26,16 +22,8 @@ public class CensusFormFilters {
 				ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
 				.getExtId();
 
-		Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
-				navigateActivity.getContentResolver(), socialGroupExtId);
-
-		if (socialGroupCursor.moveToFirst()) {
-            socialGroupCursor.close();
-			return true;
-
-		}
-        socialGroupCursor.close();
-		return false;
+        SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
+        return socialGroupGateway.exists(navigateActivity.getContentResolver(), socialGroupExtId);
 	}
 
     public static class AddLocation implements FormFilter {
@@ -74,7 +62,5 @@ public class CensusFormFilters {
 
 			return true;
 		}
-
 	}
-
 }

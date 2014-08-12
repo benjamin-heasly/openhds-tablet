@@ -94,5 +94,13 @@ public class RepositoryUtils {
         }
         return cursor.getString(columnIndex);
     }
+
+    public static int extractInt(Cursor cursor, String columnName) {
+        int columnIndex = cursor.getColumnIndex(columnName);
+        if (columnIndex < 0) {
+            return 0;
+        }
+        return cursor.getInt(columnIndex);
+    }
 }
 

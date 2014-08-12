@@ -40,15 +40,15 @@ public class IndividualGateway extends Gateway<Individual> {
         super(OpenHDS.Individuals.CONTENT_ID_URI_BASE, COLUMN_INDIVIDUAL_EXTID, new IndividualConverter());
     }
 
-    public Query findByResidency(Location residency) {
+    public Query findByResidency(String residencyId) {
         return new Query(
-                tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residency.getExtId(), COLUMN_INDIVIDUAL_EXTID);
+                tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residencyId, COLUMN_INDIVIDUAL_EXTID);
     }
 
-    public Query findByExtIdPrefix(String extIdPrefix) {
+    public Query findByExtIdPrefixDescending(String extIdPrefix) {
         final String[] columnNames = {COLUMN_INDIVIDUAL_EXTID};
         final String[] columnValues = {extIdPrefix + "%"};
-        return new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID, LIKE);
+        return new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID + " DESC", LIKE);
     }
 
     private static class IndividualConverter implements Converter<Individual> {

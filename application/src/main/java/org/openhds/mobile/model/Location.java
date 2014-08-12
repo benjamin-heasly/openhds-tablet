@@ -15,26 +15,26 @@ public class Location implements Serializable {
     private String localityName;
     private String mapAreaName;
     private String sectorName;
-    private String buildingNumber;
-    private String floorNumber;
+    private int buildingNumber;
+    private int floorNumber;
     private String regionName;
     private String provinceName;
     private String subDistrictName;
     private String districtName;
 
-    public String getBuildingNumber() {
+    public int getBuildingNumber() {
         return buildingNumber;
     }
 
-    public void setBuildingNumber(String buildingNumber) {
+    public void setBuildingNumber(int buildingNumber) {
         this.buildingNumber = buildingNumber;
     }
 
-    public String getFloorNumber() {
+    public int getFloorNumber() {
         return floorNumber;
     }
 
-    public void setFloorNumber(String floorNumber) {
+    public void setFloorNumber(int floorNumber) {
         this.floorNumber = floorNumber;
     }
 

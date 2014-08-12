@@ -1,7 +1,6 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 
 // These are not necessarily 1 to 1 with the form types, 
 // but instead filter when a form's behaviour may or may not be appropriate
@@ -34,5 +33,4 @@ public class UpdateFormFilters {
             return false;
         }
     }
-
 }

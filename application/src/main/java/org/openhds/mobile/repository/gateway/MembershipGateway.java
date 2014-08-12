@@ -5,12 +5,13 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.Query;
 
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID;
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD;
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID;
+import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
-
 
 /**
  * Convert Membership to and from database.  Membership-specific queries.
@@ -22,6 +23,12 @@ public class MembershipGateway extends Gateway<Membership> {
 
     public MembershipGateway() {
         super(OpenHDS.Memberships.CONTENT_ID_URI_BASE, COLUMN_INDIVIDUAL_EXTID, new MembershipConverter());
+    }
+
+    public Query findBySocialGroupAndIndividual(String socialGroupId, String individualId) {
+        final String[] columnNames = {COLUMN_SOCIAL_GROUP_EXTID, COLUMN_INDIVIDUAL_EXTID};
+        final String[] columnValues = {socialGroupId, individualId};
+        return new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID, EQUALS);
     }
 
     private static class MembershipConverter implements Converter<Membership> {

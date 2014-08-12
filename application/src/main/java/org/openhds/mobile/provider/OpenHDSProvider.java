@@ -938,8 +938,8 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER
+                    + " INT," + OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER
+                    + " INT," + OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME

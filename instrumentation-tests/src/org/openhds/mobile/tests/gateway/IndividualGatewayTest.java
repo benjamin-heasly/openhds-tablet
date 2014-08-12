@@ -1,7 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
 import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Location;
 import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 
@@ -21,7 +20,7 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
 
     // find individuals with similar ids
     public void testFindByExtIdPrefix() {
-        Query query = individualGateway.findByExtIdPrefix("TEST");
+        Query query = individualGateway.findByExtIdPrefixDescending("TEST");
         List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
@@ -33,15 +32,15 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         individualGateway.insertOrUpdate(contentResolver, individual2);
         individualGateway.insertOrUpdate(contentResolver, individual3);
 
-        query = individualGateway.findByExtIdPrefix("DOESNOTEXIST");
+        query = individualGateway.findByExtIdPrefixDescending("DOESNOTEXIST");
         shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
-        query = individualGateway.findByExtIdPrefix("TEST");
+        query = individualGateway.findByExtIdPrefixDescending("TEST");
         List<Individual> byPrefix = individualGateway.getList(contentResolver, query);
         assertEquals(2, byPrefix.size());
 
-        query = individualGateway.findByExtIdPrefix("TRIAL");
+        query = individualGateway.findByExtIdPrefixDescending("TRIAL");
         byPrefix = individualGateway.getList(contentResolver, query);
         assertEquals(1, byPrefix.size());
         assertEquals("TRIAL3", byPrefix.get(0).getExtId());
@@ -49,9 +48,7 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
 
     // find individuals with the same residency
     public void testFindByResidency() {
-        Location residency = new Location();
-        residency.setExtId("FINDME");
-        Query query = individualGateway.findByResidency(residency);
+        Query query = individualGateway.findByResidency("FINDME");
         List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
@@ -59,20 +56,18 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         Individual individual2 = makeTestEntity("TEST2", "test 2");
         Individual individual3 = makeTestEntity("TEST3", "test 3");
 
-        individual1.setCurrentResidence(residency.getExtId());
-        individual2.setCurrentResidence(residency.getExtId());
+        individual1.setCurrentResidence("FINDME");
+        individual2.setCurrentResidence("FINDME");
 
         individualGateway.insertOrUpdate(contentResolver, individual1);
         individualGateway.insertOrUpdate(contentResolver, individual2);
         individualGateway.insertOrUpdate(contentResolver, individual3);
 
-        Location nobodyLivesHere = new Location();
-        nobodyLivesHere.setExtId("DOESNOTEXIST");
-        query = individualGateway.findByResidency(nobodyLivesHere);
+        query = individualGateway.findByResidency("DOESNOTEXIST");
         shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
-        query = individualGateway.findByResidency(residency);
+        query = individualGateway.findByResidency("FINDME");
         List<Individual> byResidency = individualGateway.getList(contentResolver, query);
         assertEquals(2, byResidency.size());
     }

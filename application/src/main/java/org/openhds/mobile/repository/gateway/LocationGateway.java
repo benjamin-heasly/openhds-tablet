@@ -5,7 +5,9 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY;
@@ -15,8 +17,8 @@ import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_NAME;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME;
+import static org.openhds.mobile.repository.RepositoryUtils.extractInt;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
-
 
 /**
  * Convert Locations to and from database.  Location-specific queries.
@@ -25,6 +27,11 @@ public class LocationGateway extends Gateway<Location> {
 
     public LocationGateway() {
         super(OpenHDS.Locations.CONTENT_ID_URI_BASE, COLUMN_LOCATION_EXTID, new LocationConverter());
+    }
+
+    // for Bioko
+    public Query findByHierarchyDescendingBuildingNumber(String hierarchyId) {
+        return new Query(tableUri, COLUMN_LOCATION_HIERARCHY, hierarchyId, COLUMN_LOCATION_BUILDING_NUMBER + " DESC");
     }
 
     private static class LocationConverter implements Converter<Location> {
@@ -43,6 +50,9 @@ public class LocationGateway extends Gateway<Location> {
             location.setLocalityName(extractString(cursor, COLUMN_LOCATION_LOCALITY_NAME));
             location.setCommunityName(extractString(cursor, COLUMN_LOCATION_COMMUNITY_NAME));
 
+            // for Bioko
+            location.setBuildingNumber(extractInt(cursor, COLUMN_LOCATION_BUILDING_NUMBER));
+
             return location;
         }
 
@@ -59,6 +69,9 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_MAP_AREA_NAME, location.getMapAreaName());
             contentValues.put(COLUMN_LOCATION_LOCALITY_NAME, location.getLocalityName());
             contentValues.put(COLUMN_LOCATION_COMMUNITY_NAME, location.getCommunityName());
+
+            // for Bioko
+            contentValues.put(COLUMN_LOCATION_BUILDING_NUMBER, location.getBuildingNumber());
 
             return contentValues;
         }
