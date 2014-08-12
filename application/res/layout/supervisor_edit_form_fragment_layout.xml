@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" >
+
+    <Button
+            android:id="@+id/supervisor_approve_all_button"
+            android:text="@string/supervisor_approve_all"
+            android:tag="@string/supervisor_approve_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/rounded_button_sandy_brown"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+
+    <Button
+            android:id="@+id/supervisor_approve_selected_button"
+            android:text="@string/supervisor_approve_selected"
+            android:tag="@string/supervisor_approve_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/supervisor_approve_all_button"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_alignParentBottom="true"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/rounded_button_sandy_brown"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+
+    <TextView
+            android:id="@+id/supervisor_edit_form_list_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/supervisor_edit_form_list_header"
+            android:visibility="gone"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"
+            android:background="@color/SandyBrown"/>
+
+    <ListView
+            android:id="@+id/supervisor_edit_form_list"
+            android:layout_width="450dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/supervisor_edit_form_list_header"
+            android:layout_marginBottom="120dp"/>
+
+
+</RelativeLayout>
