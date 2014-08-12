@@ -105,6 +105,8 @@ public class CensusFormPayloadBuilders {
 
         formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
                 individualExtId);
+        formPayload.put(ProjectFormFields.Individuals.AGE_UNITS, "Years");
+
 
     }
 
