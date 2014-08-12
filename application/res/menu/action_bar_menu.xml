@@ -8,5 +8,4 @@
             android:id="@+id/logout_menu_button"
             android:title="@string/logout_menu_text"
             android:showAsAction="ifRoom|withText" />
-
 </menu>

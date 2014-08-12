@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.res.Configuration;
 import android.os.Parcelable;
 import android.widget.*;
 import org.openhds.mobile.OpenHDS;
@@ -102,9 +103,16 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         if (item.getItemId() == R.id.configure_server) {
             boolean isShowingPreferences = View.VISIBLE == prefContainer
                     .getVisibility();
+            boolean isPortraitMode = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
             if (isShowingPreferences) {
+                if (isPortraitMode) {
+                    supervisorOptionsList.setVisibility(View.VISIBLE);
+                }
                 prefContainer.setVisibility(View.GONE);
             } else {
+                if (isPortraitMode) {
+                    supervisorOptionsList.setVisibility(View.GONE);
+                }
                 prefContainer.setVisibility(View.VISIBLE);
             }
         } else if (item.getItemId() == R.id.logout_menu_button) {
