@@ -1,11 +1,7 @@
 package org.openhds.mobile.projectdata.QueryHelpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.content.ContentResolver;
 import org.openhds.mobile.R;
-import org.openhds.mobile.database.queries.Converter;
-import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
@@ -13,287 +9,243 @@ import org.openhds.mobile.model.LocationHierarchy;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
+import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.MembershipGateway;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class CensusQueryHelper implements QueryHelper {
 
-	// These must match the server data.
-	// They come from the name column of the locationhierarchylevel table
-	public static final String REGION_HIERARCHY_LEVEL_NAME = "Region";
-	public static final String PROVINCE_HIERARCHY_LEVEL_NAME = "Province";
-	public static final String DISTRICT_HIERARCHY_LEVEL_NAME = "District";
+    // These must match the server data.
+    // They come from the name column of the locationhierarchylevel table
+    public static final String REGION_HIERARCHY_LEVEL_NAME = "Region";
+    public static final String PROVINCE_HIERARCHY_LEVEL_NAME = "Province";
+    public static final String DISTRICT_HIERARCHY_LEVEL_NAME = "District";
     public static final String SUB_DISTRICT_HIERARCHY_LEVEL_NAME = "SubDistrict";
     public static final String LOCALITY_HIERARCHY_LEVEL_NAME = "Locality";
-	public static final String MAP_AREA_HIERARCHY_LEVEL_NAME = "MapArea";
-	public static final String SECTOR_HIERARCHY_LEVEL_NAME = "Sector";
+    public static final String MAP_AREA_HIERARCHY_LEVEL_NAME = "MapArea";
+    public static final String SECTOR_HIERARCHY_LEVEL_NAME = "Sector";
 
-	public CensusQueryHelper() {
+    public CensusQueryHelper() {}
 
-	}
+    public List<QueryResult> getAll(ContentResolver contentResolver, String state) {
 
-	public List<QueryResult> getAll(ContentResolver contentResolver,
-			String state) {
+        if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByLevel(REGION_HIERARCHY_LEVEL_NAME));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
 
-		if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
-			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
-					REGION_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResultList(cursor, state);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)) {
-			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
-					PROVINCE_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResultList(cursor, state);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)) {
-			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
-					DISTRICT_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResultList(cursor, state);
-		} else if (state
-                .equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)) {
-            Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
-                    SUB_DISTRICT_HIERARCHY_LEVEL_NAME);
-            return getHierarchyQueryResultList(cursor, state);
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)) {
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByLevel(PROVINCE_HIERARCHY_LEVEL_NAME));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
 
-        } else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
-			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
-					LOCALITY_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResultList(cursor, state);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
-			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
-					MAP_AREA_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResultList(cursor, state);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
-			Cursor cursor = Queries.getHierarchysByLevel(contentResolver,
-					SECTOR_HIERARCHY_LEVEL_NAME);
-			return getHierarchyQueryResultList(cursor, state);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
-			Cursor cursor = Queries.getAllLocations(contentResolver);
-			return getLocationQueryResultList(cursor, state);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
-			Cursor cursor = Queries.getAllIndividuals(contentResolver);
-			return getIndividualQueryResultList(cursor, contentResolver, state);
-		}
-		return new ArrayList<QueryResult>();
-	}
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)) {
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByLevel(DISTRICT_HIERARCHY_LEVEL_NAME));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
 
-	public QueryResult getIfExists(ContentResolver contentResolver,
-			String state, String extId) {
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)) {
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByLevel(SUB_DISTRICT_HIERARCHY_LEVEL_NAME));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
 
-		if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
-			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)) {
-			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)) {
-			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state
-                .equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)) {
-            Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
-            cursor.moveToFirst();
-            return getHierarchyQueryResult(cursor, state, true);
-        } else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
-			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
-			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
-			Cursor cursor = Queries.getHierarchyByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getHierarchyQueryResult(cursor, state, true);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
-			Cursor cursor = Queries.getLocationByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getLocationQueryResult(cursor, state, true);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
-			Cursor cursor = Queries
-					.getIndividualByExtId(contentResolver, extId);
-			cursor.moveToFirst();
-			return getIndividualQueryResult(cursor, contentResolver, state,
-					true);
-		}
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByLevel(LOCALITY_HIERARCHY_LEVEL_NAME));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
 
-		return null;
-	}
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByLevel(MAP_AREA_HIERARCHY_LEVEL_NAME));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
 
-	public List<QueryResult> getChildren(ContentResolver contentResolver,
-			QueryResult qr, String childState) {
-		String state = qr.getState();
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByLevel(SECTOR_HIERARCHY_LEVEL_NAME));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
 
-		if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
-				|| state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
-				|| state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+            Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver, locationGateway.findAll());
+            return getLocationQueryResultList(locationIterator, state, contentResolver);
+
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            Iterator<Individual> individualIterator = individualGateway.getIterator(contentResolver, individualGateway.findAll());
+            return getIndividualQueryResultList(individualIterator, state, contentResolver);
+        }
+
+        return new ArrayList<QueryResult>();
+    }
+
+    public QueryResult getIfExists(ContentResolver contentResolver, String state, String extId) {
+
+        if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)
                 || state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)
                 || state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)
-				|| state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
-			Cursor cursor = Queries.getHierarchysByParent(contentResolver,
-					qr.getExtId());
-			return getHierarchyQueryResultList(cursor, childState);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
-            Cursor cursor = Queries.getLocationsByHierarchy(
-                    contentResolver, qr.getExtId());
-            return getLocationQueryResultList(cursor, childState);
-		} else if (state
-				.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
-			Cursor cursor = Queries.getIndividualsByResidency(contentResolver,
-					qr.getExtId());
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
 
-			return getIndividualQueryResultList(cursor, contentResolver,
-					childState);
-		}
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            LocationHierarchy locationHierarchy = locationHierarchyGateway.getFirst(contentResolver,
+                    locationHierarchyGateway.findById(extId));
+            return getQueryResult(locationHierarchy, state, contentResolver);
 
-		return new ArrayList<QueryResult>();
-	}
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+            Location location = locationGateway.getFirst(contentResolver, locationGateway.findById(extId));
+            return getQueryResult(location, state, contentResolver);
 
-	private static List<QueryResult> getHierarchyQueryResultList(Cursor cursor,
-			String state) {
-		List<QueryResult> results = new ArrayList<QueryResult>();
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            Individual individual = individualGateway.getFirst(contentResolver, individualGateway.findById(extId));
+            return getQueryResult(individual, state, contentResolver);
+        }
 
-		if (null == cursor || cursor.getCount() < 1) {
-			return results;
-		}
+        return null;
+    }
 
-		while (cursor.moveToNext()) {
-			results.add(getHierarchyQueryResult(cursor, state, false));
-		}
+    public List<QueryResult> getChildren(ContentResolver contentResolver,
+                                         QueryResult qr, String childState) {
+        String state = qr.getState();
 
-		cursor.close();
+        if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)
+                || state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
 
-		return results;
-	}
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
+                    locationHierarchyGateway.findByParent(qr.getExtId()));
+            return getLocationHierarchyQueryResultList(hierarchyIterator, childState, contentResolver);
 
-	private static QueryResult getHierarchyQueryResult(Cursor cursor,
-			String state, boolean close) {
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+            Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver,
+                    locationGateway.findByHierarchy(qr.getExtId()));
+            return getLocationQueryResultList(locationIterator, childState, contentResolver);
 
-		if (null == cursor || cursor.getCount() < 1) {
-			return null;
-		}
+        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            Iterator<Individual> individualIterator = individualGateway.getIterator(contentResolver,
+                    individualGateway.findByResidency(qr.getExtId()));
+            return getIndividualQueryResultList(individualIterator, childState, contentResolver);
+        }
 
-		LocationHierarchy hierarchy = Converter.toHierarchy(cursor, close);
-		QueryResult qr = new QueryResult();
-		qr.setExtId(hierarchy.getExtId());
-		qr.setName(hierarchy.getName());
-		qr.setState(state);
+        return new ArrayList<QueryResult>();
+    }
 
-		return qr;
-	}
+    private static QueryResult getQueryResult(LocationHierarchy locationHierarchy, String state, ContentResolver contentResolver) {
 
-	private static List<QueryResult> getLocationQueryResultList(Cursor cursor,
-			String state) {
-		List<QueryResult> results = new ArrayList<QueryResult>();
+        if (null == locationHierarchy) {
+            return null;
+        }
 
-		if (null == cursor || cursor.getCount() < 1) {
-			return results;
-		}
+        QueryResult qr = new QueryResult();
+        qr.setExtId(locationHierarchy.getExtId());
+        qr.setName(locationHierarchy.getName());
+        qr.setState(state);
 
-		while (cursor.moveToNext()) {
-			results.add(getLocationQueryResult(cursor, state, false));
-		}
+        return qr;
+    }
 
-		cursor.close();
+    private static QueryResult getQueryResult(Location location, String state, ContentResolver contentResolver) {
 
-		return results;
-	}
+        if (null == location) {
+            return null;
+        }
 
-	private static QueryResult getLocationQueryResult(Cursor cursor,
-			String state, boolean close) {
+        QueryResult qr = new QueryResult();
+        qr.setExtId(location.getExtId());
+        qr.setName(location.getName());
+        qr.setState(state);
 
-		if (null == cursor || cursor.getCount() < 1) {
-			return null;
-		}
+        return qr;
+    }
 
-		Location location = Converter.toLocation(cursor, close);
-		QueryResult qr = new QueryResult();
-		qr.setExtId(location.getExtId());
-		qr.setName(location.getName());
-		qr.setState(state);
+    private static QueryResult getQueryResult(Individual individual, String state, ContentResolver contentResolver) {
 
-		return qr;
-	}
+        if (null == individual) {
+            return null;
+        }
 
-	private static List<QueryResult> getIndividualQueryResultList(
-			Cursor cursor, ContentResolver resolver, String state) {
-		List<QueryResult> results = new ArrayList<QueryResult>();
+        QueryResult qr = new QueryResult();
+        qr.setExtId(individual.getExtId());
+        qr.setExtId(individual.getExtId());
+        qr.setName(Individual.getFullName(individual));
+        qr.setState(state);
 
-		if (null == cursor || cursor.getCount() < 1) {
-			return results;
-		}
+        // add individual details to payload
+        qr.getStringsPayLoad().put(R.string.individual_other_names_label, individual.getOtherNames());
+        qr.getStringsPayLoad().put(R.string.individual_age_label, Individual.getAgeWithUnits(individual));
+        qr.getStringsPayLoad().put(R.string.individual_language_preference_label, individual.getLanguagePreference());
 
-		while (cursor.moveToNext()) {
-			results.add(getIndividualQueryResult(cursor, resolver, state, false));
-		}
+        // add household membership details to payload
+        MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
+        Membership membership = membershipGateway.getFirst(contentResolver,
+                membershipGateway.findBySocialGroupAndIndividual(individual.getCurrentResidence(), individual.getExtId()));
+        int relationshipId =  ProjectResources.Relationship.getRelationshipStringId(membership.getRelationshipToHead());
+        qr.getStringIdsPayLoad().put(R.string.individual_relationship_to_head_label, relationshipId);
 
-		cursor.close();
+        return qr;
+    }
 
-		return results;
-	}
+    private static List<QueryResult> getLocationHierarchyQueryResultList(Iterator<LocationHierarchy> iterator, String state, ContentResolver contentResolver) {
+        List<QueryResult> results = new ArrayList<QueryResult>();
 
-	private static QueryResult getIndividualQueryResult(Cursor cursor,
-			ContentResolver resolver, String state, boolean close) {
+        if (null == iterator) {
+            return results;
+        }
 
-		if (null == cursor || cursor.getCount() < 1) {
-			return null;
-		}
+        while (iterator.hasNext()) {
+            results.add(getQueryResult(iterator.next(), state, contentResolver));
+        }
 
-		Individual individual = Converter.toIndividual(cursor, close);
-		QueryResult qr = new QueryResult();
-		qr.setExtId(individual.getExtId());
-		qr.setName(Individual.getFullName(individual));
-		qr.setState(state);
+        return results;
+    }
 
-		// might be the gross way to do this...
+    private static List<QueryResult> getLocationQueryResultList(Iterator<Location> iterator, String state, ContentResolver contentResolver) {
+        List<QueryResult> results = new ArrayList<QueryResult>();
 
-		qr.getStringsPayLoad().put(R.string.individual_other_names_label,
-				individual.getOtherNames());
-		qr.getStringsPayLoad().put(R.string.individual_age_label,
-				Individual.getAgeWithUnits(individual));
-		qr.getStringsPayLoad().put(
-				R.string.individual_language_preference_label,
-				individual.getLanguagePreference());
+        if (null == iterator) {
+            return results;
+        }
 
-		if (null != resolver) {
+        while (iterator.hasNext()) {
+            results.add(getQueryResult(iterator.next(), state, contentResolver));
+        }
 
-			Cursor membershipCursor = Queries
-					.getMembershipByHouseholdAndIndividualExtId(resolver,
-							individual.getCurrentResidence(),
-							individual.getExtId());
+        return results;
+    }
 
-			membershipCursor.moveToFirst();
-			Membership membership = Converter.toMembership(membershipCursor,
-					true);
+    private static List<QueryResult> getIndividualQueryResultList(Iterator<Individual> iterator, String state, ContentResolver contentResolver) {
+        List<QueryResult> results = new ArrayList<QueryResult>();
 
-			qr.getStringIdsPayLoad().put(
-					R.string.individual_relationship_to_head_label,
-					ProjectResources.Relationship
-							.getRelationshipStringId(membership
-									.getRelationshipToHead()));
-		}
+        if (null == iterator) {
+            return results;
+        }
 
-		return qr;
-	}
+        while (iterator.hasNext()) {
+            results.add(getQueryResult(iterator.next(), state, contentResolver));
+        }
+
+        return results;
+    }
 }

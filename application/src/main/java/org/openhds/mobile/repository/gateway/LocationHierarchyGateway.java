@@ -5,6 +5,7 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.LocationHierarchy;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.Query;
 
 import static org.openhds.mobile.OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID;
 import static org.openhds.mobile.OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL;
@@ -20,6 +21,14 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
 
     public LocationHierarchyGateway() {
         super(OpenHDS.HierarchyItems.CONTENT_ID_URI_BASE, COLUMN_HIERARCHY_EXTID, new LocationHierarchyConverter());
+    }
+
+    public Query findByLevel(String level) {
+        return new Query(tableUri, COLUMN_HIERARCHY_LEVEL, level, COLUMN_HIERARCHY_EXTID);
+    }
+
+    public Query findByParent(String parentId) {
+        return new Query(tableUri, COLUMN_HIERARCHY_PARENT, parentId, COLUMN_HIERARCHY_EXTID);
     }
 
     private static class LocationHierarchyConverter implements Converter<LocationHierarchy> {

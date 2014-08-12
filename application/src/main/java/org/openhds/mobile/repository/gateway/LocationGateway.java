@@ -29,6 +29,10 @@ public class LocationGateway extends Gateway<Location> {
         super(OpenHDS.Locations.CONTENT_ID_URI_BASE, COLUMN_LOCATION_EXTID, new LocationConverter());
     }
 
+    public Query findByHierarchy(String hierarchyId) {
+        return new Query(tableUri, COLUMN_LOCATION_HIERARCHY, hierarchyId, COLUMN_LOCATION_EXTID);
+    }
+
     // for Bioko
     public Query findByHierarchyDescendingBuildingNumber(String hierarchyId) {
         return new Query(tableUri, COLUMN_LOCATION_HIERARCHY, hierarchyId, COLUMN_LOCATION_BUILDING_NUMBER + " DESC");
