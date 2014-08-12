@@ -49,6 +49,10 @@ public class MembershipGateway extends Gateway<Membership> {
         }
     }
 
+    public Query findByIndividual(String individualId) {
+        return new Query(tableUri, COLUMN_INDIVIDUAL_EXTID, individualId, COLUMN_INDIVIDUAL_EXTID);
+    }
+
     public Query findBySocialGroupAndIndividual(String socialGroupId, String individualId) {
         final String[] columnNames = {COLUMN_SOCIAL_GROUP_EXTID, COLUMN_INDIVIDUAL_EXTID};
         final String[] columnValues = {socialGroupId, individualId};

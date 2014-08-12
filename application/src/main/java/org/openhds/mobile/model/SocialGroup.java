@@ -9,6 +9,14 @@ public class SocialGroup implements Serializable {
 	private String extId;
 	private String groupName;
 	private String groupHead;
+
+    public SocialGroup() {}
+
+    public SocialGroup(String extId, String name, Individual head) {
+        this.extId = extId;
+        this.groupName = name;
+        this.groupHead = head.getExtId();
+    }
 	
 	public String getExtId() {
 		return extId;

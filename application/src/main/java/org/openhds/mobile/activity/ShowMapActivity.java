@@ -1,21 +1,10 @@
 package org.openhds.mobile.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.openhds.mobile.R;
-import org.openhds.mobile.adapter.AdapterContent;
-import org.openhds.mobile.adapter.MapAdapter;
-import org.openhds.mobile.database.DatabaseAdapter;
-import org.openhds.mobile.database.queries.Converter;
-import org.openhds.mobile.database.queries.Queries;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,12 +14,18 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import org.openhds.mobile.R;
+import org.openhds.mobile.adapter.AdapterContent;
+import org.openhds.mobile.adapter.MapAdapter;
+import org.openhds.mobile.database.DatabaseAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShowMapActivity extends MapActivity implements OnItemClickListener {
 	
@@ -103,24 +98,24 @@ public class ShowMapActivity extends MapActivity implements OnItemClickListener 
 		
 		List<org.openhds.mobile.model.Location> nearestLocations = new ArrayList<org.openhds.mobile.model.Location>();
 		
-		Cursor cursor = Queries.allLocations(getContentResolver());
-		List<org.openhds.mobile.model.Location> locations = Converter.toLocationList(cursor);
-		for (org.openhds.mobile.model.Location loc : locations) {
-			
-			if (loc.getLatitude().equals("Unknown") || loc.getLongitude().equals("Unknown") || 
-				loc.getLatitude().equals("") || loc.getLongitude().equals(""))
-				continue;
-			
-			double latitude = Double.parseDouble(loc.getLatitude());
-			double longitude = Double.parseDouble(loc.getLongitude());
-			
-			float[] results = new float[1];
-			Location.distanceBetween(currentLatitude, currentLongitude, latitude, longitude, results);
-			float result = results[0];
-			
-			if (result < (METER_TO_MILE * LOCATION_RADIUS))
-				nearestLocations.add(loc);
-		}
+		//Cursor cursor = Queries.allLocations(getContentResolver());
+		//List<org.openhds.mobile.model.Location> locations = Converter.toLocationList(cursor);
+//		for (org.openhds.mobile.model.Location loc : locations) {
+//
+//			if (loc.getLatitude().equals("Unknown") || loc.getLongitude().equals("Unknown") ||
+//				loc.getLatitude().equals("") || loc.getLongitude().equals(""))
+//				continue;
+//
+//			double latitude = Double.parseDouble(loc.getLatitude());
+//			double longitude = Double.parseDouble(loc.getLongitude());
+//
+//			float[] results = new float[1];
+//			Location.distanceBetween(currentLatitude, currentLongitude, latitude, longitude, results);
+//			float result = results[0];
+//
+//			if (result < (METER_TO_MILE * LOCATION_RADIUS))
+//				nearestLocations.add(loc);
+//		}
 		return nearestLocations;
 	}
 	

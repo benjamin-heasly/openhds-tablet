@@ -1,20 +1,22 @@
 package org.openhds.mobile.fragment.detailfragments;
 
-import static org.openhds.mobile.utilities.LayoutUtils.makeDetailFragmentTextView;
-
-import org.openhds.mobile.R;
-import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.database.queries.Converter;
-import org.openhds.mobile.database.queries.Queries;
-import org.openhds.mobile.model.SocialGroup;
-
-import android.database.Cursor;
+import android.content.ContentResolver;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import org.openhds.mobile.R;
+import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.SocialGroup;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
+
+import java.util.List;
+
+import static org.openhds.mobile.utilities.LayoutUtils.makeDetailFragmentTextView;
 
 public class HouseholdDetailFragment extends DetailFragment {
 	LinearLayout detailContainer;
@@ -36,8 +38,7 @@ public class HouseholdDetailFragment extends DetailFragment {
 	@Override
 	public void setUpDetails() {
 
-		SocialGroup socialGroup = getHousehold(navigateActivity
-				.getCurrentSelection().getExtId(), navigateActivity);
+		SocialGroup socialGroup = getHousehold(navigateActivity.getCurrentSelection().getExtId());
 
 		if (null != socialGroup) {
 			LinearLayout socialGroupBasicInfoContainer = (LinearLayout) detailContainer
@@ -70,31 +71,20 @@ public class HouseholdDetailFragment extends DetailFragment {
 
 	}
 
-	private SocialGroup getHousehold(String extId,
-			NavigateActivity navigateActivity) {
+	private SocialGroup getHousehold(String extId) {
 
-		Cursor cursor = Queries.getSocialGroupByExtId(
-				navigateActivity.getContentResolver(), extId);
+        SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
+        ContentResolver contentResolver = navigateActivity.getContentResolver();
+        SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver, socialGroupGateway.findById(extId));
 
-		if (cursor.moveToFirst()) {
-			SocialGroup socialGroup = Converter.toSocialGroup(cursor, true);
-			return socialGroup;
-		}
-
-		return null;
-
+		return socialGroup;
 	}
 
 	private String getMemberCount(String extId) {
-		String memberCount;
+        IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+        ContentResolver contentResolver = navigateActivity.getContentResolver();
+        List<Individual> individuals = individualGateway.getList(contentResolver, individualGateway.findByResidency(extId));
 
-		Cursor cursor = Queries.getIndividualsByResidency(getActivity()
-				.getContentResolver(), extId);
-
-		memberCount = Integer.toString(cursor.getCount());
-
-		return memberCount;
-
+		return Integer.toString(individuals.size());
 	}
-
 }

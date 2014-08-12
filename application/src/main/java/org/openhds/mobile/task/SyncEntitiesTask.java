@@ -358,9 +358,9 @@ public class SyncEntitiesTask extends
                             } else if (tagName.equalsIgnoreCase("localityName")) {
                                 location.setLocalityName(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("buildingNumber")) {
-                                location.setBuildingNumber(parser.nextText());
+                                location.setBuildingNumber(Integer.parseInt(parser.nextText()));
                             } else if (tagName.equalsIgnoreCase("floorNumber")) {
-                                location.setFloorNumber(parser.nextText());
+                                location.setFloorNumber(Integer.parseInt(parser.nextText()));
                             } else if (tagName.equalsIgnoreCase("regionName")) {
                                 location.setRegionName(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("provinceName")) {

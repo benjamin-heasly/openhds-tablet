@@ -1,11 +1,9 @@
 package org.openhds.mobile.projectdata;
 
+import org.openhds.mobile.OpenHDS;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.R;
-import org.openhds.mobile.activity.CensusActivity;
 
 public class ProjectFormFields {
 
