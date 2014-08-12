@@ -40,7 +40,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/passwordEditText"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="@string/login_btn"
+        android:background="@drawable/rounded_button_gray"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

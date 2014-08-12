@@ -59,6 +59,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         formInstanceLayout = (ListView) findViewById(R.id.portal_right_column);
         TextView header = (TextView) this.getLayoutInflater().inflate(R.layout.generic_header, null);
         header.setText(R.string.form_instance_list_header);
+        header.setVisibility(View.VISIBLE);
         formInstanceLayout.addHeaderView(header);
 
         populateFormInstanceListView();
@@ -107,7 +108,7 @@ public class PortalActivity extends Activity implements OnClickListener {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     FormInstance selected = unsyncedFormInstances.get(position - 1);
-                    Uri uri = selected.getUri();
+                    Uri uri = Uri.parse(selected.getUriString());
 
                     File selectedFile = new File(selected.getFilePath());
                     EncryptionHelper.decryptFile(selectedFile, getApplicationContext());

@@ -20,8 +20,12 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/generic_button_description"
         android:gravity="left|center_vertical"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:text="Button"
+        android:background="@drawable/rounded_button_gray"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
