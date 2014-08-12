@@ -1,11 +1,10 @@
 package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
-import java.util.Map;
-
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.VisitAdapter;
 import org.openhds.mobile.model.Visit;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+
+import java.util.Map;
 
 public class UpdateFormPayloadConsumers {
 
@@ -31,7 +30,5 @@ public class UpdateFormPayloadConsumers {
 			// TODO Auto-generated method stub
 
 		}
-
 	}
-
 }

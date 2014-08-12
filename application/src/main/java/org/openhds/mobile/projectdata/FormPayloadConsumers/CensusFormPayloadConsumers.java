@@ -1,14 +1,12 @@
 package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
-import android.database.Cursor;
+import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.database.IndividualAdapter;
 import org.openhds.mobile.database.LocationAdapter;
 import org.openhds.mobile.database.MembershipAdapter;
 import org.openhds.mobile.database.RelationshipAdapter;
 import org.openhds.mobile.database.SocialGroupAdapter;
-import org.openhds.mobile.database.queries.Converter;
-import org.openhds.mobile.database.queries.Queries;
 import org.openhds.mobile.database.queries.QueryResult;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
@@ -18,6 +16,12 @@ import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
+import org.openhds.mobile.repository.gateway.MembershipGateway;
+import org.openhds.mobile.repository.gateway.RelationshipGateway;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 import java.util.Map;
 
@@ -25,20 +29,25 @@ public class CensusFormPayloadConsumers {
 
     private static Location insertOrUpdateLocation(
             Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
-        // Insert or Update the Location
+
         Location location = LocationAdapter.create(formPayLoad);
-        LocationAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
-                location);
+
+        LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+        ContentResolver contentResolver = navigateActivity.getContentResolver();
+        locationGateway.insertOrUpdate(contentResolver, location);
+
         return location;
     }
 
     private static Individual insertOrUpdateIndividual(
             Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
-        // Insert or Update the Individual
+
         Individual individual = IndividualAdapter.create(formPayLoad);
         individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
-        IndividualAdapter.insertOrUpdate(navigateActivity.getContentResolver(),
-                individual);
+
+        IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+        ContentResolver contentResolver = navigateActivity.getContentResolver();
+        individualGateway.insertOrUpdate(contentResolver, individual);
 
         return individual;
     }
@@ -55,7 +64,6 @@ public class CensusFormPayloadConsumers {
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
             // TODO Auto-generated method stub
-
         }
     }
 
@@ -79,37 +87,30 @@ public class CensusFormPayloadConsumers {
             String startDate = formPayload
                     .get(ProjectFormFields.General.COLLECTION_DATE_TIME);
 
-            Cursor cursor = Queries.getHeadOfHouseholdByHouseholdExtId(
-                    navigateActivity.getContentResolver(),
-                    selectedLocation.getExtId());
-            cursor.moveToFirst();
-            Individual currentHeadOfHousehold = Converter.toIndividual(cursor,
-                    true);
+            SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            ContentResolver contentResolver = navigateActivity.getContentResolver();
+
+            // get head of household by household id
+            SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver,
+                    socialGroupGateway.findById(selectedLocation.getExtId()));
+            Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
+                    individualGateway.findById(socialGroup.getGroupHead()));
 
             // INSERT or UPDATE RELATIONSHIP
+            RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
             Relationship relationship = RelationshipAdapter.create(
                     individual, currentHeadOfHousehold, relationshipType,
                     startDate);
-            RelationshipAdapter.insertOrUpdate(
-                    navigateActivity.getContentResolver(), relationship);
+            relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
             // INSERT or UPDATE MEMBERSHIP
-            Cursor socialGroupCursor = Queries.getSocialGroupByExtId(
-                    navigateActivity.getContentResolver(),
-                    selectedLocation.getExtId());
-            if (socialGroupCursor.moveToFirst()) {
-                SocialGroup socialGroup = Converter.toSocialGroup(
-                        socialGroupCursor, true);
-                Membership membership = MembershipAdapter.create(individual,
-                        socialGroup, relationshipType, membershipStatus);
-
-                MembershipAdapter.insertOrUpdate(
-                        navigateActivity.getContentResolver(), membership);
-            }
-            socialGroupCursor.close();
+            MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
+            Membership membership = MembershipAdapter.create(individual,
+                    socialGroup, relationshipType, membershipStatus);
+            membershipGateway.insertOrUpdate(contentResolver, membership);
 
             return false;
-
         }
 
         @Override
@@ -128,8 +129,6 @@ public class CensusFormPayloadConsumers {
             postFillFormPayload(formPayload);
             boolean postFilled = true;
 
-
-
             Map<String, QueryResult> hierarchyPath = navigateActivity
                     .getHierarchyPath();
             QueryResult selectedLocation = hierarchyPath
@@ -145,39 +144,36 @@ public class CensusFormPayloadConsumers {
             Individual individual = insertOrUpdateIndividual(formPayload,
                     navigateActivity);
 
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+            ContentResolver contentResolver = navigateActivity.getContentResolver();
+
             // Update the name of the location
-            Cursor locationCursor = Queries.getLocationByExtId(
-                    navigateActivity.getContentResolver(),
-                    selectedLocation.getExtId());
-            locationCursor.moveToNext();
-            Location location = Converter.toLocation(locationCursor, true);
+            Location location = locationGateway.getFirst(contentResolver,
+                    locationGateway.findById(selectedLocation.getExtId()));
             String locationName = individual.getLastName();
             location.setName(locationName);
             selectedLocation.setName(locationName);
-            LocationAdapter.update(navigateActivity.getContentResolver(),
-                    location);
+            locationGateway.insertOrUpdate(contentResolver, location);
 
-            // create socialgroup
-            SocialGroup socialGroup;
-            socialGroup = SocialGroupAdapter.create(
+            // create social group
+            SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
+            SocialGroup socialGroup = SocialGroupAdapter.create(
                     selectedLocation.getExtId(), individual);
-            SocialGroupAdapter.insertOrUpdate(
-                    navigateActivity.getContentResolver(), socialGroup);
+            socialGroupGateway.insertOrUpdate(contentResolver, socialGroup);
 
             // create membership
+            MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
             Membership membership = MembershipAdapter.create(individual,
                     socialGroup, relationshipType, membershipStatus);
-            MembershipAdapter.insertOrUpdate(
-                    navigateActivity.getContentResolver(), membership);
+            membershipGateway.insertOrUpdate(contentResolver, membership);
 
             // Set head of household's relationship to himself.
+            RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
             Relationship relationship = RelationshipAdapter.create(individual,
                     individual, relationshipType, startDate);
-            RelationshipAdapter.insertOrUpdate(
-                    navigateActivity.getContentResolver(), relationship);
+            relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
             return postFilled;
-
         }
 
         @Override
