@@ -18,7 +18,8 @@ public class ProjectFormFields {
 		public static final String REGION_STATE_FIELD_NAME = "regionExtId";
 		public static final String PROVINCE_STATE_FIELD_NAME = "provinceExtId";
 		public static final String DISTRICT_STATE_FIELD_NAME = "districtExtId";
-		public static final String LOCALITY_STATE_FIELD_NAME = "localityExtId";
+        public static final String SUB_DISTRICT_STATE_FIELD_NAME = "subDistrictExtId";
+        public static final String LOCALITY_STATE_FIELD_NAME = "localityExtId";
 		public static final String MAP_AREA_STATE_FIELD_NAME = "mapAreaExtId";
 		public static final String SECTOR_STATE_FIELD_NAME = "sectorExtId";
 		public static final String HOUSEHOLD_STATE_FIELD_NAME = "householdExtId";
@@ -37,6 +38,9 @@ public class ProjectFormFields {
 			stateFieldNames.put(
 					ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE,
 					DISTRICT_STATE_FIELD_NAME);
+            stateFieldNames.put(
+                    ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE,
+                    SUB_DISTRICT_STATE_FIELD_NAME);
 			stateFieldNames.put(
 					ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE,
 					LOCALITY_STATE_FIELD_NAME);

@@ -33,6 +33,6 @@
         android:paddingRight="20dp"
         android:background="@color/AcidGray"
         android:orientation="vertical"
-        android:paddingTop="45dp" />
+        android:paddingTop="20dp" />
 
 </LinearLayout>
