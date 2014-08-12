@@ -1,17 +1,20 @@
 package org.openhds.mobile.model;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.net.Uri;
 
-public class FormInstance {
+public class FormInstance implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
 	private String formName;
 	private String filePath;
     private String fileName;
-	private Uri uri;
+	private String uriString;
 
     public String getFileName() { return fileName; }
 
@@ -33,12 +36,12 @@ public class FormInstance {
 		this.filePath = filePath;
 	}
 
-	public Uri getUri() {
-		return uri;
+	public String getUriString() {
+		return uriString;
 	}
 
-	public void setUri(Uri uri) {
-		this.uri = uri;
+	public void setUriString(String uriString) {
+		this.uriString = uriString;
 	}
 
 	public static List<File> toListOfFiles(List<FormInstance> formInstances) {
@@ -54,7 +57,7 @@ public class FormInstance {
 		ArrayList<Uri> uriList = new ArrayList<Uri>();
 
 		for (FormInstance instance : formInstances) {
-			uriList.add(instance.getUri());
+			uriList.add(Uri.parse(instance.getUriString()));
 		}
 		return uriList;
 	}

@@ -3,6 +3,7 @@ package org.openhds.mobile.fragment;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -141,7 +142,7 @@ public class FormInstanceReviewFragment extends Fragment {
         if (null != adapter) {
             List<FormInstance> approved = adapter.registerApproveAllAction();
             approveListOfForms(approved);
-            adapter.clearInstanceList();
+//            adapter.clearInstanceList();
             editedForms.clear();
             editFormListView = null;
         }
@@ -156,7 +157,7 @@ public class FormInstanceReviewFragment extends Fragment {
         for (FormInstance instance: allFormInstances) {
             File instanceFile = new File(instance.getFilePath());
             if (!FormHelper.isFormReviewed(instance.getFilePath())) {
-                OdkCollectHelper.setStatusIncomplete(getActivity().getContentResolver(), instance.getUri());
+                OdkCollectHelper.setStatusIncomplete(getActivity().getContentResolver(), Uri.parse(instance.getUriString()));
                 EncryptionHelper.encryptFile(instanceFile, getActivity());
             }
         }
@@ -170,7 +171,7 @@ public class FormInstanceReviewFragment extends Fragment {
             EncryptionHelper.decryptFile(instanceFile, getActivity());
             FormHelper.setFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NO_REVIEW_NEEDED,
                     instance.getFilePath());
-            OdkCollectHelper.setStatusComplete(getActivity().getContentResolver(), instance.getUri());
+            OdkCollectHelper.setStatusComplete(getActivity().getContentResolver(), Uri.parse(instance.getUriString()));
             EncryptionHelper.encryptFile(instanceFile, getActivity());
         }
     }

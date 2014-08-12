@@ -4,24 +4,12 @@ import static org.openhds.mobile.utilities.ConfigUtils.getPreferenceString;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
 import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
-
-import java.io.File;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.res.Configuration;
-import android.os.Parcelable;
 import android.widget.*;
-import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
-import org.openhds.mobile.adapter.SupervisorFormInstanceAdapter;
 import org.openhds.mobile.fragment.FormInstanceReviewFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
-import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormInstance;
-import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.task.HttpTask.RequestContext;
 import org.openhds.mobile.task.SyncEntitiesTask;
 import org.openhds.mobile.task.SyncFieldworkersTask;

@@ -6,14 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
-import org.jdom2.Content;
 import org.openhds.mobile.InstanceProviderAPI;
 import org.openhds.mobile.model.FormInstance;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import org.openhds.mobile.projectdata.ProjectResources;
 
 public class OdkCollectHelper {
 
@@ -56,7 +54,7 @@ public class OdkCollectHelper {
             fileName = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
 
             formInstance.setFilePath(filePath);
-            formInstance.setUri(uri);
+            formInstance.setUriString(uri.toString());
             formInstance.setFormName(formName);
             formInstance.setFileName(fileName);
 
@@ -103,9 +101,10 @@ public class OdkCollectHelper {
             fileName = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
 
 			formInstance.setFilePath(filePath);
-			formInstance.setUri(uri);
             formInstance.setFormName(formName);
             formInstance.setFileName(fileName);
+
+            formInstance.setUriString(uri.toString());
 
 			formInstances.add(formInstance);
 

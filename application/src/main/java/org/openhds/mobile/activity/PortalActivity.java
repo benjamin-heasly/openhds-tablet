@@ -108,7 +108,7 @@ public class PortalActivity extends Activity implements OnClickListener {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     FormInstance selected = unsyncedFormInstances.get(position - 1);
-                    Uri uri = selected.getUri();
+                    Uri uri = Uri.parse(selected.getUriString());
 
                     File selectedFile = new File(selected.getFilePath());
                     EncryptionHelper.decryptFile(selectedFile, getApplicationContext());

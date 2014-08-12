@@ -18,7 +18,6 @@ import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
 
 import java.io.File;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,13 +66,16 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
         int resourceId = ProjectResources.FormType.getFormTypeStringId(formType);
         holder.formType.setText(context.getResources().getString(resourceId));
 
-        holder.fileName.setText(instance.getFileName());
+        String verboseFileName= instance.getFileName();
+        //trim the file extension
+        holder.fileName.setText(verboseFileName.substring(0, verboseFileName.length() - 4));
+
         holder.fileName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 FormInstance selected = (FormInstance) v.getTag();
-                Uri uri = selected.getUri();
+                Uri uri = Uri.parse(selected.getUriString());
 
                 File selectedFile = new File(selected.getFilePath());
                 EncryptionHelper.decryptFile(selectedFile, context);
@@ -132,7 +134,8 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
     }
 
     public List<FormInstance> registerApproveAllAction() {
-        ArrayList<FormInstance> allInstances = formInstanceList;
+        ArrayList<FormInstance> allInstances = new ArrayList<>(formInstanceList);
+        clearInstanceList();
         return allInstances;
     }
 
