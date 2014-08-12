@@ -261,18 +261,22 @@ public class FormHelper {
                     filledForm.setRootElement(filledFormRoot);
                     Iterator<Element> dataDecendantsItr = filledFormRoot.getDescendants(new ElementFilter());
 
+                    Map<Element, String> toModify = new HashMap<>();
+
                     while (dataDecendantsItr.hasNext()) {
 
                         Element child = dataDecendantsItr.next();
+                        String name = child.getName();
 
-                        if (formFieldNames.containsKey(child.getName())
-                                && null != formFieldNames.get(child.getName())) {
-
-                            child.setText(formFieldNames.get(child.getName()));
-
+                        if (formFieldNames.containsKey(name) && null != formFieldNames.get(name)) {
+                            toModify.put(child, formFieldNames.get(name));
                         } else {
-                            child.setText("");
+                            toModify.put(child, "");
                         }
+                    }
+
+                    for (Element child : toModify.keySet()) {
+                        child.setText(toModify.get(child));
                     }
                 }
 
