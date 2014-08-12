@@ -36,7 +36,9 @@ public class HttpTask<Params, Progress> extends
 
 	public HttpTask(RequestContext requestContext) {
 		this.requestContext = requestContext;
-		httpGet = new HttpGet(requestContext.url.getPath());
+        if (null != requestContext) {
+            httpGet = new HttpGet(requestContext.url.getPath());
+        }
 	}
 
 	public static enum EndResult {

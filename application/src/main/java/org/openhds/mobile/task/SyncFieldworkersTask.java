@@ -48,7 +48,7 @@ public class SyncFieldworkersTask extends HttpTask<Void, Integer> {
 		return EndResult.SUCCESS;
 	}
 
-	private void processXMLDocument(InputStream content)
+	public void processXMLDocument(InputStream content)
 			throws XmlPullParserException, IOException {
 
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();

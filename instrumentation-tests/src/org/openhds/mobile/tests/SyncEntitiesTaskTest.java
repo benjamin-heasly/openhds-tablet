@@ -28,9 +28,9 @@ import java.util.List;
 /**
  * Feed XML documents to SyncEntitiesTask and verify that entities were created in the database.
  *
- * Note, the XML parsing in SyncEntitiesTask is quite brittle.  The XML in assets/testXml must
- * not contain extra whitespace.  Otherwise the SyncEntitiesTask might get caught in an infinite
- * loop.  SyncEntitiesTask is past due for refactoring!
+ * Note, the XML parsing in is quite brittle.  The XML in assets/testXml must
+ * not contain extra whitespace.  Otherwise the task might get caught in an infinite
+ * loop.  SyncEntitiesTask and SyncFieldWorkersTask are ripe for refactoring!
  *
  * BSH
  */
