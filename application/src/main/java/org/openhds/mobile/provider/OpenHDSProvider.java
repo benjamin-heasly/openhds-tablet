@@ -945,9 +945,9 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_NAME
-                    + " TEXT NOT NULL);"                    + " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON "
-                    + OpenHDS.Locations.TABLE_NAME + "("
-                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY + ")");
+                    + " TEXT NOT NULL);"
+                    + " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON "
+                    + OpenHDS.Locations.TABLE_NAME + "(" + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY + ")");
 
             db.execSQL("CREATE TABLE " + OpenHDS.HierarchyItems.TABLE_NAME
                     + " (" + OpenHDS.HierarchyItems._ID
