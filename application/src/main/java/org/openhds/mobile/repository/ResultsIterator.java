@@ -20,44 +20,52 @@ import java.util.NoSuchElementException;
  */
 public class ResultsIterator<T> implements Iterator<T> {
 
-    public static final int DEFAULT_WINDOW_SIZE = 10;
+    public static final int DEFAULT_WINDOW_MAX_SIZE = 100;
 
     private final ContentResolver contentResolver;
     private final Query query;
     private final Converter<T> converter;
 
-    private final int windowSize;
+    private final int windowMaxSize;
     private final List<T> windowResults;
-    private final int fullResultSize;
-
     private int windowIndex;
-    private int fullResultIndex;
+    private int windowQueryOffset;
+
+    private boolean gotLastResult;
 
     public ResultsIterator(ContentResolver contentResolver, Query query, Converter<T> converter) {
-        this(contentResolver, query, converter, DEFAULT_WINDOW_SIZE);
+        this(contentResolver, query, converter, DEFAULT_WINDOW_MAX_SIZE);
     }
 
-    public ResultsIterator(ContentResolver contentResolver, Query query, Converter<T> converter, int windowSize) {
+    public ResultsIterator(ContentResolver contentResolver, Query query, Converter<T> converter, int windowMaxSize) {
         this.contentResolver = contentResolver;
         this.query = query;
         this.converter = converter;
-        this.windowSize = windowSize;
+        this.windowMaxSize = windowMaxSize;
 
         windowResults = new ArrayList<T>();
-
-        // initial query to determine full result count
-        Cursor cursor = query.select(contentResolver);
-        fullResultSize = cursor.getCount();
-        cursor.close();
-
-        // initially positioned before first item
-        fullResultIndex = -1;
+        windowIndex = 0;
+        windowQueryOffset = 0;
+        gotLastResult = false;
     }
-
 
     @Override
     public boolean hasNext() {
-        return fullResultSize > 0 && fullResultIndex < (fullResultSize - 1);
+        // get more results as needed
+        if (windowIndex >= windowResults.size()) {
+
+            // already got the last result
+            if (gotLastResult) {
+                windowResults.clear();
+                return false;
+            }
+
+            getNextResultSet();
+            windowIndex = 0;
+        }
+
+        // got results?
+        return windowResults.size() > 0;
     }
 
     @Override
@@ -65,13 +73,7 @@ public class ResultsIterator<T> implements Iterator<T> {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-
-        fullResultIndex++;
-        if (windowIndex >= windowResults.size()) {
-            // ran out of results in the current window, get more
-            getNextResultSet();
-            windowIndex = 0;
-        }
+        // hasNext() implies windowIndex < windowResults.size()
         return windowResults.get(windowIndex++);
     }
 
@@ -80,13 +82,22 @@ public class ResultsIterator<T> implements Iterator<T> {
         throw new UnsupportedOperationException();
     }
 
-    // do a piecewise select with windowSize results or fewer
+    // do a piecewise select with windowMaxSize results or fewer
     private void getNextResultSet() {
+        // select a range of results
+        Cursor cursor = query.selectRange(contentResolver, windowQueryOffset, windowMaxSize);
+
+        // populate the results window
         windowResults.clear();
-        Cursor cursor = query.selectRange(contentResolver, fullResultIndex, windowSize);
         while(cursor.moveToNext()) {
             windowResults.add(converter.fromCursor(cursor));
         }
         cursor.close();
+
+        // this range contains the last result
+        gotLastResult = windowResults.size() < windowMaxSize;
+
+        // select a different range next time
+        windowQueryOffset += windowMaxSize;
     }
 }
