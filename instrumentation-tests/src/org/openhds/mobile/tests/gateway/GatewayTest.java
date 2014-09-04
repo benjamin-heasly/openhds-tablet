@@ -7,6 +7,7 @@ import net.sqlcipher.database.SQLiteOpenHelper;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.provider.OpenHDSProvider;
 import org.openhds.mobile.provider.PasswordHelper;
+import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.ResultsIterator;
 
@@ -68,6 +69,9 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
         T entity = gateway.getFirst(contentResolver, gateway.findById("INVALID"));
         assertNull(entity);
+
+        QueryResult result = gateway.getFirstQueryResult(contentResolver, gateway.findById("INVALID"), "test");
+        assertNull(result);
     }
 
     public void testAdd() {
@@ -81,6 +85,10 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         assertNotNull(savedEntity);
         String savedId = gateway.getConverter().getId(savedEntity);
         assertEquals(id, savedId);
+
+        QueryResult savedQueryResult = gateway.getFirstQueryResult(contentResolver, gateway.findById(id), "test");
+        assertNotNull(savedQueryResult);
+        assertEquals(id, savedQueryResult.getExtId());
 
         wasInserted = gateway.insertOrUpdate(contentResolver, entity);
         assertEquals(false, wasInserted);
@@ -126,31 +134,38 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         String id1 = gateway.getConverter().getId(allEntities.get(0));
         String id2 = gateway.getConverter().getId(allEntities.get(1));
         assertNotSame(id1, id2);
+
+        List<QueryResult> allQueryResults = gateway.getQueryResultList(contentResolver, gateway.findAll(), "test");
+        assertEquals(2, allQueryResults.size());
+        assertNotSame(allQueryResults.get(0).getExtId(), allQueryResults.get(1).getExtId());
     }
 
     public void testFindAllAsIterator() {
         Iterator<T> allIterator = gateway.getIterator(contentResolver, gateway.findAll());
         assertFalse(allIterator.hasNext());
 
+        Iterator<QueryResult> allQueryResultsIterator =
+                gateway.getQueryResultIterator(contentResolver, gateway.findAll(), "test");
+        assertFalse(allQueryResultsIterator.hasNext());
+
         T entity1 = makeTestEntity("TEST1", "test person");
         T entity2 = makeTestEntity("TEST2", "test person");
         gateway.insertOrUpdate(contentResolver, entity1);
         gateway.insertOrUpdate(contentResolver, entity2);
 
+        // expect both entities to come out, ordered by id
         allIterator = gateway.getIterator(contentResolver, gateway.findAll());
-
         assertTrue(allIterator.hasNext());
-
-        // expect both to come out, ordered by id
-        T savedEntity1 = allIterator.next();
-        assertNotNull(savedEntity1);
-        assertEquals("TEST1", gateway.getConverter().getId(savedEntity1));
-
-        T savedEntity2 = allIterator.next();
-        assertNotNull(savedEntity2);
-        assertEquals("TEST2", gateway.getConverter().getId(savedEntity2));
-
+        assertEquals("TEST1", gateway.getConverter().getId(allIterator.next()));
+        assertEquals("TEST2", gateway.getConverter().getId(allIterator.next()));
         assertFalse(allIterator.hasNext());
+
+        // expect both query results to come out, ordered by id
+        allQueryResultsIterator = gateway.getQueryResultIterator(contentResolver, gateway.findAll(), "test");
+        assertTrue(allQueryResultsIterator.hasNext());
+        assertEquals("TEST1", allQueryResultsIterator.next().getExtId());
+        assertEquals("TEST2", allQueryResultsIterator.next().getExtId());
+        assertFalse(allQueryResultsIterator.hasNext());
     }
 
     public void testFindAllAsIteratorMany() {
