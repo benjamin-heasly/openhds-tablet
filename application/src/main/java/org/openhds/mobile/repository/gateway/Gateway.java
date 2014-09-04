@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.Query;
+import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.QueryResultsIterator;
 import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
@@ -88,6 +90,36 @@ public abstract class Gateway<T> {
     // get an iterator over all results from a query, with given iterator window size
     public Iterator<T> getIterator(ContentResolver contentResolver, Query query, int windowSize) {
         return new ResultsIterator<T>(contentResolver, query, converter, windowSize);
+    }
+
+    // get the first result from a query as a QueryResult or null
+    public QueryResult getFirstQueryResult(ContentResolver contentResolver, Query query, String state) {
+        T entity = getFirst(contentResolver, query);
+        if (null == entity) {
+            return null;
+        }
+        return converter.toQueryResult(entity, state);
+    }
+
+    // get all results from a query as a list of QueryResults
+    public List<QueryResult> getQueryResultList(ContentResolver contentResolver, Query query, String state) {
+        List<QueryResult> queryResults = new ArrayList<QueryResult>();
+        Cursor cursor = query.select(contentResolver);
+        List<T> entities = toList(cursor);
+        for (T entity : entities) {
+            queryResults.add(converter.toQueryResult(entity, state));
+        }
+        return queryResults;
+    }
+
+    // get an iterator over all results from a query as QueryResults
+    public Iterator<QueryResult> getQueryResultIterator(ContentResolver contentResolver, Query query, String state) {
+        return new QueryResultsIterator(contentResolver, query, converter, state);
+    }
+
+    // get an iterator over all results from a query as QueryResults, with given iterator window size
+    public Iterator<QueryResult> getQueryResultIterator(ContentResolver contentResolver, Query query, String state, int windowSize) {
+        return new QueryResultsIterator(contentResolver, query, converter, state, windowSize);
     }
 
     // find entities with given id

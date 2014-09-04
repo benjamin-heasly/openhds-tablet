@@ -14,4 +14,6 @@ public interface Converter<T> {
 
     public String getId(T entity);
 
+    public QueryResult toQueryResult(T entity, String state);
+
 }

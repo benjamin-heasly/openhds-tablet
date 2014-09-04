@@ -7,6 +7,7 @@ import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.Query;
+import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS;
@@ -110,6 +111,18 @@ public class IndividualGateway extends Gateway<Individual> {
         @Override
         public String getId(Individual individual) {
             return individual.getExtId();
+        }
+
+        @Override
+        public QueryResult toQueryResult(Individual individual, String state) {
+            QueryResult queryResult = new QueryResult();
+            queryResult.setExtId(individual.getExtId());
+            queryResult.setName(individual.getFirstName());
+            queryResult.setState(state);
+
+            // individual payload!
+
+            return queryResult;
         }
     }
 }

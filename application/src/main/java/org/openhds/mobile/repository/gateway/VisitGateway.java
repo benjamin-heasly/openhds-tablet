@@ -5,7 +5,7 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Visit;
 import org.openhds.mobile.repository.Converter;
-import org.openhds.mobile.repository.gateway.Gateway;
+import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_DATE;
 import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_EXTID;
@@ -44,7 +44,7 @@ public class VisitGateway extends Gateway<Visit> {
             contentValues.put(COLUMN_VISIT_EXTID, visit.getVisitExtId());
             contentValues.put(COLUMN_VISIT_DATE, visit.getVisitDate());
             contentValues.put(COLUMN_VISIT_LOCATION_EXTID, visit.getLocationExtId());
-            contentValues.put(COLUMN_VISIT_FIELDWORKER_EXTID, visit.getFieldWorkerExtid());
+            contentValues.put(COLUMN_VISIT_FIELDWORKER_EXTID, visit.getFieldWorkerExtId());
 
             return contentValues;
         }
@@ -52,6 +52,15 @@ public class VisitGateway extends Gateway<Visit> {
         @Override
         public String getId(Visit visit) {
             return visit.getVisitExtId();
+        }
+
+        @Override
+        public QueryResult toQueryResult(Visit visit, String state) {
+            QueryResult queryResult = new QueryResult();
+            queryResult.setExtId(visit.getVisitExtId());
+            queryResult.setName(visit.getLocationExtId());
+            queryResult.setState(state);
+            return queryResult;
         }
     }
 }

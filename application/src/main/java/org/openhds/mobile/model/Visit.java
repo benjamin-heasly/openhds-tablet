@@ -9,7 +9,7 @@ public class Visit implements Serializable {
 	private String visitExtId;
 	private String locationExtId;
 	private String visitDate;
-	private String fieldWorkerExtid;
+	private String fieldWorkerExtId;
 
 	public String getVisitExtId() {
 		return visitExtId;
@@ -35,12 +35,12 @@ public class Visit implements Serializable {
 		this.visitDate = visitDate;
 	}
 
-	public String getFieldWorkerExtid() {
-		return fieldWorkerExtid;
+	public String getFieldWorkerExtId() {
+		return fieldWorkerExtId;
 	}
 
 	public void setFieldWorkerExtId(String fieldWorkerExtid) {
-		this.fieldWorkerExtid = fieldWorkerExtid;
+		this.fieldWorkerExtId = fieldWorkerExtid;
 	}
 
 }

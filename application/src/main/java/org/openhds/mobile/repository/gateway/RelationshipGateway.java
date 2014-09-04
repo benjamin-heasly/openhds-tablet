@@ -4,13 +4,11 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.Query;
+import org.openhds.mobile.repository.QueryResult;
 
-import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID;
-import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID;
 import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A;
 import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B;
 import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE;
@@ -90,6 +88,15 @@ public class RelationshipGateway extends Gateway<Relationship> {
         @Override
         public String getId(Relationship relationship) {
             return relationship.getIndividualA();
+        }
+
+        @Override
+        public QueryResult toQueryResult(Relationship relationship, String state) {
+            QueryResult queryResult = new QueryResult();
+            queryResult.setExtId(relationship.getIndividualA());
+            queryResult.setName(relationship.getType());
+            queryResult.setState(state);
+            return queryResult;
         }
     }
 }

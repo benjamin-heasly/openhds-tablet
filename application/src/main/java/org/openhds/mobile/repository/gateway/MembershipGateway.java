@@ -7,6 +7,7 @@ import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.Query;
+import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID;
 import static org.openhds.mobile.OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD;
@@ -86,6 +87,15 @@ public class MembershipGateway extends Gateway<Membership> {
         @Override
         public String getId(Membership membership) {
             return membership.getIndividualExtId();
+        }
+
+        @Override
+        public QueryResult toQueryResult(Membership membership, String state) {
+            QueryResult queryResult = new QueryResult();
+            queryResult.setExtId(membership.getIndividualExtId());
+            queryResult.setName(membership.getRelationshipToHead());
+            queryResult.setState(state);
+            return queryResult;
         }
     }
 }

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID;
 import static org.openhds.mobile.OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID;
@@ -48,6 +49,15 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
         @Override
         public String getId(SocialGroup socialGroup) {
             return socialGroup.getExtId();
+        }
+
+        @Override
+        public QueryResult toQueryResult(SocialGroup socialGroup, String state) {
+            QueryResult queryResult = new QueryResult();
+            queryResult.setExtId(socialGroup.getExtId());
+            queryResult.setName(socialGroup.getGroupName());
+            queryResult.setState(state);
+            return queryResult;
         }
     }
 }

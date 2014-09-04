@@ -5,6 +5,7 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME;
@@ -56,6 +57,15 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
         @Override
         public String getId(FieldWorker fieldWorker) {
             return fieldWorker.getExtId();
+        }
+
+        @Override
+        public QueryResult toQueryResult(FieldWorker fieldWorker, String state) {
+            QueryResult queryResult = new QueryResult();
+            queryResult.setExtId(fieldWorker.getExtId());
+            queryResult.setName(fieldWorker.getFirstName());
+            queryResult.setState(state);
+            return queryResult;
         }
     }
 }

@@ -10,7 +10,9 @@ import java.util.Map;
  * hierarchy navigation.  But it's up to the caller to interpret the QueryResult
  * correctly, for example using the extId and "state" of hierarchy navigation.
  *
- * Payloads may contain arbitrary data for example to display with result name and extId.
+ * Payloads may contain arbitrary data, for example to display with result name and extId.
+ *
+ * BSH
  */
 public class QueryResult {
 

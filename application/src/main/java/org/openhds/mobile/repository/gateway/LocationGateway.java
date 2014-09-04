@@ -6,6 +6,7 @@ import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.Query;
+import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
@@ -83,6 +84,15 @@ public class LocationGateway extends Gateway<Location> {
         @Override
         public String getId(Location location) {
             return location.getExtId();
+        }
+
+        @Override
+        public QueryResult toQueryResult(Location location, String state) {
+            QueryResult queryResult = new QueryResult();
+            queryResult.setExtId(location.getExtId());
+            queryResult.setName(location.getName());
+            queryResult.setState(state);
+            return queryResult;
         }
     }
 }
