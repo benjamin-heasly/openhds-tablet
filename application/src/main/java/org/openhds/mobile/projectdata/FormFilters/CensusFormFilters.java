@@ -1,7 +1,7 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
+import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;

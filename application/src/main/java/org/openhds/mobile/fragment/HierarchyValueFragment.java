@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.HierarchyNavigator;
-import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
+import org.openhds.mobile.repository.QueryResult;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -69,10 +69,10 @@ public class HierarchyValueFragment extends Fragment {
 
 			if (convertView == null) {
 				convertView = makeNewGenericLayout(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
-						null, null, R.drawable.value_frag_selector, qr.getStringsPayLoad(), qr.getStringIdsPayLoad());
+						null, null, R.drawable.value_frag_selector, qr.getStringsPayload(), qr.getStringIdsPayload());
 			} else {
 				configureGenericLayout(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId(),
-						qr.getStringsPayLoad(), qr.getStringIdsPayLoad());
+						qr.getStringsPayload(), qr.getStringIdsPayload());
 			}
 
 			

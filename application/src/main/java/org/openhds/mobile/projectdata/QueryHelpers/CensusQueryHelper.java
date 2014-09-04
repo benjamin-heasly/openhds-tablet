@@ -9,6 +9,7 @@ import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
@@ -192,16 +193,16 @@ public class CensusQueryHelper implements QueryHelper {
         qr.setState(state);
 
         // add individual details to payload
-        qr.getStringsPayLoad().put(R.string.individual_other_names_label, individual.getOtherNames());
-        qr.getStringsPayLoad().put(R.string.individual_age_label, Individual.getAgeWithUnits(individual));
-        qr.getStringsPayLoad().put(R.string.individual_language_preference_label, individual.getLanguagePreference());
+        qr.getStringsPayload().put(R.string.individual_other_names_label, individual.getOtherNames());
+        qr.getStringsPayload().put(R.string.individual_age_label, Individual.getAgeWithUnits(individual));
+        qr.getStringsPayload().put(R.string.individual_language_preference_label, individual.getLanguagePreference());
 
         // add household membership details to payload
         MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
         Membership membership = membershipGateway.getFirst(contentResolver,
                 membershipGateway.findBySocialGroupAndIndividual(individual.getCurrentResidence(), individual.getExtId()));
         int relationshipId =  ProjectResources.Relationship.getRelationshipStringId(membership.getRelationshipToHead());
-        qr.getStringIdsPayLoad().put(R.string.individual_relationship_to_head_label, relationshipId);
+        qr.getStringIdsPayload().put(R.string.individual_relationship_to_head_label, relationshipId);
 
         return qr;
     }

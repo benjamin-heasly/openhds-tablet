@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import org.openhds.mobile.R;
-import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
+import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.fragment.DetailToggleFragment;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.HierarchyFormFragment;

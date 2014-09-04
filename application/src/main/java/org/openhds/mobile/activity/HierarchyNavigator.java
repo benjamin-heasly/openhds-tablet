@@ -3,7 +3,7 @@ package org.openhds.mobile.activity;
 import java.util.List;
 import java.util.Map;
 
-import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
+import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.model.FormBehaviour;
 
 public interface HierarchyNavigator {

@@ -3,6 +3,7 @@ package org.openhds.mobile.projectdata.QueryHelpers;
 import java.util.List;
 
 import android.content.ContentResolver;
+import org.openhds.mobile.repository.QueryResult;
 
 public interface QueryHelper {
 	public List<QueryResult> getAll(ContentResolver contentResolver,
