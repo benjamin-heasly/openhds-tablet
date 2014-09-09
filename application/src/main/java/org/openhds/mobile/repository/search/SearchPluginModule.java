@@ -26,7 +26,6 @@ public class SearchPluginModule {
     public SearchPluginModule(Gateway gateway, int labelId) {
         this.gateway = gateway;
         this.labelId = labelId;
-
         columnsAndLabels = new HashMap<>();
     }
 

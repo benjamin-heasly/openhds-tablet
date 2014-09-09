@@ -4,8 +4,7 @@
         android:id="@+id/dropdown_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
+        android:padding="15dp"
         android:visibility="visible"
         android:textAppearance="?android:attr/textAppearanceLargeInverse"
-        android:background="@color/SandyBrown"
 />

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.repository.QueryResult;
@@ -25,8 +27,7 @@ import java.util.List;
 public class SearchFragment extends Fragment {
 
     private SelectionHandler selectionHandler;
-    private List<SearchPluginModule> searchPluginModules;
-    private SearchFragmentSpinnerAdapter searchFragmentSpinnerAdapter;
+    private ArrayAdapter<SearchPluginModule> searchPluginAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,16 +40,19 @@ public class SearchFragment extends Fragment {
     }
 
     public void setSearchPluginModules(List<SearchPluginModule> searchPluginModules) {
-        this.searchPluginModules = searchPluginModules;
+        searchPluginAdapter = new ChooseSearchSpinnerAdapter(getActivity(), R.layout.generic_dropdown_item, searchPluginModules);
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.search_fragment_spinner);
+        spinner.setAdapter(searchPluginAdapter);
+        //spinner.setOnItemClickListener(new SpinnerClickHandler());
     }
 
     public interface SelectionHandler {
         public void handleSearchResults(List<QueryResult> queryResults);
     }
 
-    private class SearchFragmentSpinnerAdapter extends ArrayAdapter<SearchPluginModule> {
+    private class ChooseSearchSpinnerAdapter extends ArrayAdapter<SearchPluginModule> {
 
-        public SearchFragmentSpinnerAdapter(Context context, int resource, List<SearchPluginModule> objects) {
+        public ChooseSearchSpinnerAdapter(Context context, int resource, List<SearchPluginModule> objects) {
             super(context, resource, objects);
         }
 
@@ -65,6 +69,11 @@ public class SearchFragment extends Fragment {
             SearchPluginModule searchPluginModule = getItem(position);
             textView.setText(searchPluginModule.getLabelId());
             return convertView;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getView(position, convertView, parent);
         }
     }
 }

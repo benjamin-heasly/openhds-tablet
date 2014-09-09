@@ -17,21 +17,28 @@ import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
+import org.openhds.mobile.fragment.SearchFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.search.SearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
 
 public class PortalActivity extends Activity implements OnClickListener {
 
+    private static final String SEARCH_FRAGMENT_TAG = "searchFragment";
+
     private FieldWorker currentFieldWorker;
 
+    private SearchFragment searchFragment;
     private ListView formInstanceView;
     private List<FormInstance> formInstances;
 
@@ -48,7 +55,14 @@ public class PortalActivity extends Activity implements OnClickListener {
 
         // put a sample search fragment in the left column for testing
         // TODO: design this UI
-
+        if (null == savedInstanceState) {
+            searchFragment = new SearchFragment();
+            getFragmentManager().beginTransaction()
+                    .add(R.id.portal_left_column, searchFragment, SEARCH_FRAGMENT_TAG)
+                    .commit();
+        } else {
+            searchFragment = (SearchFragment) getFragmentManager().findFragmentByTag(SEARCH_FRAGMENT_TAG);
+        }
 
         // fill the middle column with a button for each available activity
         LinearLayout activitiesLayout = (LinearLayout) findViewById(R.id.portal_middle_column);
@@ -108,10 +122,21 @@ public class PortalActivity extends Activity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+        populateSearchFragment();
         populateFormInstanceListView();
     }
 
-    // display a list of recent form instances not yet sent to the ODK server
+    // Allow a few searches for testing
+    // TODO: design this UI
+    private void populateSearchFragment() {
+        List<SearchPluginModule> searchPluginModules = new ArrayList<>();
+        searchPluginModules.add(new SearchPluginModule(GatewayRegistry.getIndividualGateway(), R.string.individual_label));
+        searchPluginModules.add(new SearchPluginModule(GatewayRegistry.getLocationGateway(), R.string.locality_label));
+        searchPluginModules.add(new SearchPluginModule(GatewayRegistry.getSocialGroupGateway(), R.string.household_label));
+        searchFragment.setSearchPluginModules(searchPluginModules);
+    }
+
+    // Display a list of recent form instances not yet sent to the ODK server
     private void populateFormInstanceListView() {
         formInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
         if (!formInstances.isEmpty()) {
@@ -138,4 +163,5 @@ public class PortalActivity extends Activity implements OnClickListener {
             startActivityForResult(intent, 0);
         }
     }
+
 }
