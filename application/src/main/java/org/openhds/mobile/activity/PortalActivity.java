@@ -163,5 +163,4 @@ public class PortalActivity extends Activity implements OnClickListener {
             startActivityForResult(intent, 0);
         }
     }
-
 }
