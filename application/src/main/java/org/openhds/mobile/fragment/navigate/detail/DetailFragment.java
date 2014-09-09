@@ -1,4 +1,4 @@
-package org.openhds.mobile.fragment.detailfragments;
+package org.openhds.mobile.fragment.navigate.detail;
 
 import org.openhds.mobile.activity.NavigateActivity;
 

@@ -27,7 +27,7 @@ public class FormSelectionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout formContainer = (LinearLayout) inflater.inflate(R.layout.hierarchy_form_fragment, container, false);
+        LinearLayout formContainer = (LinearLayout) inflater.inflate(R.layout.form_selection_fragment, container, false);
         return formContainer;
     }
 
