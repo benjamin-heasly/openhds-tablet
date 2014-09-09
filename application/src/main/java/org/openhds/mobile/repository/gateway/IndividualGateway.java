@@ -1,11 +1,15 @@
 package org.openhds.mobile.repository.gateway;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.R;
 import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.Membership;
+import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.QueryResult;
 
@@ -28,8 +32,11 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS;
+import static org.openhds.mobile.model.Individual.getAgeWithUnits;
+import static org.openhds.mobile.model.Individual.getFullName;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
+
 
 
 /**
@@ -114,13 +121,27 @@ public class IndividualGateway extends Gateway<Individual> {
         }
 
         @Override
-        public QueryResult toQueryResult(Individual individual, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, Individual individual, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(individual.getExtId());
-            queryResult.setName(individual.getFirstName());
+            queryResult.setName(getFullName(individual));
             queryResult.setState(state);
 
-            // individual payload!
+            // for Bioko
+            // add individual details to payload
+            queryResult.getStringsPayload().put(R.string.individual_other_names_label, individual.getOtherNames());
+            queryResult.getStringsPayload().put(R.string.individual_age_label, getAgeWithUnits(individual));
+            queryResult.getStringsPayload().put(R.string.individual_language_preference_label, individual.getLanguagePreference());
+
+            // for Bioko
+            // add household membership details to payload
+            MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
+            Membership membership = membershipGateway.getFirst(contentResolver,
+                    membershipGateway.findBySocialGroupAndIndividual(individual.getCurrentResidence(), individual.getExtId()));
+            if (null != membership) {
+                int relationshipId =  ProjectResources.Relationship.getRelationshipStringId(membership.getRelationshipToHead());
+                queryResult.getStringIdsPayload().put(R.string.individual_relationship_to_head_label, relationshipId);
+            }
 
             return queryResult;
         }

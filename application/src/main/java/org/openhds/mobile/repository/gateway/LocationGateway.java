@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository.gateway;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
@@ -87,7 +88,7 @@ public class LocationGateway extends Gateway<Location> {
         }
 
         @Override
-        public QueryResult toQueryResult(Location location, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, Location location, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(location.getExtId());
             queryResult.setName(location.getName());

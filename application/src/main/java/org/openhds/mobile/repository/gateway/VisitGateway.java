@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository.gateway;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
@@ -55,7 +56,7 @@ public class VisitGateway extends Gateway<Visit> {
         }
 
         @Override
-        public QueryResult toQueryResult(Visit visit, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, Visit visit, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(visit.getVisitExtId());
             queryResult.setName(visit.getLocationExtId());

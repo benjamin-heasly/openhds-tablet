@@ -90,7 +90,7 @@ public class MembershipGateway extends Gateway<Membership> {
         }
 
         @Override
-        public QueryResult toQueryResult(Membership membership, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, Membership membership, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(membership.getIndividualExtId());
             queryResult.setName(membership.getRelationshipToHead());

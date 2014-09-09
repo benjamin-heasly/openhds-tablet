@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 
@@ -14,6 +15,6 @@ public interface Converter<T> {
 
     public String getId(T entity);
 
-    public QueryResult toQueryResult(T entity, String state);
+    public QueryResult toQueryResult(ContentResolver contentResolver, T entity, String state);
 
 }

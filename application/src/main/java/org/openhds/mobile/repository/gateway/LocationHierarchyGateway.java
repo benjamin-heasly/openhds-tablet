@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository.gateway;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
@@ -64,7 +65,7 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
         }
 
         @Override
-        public QueryResult toQueryResult(LocationHierarchy locationHierarchy, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, LocationHierarchy locationHierarchy, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(locationHierarchy.getExtId());
             queryResult.setName(locationHierarchy.getName());

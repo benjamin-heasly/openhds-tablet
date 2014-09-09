@@ -98,7 +98,7 @@ public abstract class Gateway<T> {
         if (null == entity) {
             return null;
         }
-        return converter.toQueryResult(entity, state);
+        return converter.toQueryResult(contentResolver, entity, state);
     }
 
     // get all results from a query as a list of QueryResults
@@ -107,19 +107,19 @@ public abstract class Gateway<T> {
         Cursor cursor = query.select(contentResolver);
         List<T> entities = toList(cursor);
         for (T entity : entities) {
-            queryResults.add(converter.toQueryResult(entity, state));
+            queryResults.add(converter.toQueryResult(contentResolver, entity, state));
         }
         return queryResults;
     }
 
     // get an iterator over all results from a query as QueryResults
     public Iterator<QueryResult> getQueryResultIterator(ContentResolver contentResolver, Query query, String state) {
-        return new QueryResultsIterator(contentResolver, query, converter, state);
+        return new QueryResultsIterator<T>(contentResolver, query, converter, state);
     }
 
     // get an iterator over all results from a query as QueryResults, with given iterator window size
     public Iterator<QueryResult> getQueryResultIterator(ContentResolver contentResolver, Query query, String state, int windowSize) {
-        return new QueryResultsIterator(contentResolver, query, converter, state, windowSize);
+        return new QueryResultsIterator<T>(contentResolver, query, converter, state, windowSize);
     }
 
     // find entities with given id

@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository.gateway;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
@@ -60,7 +61,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
         }
 
         @Override
-        public QueryResult toQueryResult(FieldWorker fieldWorker, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, FieldWorker fieldWorker, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(fieldWorker.getExtId());
             queryResult.setName(fieldWorker.getFirstName());

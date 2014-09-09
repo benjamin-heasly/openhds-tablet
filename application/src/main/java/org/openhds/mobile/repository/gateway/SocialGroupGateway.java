@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository.gateway;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
@@ -52,7 +53,7 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
         }
 
         @Override
-        public QueryResult toQueryResult(SocialGroup socialGroup, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, SocialGroup socialGroup, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(socialGroup.getExtId());
             queryResult.setName(socialGroup.getGroupName());

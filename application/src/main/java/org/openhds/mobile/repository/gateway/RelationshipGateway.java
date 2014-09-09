@@ -91,7 +91,7 @@ public class RelationshipGateway extends Gateway<Relationship> {
         }
 
         @Override
-        public QueryResult toQueryResult(Relationship relationship, String state) {
+        public QueryResult toQueryResult(ContentResolver contentResolver, Relationship relationship, String state) {
             QueryResult queryResult = new QueryResult();
             queryResult.setExtId(relationship.getIndividualA());
             queryResult.setName(relationship.getType());

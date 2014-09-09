@@ -19,17 +19,20 @@ import java.util.Iterator;
 public class QueryResultsIterator<T> implements Iterator<QueryResult> {
 
     private final Converter<T> converter;
+    private final ContentResolver contentResolver;
     private final ResultsIterator<T> resultsIterator;
     private final String state;
 
     public QueryResultsIterator(ContentResolver contentResolver, Query query, Converter<T> converter, String state) {
         this.converter = converter;
+        this.contentResolver = contentResolver;
         this.resultsIterator = new ResultsIterator<T>(contentResolver, query, converter);
         this.state = state;
     }
 
     public QueryResultsIterator(ContentResolver contentResolver, Query query, Converter<T> converter, String state, int windowMaxSize) {
         this.converter = converter;
+        this.contentResolver = contentResolver;
         this.resultsIterator = new ResultsIterator<T>(contentResolver, query, converter, windowMaxSize);
         this.state = state;
     }
@@ -41,7 +44,7 @@ public class QueryResultsIterator<T> implements Iterator<QueryResult> {
 
     @Override
     public QueryResult next() {
-        return converter.toQueryResult(resultsIterator.next(), state);
+        return converter.toQueryResult(contentResolver, resultsIterator.next(), state);
     }
 
     @Override

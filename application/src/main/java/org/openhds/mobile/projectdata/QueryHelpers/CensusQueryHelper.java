@@ -37,55 +37,46 @@ public class CensusQueryHelper implements QueryHelper {
 
         if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByLevel(REGION_HIERARCHY_LEVEL_NAME));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByLevel(REGION_HIERARCHY_LEVEL_NAME), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByLevel(PROVINCE_HIERARCHY_LEVEL_NAME));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByLevel(PROVINCE_HIERARCHY_LEVEL_NAME), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByLevel(DISTRICT_HIERARCHY_LEVEL_NAME));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByLevel(DISTRICT_HIERARCHY_LEVEL_NAME), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByLevel(SUB_DISTRICT_HIERARCHY_LEVEL_NAME));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByLevel(SUB_DISTRICT_HIERARCHY_LEVEL_NAME), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByLevel(LOCALITY_HIERARCHY_LEVEL_NAME));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByLevel(LOCALITY_HIERARCHY_LEVEL_NAME), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByLevel(MAP_AREA_HIERARCHY_LEVEL_NAME));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByLevel(MAP_AREA_HIERARCHY_LEVEL_NAME), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByLevel(SECTOR_HIERARCHY_LEVEL_NAME));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, state, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByLevel(SECTOR_HIERARCHY_LEVEL_NAME), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
-            Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver, locationGateway.findAll());
-            return getLocationQueryResultList(locationIterator, state, contentResolver);
+            return locationGateway.getQueryResultList(contentResolver, locationGateway.findAll(), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-            Iterator<Individual> individualIterator = individualGateway.getIterator(contentResolver, individualGateway.findAll());
-            return getIndividualQueryResultList(individualIterator, state, contentResolver);
+            return individualGateway.getQueryResultList(contentResolver, individualGateway.findAll(), state);
         }
 
         return new ArrayList<QueryResult>();
@@ -102,26 +93,22 @@ public class CensusQueryHelper implements QueryHelper {
                 || state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
 
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            LocationHierarchy locationHierarchy = locationHierarchyGateway.getFirst(contentResolver,
-                    locationHierarchyGateway.findById(extId));
-            return getQueryResult(locationHierarchy, state, contentResolver);
+            return locationHierarchyGateway.getFirstQueryResult(
+                    contentResolver, locationHierarchyGateway.findById(extId), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
-            Location location = locationGateway.getFirst(contentResolver, locationGateway.findById(extId));
-            return getQueryResult(location, state, contentResolver);
+            return locationGateway.getFirstQueryResult(contentResolver, locationGateway.findById(extId), state);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-            Individual individual = individualGateway.getFirst(contentResolver, individualGateway.findById(extId));
-            return getQueryResult(individual, state, contentResolver);
+            return individualGateway.getFirstQueryResult(contentResolver, individualGateway.findById(extId), state);
         }
 
         return null;
     }
 
-    public List<QueryResult> getChildren(ContentResolver contentResolver,
-                                         QueryResult qr, String childState) {
+    public List<QueryResult> getChildren(ContentResolver contentResolver, QueryResult qr, String childState) {
         String state = qr.getState();
 
         if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
@@ -132,120 +119,20 @@ public class CensusQueryHelper implements QueryHelper {
                 || state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
 
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            Iterator<LocationHierarchy> hierarchyIterator = locationHierarchyGateway.getIterator(contentResolver,
-                    locationHierarchyGateway.findByParent(qr.getExtId()));
-            return getLocationHierarchyQueryResultList(hierarchyIterator, childState, contentResolver);
+            return locationHierarchyGateway.getQueryResultList(contentResolver,
+                    locationHierarchyGateway.findByParent(qr.getExtId()), childState);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
-            Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver,
-                    locationGateway.findByHierarchyDescendingBuildingNumber(qr.getExtId()));
-            return getLocationQueryResultList(locationIterator, childState, contentResolver);
+            return locationGateway.getQueryResultList(contentResolver,
+                    locationGateway.findByHierarchyDescendingBuildingNumber(qr.getExtId()), childState);
 
         } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-            Iterator<Individual> individualIterator = individualGateway.getIterator(contentResolver,
-                    individualGateway.findByResidency(qr.getExtId()));
-            return getIndividualQueryResultList(individualIterator, childState, contentResolver);
+            return individualGateway.getQueryResultList(contentResolver,
+                    individualGateway.findByResidency(qr.getExtId()), childState);
         }
 
         return new ArrayList<QueryResult>();
-    }
-
-    private static QueryResult getQueryResult(LocationHierarchy locationHierarchy, String state, ContentResolver contentResolver) {
-
-        if (null == locationHierarchy) {
-            return null;
-        }
-
-        QueryResult qr = new QueryResult();
-        qr.setExtId(locationHierarchy.getExtId());
-        qr.setName(locationHierarchy.getName());
-        qr.setState(state);
-
-        return qr;
-    }
-
-    private static QueryResult getQueryResult(Location location, String state, ContentResolver contentResolver) {
-
-        if (null == location) {
-            return null;
-        }
-
-        QueryResult qr = new QueryResult();
-        qr.setExtId(location.getExtId());
-        qr.setName(location.getName());
-        qr.setState(state);
-
-        return qr;
-    }
-
-    private static QueryResult getQueryResult(Individual individual, String state, ContentResolver contentResolver) {
-
-        if (null == individual) {
-            return null;
-        }
-
-        QueryResult qr = new QueryResult();
-        qr.setExtId(individual.getExtId());
-        qr.setExtId(individual.getExtId());
-        qr.setName(Individual.getFullName(individual));
-        qr.setState(state);
-
-        // add individual details to payload
-        qr.getStringsPayload().put(R.string.individual_other_names_label, individual.getOtherNames());
-        qr.getStringsPayload().put(R.string.individual_age_label, Individual.getAgeWithUnits(individual));
-        qr.getStringsPayload().put(R.string.individual_language_preference_label, individual.getLanguagePreference());
-
-        // add household membership details to payload
-        MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
-        Membership membership = membershipGateway.getFirst(contentResolver,
-                membershipGateway.findBySocialGroupAndIndividual(individual.getCurrentResidence(), individual.getExtId()));
-        int relationshipId =  ProjectResources.Relationship.getRelationshipStringId(membership.getRelationshipToHead());
-        qr.getStringIdsPayload().put(R.string.individual_relationship_to_head_label, relationshipId);
-
-        return qr;
-    }
-
-    private static List<QueryResult> getLocationHierarchyQueryResultList(Iterator<LocationHierarchy> entities, String state, ContentResolver contentResolver) {
-        List<QueryResult> results = new ArrayList<QueryResult>();
-
-        if (null == entities) {
-            return results;
-        }
-
-        while(entities.hasNext()) {
-            results.add(getQueryResult(entities.next(), state, contentResolver));
-        }
-
-        return results;
-    }
-
-    private static List<QueryResult> getLocationQueryResultList(Iterator<Location> entities, String state, ContentResolver contentResolver) {
-        List<QueryResult> results = new ArrayList<QueryResult>();
-
-        if (null == entities) {
-            return results;
-        }
-
-        while(entities.hasNext()) {
-            results.add(getQueryResult(entities.next(), state, contentResolver));
-        }
-
-        return results;
-    }
-
-    private static List<QueryResult> getIndividualQueryResultList(Iterator<Individual> entities, String state, ContentResolver contentResolver) {
-        List<QueryResult> results = new ArrayList<QueryResult>();
-
-        if (null == entities) {
-            return results;
-        }
-
-        while(entities.hasNext()) {
-            results.add(getQueryResult(entities.next(), state, contentResolver));
-        }
-
-        return results;
     }
 }
