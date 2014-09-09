@@ -25,6 +25,8 @@ public class ProjectResources {
         public static final String RESIDENCY_END_TYPE_NA = "NA";
         public static final String RESIDENCY_END_TYPE_OMG = "OMG";
 
+        public static final String END_TYPE_DEATH = "DTH";
+
 		public static final String AGE_UNITS_YEARS = "Years";
 		public static final String AGE_UNITS_MONTHS = "Months";
 
@@ -126,6 +128,8 @@ public class ProjectResources {
         private static final String FORM_TYPE_VISIT = "visit";
         private static final String FORM_TYPE_OUT_MIGRATION = "out_migration";
         private static final String FORM_TYPE_BED_NET = "bed_net";
+        private static final String FORM_TYPE_DEATH = "death";
+
 
         static {
 
@@ -134,6 +138,7 @@ public class ProjectResources {
             FormType.put(FORM_TYPE_VISIT, R.string.form_type_visit);
             FormType.put(FORM_TYPE_OUT_MIGRATION, R.string.form_type_out_migration);
             FormType.put(FORM_TYPE_BED_NET, R.string.form_type_bed_net);
+            FormType.put(FORM_TYPE_DEATH, R.string.form_type_death);
 
         }
         public static int getFormTypeStringId(String key) {

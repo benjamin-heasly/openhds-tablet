@@ -61,4 +61,18 @@ public class UpdateFormPayloadBuilders {
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
         }
     }
+
+    public static class RegisterDeath implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, true);
+
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+
+        }
+    }
 }

@@ -192,6 +192,7 @@
     <string name="form_type_visit">Visit</string>
     <string name="form_type_out_migration">Out Migration</string>
     <string name="form_type_bed_net">Bed Net</string>
+    <string name="form_type_death">Death</string>
     <string name="form_instance_list_header">Recent Forms</string>
     <string name="field_worker_home_menu_text">Field Worker Home</string>
     <string name="logout_menu_text">Logout</string>
@@ -199,6 +200,7 @@
     <string name="supervisor_approve_all"> Approve All </string>
     <string name="supervisor_approve_selected"> Approve Selected </string>
     <string name="sub_district_label">SubDistrict</string>
+    <string name="register_death">Register a Death</string>
 
 
 </resources>
