@@ -1,8 +1,8 @@
 package org.openhds.mobile.projectdata;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.fragment.detailfragments.DetailFragment;
-import org.openhds.mobile.fragment.detailfragments.IndividualDetailFragment;
+import org.openhds.mobile.fragment.navigate.detail.DetailFragment;
+import org.openhds.mobile.fragment.navigate.detail.IndividualDetailFragment;
 import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.projectdata.FormFilters.BiokoFormFilters;
 import org.openhds.mobile.projectdata.FormFilters.CensusFormFilters;

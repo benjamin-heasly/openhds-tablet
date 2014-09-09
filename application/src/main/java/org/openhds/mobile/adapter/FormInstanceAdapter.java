@@ -11,19 +11,14 @@ import org.openhds.mobile.R;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectResources;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class FormInstanceAdapter extends ArrayAdapter {
 
     private Object[] formInstances;
-    private Context context;
     private LayoutInflater inflater;
 
 
     public FormInstanceAdapter(Context context, int resource, Object[] formInstances) {
         super(context, resource, formInstances);
-        this.context = context;
         this.formInstances = formInstances;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -41,7 +36,6 @@ public class FormInstanceAdapter extends ArrayAdapter {
         int formTypeLocalizedId= ProjectResources.FormType.getFormTypeStringId(formType);
 
         if (convertView == null) {
-
             convertView = inflater.inflate(R.layout.form_instance_list_item, null);
         }
 
@@ -52,9 +46,5 @@ public class FormInstanceAdapter extends ArrayAdapter {
         fileNameView.setText(fileName);
 
         return convertView;
-
     }
-
-
-
 }

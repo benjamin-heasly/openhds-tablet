@@ -27,7 +27,7 @@ public class ValueSelectionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout valueContainer = (LinearLayout) inflater.inflate(R.layout.hierarchy_value_fragment, container, false);
+        LinearLayout valueContainer = (LinearLayout) inflater.inflate(R.layout.value_selection_fragment, container, false);
         return valueContainer;
     }
 

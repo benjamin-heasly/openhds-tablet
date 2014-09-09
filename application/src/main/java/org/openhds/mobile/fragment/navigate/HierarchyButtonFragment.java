@@ -1,4 +1,4 @@
-package org.openhds.mobile.fragment;
+package org.openhds.mobile.fragment.navigate;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
@@ -31,7 +31,7 @@ public class HierarchyButtonFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		LinearLayout selectionContainer = (LinearLayout) inflater.inflate(
-				R.layout.hierarchy_selection_fragment, container, false);
+				R.layout.hierarchy_button_fragment, container, false);
 
 		viewsForStates = new HashMap<String, RelativeLayout>();
 		HierarchyButtonListener listener = new HierarchyButtonListener();

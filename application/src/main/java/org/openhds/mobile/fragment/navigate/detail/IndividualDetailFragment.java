@@ -1,11 +1,9 @@
-package org.openhds.mobile.fragment.detailfragments;
+package org.openhds.mobile.fragment.navigate.detail;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.R;
-import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectResources;

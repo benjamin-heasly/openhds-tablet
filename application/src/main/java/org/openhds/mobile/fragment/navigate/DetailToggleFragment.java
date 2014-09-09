@@ -1,4 +1,4 @@
-package org.openhds.mobile.fragment;
+package org.openhds.mobile.fragment.navigate;
 
 import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
 import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
@@ -16,19 +16,22 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 
-public class VisitFragment extends Fragment implements OnClickListener {
+public class DetailToggleFragment extends Fragment implements OnClickListener {
+
 	NavigateActivity navigateActivity;
 
 	private static final int BUTTON_MARGIN = 10;
 
 	RelativeLayout layout;
 
+	private boolean isEnabled;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
 		LinearLayout toggleContainer = (LinearLayout) inflater.inflate(
-				R.layout.visit_fragment, container, false);
+				R.layout.detail_toggle_fragment, container, false);
 
 		layout = makeNewGenericLayout(getActivity(), null, null, null, this,
 				toggleContainer, 0, null, null);
@@ -45,26 +48,58 @@ public class VisitFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		navigateActivity.finishVisit();
+		navigateActivity.toggleMiddleFragment();
 	}
 
 	public void setButtonEnabled(boolean isEnabled) {
 
+		this.isEnabled = isEnabled;
+
 		if (null == layout) {
 			return;
 		}
-		if (isEnabled) {
-			layout.setVisibility(ViewGroup.VISIBLE);
-			layout.setBackgroundColor(getResources().getColor(
-					R.color.LightGreen));
-			configureGenericLayout(getActivity(), layout, getResources()
-					.getString(R.string.finish_visit), null,
-					null, null);
-			layout.setClickable(true);
+		if (!isEnabled) {
+			// use this if you want it to be grayed out instead of invisible
+			//
+			// layout.setBackgroundColor(getResources().getColor(R.color.Gray));
+			// configureGenericLayout(getActivity(), layout, getResources()
+			// .getString(R.string.toggle_fragment_button_none), null,
+			// null, null);
+			// layout.setClickable(false);
 
-		} else {
 			layout.setVisibility(ViewGroup.INVISIBLE);
+		} else {
+			layout.setVisibility(ViewGroup.VISIBLE);
+			layout.setClickable(true);
+			setButtonHighlighted(false);
 		}
 
 	}
+
+	public void setButtonHighlighted(boolean isHighlighted) {
+
+		if (null == layout) {
+			return;
+		}
+
+		if (isEnabled && isHighlighted) {
+			layout.setBackgroundColor(getResources().getColor(
+					R.color.LightGreen));
+
+			configureGenericLayout(getActivity(), layout, getResources()
+					.getString(R.string.toggle_fragment_button_show_children),
+					null, null, null);
+
+		} else if (isEnabled && !isHighlighted) {
+			layout.setBackgroundColor(getResources().getColor(
+					R.color.DarkSeaGreen));
+
+			configureGenericLayout(getActivity(), layout, getResources()
+					.getString(R.string.toggle_fragment_button_show_details),
+					null, null, null);
+
+		}
+
+	}
+
 }
