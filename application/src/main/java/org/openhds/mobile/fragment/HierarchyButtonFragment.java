@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 
-public class HierarchySelectionFragment extends Fragment {
+public class HierarchyButtonFragment extends Fragment {
 
 	// for some reason margin in layout XML is ignored
 	private static final int BUTTON_MARGIN = 10;
