@@ -6,13 +6,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.search.SearchPluginModule;
+
+import static org.openhds.mobile.utilities.LayoutUtils.makeEditText;
 
 import java.util.List;
 
@@ -25,13 +29,13 @@ import java.util.List;
  */
 public class SearchFragment extends Fragment {
 
+    private SearchPluginModule currentPluginModule;
     private SelectionHandler selectionHandler;
     private ArrayAdapter<SearchPluginModule> searchPluginAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout searchContainer = (LinearLayout) inflater.inflate(R.layout.search_fragment, container, false);
-        return searchContainer;
+        return inflater.inflate(R.layout.search_fragment, container, false);
     }
 
     public void setSelectionHandler(SelectionHandler selectionHandler) {
@@ -39,19 +43,56 @@ public class SearchFragment extends Fragment {
     }
 
     public void setSearchPluginModules(List<SearchPluginModule> searchPluginModules) {
-        searchPluginAdapter = new ChooseSearchSpinnerAdapter(getActivity(), R.layout.generic_dropdown_item, searchPluginModules);
-        Spinner spinner = (Spinner) getActivity().findViewById(R.id.search_fragment_spinner);
+
+        Spinner spinner = (Spinner) getView().findViewById(R.id.search_fragment_spinner);
+
+        if (null == searchPluginModules || 0 == searchPluginModules.size()) {
+            spinner.setVisibility(View.GONE);
+            return;
+        }
+
+        // activate the only plugin
+        if (1 == searchPluginModules.size()) {
+            setPluginModule(searchPluginModules.get(0));
+            spinner.setVisibility(View.GONE);
+            return;
+        }
+
+        // allow the user to choose from 2 or more plugins
+        searchPluginAdapter = new SpinnerListAdapter(getActivity(), R.layout.generic_dropdown_item, searchPluginModules);
         spinner.setAdapter(searchPluginAdapter);
-        //spinner.setOnItemClickListener(new SpinnerClickHandler());
+        spinner.setOnItemSelectedListener(new SpinnerClickHandler());
+    }
+
+    public void setTitle(int titleId) {
+        TextView textView = (TextView) getView().findViewById(R.id.search_fragment_title);
+        textView.setText(titleId);
+    }
+
+    // Set up search fields for a selected search plugin module.
+    private void setPluginModule(SearchPluginModule searchPluginModule) {
+        currentPluginModule = searchPluginModule;
+        configureEditTexts();
+    }
+
+    private void configureEditTexts() {
+        LinearLayout editTextContainer = (LinearLayout) getView().findViewById(R.id.search_fragment_container);
+        editTextContainer.removeAllViews();
+        for (String columnName : currentPluginModule.getColumnsAndLabels().keySet()) {
+            Integer textHintId = currentPluginModule.getColumnsAndLabels().get(columnName);
+            EditText editText = makeEditText(getActivity(), textHintId, columnName);
+            editTextContainer.addView(editText);
+        }
     }
 
     public interface SelectionHandler {
         public void handleSearchResults(List<QueryResult> queryResults);
     }
 
-    private class ChooseSearchSpinnerAdapter extends ArrayAdapter<SearchPluginModule> {
+    // Display a choice of search plugin modules.
+    private class SpinnerListAdapter extends ArrayAdapter<SearchPluginModule> {
 
-        public ChooseSearchSpinnerAdapter(Context context, int resource, List<SearchPluginModule> objects) {
+        public SpinnerListAdapter(Context context, int resource, List<SearchPluginModule> objects) {
             super(context, resource, objects);
         }
 
@@ -74,5 +115,17 @@ public class SearchFragment extends Fragment {
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
             return getView(position, convertView, parent);
         }
+    }
+
+    // Set up search fields when the user chooses a plugin module from the spinner.
+    private class SpinnerClickHandler implements AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            SearchPluginModule searchPluginModule = (SearchPluginModule) adapterView.getItemAtPosition(position);
+            setPluginModule(searchPluginModule);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {}
     }
 }

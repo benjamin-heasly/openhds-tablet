@@ -130,10 +130,22 @@ public class PortalActivity extends Activity implements OnClickListener {
     // TODO: design this UI
     private void populateSearchFragment() {
         List<SearchPluginModule> searchPluginModules = new ArrayList<>();
-        searchPluginModules.add(new SearchPluginModule(GatewayRegistry.getIndividualGateway(), R.string.individual_label));
-        searchPluginModules.add(new SearchPluginModule(GatewayRegistry.getLocationGateway(), R.string.locality_label));
-        searchPluginModules.add(new SearchPluginModule(GatewayRegistry.getSocialGroupGateway(), R.string.household_label));
+
+        SearchPluginModule individualPluginModule = new SearchPluginModule(GatewayRegistry.getIndividualGateway(), R.string.individual_label);
+        individualPluginModule.getColumnsAndLabels().put("Age Column", R.string.individual_age_label);
+        individualPluginModule.getColumnsAndLabels().put("DIP Column", R.string.individual_dip_label);
+        individualPluginModule.getColumnsAndLabels().put("DoB Column", R.string.individual_date_of_birth_label);
+        searchPluginModules.add(individualPluginModule);
+
+        SearchPluginModule locationPluginModule = new SearchPluginModule(GatewayRegistry.getLocationGateway(), R.string.location_lbl);
+        locationPluginModule.getColumnsAndLabels().put("Locality Column", R.string.locality_label);
+        searchPluginModules.add(locationPluginModule);
+
+        SearchPluginModule householdPlugin = new SearchPluginModule(GatewayRegistry.getSocialGroupGateway(), R.string.household_label);
+        searchPluginModules.add(householdPlugin);
+
         searchFragment.setSearchPluginModules(searchPluginModules);
+        searchFragment.setTitle(R.string.search_individual_lbl);
     }
 
     // Display a list of recent form instances not yet sent to the ODK server

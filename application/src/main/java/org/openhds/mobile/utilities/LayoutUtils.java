@@ -65,8 +65,8 @@ public class LayoutUtils {
 
     // Pass new data to a layout that was created with makeTextWithPayload().
     public static void configureTextWithPayload(Activity activity, RelativeLayout layout, String primaryText,
-                                                String secondaryText, Map<Integer, String> stringsPayLoad,
-                                                Map<Integer, Integer> stringsIdsPayLoad) {
+                                                String secondaryText, Map<Integer, String> stringsPayload,
+                                                Map<Integer, Integer> stringsIdsPayload) {
 
         TextView primary = (TextView) layout.findViewById(R.id.primary_text);
         TextView secondary = (TextView) layout.findViewById(R.id.secondary_text);
@@ -86,40 +86,44 @@ public class LayoutUtils {
             secondary.setText(secondaryText);
         }
 
-        if (null == stringsPayLoad) {
+        // fill in payload strings, if any
+        payLoadContainer.removeAllViews();
+
+        if (null != stringsPayload) {
+            for (Integer key : stringsPayload.keySet()) {
+                String value = stringsPayload.get(key);
+
+                if (null == value) {
+                    continue;
+                }
+
+                TextView textView = new TextView(activity);
+                textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
+                textView.setText(activity.getResources().getString(key) + ": " + value);
+
+                payLoadContainer.addView(textView);
+            }
+        }
+
+        if (null != stringsIdsPayload) {
+            for (Integer key : stringsIdsPayload.keySet()) {
+                String value = activity.getResources().getString(stringsIdsPayload.get(key));
+
+                if (null == value) {
+                    continue;
+                }
+
+                TextView textView = new TextView(activity);
+                textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
+                textView.setText(activity.getResources().getString(key) + ": " + value);
+
+                payLoadContainer.addView(textView);
+            }
+        }
+
+        if (0 == payLoadContainer.getChildCount()) {
             payLoadContainer.setVisibility(View.GONE);
         } else {
-            payLoadContainer.removeAllViews();
-
-            for (Integer key : stringsPayLoad.keySet()) {
-                String value = stringsPayLoad.get(key);
-
-                if (null == value) {
-                    continue;
-                }
-
-                TextView textView = new TextView(activity);
-                textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
-                textView.setText(activity.getResources().getString(key) + ": " + value);
-
-                payLoadContainer.addView(textView);
-            }
-
-            for (Integer key : stringsIdsPayLoad.keySet()) {
-
-                String value = activity.getResources().getString(stringsIdsPayLoad.get(key));
-
-                if (null == value) {
-                    continue;
-                }
-
-                TextView textView = new TextView(activity);
-                textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
-                textView.setText(activity.getResources().getString(key) + ": " + value);
-
-                payLoadContainer.addView(textView);
-            }
-
             payLoadContainer.setVisibility(View.VISIBLE);
         }
     }
