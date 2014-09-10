@@ -381,6 +381,12 @@ public class ProjectActivityBuilder {
                     new UpdateFormPayloadBuilders.RegisterOutMigration(),
                     null, false));
 
+            bottomFormList.add(new FormBehaviour("Death",
+                    R.string.register_death,
+                    new UpdateFormFilters.RegisterDeath(),
+                    new UpdateFormPayloadBuilders.RegisterDeath(),
+                    new UpdateFormPayloadConsumers.RegisterDeath(), false));
+
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
 			formsForStates.put(DISTRICT_STATE, districtFormList);
