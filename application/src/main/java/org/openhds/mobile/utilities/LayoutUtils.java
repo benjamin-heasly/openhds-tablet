@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import java.util.Map;
 
 public class LayoutUtils {
 
+    // Create a new Button with the given description, name, tag, and listener.
     public static Button makeButton(Activity activity, String description, String buttonName, Object buttonTag,
                                     OnClickListener listener, ViewGroup container) {
 
@@ -35,6 +37,7 @@ public class LayoutUtils {
         return b;
     }
 
+    // Create a new Layout that contains two text views and optionally several "payload" text views beneath.
     public static RelativeLayout makeTextWithPayload(Activity activity, String primaryText, String secondaryText,
                                                      Object layoutTag, OnClickListener listener, ViewGroup container,
                                                      int background, Map<Integer, String> stringsPayLoad,
@@ -60,6 +63,7 @@ public class LayoutUtils {
         return layout;
     }
 
+    // Pass new data to a layout that was created with makeTextWithPayload().
     public static void configureTextWithPayload(Activity activity, RelativeLayout layout, String primaryText,
                                                 String secondaryText, Map<Integer, String> stringsPayLoad,
                                                 Map<Integer, Integer> stringsIdsPayLoad) {
@@ -120,6 +124,7 @@ public class LayoutUtils {
         }
     }
 
+    // Create a pair of text views to represent some value plus its label, with given colors.
     public static RelativeLayout makeTextWithValueAndLabel(Activity activity, String labelText, String valueText,
                                                            int labelColor, int valueColor) {
 
@@ -136,7 +141,7 @@ public class LayoutUtils {
         if (null == valueText || valueText.isEmpty()) {
             labelTextView.setTextColor(activity.getResources().getColor(R.color.NA_Gray));
             valueTextView.setTextColor(activity.getResources().getColor(R.color.NA_Gray));
-            valueTextView.setText(activity.getResources().getString( R.string.not_available));
+            valueTextView.setText(activity.getResources().getString(R.string.not_available));
         } else {
             labelTextView.setTextColor(labelColor);
             valueTextView.setTextColor(valueColor);
@@ -153,5 +158,20 @@ public class LayoutUtils {
         layout.addView(valueTextView, params);
 
         return layout;
+    }
+
+    // Create a new edit text with the given hint (String resource id) and tag.
+    public static EditText makeEditText(Activity activity, int hintId, String tag) {
+        EditText editText = (EditText) activity.getLayoutInflater().inflate(R.layout.generic_edit_text, null);
+        configureEditText(editText, hintId, tag);
+        return editText;
+    }
+
+    // Pass new data to an edit text that was created with makeEditText().
+    public static void configureEditText(EditText editText, int hintId, String tag) {
+        editText.setHint(hintId);
+        editText.setTag(tag);
+        editText.setText(null);
+        return;
     }
 }
