@@ -2,7 +2,7 @@ package org.openhds.mobile.activity;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getPreferenceString;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericButton;
+import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
 import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
 import android.content.res.Configuration;
 import android.widget.*;
@@ -43,26 +43,26 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
 		supervisorOptionsList = (LinearLayout) findViewById(R.id.supervisor_activity_options);
 		syncDatabaseHelper = new SyncDatabaseHelper(this);
 
-		makeNewGenericButton(this,
-				getResourceString(this, R.string.sync_database_description),
-				getResourceString(this, R.string.sync_database_name),
-				getResourceString(this, R.string.sync_database_name), this,
-				supervisorOptionsList);
+		makeButton(this,
+                getResourceString(this, R.string.sync_database_description),
+                getResourceString(this, R.string.sync_database_name),
+                getResourceString(this, R.string.sync_database_name), this,
+                supervisorOptionsList);
 
-		makeNewGenericButton(
-				this,
-				getResourceString(this, R.string.sync_field_worker_description),
-				getResourceString(this, R.string.sync_field_worker_name),
-				getResourceString(this, R.string.sync_field_worker_name), this,
-				supervisorOptionsList);
+		makeButton(
+                this,
+                getResourceString(this, R.string.sync_field_worker_description),
+                getResourceString(this, R.string.sync_field_worker_name),
+                getResourceString(this, R.string.sync_field_worker_name), this,
+                supervisorOptionsList);
 
-		makeNewGenericButton(
-				this,
-				getResourceString(this,
-						R.string.send_finalized_forms_description),
-				getResourceString(this, R.string.send_finalized_forms_name),
-				getResourceString(this, R.string.send_finalized_forms_name),
-				this, supervisorOptionsList);
+		makeButton(
+                this,
+                getResourceString(this,
+                        R.string.send_finalized_forms_description),
+                getResourceString(this, R.string.send_finalized_forms_name),
+                getResourceString(this, R.string.send_finalized_forms_name),
+                this, supervisorOptionsList);
 
         if (null == savedInstanceState)  {
             reviewFragment = new FormInstanceReviewFragment();

@@ -1,8 +1,8 @@
 package org.openhds.mobile.fragment.navigate;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
-import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +41,9 @@ public class HierarchyButtonFragment extends Fragment {
 			final String description = null;
 			
 
-			RelativeLayout layout = makeNewGenericLayout(getActivity(),
-					getResourceString(getActivity(), labels.get(state)), description, state, listener,
-					selectionContainer, 0, null, null);
+			RelativeLayout layout = makeTextWithPayload(getActivity(),
+                    getResourceString(getActivity(), labels.get(state)), description, state, listener,
+                    selectionContainer, 0, null, null);
 			LayoutParams params = (LayoutParams) layout.getLayoutParams();
 			params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -74,7 +74,7 @@ public class HierarchyButtonFragment extends Fragment {
 		if (null == layout) {
 			return;
 		}
-		configureGenericLayout(getActivity(), layout, name, id, null, null);
+		configureTextWithPayload(getActivity(), layout, name, id, null, null);
 	}
 
 	private class HierarchyButtonListener implements OnClickListener {

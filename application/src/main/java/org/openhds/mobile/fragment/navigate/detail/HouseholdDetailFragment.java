@@ -16,7 +16,7 @@ import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 import java.util.List;
 
-import static org.openhds.mobile.utilities.LayoutUtils.makeDetailFragmentTextView;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithValueAndLabel;
 
 public class HouseholdDetailFragment extends DetailFragment {
 	LinearLayout detailContainer;
@@ -50,18 +50,18 @@ public class HouseholdDetailFragment extends DetailFragment {
 					.findViewById(R.id.household_detail_frag_extid);
 			extIdTextView.setText(socialGroup.getExtId());
 
-			socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
-					getActivity(), getString(R.string.household_name),
-					socialGroup.getGroupName(), greenLabel, greenValue));
+			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(
+                    getActivity(), getString(R.string.household_name),
+                    socialGroup.getGroupName(), greenLabel, greenValue));
 
-			socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
-					getActivity(), getString(R.string.household_head_extid),
-					socialGroup.getGroupHead(), greenLabel, greenValue));
+			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(
+                    getActivity(), getString(R.string.household_head_extid),
+                    socialGroup.getGroupHead(), greenLabel, greenValue));
 
-			socialGroupBasicInfoContainer.addView(makeDetailFragmentTextView(
-					getActivity(), getString(R.string.household_member_count),
-					getMemberCount(socialGroup.getExtId()), greenLabel,
-					greenValue));
+			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(
+                    getActivity(), getString(R.string.household_member_count),
+                    getMemberCount(socialGroup.getExtId()), greenLabel,
+                    greenValue));
 
 		} else {
 			TextView extIdTextView = (TextView) detailContainer

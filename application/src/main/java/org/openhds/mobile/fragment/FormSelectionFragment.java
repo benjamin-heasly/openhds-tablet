@@ -17,8 +17,8 @@ import org.openhds.mobile.model.FormBehaviour;
 
 import java.util.List;
 
-import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
 public class FormSelectionFragment extends Fragment {
 
@@ -67,11 +67,11 @@ public class FormSelectionFragment extends Fragment {
             FormBehaviour form = formListAdapter.getItem(position);
 
             if (convertView == null) {
-                convertView = makeNewGenericLayout(getActivity(), getString(form.getFormLabelId()), null,
+                convertView = makeTextWithPayload(getActivity(), getString(form.getFormLabelId()), null,
                         form.getFormLabelId(), null, null, R.drawable.form_frag_selector, null, null);
             }
 
-            configureGenericLayout(getActivity(),
+            configureTextWithPayload(getActivity(),
                     (RelativeLayout) convertView, getString(form.getFormLabelId()), null, null, null);
             return convertView;
         }

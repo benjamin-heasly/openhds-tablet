@@ -17,8 +17,8 @@ import org.openhds.mobile.repository.QueryResult;
 
 import java.util.List;
 
-import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
 public class ValueSelectionFragment extends Fragment {
 
@@ -66,10 +66,10 @@ public class ValueSelectionFragment extends Fragment {
             QueryResult qr = queryResultAdapter.getItem(position);
 
             if (convertView == null) {
-                convertView = makeNewGenericLayout(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
+                convertView = makeTextWithPayload(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
                         null, null, R.drawable.value_frag_selector, qr.getStringsPayload(), qr.getStringIdsPayload());
             } else {
-                configureGenericLayout(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId(),
+                configureTextWithPayload(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId(),
                         qr.getStringsPayload(), qr.getStringIdsPayload());
             }
 

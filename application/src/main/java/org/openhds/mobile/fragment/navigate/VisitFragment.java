@@ -1,7 +1,7 @@
 package org.openhds.mobile.fragment.navigate;
 
-import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.NavigateActivity;
@@ -30,8 +30,8 @@ public class VisitFragment extends Fragment implements OnClickListener {
 		LinearLayout toggleContainer = (LinearLayout) inflater.inflate(
 				R.layout.visit_fragment, container, false);
 
-		layout = makeNewGenericLayout(getActivity(), null, null, null, this,
-				toggleContainer, 0, null, null);
+		layout = makeTextWithPayload(getActivity(), null, null, null, this,
+                toggleContainer, 0, null, null);
 		LayoutParams params = (LayoutParams) layout.getLayoutParams();
 		params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -57,9 +57,9 @@ public class VisitFragment extends Fragment implements OnClickListener {
 			layout.setVisibility(ViewGroup.VISIBLE);
 			layout.setBackgroundColor(getResources().getColor(
 					R.color.LightGreen));
-			configureGenericLayout(getActivity(), layout, getResources()
-					.getString(R.string.finish_visit), null,
-					null, null);
+			configureTextWithPayload(getActivity(), layout, getResources()
+                            .getString(R.string.finish_visit), null,
+                    null, null);
 			layout.setClickable(true);
 
 		} else {

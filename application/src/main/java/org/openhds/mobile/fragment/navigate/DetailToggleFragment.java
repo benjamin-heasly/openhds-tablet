@@ -1,7 +1,7 @@
 package org.openhds.mobile.fragment.navigate;
 
-import static org.openhds.mobile.utilities.LayoutUtils.configureGenericLayout;
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.NavigateActivity;
@@ -33,8 +33,8 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 		LinearLayout toggleContainer = (LinearLayout) inflater.inflate(
 				R.layout.detail_toggle_fragment, container, false);
 
-		layout = makeNewGenericLayout(getActivity(), null, null, null, this,
-				toggleContainer, 0, null, null);
+		layout = makeTextWithPayload(getActivity(), null, null, null, this,
+                toggleContainer, 0, null, null);
 		LayoutParams params = (LayoutParams) layout.getLayoutParams();
 		params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -62,7 +62,7 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 			// use this if you want it to be grayed out instead of invisible
 			//
 			// layout.setBackgroundColor(getResources().getColor(R.color.Gray));
-			// configureGenericLayout(getActivity(), layout, getResources()
+			// configureTextWithPayload(getActivity(), layout, getResources()
 			// .getString(R.string.toggle_fragment_button_none), null,
 			// null, null);
 			// layout.setClickable(false);
@@ -86,17 +86,17 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 			layout.setBackgroundColor(getResources().getColor(
 					R.color.LightGreen));
 
-			configureGenericLayout(getActivity(), layout, getResources()
-					.getString(R.string.toggle_fragment_button_show_children),
-					null, null, null);
+			configureTextWithPayload(getActivity(), layout, getResources()
+                            .getString(R.string.toggle_fragment_button_show_children),
+                    null, null, null);
 
 		} else if (isEnabled && !isHighlighted) {
 			layout.setBackgroundColor(getResources().getColor(
 					R.color.DarkSeaGreen));
 
-			configureGenericLayout(getActivity(), layout, getResources()
-					.getString(R.string.toggle_fragment_button_show_details),
-					null, null, null);
+			configureTextWithPayload(getActivity(), layout, getResources()
+                            .getString(R.string.toggle_fragment_button_show_details),
+                    null, null, null);
 
 		}
 

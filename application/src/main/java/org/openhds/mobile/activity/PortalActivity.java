@@ -30,7 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openhds.mobile.utilities.LayoutUtils.makeNewGenericLayout;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
 public class PortalActivity extends Activity implements OnClickListener {
 
@@ -68,7 +68,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         LinearLayout activitiesLayout = (LinearLayout) findViewById(R.id.portal_middle_column);
         List<String> activityModuleNames = ProjectActivityBuilder.getActivityModuleNames();
         for (String name : activityModuleNames) {
-            RelativeLayout layout = makeNewGenericLayout(this,
+            RelativeLayout layout = makeTextWithPayload(this,
                     getString(ProjectActivityBuilder.getModuleInfoByName(name).getModuleLabelStringId()),
                     getString(ProjectActivityBuilder.getModuleInfoByName(name).getModuleDescriptionStringId()),
                     name, this, activitiesLayout,

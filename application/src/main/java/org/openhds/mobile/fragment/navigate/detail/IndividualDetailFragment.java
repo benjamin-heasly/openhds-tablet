@@ -8,7 +8,7 @@ import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectResources;
 
-import static org.openhds.mobile.utilities.LayoutUtils.makeDetailFragmentTextView;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithValueAndLabel;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,23 +73,23 @@ public class IndividualDetailFragment extends DetailFragment {
         extIdTextView.setText(individual.getExtId());
 
         // Name
-        personalInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.individual_name_label),
                 individual.getFirstName() + " " + individual.getLastName(),
                 greenLabel, greenValue));
         // Other names
-        personalInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.individual_other_names_label),
                 individual.getOtherNames(), greenLabel, greenValue));
 
-        personalInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.gender_lbl),
                 getString(ProjectResources.Individual
                         .getIndividualStringId(individual.getGender())),
                 greenLabel, greenValue));
 
         // Language Preference
-        personalInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.individual_language_preference_label),
                 getString(ProjectResources.Individual
                         .getIndividualStringId(individual
@@ -98,27 +98,27 @@ public class IndividualDetailFragment extends DetailFragment {
 
         // age and birthday
         personalInfoContainer
-                .addView(makeDetailFragmentTextView(getActivity(),
+                .addView(makeTextWithValueAndLabel(getActivity(),
                         getString(R.string.individual_age_label),
                         Individual.getAgeWithUnits(individual), greenLabel,
                         greenValue));
 
-        personalInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.individual_date_of_birth_label),
                 individual.getDob(), greenLabel, greenValue));
 
         // Contact Info
-        contactInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        contactInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.individual_personal_phone_number_label),
                 individual.getPhoneNumber(), pinkLabel, pinkValue));
-        contactInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        contactInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.individual_other_phone_number_label),
                 individual.getOtherPhoneNumber(), pinkLabel, pinkValue));
-        contactInfoContainer.addView(makeDetailFragmentTextView(getActivity(),
+        contactInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 getString(R.string.individual_point_of_contact_label),
                 individual.getPointOfContactName(), pinkLabel, pinkValue));
         contactInfoContainer
-                .addView(makeDetailFragmentTextView(
+                .addView(makeTextWithValueAndLabel(
                         getActivity(),
                         getString(R.string.individual_point_of_contact_phone_number_label),
                         individual.getPointOfContactPhoneNumber(), pinkLabel,
@@ -127,7 +127,7 @@ public class IndividualDetailFragment extends DetailFragment {
         // Memberships
         for (Membership membership : memberships) {
 
-            membershipInfoContainer.addView(makeDetailFragmentTextView(
+            membershipInfoContainer.addView(makeTextWithValueAndLabel(
                     getActivity(),
                     getString(R.string.individual_relationship_to_head_label),
                     getString(ProjectResources.Relationship
@@ -136,7 +136,7 @@ public class IndividualDetailFragment extends DetailFragment {
                     yellowValue));
 
             membershipInfoContainer
-                    .addView(makeDetailFragmentTextView(
+                    .addView(makeTextWithValueAndLabel(
                             getActivity(),
                             getString(R.string.individual_socialgroup_extid_label),
                             membership.getSocialGroupExtId(), yellowLabel,
