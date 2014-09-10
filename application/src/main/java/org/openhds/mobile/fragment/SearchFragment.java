@@ -13,12 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import org.openhds.mobile.R;
+import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.search.SearchPluginModule;
 
-import static org.openhds.mobile.utilities.LayoutUtils.makeEditText;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.openhds.mobile.utilities.LayoutUtils.makeEditText;
 
 /**
  * Allow user to search for entities using free text criteria.
@@ -30,16 +33,21 @@ import java.util.List;
 public class SearchFragment extends Fragment {
 
     private SearchPluginModule currentPluginModule;
-    private SelectionHandler selectionHandler;
+    private ResultsHandler resultsHandler;
     private ArrayAdapter<SearchPluginModule> searchPluginAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.search_fragment, container, false);
+        View view = inflater.inflate(R.layout.search_fragment, container, false);
+
+        View button = view.findViewById(R.id.search_fragment_button);
+        button.setOnClickListener(new ButtonClickHandler());
+
+        return view;
     }
 
-    public void setSelectionHandler(SelectionHandler selectionHandler) {
-        this.selectionHandler = selectionHandler;
+    public void setResultsHandler(ResultsHandler resultsHandler) {
+        this.resultsHandler = resultsHandler;
     }
 
     public void setSearchPluginModules(List<SearchPluginModule> searchPluginModules) {
@@ -85,7 +93,40 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    public interface SelectionHandler {
+    // Gather column values from the current edit texts, exclude empty text.
+    private Map<String, String> gatherColumnValues() {
+        Map<String, String> columnValues = new HashMap<>();
+        for (String columnName : currentPluginModule.getColumnsAndLabels().keySet()) {
+            EditText editText = (EditText) getView().findViewWithTag(columnName);
+            String columnValue = editText.getText().toString();
+            if (null != columnValue && !columnValue.isEmpty()) {
+                columnValues.put(columnName, columnValue);
+            }
+        }
+        return columnValues;
+    }
+
+    private void performQuery() {
+        Map<String, String> columnNamesAndValues = gatherColumnValues();
+        int nValues = columnNamesAndValues.size();
+        if (0 == nValues) {
+            return;
+        }
+
+        // build a query with the values that the user typed in
+        final String[] columnNames = columnNamesAndValues.keySet().toArray(new String[nValues]);
+        final String[] columnValues = columnNamesAndValues.values().toArray(new String[nValues]);
+        Query query = currentPluginModule.getGateway().findByCriteriaLike(columnNames, columnValues, columnNames[0]);
+        List<QueryResult> queryResults = currentPluginModule.getGateway().getQueryResultList(
+                getActivity().getContentResolver(), query, "searchFragment");
+
+        // report the results to the listener
+        if (null != resultsHandler) {
+            resultsHandler.handleSearchResults(queryResults);
+        }
+    }
+
+    public interface ResultsHandler {
         public void handleSearchResults(List<QueryResult> queryResults);
     }
 
@@ -127,5 +168,11 @@ public class SearchFragment extends Fragment {
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {}
+    }
+    private class ButtonClickHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            performQuery();
+        }
     }
 }

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
 import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
@@ -22,6 +23,7 @@ import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.search.SearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
+import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
 public class PortalActivity extends Activity implements OnClickListener {
 
@@ -54,7 +57,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         currentFieldWorker = (FieldWorker) getIntent().getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
 
         // put a sample search fragment in the left column for testing
-        // TODO: design this UI
+        // TODO: remove this because it's just for testing
         if (null == savedInstanceState) {
             searchFragment = new SearchFragment();
             getFragmentManager().beginTransaction()
@@ -127,25 +130,34 @@ public class PortalActivity extends Activity implements OnClickListener {
     }
 
     // Allow a few searches for testing
-    // TODO: design this UI
+    // TODO: remove this because it's just for testing
     private void populateSearchFragment() {
         List<SearchPluginModule> searchPluginModules = new ArrayList<>();
 
         SearchPluginModule individualPluginModule = new SearchPluginModule(GatewayRegistry.getIndividualGateway(), R.string.individual_label);
-        individualPluginModule.getColumnsAndLabels().put("Age Column", R.string.individual_age_label);
-        individualPluginModule.getColumnsAndLabels().put("DIP Column", R.string.individual_dip_label);
-        individualPluginModule.getColumnsAndLabels().put("DoB Column", R.string.individual_date_of_birth_label);
+        individualPluginModule.getColumnsAndLabels().put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, R.string.individual_name_label);
+        individualPluginModule.getColumnsAndLabels().put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER, R.string.individual_personal_phone_number_label);
+        individualPluginModule.getColumnsAndLabels().put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE, R.string.individual_age_label);
         searchPluginModules.add(individualPluginModule);
 
+        SearchPluginModule fieldWorkerPluginModule = new SearchPluginModule(GatewayRegistry.getFieldWorkerGateway(), R.string.fieldworker_login);
+        fieldWorkerPluginModule.getColumnsAndLabels().put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME, R.string.individual_name_label);
+        fieldWorkerPluginModule.getColumnsAndLabels().put(OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID, R.string.individual_dip_label);
+        searchPluginModules.add(fieldWorkerPluginModule);
+
         SearchPluginModule locationPluginModule = new SearchPluginModule(GatewayRegistry.getLocationGateway(), R.string.location_lbl);
-        locationPluginModule.getColumnsAndLabels().put("Locality Column", R.string.locality_label);
+        locationPluginModule.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_EXTID, R.string.household_head_extid);
+        locationPluginModule.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_NAME, R.string.individual_name_label);
+        locationPluginModule.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME, R.string.locality_label);
+        locationPluginModule.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER, R.string.individual_personal_phone_number_label);
+        locationPluginModule.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER, R.string.individual_other_phone_number_label);
+        locationPluginModule.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME, R.string.map_area_label);
+        locationPluginModule.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, R.string.sector_label);
         searchPluginModules.add(locationPluginModule);
 
-        SearchPluginModule householdPlugin = new SearchPluginModule(GatewayRegistry.getSocialGroupGateway(), R.string.household_label);
-        searchPluginModules.add(householdPlugin);
-
         searchFragment.setSearchPluginModules(searchPluginModules);
-        searchFragment.setTitle(R.string.search_individual_lbl);
+        searchFragment.setTitle(R.string.search_lbl);
+        searchFragment.setResultsHandler(new SearchResultsHandler());
     }
 
     // Display a list of recent form instances not yet sent to the ODK server
@@ -173,6 +185,14 @@ public class PortalActivity extends Activity implements OnClickListener {
 
             Intent intent = new Intent(Intent.ACTION_EDIT, uri);
             startActivityForResult(intent, 0);
+        }
+    }
+
+    // Receive search results from the search fragment.
+    private class SearchResultsHandler implements SearchFragment.ResultsHandler {
+        @Override
+        public void handleSearchResults(List<QueryResult> queryResults) {
+            showLongToast(PortalActivity.this, "Found " + queryResults.size() + " results.");
         }
     }
 }
