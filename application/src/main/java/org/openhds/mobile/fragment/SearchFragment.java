@@ -32,6 +32,8 @@ import static org.openhds.mobile.utilities.LayoutUtils.makeEditText;
  */
 public class SearchFragment extends Fragment {
 
+    private static final String LIKE_WILD_CARD = "%";
+
     private SearchPluginModule currentPluginModule;
     private ResultsHandler resultsHandler;
     private ArrayAdapter<SearchPluginModule> searchPluginAdapter;
@@ -113,9 +115,12 @@ public class SearchFragment extends Fragment {
             return;
         }
 
-        // build a query with the values that the user typed in
-        final String[] columnNames = columnNamesAndValues.keySet().toArray(new String[nValues]);
+        // surround the user's text with SQL LIKE wild cards
         final String[] columnValues = columnNamesAndValues.values().toArray(new String[nValues]);
+
+
+        // build a query with those values that the user typed in
+        final String[] columnNames = columnNamesAndValues.keySet().toArray(new String[nValues]);
         Query query = currentPluginModule.getGateway().findByCriteriaLike(columnNames, columnValues, columnNames[0]);
         List<QueryResult> queryResults = currentPluginModule.getGateway().getQueryResultList(
                 getActivity().getContentResolver(), query, "searchFragment");

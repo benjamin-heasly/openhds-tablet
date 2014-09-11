@@ -13,6 +13,7 @@ import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 
 
 /**
@@ -37,7 +38,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
 
             // for Bioko
             int id = cursor.getInt(cursor.getColumnIndex(OpenHDS.FieldWorkers._ID));
-            String idString = String.format("%02d", id);
+            String idString = String.format(LIKE_WILD_CARD + "02d", id);
             fieldWorker.setCollectedIdPrefix(idString);
 
             return fieldWorker;

@@ -35,6 +35,7 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS;
 import static org.openhds.mobile.model.Individual.getAgeWithUnits;
 import static org.openhds.mobile.model.Individual.getFullName;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
 
@@ -55,7 +56,7 @@ public class IndividualGateway extends Gateway<Individual> {
 
     public Query findByExtIdPrefixDescending(String extIdPrefix) {
         final String[] columnNames = {COLUMN_INDIVIDUAL_EXTID};
-        final String[] columnValues = {extIdPrefix + "%"};
+        final String[] columnValues = {extIdPrefix + LIKE_WILD_CARD};
         return new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_EXTID + " DESC", LIKE);
     }
 

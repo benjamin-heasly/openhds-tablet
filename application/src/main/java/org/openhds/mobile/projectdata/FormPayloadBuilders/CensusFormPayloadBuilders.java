@@ -21,6 +21,8 @@ import org.openhds.mobile.utilities.LuhnValidator;
 
 import java.util.Iterator;
 import java.util.Map;
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
+
 
 public class CensusFormPayloadBuilders {
 
@@ -68,7 +70,7 @@ public class CensusFormPayloadBuilders {
             buildingNumber += locationIterator.next().getBuildingNumber();
         }
 
-        formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, String.format("%02d", buildingNumber));
+        formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, String.format(LIKE_WILD_CARD + "02d", buildingNumber));
     }
 
     private static void addNewIndividualPayload(
@@ -95,7 +97,7 @@ public class CensusFormPayloadBuilders {
         }
 
         // TODO: break out 5-digit number format, don't use string literal here.
-        String generatedIdSeqNum = String.format("%05d", nextSequence);
+        String generatedIdSeqNum = String.format(LIKE_WILD_CARD + "05d", nextSequence);
 
         Character generatedIdCheck = LuhnValidator
                 .generateCheckCharacter(generatedIdSeqNum + generatedIdSeqNum);

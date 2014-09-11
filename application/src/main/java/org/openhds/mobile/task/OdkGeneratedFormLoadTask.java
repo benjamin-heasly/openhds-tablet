@@ -36,6 +36,9 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
+
 
 public class OdkGeneratedFormLoadTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -75,7 +78,7 @@ public class OdkGeneratedFormLoadTask extends AsyncTask<Void, Void, Boolean> {
     private Cursor getCursorForFormsProvider(String name) {
         return resolver.query(FormsProviderAPI.FormsColumns.CONTENT_URI, new String[] {
                 FormsProviderAPI.FormsColumns.JR_FORM_ID, FormsProviderAPI.FormsColumns.FORM_FILE_PATH },
-                FormsProviderAPI.FormsColumns.JR_FORM_ID + " like ?", new String[] { name + "%" }, null);
+                FormsProviderAPI.FormsColumns.JR_FORM_ID + " "+LIKE+" ?", new String[] { name + "%" }, null);
     }
 
     private String processXml(String jrFormId, String formFilePath) {

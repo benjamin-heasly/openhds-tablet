@@ -1,11 +1,11 @@
 package org.openhds.mobile.model;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Environment;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
@@ -14,17 +14,22 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.openhds.mobile.FormsProviderAPI;
 import org.openhds.mobile.InstanceProviderAPI;
-
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Environment;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
-import org.openhds.mobile.utilities.EncryptionHelper;
-import org.openhds.mobile.utilities.OdkCollectHelper;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
+import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 
 public class FormHelper {
 
@@ -235,93 +240,87 @@ public class FormHelper {
                 FormsProviderAPI.FormsColumns.CONTENT_URI, new String[] {
                         FormsProviderAPI.FormsColumns.JR_FORM_ID,
                         FormsProviderAPI.FormsColumns.FORM_FILE_PATH },
-                FormsProviderAPI.FormsColumns.JR_FORM_ID + " like ?",
-                new String[] { form.getFormName() + "%" }, null);
+                FormsProviderAPI.FormsColumns.JR_FORM_ID + " " + LIKE + " ?",
+                new String[] { form.getFormName() + LIKE_WILD_CARD }, null);
 
+
+        // read the path and type for the new form instance
+        String jrFormId;
+        String formFilePath;
         if (cursor.moveToFirst()) {
-            String jrFormId = cursor.getString(0);
-            String formFilePath = cursor.getString(1);
+            jrFormId = cursor.getString(0);
+            formFilePath = cursor.getString(1);
+            cursor.close();
+        } else {
+            cursor.close();
+            return false;
+        }
 
-            try {
-                SAXBuilder builder = new SAXBuilder();
+        // populate the fields of the new form instance
+        try {
+            SAXBuilder builder = new SAXBuilder();
 
-                // get reference to unfilled form
+            // get reference to unfilled form
+            Document blankDoc = builder.build(new File(formFilePath));
+            Element root = blankDoc.getRootElement();
+            ElementFilter filter = new ElementFilter("data");
+            Document filledForm = new Document();
+            Iterator<Element> itr = root.getDescendants(filter);
 
-                Document blankDoc = builder.build(new File(formFilePath));
+            if (itr.hasNext()) {
 
-                Element root = blankDoc.getRootElement();
+                Element filledFormRoot = itr.next();
+                filledFormRoot.detach();
+                filledForm.setRootElement(filledFormRoot);
+                Iterator<Element> dataDescendantsItr = filledFormRoot.getDescendants(new ElementFilter());
 
-                ElementFilter filter = new ElementFilter("data");
+                Map<Element, String> toModify = new HashMap<>();
 
-                Document filledForm = new Document();
+                while (dataDescendantsItr.hasNext()) {
 
-                Iterator<Element> itr = root.getDescendants(filter);
+                    Element child = dataDescendantsItr.next();
+                    String name = child.getName();
 
-                if (itr.hasNext()) {
-
-                    Element filledFormRoot = itr.next();
-                    filledFormRoot.detach();
-                    filledForm.setRootElement(filledFormRoot);
-                    Iterator<Element> dataDecendantsItr = filledFormRoot.getDescendants(new ElementFilter());
-
-                    Map<Element, String> toModify = new HashMap<>();
-
-                    while (dataDecendantsItr.hasNext()) {
-
-                        Element child = dataDecendantsItr.next();
-                        String name = child.getName();
-
-                        if (formFieldNames.containsKey(name) && null != formFieldNames.get(name)) {
-                            toModify.put(child, formFieldNames.get(name));
-                        } else {
-                            toModify.put(child, "");
-                        }
-                    }
-
-                    for (Element child : toModify.keySet()) {
-                        child.setText(toModify.get(child));
+                    if (formFieldNames.containsKey(name) && null != formFieldNames.get(name)) {
+                        toModify.put(child, formFieldNames.get(name));
+                    } else {
+                        toModify.put(child, "");
                     }
                 }
 
-                File editableFormFile = getExternalStorageXmlFile(jrFormId,
-                        form.getFormName(), ".xml");
-
-                FileOutputStream fos = new FileOutputStream(editableFormFile);
-                XMLOutputter xmlOutput = new XMLOutputter();
-                xmlOutput.setFormat(Format.getPrettyFormat());
-                xmlOutput.output(filledForm, fos);
-                fos.close();
-
-                contentUri = shareOdkFormInstance(editableFormFile,
-                        editableFormFile.getName(), jrFormId);
-
-                return true;
-
-            } catch (Exception e) {
-                return false;
+                for (Element child : toModify.keySet()) {
+                    child.setText(toModify.get(child));
+                }
             }
 
+            // write out the filled-n form instance
+            File editableFormFile = getExternalStorageXmlFile(jrFormId, form.getFormName(), ".xml");
+            FileOutputStream fileOutputStream = new FileOutputStream(editableFormFile);
+            XMLOutputter xmlOutput = new XMLOutputter();
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            xmlOutput.output(filledForm, fileOutputStream);
+            fileOutputStream.close();
+
+            contentUri = shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId);
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
         }
-        return false;
     }
 
     // ODKCollectHelper
-    private Uri shareOdkFormInstance(File targetFile, String displayName,
-                                     String formId) {
+    private Uri shareOdkFormInstance(File targetFile, String displayName, String formId) {
         ContentValues values = new ContentValues();
-        values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH,
-                targetFile.getAbsolutePath());
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME,
-                displayName);
+        values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
+        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
         values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
-        return resolver.insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI,
-                values);
+        return resolver.insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
     }
 
-    private File getExternalStorageXmlFile(String subDir, String baseName,
-                                           String extension) {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss",
-                Locale.getDefault());
+    private File getExternalStorageXmlFile(String subDir, String baseName, String extension) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss", Locale.getDefault());
         df.setTimeZone(TimeZone.getDefault());
         String date = df.format(new Date());
         String externalFileName = baseName + date + extension;
@@ -343,5 +342,4 @@ public class FormHelper {
         File targetFile = new File(destinationPath);
         return targetFile;
     }
-
 }
