@@ -20,10 +20,12 @@ import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.SearchFragment;
 import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.model.FormBehaviour;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
@@ -193,6 +195,14 @@ public class PortalActivity extends Activity implements OnClickListener {
         @Override
         public void handleSearchResults(List<QueryResult> queryResults) {
             showLongToast(PortalActivity.this, "Found " + queryResults.size() + " results.");
+
+            Intent intent = new Intent(PortalActivity.this, FormSearchActivity.class);
+
+            FormSearchPluginModule formSearchPluginModule =
+                    new FormSearchPluginModule(GatewayRegistry.getFieldWorkerGateway(), R.string.fieldworker_login, "fieldWorker");
+            FormSearchPluginModule[] formSearchPluginModules = new FormSearchPluginModule[] {formSearchPluginModule};
+            intent.putExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, formSearchPluginModules);
+            startActivityForResult(intent, 42);
         }
     }
 }

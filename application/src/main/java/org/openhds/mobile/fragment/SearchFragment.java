@@ -17,6 +17,7 @@ import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.search.SearchPluginModule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,11 +117,14 @@ public class SearchFragment extends Fragment {
         }
 
         // surround the user's text with SQL LIKE wild cards
-        final String[] columnValues = columnNamesAndValues.values().toArray(new String[nValues]);
-
+        List<String> wildCardValues = new ArrayList<>();
+        for (String columnValue : columnNamesAndValues.values()) {
+            wildCardValues.add(LIKE_WILD_CARD + columnValue + LIKE_WILD_CARD);
+        }
 
         // build a query with those values that the user typed in
         final String[] columnNames = columnNamesAndValues.keySet().toArray(new String[nValues]);
+        final String[] columnValues = wildCardValues.toArray(new String[nValues]);
         Query query = currentPluginModule.getGateway().findByCriteriaLike(columnNames, columnValues, columnNames[0]);
         List<QueryResult> queryResults = currentPluginModule.getGateway().getQueryResultList(
                 getActivity().getContentResolver(), query, "searchFragment");

@@ -10,7 +10,8 @@ import org.openhds.mobile.repository.gateway.Gateway;
  *
  * TODO: might also add a consumer to take a QueryResult
  * (eg from FormSearchActivity) and return up a related value
- * that can be fill into the form field.
+ * that can be fill into the form field.  The consumer would
+ * have to be serializable.
  */
 public class FormSearchPluginModule extends SearchPluginModule {
     private String fieldName;

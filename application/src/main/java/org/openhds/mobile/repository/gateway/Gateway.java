@@ -10,6 +10,7 @@ import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.QueryResultsIterator;
 import org.openhds.mobile.repository.ResultsIterator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

@@ -23,7 +23,12 @@ public class SearchPluginModule implements Serializable {
 
     private static final long serialVersionUID = 91916640L;
 
+    // TODO: want to pass SearchPluginModules around in intents,
+    // so need to make them serializable.  Perhaps need to store
+    // gateway class name instead of gateway reference,
+    // then want a registry util for resolving the gateway by name.
     private Gateway gateway;
+
     private int labelId;
     private Map<String, Integer> columnsAndLabels;
 
