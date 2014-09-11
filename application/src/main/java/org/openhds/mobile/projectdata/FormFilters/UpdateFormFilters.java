@@ -37,8 +37,9 @@ public class UpdateFormFilters {
             Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
 
             boolean deceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+            boolean isOutMigrated = UpdateFormFilters.isIndividualOutMigrated(selectedIndividual);
 
-            if (null != navigateActivity.getCurrentVisit() && !deceased) {
+            if (null != navigateActivity.getCurrentVisit() && !deceased && !isOutMigrated) {
                 return true;
             }
 
@@ -54,8 +55,9 @@ public class UpdateFormFilters {
             Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
 
             boolean deceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+            boolean isOutMigrated = UpdateFormFilters.isIndividualOutMigrated(selectedIndividual);
 
-            if (null != navigateActivity.getCurrentVisit() && !deceased) {
+            if (null != navigateActivity.getCurrentVisit() && !deceased && !isOutMigrated) {
                 return true;
             }
 
@@ -72,8 +74,9 @@ public class UpdateFormFilters {
 
             boolean isDeceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
             boolean isFemale = UpdateFormFilters.isIndividualFemale(selectedIndividual);
+            boolean isOutMigrated = UpdateFormFilters.isIndividualOutMigrated(selectedIndividual);
 
-            if (null != navigateActivity.getCurrentVisit() && isFemale && !isDeceased) {
+            if (null != navigateActivity.getCurrentVisit() && isFemale && !isDeceased && !isOutMigrated) {
                 return true;
             }
 
@@ -104,6 +107,12 @@ public class UpdateFormFilters {
     private static boolean isIndividualFemale(Individual selectedIndividual) {
 
         return selectedIndividual.getGender().equals(ProjectResources.Individual.GENDER_FEMALE);
+
+    }
+
+    private static boolean isIndividualOutMigrated(Individual selectedIndividual) {
+
+        return selectedIndividual.getEndType().equals(ProjectResources.Individual.RESIDENCY_END_TYPE_OMG);
 
     }
 
