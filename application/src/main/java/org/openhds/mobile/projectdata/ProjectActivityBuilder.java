@@ -94,7 +94,7 @@ public class ProjectActivityBuilder {
                     R.string.distribute_bednets,
                     new BiokoFormFilters.DistributeBednets(),
                     new BiokoFormPayloadBuilders.DistributeBednets(),
-                    new BiokoFormPayloadConsumers.DistributeBednets(), false));
+                    new BiokoFormPayloadConsumers.DistributeBednets()));
 
             formsForStates.put(REGION_STATE, regionFormList);
             formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -138,7 +138,7 @@ public class ProjectActivityBuilder {
         }
 
         @Override
-        public Map<String, List<FormBehaviour>> getFormsforstates() {
+        public Map<String, List<FormBehaviour>> getFormsForStates() {
             return formsForStates;
         }
 
@@ -224,25 +224,25 @@ public class ProjectActivityBuilder {
                     R.string.create_location,
                     new CensusFormFilters.AddLocation(),
                     new CensusFormPayloadBuilders.AddLocation(),
-                    new CensusFormPayloadConsumers.AddLocation(), false));
+                    new CensusFormPayloadConsumers.AddLocation()));
 
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.create_head_of_household_label,
 					new CensusFormFilters.AddHeadOfHousehold(),
 					new CensusFormPayloadBuilders.AddHeadOfHousehold(),
-					new CensusFormPayloadConsumers.AddHeadOfHousehold(), false));
+					new CensusFormPayloadConsumers.AddHeadOfHousehold()));
 
 			individualFormList.add(new FormBehaviour("Individual",
 					R.string.add_member_of_household_label,
 					new CensusFormFilters.AddMemberOfHousehold(),
 					new CensusFormPayloadBuilders.AddMemberOfHousehold(),
-					new CensusFormPayloadConsumers.AddMemberOfHousehold(), false));
+					new CensusFormPayloadConsumers.AddMemberOfHousehold()));
 
 			bottomFormList.add(new FormBehaviour("Individual",
 					R.string.edit_individual_label,
 					new CensusFormFilters.EditIndividual(),
 					new CensusFormPayloadBuilders.EditIndividual(),
-					new CensusFormPayloadConsumers.EditIndividual(), true));
+					new CensusFormPayloadConsumers.EditIndividual()));
 
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -287,7 +287,7 @@ public class ProjectActivityBuilder {
 		}
 
 		@Override
-		public Map<String, List<FormBehaviour>> getFormsforstates() {
+		public Map<String, List<FormBehaviour>> getFormsForStates() {
 			return formsForStates;
 		}
 
@@ -373,19 +373,19 @@ public class ProjectActivityBuilder {
 					R.string.start_a_visit,
 					new UpdateFormFilters.StartAVisit(),
 					new UpdateFormPayloadBuilders.StartAVisit(),
-					new UpdateFormPayloadConsumers.StartAVisit(), false));
+					new UpdateFormPayloadConsumers.StartAVisit()));
 
             bottomFormList.add(new FormBehaviour("Out_migration",
                     R.string.out_migration,
                     new UpdateFormFilters.RegisterOutMigration(),
                     new UpdateFormPayloadBuilders.RegisterOutMigration(),
-                    null, false));
+                    null));
 
             bottomFormList.add(new FormBehaviour("Death",
                     R.string.register_death,
                     new UpdateFormFilters.RegisterDeath(),
                     new UpdateFormPayloadBuilders.RegisterDeath(),
-                    new UpdateFormPayloadConsumers.RegisterDeath(), false));
+                    new UpdateFormPayloadConsumers.RegisterDeath()));
 
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
@@ -430,7 +430,7 @@ public class ProjectActivityBuilder {
 		}
 
 		@Override
-		public Map<String, List<FormBehaviour>> getFormsforstates() {
+		public Map<String, List<FormBehaviour>> getFormsForStates() {
 			return formsForStates;
 		}
 

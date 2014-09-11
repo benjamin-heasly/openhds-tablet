@@ -6,51 +6,41 @@ import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
 
 public class FormBehaviour {
 
-	private String formName;
-	private int formLabelId;
-	private FormFilter formFilter;
-	private FormPayloadBuilder formPayloadBuilder;
-	private FormPayloadConsumer formPayloadConsumer;
-    private boolean isEditForm;
+    private String formName;
+    private int formLabelId;
+    private FormFilter formFilter;
+    private FormPayloadBuilder formPayloadBuilder;
+    private FormPayloadConsumer formPayloadConsumer;
 
-	public FormBehaviour(String formName, int formLabelId,
-			FormFilter formFilter, FormPayloadBuilder formMapper,
-			FormPayloadConsumer formPayloadConsumer, boolean isEditForm) {
+    public FormBehaviour(String formName, int formLabelId,
+                         FormFilter formFilter, FormPayloadBuilder formMapper,
+                         FormPayloadConsumer formPayloadConsumer) {
 
-		this.formName = formName;
-		this.formLabelId = formLabelId;
-		this.formFilter = formFilter;
-		this.formPayloadBuilder = formMapper;
-		this.formPayloadConsumer = formPayloadConsumer;
-        this.isEditForm = isEditForm;
-	}
-
-    public boolean isEditForm() {
-        return isEditForm;
-    }
-
-    public void setEditForm(boolean isEditForm) {
-        this.isEditForm = isEditForm;
+        this.formName = formName;
+        this.formLabelId = formLabelId;
+        this.formFilter = formFilter;
+        this.formPayloadBuilder = formMapper;
+        this.formPayloadConsumer = formPayloadConsumer;
     }
 
     public String getFormName() {
-		return formName;
-	}
+        return formName;
+    }
 
-	public int getFormLabelId() {
-		return formLabelId;
-	}
+    public int getFormLabelId() {
+        return formLabelId;
+    }
 
-	public FormFilter getFormFilter() {
-		return formFilter;
-	}
+    public FormFilter getFormFilter() {
+        return formFilter;
+    }
 
-	public FormPayloadBuilder getFormPayloadBuilder() {
-		return formPayloadBuilder;
-	}
+    public FormPayloadBuilder getFormPayloadBuilder() {
+        return formPayloadBuilder;
+    }
 
-	public FormPayloadConsumer getFormPayloadConsumer() {
-		return formPayloadConsumer;
-	}
+    public FormPayloadConsumer getFormPayloadConsumer() {
+        return formPayloadConsumer;
+    }
 
 }

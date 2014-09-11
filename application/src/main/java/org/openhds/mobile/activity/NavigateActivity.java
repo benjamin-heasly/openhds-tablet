@@ -90,7 +90,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         stateLabels = builder.getStateLabels();
         stateSequence = builder.getStateSequence();
         queryHelper = builder.getQueryHelper();
-        formsForStates = builder.getFormsforstates();
+        formsForStates = builder.getFormsForStates();
         detailFragsForStates = builder.getDetailFragsForStates();
 
         hierarchyPath = new HashMap<String, QueryResult>();

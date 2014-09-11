@@ -15,7 +15,7 @@ public interface NavigatePluginModule {
 
 	public QueryHelper getQueryHelper();
 
-	public Map<String, List<FormBehaviour>> getFormsforstates();
+	public Map<String, List<FormBehaviour>> getFormsForStates();
 
 	public Map<String, DetailFragment> getDetailFragsForStates();
 	
