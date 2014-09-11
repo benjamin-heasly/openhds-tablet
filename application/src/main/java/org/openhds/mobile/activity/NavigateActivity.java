@@ -23,6 +23,7 @@ import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.model.StateMachine;
 import org.openhds.mobile.model.StateMachine.StateListener;
 import org.openhds.mobile.model.Visit;
+import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
 import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
@@ -39,6 +40,9 @@ import java.util.Map;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 
 public class NavigateActivity extends Activity implements HierarchyNavigator {
+
+    private static final int ODK_ACTIVITY_REQUEST_CODE = 0;
+    private static final int SEARCH_ACTIVITY_REQUEST_CODE = 1;
 
     private HierarchyButtonFragment hierarchyButtonFragment;
     private ValueSelectionFragment valueFragment;
@@ -360,21 +364,46 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     }
 
     @Override
-    public void launchForm(FormBehaviour form) {
+    public void launchForm(FormBehaviour formBehaviour) {
 
-        Map<String, String> formFieldMap = new HashMap<String, String>();
+        // use the given form as the current form
+        formHelper.setFormBehaviour(formBehaviour);
 
-        form.getFormPayloadBuilder().buildFormPayload(formFieldMap, this);
+        // fill a payload of form fields for the current form
+        Map<String, String> formFieldData = new HashMap<String, String>();
+        formBehaviour.getFormPayloadBuilder().buildFormPayload(formFieldData, this);
+        formHelper.setFormFieldData(formFieldData);
 
-        if (null != form.getFormName()) {
-            formHelper.newFormInstance(form, formFieldMap);
+        // if needed, ask the user to search for required form field data
+        if (formBehaviour.getNeedsFormFieldSearch()) {
+            launchCurrentFormInSearchActivity();
+            return;
+        }
+
+        // otherwise, launch the form in ODK immediately
+        launchCurrentFormInODK();
+    }
+
+    private void launchCurrentFormInODK() {
+        FormBehaviour formBehaviour = formHelper.getFormBehaviour();
+        if (null != formBehaviour && null != formBehaviour.getFormName()) {
+            formHelper.newFormInstance();
             Intent intent = formHelper.buildEditFormInstanceIntent();
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    private void launchCurrentFormInSearchActivity() {
+        FormBehaviour formBehaviour = formHelper.getFormBehaviour();
+        if (null != formBehaviour) {
+            // put all the form search plugins in an intent so we know what the user needs to search for
+            Intent intent = new Intent(this, FormSearchActivity.class);
+            intent.putExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, formBehaviour.getFormSearchPluginModules().toArray());
+            startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE);
         }
     }
 
     private void showValueFragment() {
-
         // there is only 1 value fragment that can be added
         if (!valueFragment.isAdded()) {
             getFragmentManager()
@@ -387,16 +416,14 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     }
 
     private void showDetailFragment() {
-
-        // we don't check if it is added here because there are detail fragments
-        // for each state
-
+        // we don't check if it is added here because there are detail fragments for each state
         detailFragment = getDetailFragmentForCurrentState();
         detailFragment.setNavigateActivity(this);
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.middle_column, detailFragment, DETAIL_FRAGMENT_TAG).commit();
+                .replace(R.id.middle_column, detailFragment, DETAIL_FRAGMENT_TAG)
+                .commit();
         getFragmentManager().executePendingTransactions();
 
         detailFragment.setUpDetails();
@@ -411,16 +438,13 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     }
 
     private boolean shouldShowDetailFragment() {
-
         if (null == currentResults || currentResults.isEmpty()) {
             return true;
         }
         return false;
-
     }
 
     private void updateToggleButton() {
-
         if (null != detailFragsForStates.get(getState()) && !shouldShowDetailFragment()) {
 
             detailToggleFragment.setButtonEnabled(true);
@@ -430,12 +454,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         } else {
             detailToggleFragment.setButtonEnabled(false);
         }
-
     }
 
     // for ONCLICK of the toggleFrag
     public void toggleMiddleFragment() {
-
         if (valueFragment.isAdded()) {
             showDetailFragment();
             detailToggleFragment.setButtonHighlighted(true);
@@ -448,26 +470,46 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) {
-            FormBehaviour form = formHelper.getForm();
-            formHelper.checkFormInstanceStatus();
-            if (null != formHelper.getFinalizedFormFilePath()) {
+        if (RESULT_OK == resultCode) {
 
-                if (null != form.getFormPayloadConsumer()
-                        && form.getFormPayloadConsumer().consumeFormPayload(formHelper.getFormInstanceData(), this)) {
+            switch (requestCode) {
+                case ODK_ACTIVITY_REQUEST_CODE:
+                    // consume form data that the user entered with ODK
+                    FormBehaviour formBehaviour = formHelper.getFormBehaviour();
+                    formHelper.checkFormInstanceStatus();
+                    if (null != formHelper.getFinalizedFormFilePath()) {
+                        FormPayloadConsumer consumer = formBehaviour.getFormPayloadConsumer();
+                        if (null != consumer) {
+                            boolean needUpdate = consumer.consumeFormPayload(formHelper.getFormInstanceData(), this);
+                            if (needUpdate) {
+                                formHelper.updateExistingFormInstance();
+                            }
+                        }
+                    }
+                    break;
 
-                    formHelper.updateExistingFormInstance();
-                }
-            }
-            if(!shouldShowDetailFragment()) {
-                showValueFragment();
+                case SEARCH_ACTIVITY_REQUEST_CODE:
+                    // result intent contains the form fields and values that the user just search for
+                    String[] searchedFieldNames = data.getExtras().getStringArray(FormSearchActivity.FORM_FIELD_NAMES_KEY);
+                    String[] searchedFieldValues = data.getExtras().getStringArray(FormSearchActivity.FORM_FIELD_VALUES_KEY);
+
+                    // merge searched fields with the existing form payload
+                    for (int i=0; i<searchedFieldNames.length; i++){
+                        formHelper.getFormFieldData().put(searchedFieldNames[i], searchedFieldValues[i]);
+                    }
+
+                    // now let the user finish filling in the form in ODK
+                    launchCurrentFormInODK();
+                    break;
             }
         }
-        if (resultCode == RESULT_CANCELED) {
-            // Write your code if there's no result
+
+        // restore the appropriate UI in the middle column
+        if(!shouldShowDetailFragment()) {
+            showValueFragment();
         }
 
-        // encrypt files regardless.
+        // encrypt files regardless
         EncryptionHelper.encryptFiles(
                 FormInstance.toListOfFiles(OdkCollectHelper.getAllFormInstances(getContentResolver())), this);
     }

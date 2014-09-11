@@ -33,24 +33,34 @@ import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 
 public class FormHelper {
 
-    Uri contentUri;
-    ContentResolver resolver;
-    Map<String, String> formFieldNames;
-    FormBehaviour form;
+    private FormBehaviour formBehaviour;
+    private Uri contentUri;
+    private ContentResolver contentResolver;
+    private Map<String, String> formFieldData;
+    private String finalizedFormFilePath;
 
-    String finalizedFormFilePath;
-
-    public FormHelper(ContentResolver resolver) {
-        this.resolver = resolver;
-
+    public FormHelper(ContentResolver contentResolver) {
+        this.contentResolver = contentResolver;
     }
 
     public String getFinalizedFormFilePath() {
         return finalizedFormFilePath;
     }
 
-    public FormBehaviour getForm() {
-        return form;
+    public FormBehaviour getFormBehaviour() {
+        return formBehaviour;
+    }
+
+    public void setFormBehaviour(FormBehaviour formBehaviour) {
+        this.formBehaviour = formBehaviour;
+    }
+
+    public Map<String, String> getFormFieldData() {
+        return formFieldData;
+    }
+
+    public void setFormFieldData(Map<String, String> formFieldData) {
+        this.formFieldData = formFieldData;
     }
 
     public Intent buildEditFormInstanceIntent() {
@@ -60,19 +70,20 @@ public class FormHelper {
 
     // Pull out to ODKCollectHelper
     public boolean checkFormInstanceStatus() {
-        Cursor cursor = resolver.query(contentUri, new String[] {
-                        InstanceProviderAPI.InstanceColumns.STATUS,
-                        InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH },
+        final String[] columnNames = new String[] {
+                InstanceProviderAPI.InstanceColumns.STATUS,
+                InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH };
+        Cursor cursor = contentResolver.query(contentUri, columnNames,
                 InstanceProviderAPI.InstanceColumns.STATUS + "=?",
                 new String[] { InstanceProviderAPI.STATUS_COMPLETE }, null);
-        if (cursor.moveToNext()) {
-            finalizedFormFilePath = cursor
-                    .getString(cursor
-                            .getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
 
+        if (cursor.moveToNext()) {
+            finalizedFormFilePath = cursor.getString(cursor.getColumnIndex(
+                    InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
             cursor.close();
             return true;
         } else {
+            finalizedFormFilePath = null;
             cursor.close();
             return false;
         }
@@ -88,18 +99,15 @@ public class FormHelper {
     }
 
     public static boolean isFormReviewed(String formFilePath) {
-
         String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, formFilePath);
         if (needsReview == null) {
             return false;
         }
         boolean value = needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NO_REVIEW_NEEDED);
         return value;
-
     }
 
     public static boolean setFormTagValue(String tag, String value, String formFilePath) {
-
         Map<String, String> formFieldMap = FormHelper.getFormInstanceData(formFilePath);
         formFieldMap.put(tag, value);
         return FormHelper.updateExistingFormInstance(formFieldMap, formFilePath);
@@ -141,7 +149,6 @@ public class FormHelper {
     //    TODO: Convert FormHelper to a static class
 //    Static implementation of getFormInstanceData()
     public static Map<String, String> getFormInstanceData(String formFilePath) {
-
         Map<String, String> formFields = new HashMap<>();
         if (null == formFilePath) {
             return null;
@@ -164,11 +171,11 @@ public class FormHelper {
 
         formFields = formFields;
         return formFields;
-
     }
+
     public Map<String, String> getFormInstanceData() {
 
-        formFieldNames.clear();
+        formFieldData.clear();
 
         if (null == finalizedFormFilePath) {
             return null;
@@ -184,14 +191,14 @@ public class FormHelper {
 
             while (itr.hasNext()) {
                 Element child = itr.next();
-                formFieldNames.put(child.getName(), child.getText());
+                formFieldData.put(child.getName(), child.getText());
             }
 
         } catch (Exception e) {
             return null;
         }
 
-        return formFieldNames;
+        return formFieldData;
     }
 
     // this method assumes/relies on finalizedFormFilePath is NOT null.
@@ -208,10 +215,10 @@ public class FormHelper {
             root.removeContent();
             newForm.setRootElement(root);
 
-            for (String elementName : formFieldNames.keySet()) {
+            for (String elementName : formFieldData.keySet()) {
 
                 Element child = new Element(elementName);
-                child.setText(formFieldNames.get(elementName));
+                child.setText(formFieldData.get(elementName));
                 newForm.getRootElement().addContent(child);
             }
 
@@ -228,21 +235,17 @@ public class FormHelper {
         }
     }
 
-    public boolean newFormInstance(FormBehaviour form,
-                                   Map<String, String> formFieldNames) {
-        // find a blank form with given name
+    public boolean newFormInstance() {
+        this.finalizedFormFilePath = null;
 
-        this.form = form;
-        this.formFieldNames = formFieldNames;
-        finalizedFormFilePath = null;
-
-        Cursor cursor = resolver.query(
-                FormsProviderAPI.FormsColumns.CONTENT_URI, new String[] {
-                        FormsProviderAPI.FormsColumns.JR_FORM_ID,
-                        FormsProviderAPI.FormsColumns.FORM_FILE_PATH },
+        // find a form definition with the name of the current form behaviour
+        final String[] columnNames = new String[] {
+                FormsProviderAPI.FormsColumns.JR_FORM_ID,
+                FormsProviderAPI.FormsColumns.FORM_FILE_PATH };
+        Cursor cursor = contentResolver.query(
+                FormsProviderAPI.FormsColumns.CONTENT_URI, columnNames,
                 FormsProviderAPI.FormsColumns.JR_FORM_ID + " " + LIKE + " ?",
-                new String[] { form.getFormName() + LIKE_WILD_CARD }, null);
-
+                new String[] { formBehaviour.getFormName() + LIKE_WILD_CARD }, null);
 
         // read the path and type for the new form instance
         String jrFormId;
@@ -281,8 +284,8 @@ public class FormHelper {
                     Element child = dataDescendantsItr.next();
                     String name = child.getName();
 
-                    if (formFieldNames.containsKey(name) && null != formFieldNames.get(name)) {
-                        toModify.put(child, formFieldNames.get(name));
+                    if (formFieldData.containsKey(name) && null != formFieldData.get(name)) {
+                        toModify.put(child, formFieldData.get(name));
                     } else {
                         toModify.put(child, "");
                     }
@@ -293,8 +296,8 @@ public class FormHelper {
                 }
             }
 
-            // write out the filled-n form instance
-            File editableFormFile = getExternalStorageXmlFile(jrFormId, form.getFormName(), ".xml");
+            // write out the filled-in form instance
+            File editableFormFile = getExternalStorageXmlFile(jrFormId, formBehaviour.getFormName(), ".xml");
             FileOutputStream fileOutputStream = new FileOutputStream(editableFormFile);
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getPrettyFormat());
@@ -316,7 +319,7 @@ public class FormHelper {
         values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
         values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
-        return resolver.insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
+        return contentResolver.insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
     }
 
     private File getExternalStorageXmlFile(String subDir, String baseName, String extension) {

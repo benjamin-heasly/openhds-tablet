@@ -2,6 +2,7 @@ package org.openhds.mobile.repository.search;
 
 import org.openhds.mobile.repository.gateway.Gateway;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,10 @@ import java.util.Map;
  *
  * BSH
  */
-public class SearchPluginModule {
+public class SearchPluginModule implements Serializable {
+
+    private static final long serialVersionUID = 91916640L;
+
     private Gateway gateway;
     private int labelId;
     private Map<String, Integer> columnsAndLabels;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A filled form represents an ODK form that has been prefilled with values from
+ * A filled formBehaviour represents an ODK formBehaviour that has been prefilled with values from
  * the OpenHDS application.
  */
 public class FilledForm {

@@ -26,9 +26,8 @@ public class OpeningActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		EncryptionHelper.encryptFiles(FormInstance
-				.toListOfFiles(OdkCollectHelper
-						.getAllFormInstances(getContentResolver())), this);
+		EncryptionHelper.encryptFiles(
+                FormInstance.toListOfFiles(OdkCollectHelper.getAllFormInstances(getContentResolver())), this);
 	}
 
 	@Override
@@ -48,7 +47,8 @@ public class OpeningActivity extends Activity {
 				.add(R.id.field_worker_login_container,
 						new FieldWorkerLoginFragment())
 				.add(R.id.supervisor_login_container,
-						new SupervisorLoginFragment()).commit();
+						new SupervisorLoginFragment())
+                .commit();
 	}
 
 	@Override
