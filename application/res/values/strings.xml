@@ -201,6 +201,8 @@
     <string name="supervisor_approve_selected"> Approve Selected </string>
     <string name="sub_district_label">SubDistrict</string>
     <string name="register_death">Register a Death</string>
+    <string name="record_pregnancy_observation">Record a Pregnancy Observation</string>
+    <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
 
 
 </resources>

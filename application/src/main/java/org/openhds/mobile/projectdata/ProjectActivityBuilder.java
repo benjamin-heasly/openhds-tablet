@@ -387,6 +387,12 @@ public class ProjectActivityBuilder {
                     new UpdateFormPayloadBuilders.RegisterDeath(),
                     new UpdateFormPayloadConsumers.RegisterDeath(), false));
 
+            bottomFormList.add(new FormBehaviour("Pregnancy_observation",
+                    R.string.record_pregnancy_observation,
+                    new UpdateFormFilters.RecordPregnancyObservation(),
+                    new UpdateFormPayloadBuilders.RecordPregnancyObservation(),
+                    null, false));
+
 			formsForStates.put(REGION_STATE, regionFormList);
 			formsForStates.put(PROVINCE_STATE, provinceFormList);
 			formsForStates.put(DISTRICT_STATE, districtFormList);

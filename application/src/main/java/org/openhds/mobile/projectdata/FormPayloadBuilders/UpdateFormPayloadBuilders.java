@@ -75,4 +75,22 @@ public class UpdateFormPayloadBuilders {
 
         }
     }
+
+    public static class RecordPregnancyObservation implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            String observationDate = new SimpleDateFormat("yyyy-MM-dd").format(
+                    Calendar.getInstance().getTime()).toString();
+
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+            formPayload.put(ProjectFormFields.PregnancyObservation.PREGNANCY_OBSERVATION_RECORDED_DATE, observationDate);
+
+        }
+    }
 }

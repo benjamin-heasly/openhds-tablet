@@ -7,7 +7,6 @@ import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryResult;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
-import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 import java.util.Map;
 
@@ -35,7 +34,11 @@ public class UpdateFormFilters {
         @Override
         public boolean amIValid(NavigateActivity navigateActivity) {
 
-            if (null != navigateActivity.getCurrentVisit()) {
+            Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
+
+            boolean deceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+
+            if (null != navigateActivity.getCurrentVisit() && !deceased) {
                 return true;
             }
 
@@ -48,7 +51,9 @@ public class UpdateFormFilters {
         @Override
         public boolean amIValid(NavigateActivity navigateActivity) {
 
-            boolean deceased = UpdateFormFilters.isIndividualDeceased(navigateActivity, navigateActivity.getHierarchyPath());
+            Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
+
+            boolean deceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
 
             if (null != navigateActivity.getCurrentVisit() && !deceased) {
                 return true;
@@ -58,18 +63,48 @@ public class UpdateFormFilters {
         }
     }
 
-    private static boolean isIndividualDeceased(
-            NavigateActivity navigateActivity,
-            Map<String, QueryResult> hierarchyPath) {
+    public static class RecordPregnancyObservation implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+
+            Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
+
+            boolean isDeceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+            boolean isFemale = UpdateFormFilters.isIndividualFemale(selectedIndividual);
+
+            if (null != navigateActivity.getCurrentVisit() && isFemale && !isDeceased) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private static Individual getCurrentSelectedIndividual(NavigateActivity navigateActivity) {
+
+        Map<String, QueryResult> hierarchyPath = navigateActivity.getHierarchyPath();
 
         String individualExtId = hierarchyPath.get(
                 ProjectActivityBuilder.UpdateActivityModule.INDIVIDUAL_STATE)
                 .getExtId();
-
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-        Individual selectedIndividual = individualGateway.getFirst(navigateActivity.getContentResolver(),
+
+        return individualGateway.getFirst(navigateActivity.getContentResolver(),
                 individualGateway.findByExtIdPrefixDescending(individualExtId));
 
-        return selectedIndividual.getEndType().equals(ProjectResources.Individual.END_TYPE_DEATH);
     }
+
+    private static boolean isIndividualDeceased(Individual selectedIndividual) {
+
+        return selectedIndividual.getEndType().equals(ProjectResources.Individual.END_TYPE_DEATH);
+
+    }
+
+    private static boolean isIndividualFemale(Individual selectedIndividual) {
+
+        return selectedIndividual.getGender().equals(ProjectResources.Individual.GENDER_FEMALE);
+
+    }
+
 }
