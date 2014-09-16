@@ -1,5 +1,6 @@
 package org.openhds.mobile.repository.search;
 
+import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.Gateway;
 
 import java.io.Serializable;
@@ -19,18 +20,15 @@ import java.util.Map;
  *
  * BSH
  */
-public class SearchPluginModule implements Serializable {
+public class SearchPluginModule {
 
     private static final long serialVersionUID = 91916640L;
 
-    // TODO: want to pass SearchPluginModules around in intents,
-    // so need to make them serializable.  Perhaps need to store
-    // gateway class name instead of gateway reference,
-    // then want a registry util for resolving the gateway by name.
-    private Gateway gateway;
+    protected Gateway gateway;
+    protected int labelId;
+    protected Map<String, Integer> columnsAndLabels;
 
-    private int labelId;
-    private Map<String, Integer> columnsAndLabels;
+    public SearchPluginModule() {}
 
     public SearchPluginModule(Gateway gateway, int labelId) {
         this.gateway = gateway;

@@ -16,25 +16,25 @@ import java.util.Map;
 public class LayoutUtils {
 
     // Create a new Button with the given description, name, tag, and listener.
-    public static Button makeButton(Activity activity, String description, String buttonName, Object buttonTag,
+    public static Button makeButton(Activity activity, int descriptionId, int buttonNameId, Object buttonTag,
                                     OnClickListener listener, ViewGroup container) {
 
-        View v = activity.getLayoutInflater().inflate(R.layout.generic_textview_button, null);
-        container.addView(v);
-        Button b = (Button) v.findViewById(R.id.generic_button);
-        TextView t = (TextView) v.findViewById(R.id.generic_button_description);
+        View view = activity.getLayoutInflater().inflate(R.layout.generic_textview_button, null);
+        container.addView(view);
 
-        if (null == description) {
-            t.setVisibility(View.GONE);
+        TextView textView = (TextView) view.findViewById(R.id.generic_button_description);
+        if (descriptionId > 0) {
+            textView.setText(descriptionId);
         } else {
-            t.setText(description);
+            textView.setVisibility(View.GONE);
         }
 
-        b.setText(buttonName);
-        b.setTag(buttonTag);
-        b.setOnClickListener(listener);
+        Button button = (Button) view.findViewById(R.id.generic_button);
+        button.setText(buttonNameId);
+        button.setTag(buttonTag);
+        button.setOnClickListener(listener);
 
-        return b;
+        return button;
     }
 
     // Create a new Layout that contains two text views and optionally several "payload" text views beneath.
@@ -129,40 +129,68 @@ public class LayoutUtils {
     }
 
     // Create a pair of text views to represent some value plus its label, with given colors.
-    public static RelativeLayout makeTextWithValueAndLabel(Activity activity, String labelText, String valueText,
-                                                           int labelColor, int valueColor) {
+    public static RelativeLayout makeTextWithValueAndLabel(Activity activity, int labelId, String valueText,
+                                                           int labelColor, int valueColor, int missingColor) {
+
+        final int textSize = 20;
+
+        //create text views
+        TextView labelTextView = new TextView(activity);
+        labelTextView.setId(1);
+        labelTextView.setTextSize(textSize);
+
+        TextView delimiterTextView = new TextView(activity);
+        delimiterTextView.setId(2);
+        delimiterTextView.setTextSize(textSize);
+        delimiterTextView.setText(" : ");
+
+        TextView valueTextView = new TextView(activity);
+        valueTextView.setId(3);
+        valueTextView.setTextSize(textSize);
 
         RelativeLayout layout = new RelativeLayout(activity);
 
-        TextView labelTextView = new TextView(activity);
-        labelTextView.setTextSize(20);
-        labelTextView.setText(labelText + ": ");
-
-        TextView valueTextView = new TextView(activity);
-        valueTextView.setTextSize(20);
-        valueTextView.setText(valueText);
-
-        if (null == valueText || valueText.isEmpty()) {
-            labelTextView.setTextColor(activity.getResources().getColor(R.color.NA_Gray));
-            valueTextView.setTextColor(activity.getResources().getColor(R.color.NA_Gray));
-            valueTextView.setText(activity.getResources().getString(R.string.not_available));
-        } else {
-            labelTextView.setTextColor(labelColor);
-            valueTextView.setTextColor(valueColor);
-        }
-
+        // assemble text views into one layout
         layout.addView(labelTextView);
 
-        labelTextView.setId(1);
+        RelativeLayout.LayoutParams delimiterParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        delimiterParams.addRule(RelativeLayout.RIGHT_OF, labelTextView.getId());
+        layout.addView(delimiterTextView, delimiterParams);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.RIGHT_OF, labelTextView.getId());
+        RelativeLayout.LayoutParams valueParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        valueParams.addRule(RelativeLayout.RIGHT_OF, delimiterTextView.getId());
+        layout.addView(valueTextView, valueParams);
 
-        layout.addView(valueTextView, params);
+        configureTextWithValueAndLabel(layout, labelId, valueText, labelColor, valueColor, missingColor);
 
         return layout;
     }
+
+    // Pass new data to text views created with makeTextWithValueAndLabel().
+    public static void configureTextWithValueAndLabel(RelativeLayout layout,int labelId, String valueText,
+                                                      int labelColor, int valueColor, int missingColor) {
+
+        TextView labelTextView = (TextView) layout.findViewById(1);
+        TextView delimiterTextView = (TextView) layout.findViewById(2);
+        TextView valueTextView = (TextView) layout.findViewById(3);
+
+        labelTextView.setText(labelId);
+        valueTextView.setText(valueText);
+        if (null == valueText || valueText.isEmpty()) {
+            // TODO: must convert color id to actual color-int
+            labelTextView.setTextColor(missingColor);
+            delimiterTextView.setTextColor(missingColor);
+            valueTextView.setTextColor(missingColor);
+            valueTextView.setText(R.string.not_available);
+        } else {
+            labelTextView.setTextColor(labelColor);
+            delimiterTextView.setTextColor(labelColor);
+            valueTextView.setTextColor(valueColor);
+        }
+    }
+
 
     // Create a new edit text with the given hint (String resource id) and tag.
     public static EditText makeEditText(Activity activity, int hintId, String tag) {

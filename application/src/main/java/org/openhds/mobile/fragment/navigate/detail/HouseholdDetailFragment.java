@@ -24,10 +24,8 @@ public class HouseholdDetailFragment extends DetailFragment {
 	int greenValue;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		detailContainer = (LinearLayout) inflater.inflate(
-				R.layout.household_detail_fragment, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		detailContainer = (LinearLayout) inflater.inflate(R.layout.household_detail_fragment, container, false);
 
 		greenLabel = getResources().getColor(R.color.LabelGreen);
 		greenValue = getResources().getColor(R.color.ValueGreen);
@@ -41,34 +39,33 @@ public class HouseholdDetailFragment extends DetailFragment {
 		SocialGroup socialGroup = getHousehold(navigateActivity.getCurrentSelection().getExtId());
 
 		if (null != socialGroup) {
-			LinearLayout socialGroupBasicInfoContainer = (LinearLayout) detailContainer
-					.findViewById(R.id.household_detail_frag_basic_info);
+			LinearLayout socialGroupBasicInfoContainer =
+                    (LinearLayout) detailContainer.findViewById(R.id.household_detail_frag_basic_info);
 
 			socialGroupBasicInfoContainer.removeAllViews();
 
-			TextView extIdTextView = (TextView) detailContainer
-					.findViewById(R.id.household_detail_frag_extid);
+			TextView extIdTextView = (TextView) detailContainer.findViewById(R.id.household_detail_frag_extid);
 			extIdTextView.setText(socialGroup.getExtId());
 
-			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(
-                    getActivity(), getString(R.string.household_name),
-                    socialGroup.getGroupName(), greenLabel, greenValue));
+			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+                    R.string.household_name,
+                    socialGroup.getGroupName(),
+                    greenLabel, greenValue, R.color.NA_Gray));
 
-			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(
-                    getActivity(), getString(R.string.household_head_extid),
-                    socialGroup.getGroupHead(), greenLabel, greenValue));
+			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+                    R.string.household_head_extid,
+                    socialGroup.getGroupHead(),
+                    greenLabel, greenValue, R.color.NA_Gray));
 
-			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(
-                    getActivity(), getString(R.string.household_member_count),
-                    getMemberCount(socialGroup.getExtId()), greenLabel,
-                    greenValue));
+			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+                    R.string.household_member_count,
+                    getMemberCount(socialGroup.getExtId()),
+                    greenLabel, greenValue, R.color.NA_Gray));
 
 		} else {
-			TextView extIdTextView = (TextView) detailContainer
-					.findViewById(R.id.household_detail_frag_extid);
-			extIdTextView.setText(getString(R.string.details_not_available));
+			TextView extIdTextView = (TextView) detailContainer.findViewById(R.id.household_detail_frag_extid);
+			extIdTextView.setText(R.string.details_not_available);
 		}
-
 	}
 
 	private SocialGroup getHousehold(String extId) {

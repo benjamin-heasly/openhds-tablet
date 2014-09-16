@@ -39,8 +39,6 @@ public class HierarchyButtonFragment extends Fragment {
 		Map<String, Integer> labels = navigator.getStateLabels();
 		for (String state : navigator.getStateSequence()) {
 			final String description = null;
-			
-
 			RelativeLayout layout = makeTextWithPayload(getActivity(),
                     getResourceString(getActivity(), labels.get(state)), description, state, listener,
                     selectionContainer, 0, null, null);

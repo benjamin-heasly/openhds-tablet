@@ -53,7 +53,7 @@
     <string name="lastname_hint_lbl">Apellido</string>
     <string name="gender_lbl">Género</string>
     <string name="clear_lbl">Clear</string>
-    <string name="search_lbl">Buscar</string>
+    <string name="search_database_label">Buscar</string>
     <string name="search_loc_lbl">Buscar Ubicación</string>
     <string name="search_form_lbl">Buscar Impreso</string>
     <string name="search_individual_lbl">Buscar por un Individuo</string>
@@ -81,9 +81,9 @@
     <string name="supervisor_bad_credentials">Credenciales inválidos</string>
     <string name="preference_invalid_label">Inválido!</string>
     <string name="preference_invalid_warning">Valor de preferencia inválido</string>
-    <string name="sync_database_name">Sincronizar Base de Datos</string>
+    <string name="sync_database_label">Sincronizar Base de Datos</string>
     <string name="sync_database_description">Sincroniza los datos del censo con el servidor</string>
-    <string name="sync_field_worker_name">Sincronizar Investigadores de Campo</string>
+    <string name="sync_field_worker_label">Sincronizar Investigadores de Campo</string>
     <string name="sync_field_worker_description">Sincronizas Investigadores de Campo con el servidor</string>
     <string name="field_worker_bad_credentials">Credenciales inválidos</string>
     <string name="region_label">Región</string>
@@ -131,7 +131,7 @@
     <string name="db_val_relation_to_head_type_dont_know">No Sé</string>
         
         <!-- IndividualDetailFragment Labels -->
-    <string name="individual_name_label">Nombre </string>
+    <string name="individual_full_name_label">Nombre </string>
  	<string name="individual_other_names_label">Otros Nombres</string>
     <string name="individual_age_label">Edad</string>
     <string name="individual_date_of_birth_label">Fecha de Nacimiento</string>

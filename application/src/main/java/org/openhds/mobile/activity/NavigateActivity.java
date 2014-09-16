@@ -28,6 +28,7 @@ import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
@@ -198,7 +199,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             }
         }
 
-        savedInstanceState.putSerializable(VISIT_KEY,getCurrentVisit());
+        savedInstanceState.putSerializable(VISIT_KEY, getCurrentVisit());
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -490,12 +491,12 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
                 case SEARCH_ACTIVITY_REQUEST_CODE:
                     // result intent contains the form fields and values that the user just search for
-                    String[] searchedFieldNames = data.getExtras().getStringArray(FormSearchActivity.FORM_FIELD_NAMES_KEY);
-                    String[] searchedFieldValues = data.getExtras().getStringArray(FormSearchActivity.FORM_FIELD_VALUES_KEY);
+                    List<FormSearchPluginModule> formSearchPluginModules =
+                            data.getParcelableArrayListExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY);
 
                     // merge searched fields with the existing form payload
-                    for (int i=0; i<searchedFieldNames.length; i++){
-                        formHelper.getFormFieldData().put(searchedFieldNames[i], searchedFieldValues[i]);
+                    for (FormSearchPluginModule plugin : formSearchPluginModules) {
+                        formHelper.getFormFieldData().put(plugin.getFieldName(), plugin.getFieldValue());
                     }
 
                     // now let the user finish filling in the form in ODK
