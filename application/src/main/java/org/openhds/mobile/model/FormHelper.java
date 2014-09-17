@@ -271,11 +271,18 @@ public class FormHelper {
                         Element child = dataDecendantsItr.next();
                         String name = child.getName();
 
+//                      TODO: check if the child's parent has any attributes; if so, remove child from generated document
+
+                        boolean isNestedElement = child.getParentElement().hasAttributes();
+
+                        if (child.getParentElement() != filledFormRoot && isNestedElement) {
+                            filledFormRoot.removeChild(name);
+                        }
+
                         if (formFieldNames.containsKey(name) && null != formFieldNames.get(name)) {
                             toModify.put(child, formFieldNames.get(name));
-                        } else {
-                            toModify.put(child, "");
                         }
+
                     }
 
                     for (Element child : toModify.keySet()) {
