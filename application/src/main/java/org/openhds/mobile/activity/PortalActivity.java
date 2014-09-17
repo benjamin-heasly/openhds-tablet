@@ -14,23 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
 import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
-import org.openhds.mobile.fragment.SearchFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.QueryResult;
-import org.openhds.mobile.repository.search.FormSearchPluginModule;
-import org.openhds.mobile.repository.search.SearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;

@@ -7,9 +7,8 @@ import net.sqlcipher.database.SQLiteOpenHelper;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.provider.OpenHDSProvider;
 import org.openhds.mobile.provider.PasswordHelper;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.gateway.Gateway;
-import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -70,7 +69,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         T entity = gateway.getFirst(contentResolver, gateway.findById("INVALID"));
         assertNull(entity);
 
-        QueryResult result = gateway.getFirstQueryResult(contentResolver, gateway.findById("INVALID"), "test");
+        DataWrapper result = gateway.getFirstQueryResult(contentResolver, gateway.findById("INVALID"), "test");
         assertNull(result);
     }
 
@@ -86,9 +85,9 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         String savedId = gateway.getConverter().getId(savedEntity);
         assertEquals(id, savedId);
 
-        QueryResult savedQueryResult = gateway.getFirstQueryResult(contentResolver, gateway.findById(id), "test");
-        assertNotNull(savedQueryResult);
-        assertEquals(id, savedQueryResult.getExtId());
+        DataWrapper savedDataWrapper = gateway.getFirstQueryResult(contentResolver, gateway.findById(id), "test");
+        assertNotNull(savedDataWrapper);
+        assertEquals(id, savedDataWrapper.getExtId());
 
         wasInserted = gateway.insertOrUpdate(contentResolver, entity);
         assertEquals(false, wasInserted);
@@ -135,16 +134,16 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         String id2 = gateway.getConverter().getId(allEntities.get(1));
         assertNotSame(id1, id2);
 
-        List<QueryResult> allQueryResults = gateway.getQueryResultList(contentResolver, gateway.findAll(), "test");
-        assertEquals(2, allQueryResults.size());
-        assertNotSame(allQueryResults.get(0).getExtId(), allQueryResults.get(1).getExtId());
+        List<DataWrapper> allDataWrappers = gateway.getQueryResultList(contentResolver, gateway.findAll(), "test");
+        assertEquals(2, allDataWrappers.size());
+        assertNotSame(allDataWrappers.get(0).getExtId(), allDataWrappers.get(1).getExtId());
     }
 
     public void testFindAllAsIterator() {
         Iterator<T> allIterator = gateway.getIterator(contentResolver, gateway.findAll());
         assertFalse(allIterator.hasNext());
 
-        Iterator<QueryResult> allQueryResultsIterator =
+        Iterator<DataWrapper> allQueryResultsIterator =
                 gateway.getQueryResultIterator(contentResolver, gateway.findAll(), "test");
         assertFalse(allQueryResultsIterator.hasNext());
 

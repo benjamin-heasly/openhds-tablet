@@ -6,8 +6,8 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
-import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
@@ -88,12 +88,12 @@ public class LocationGateway extends Gateway<Location> {
         }
 
         @Override
-        public QueryResult toQueryResult(ContentResolver contentResolver, Location location, String state) {
-            QueryResult queryResult = new QueryResult();
-            queryResult.setExtId(location.getExtId());
-            queryResult.setName(location.getName());
-            queryResult.setState(state);
-            return queryResult;
+        public DataWrapper toQueryResult(ContentResolver contentResolver, Location location, String state) {
+            DataWrapper dataWrapper = new DataWrapper();
+            dataWrapper.setExtId(location.getExtId());
+            dataWrapper.setName(location.getName());
+            dataWrapper.setState(state);
+            return dataWrapper;
         }
     }
 }

@@ -3,15 +3,15 @@ package org.openhds.mobile.projectdata.QueryHelpers;
 import java.util.List;
 
 import android.content.ContentResolver;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 
 public interface QueryHelper {
-	public List<QueryResult> getAll(ContentResolver contentResolver,
+	public List<DataWrapper> getAll(ContentResolver contentResolver,
 			String state);
 
-	public List<QueryResult> getChildren(ContentResolver contentResolver,
-			QueryResult qr, String childState);
+	public List<DataWrapper> getChildren(ContentResolver contentResolver,
+			DataWrapper qr, String childState);
 
-	public QueryResult getIfExists(ContentResolver contentResolver,
+	public DataWrapper getIfExists(ContentResolver contentResolver,
 			String state, String extId);
 }

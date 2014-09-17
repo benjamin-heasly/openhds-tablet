@@ -1,7 +1,7 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
@@ -25,7 +25,7 @@ public class PayloadTools {
                                              NavigateActivity navigateActivity) {
 
         List<String> stateSequence = navigateActivity.getStateSequence();
-        Map<String, QueryResult> hierarchyPath = navigateActivity
+        Map<String, DataWrapper> hierarchyPath = navigateActivity
                 .getHierarchyPath();
 
         // Add all the extIds from the HierarchyPath

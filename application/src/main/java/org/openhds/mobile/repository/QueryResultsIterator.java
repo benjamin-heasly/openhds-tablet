@@ -1,10 +1,6 @@
 package org.openhds.mobile.repository;
 
 import android.content.ContentResolver;
-import org.openhds.mobile.repository.Converter;
-import org.openhds.mobile.repository.Query;
-import org.openhds.mobile.repository.QueryResult;
-import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.Iterator;
 
@@ -16,7 +12,7 @@ import java.util.Iterator;
  *
  * BSH
  */
-public class QueryResultsIterator<T> implements Iterator<QueryResult> {
+public class QueryResultsIterator<T> implements Iterator<DataWrapper> {
 
     private final Converter<T> converter;
     private final ContentResolver contentResolver;
@@ -43,7 +39,7 @@ public class QueryResultsIterator<T> implements Iterator<QueryResult> {
     }
 
     @Override
-    public QueryResult next() {
+    public DataWrapper next() {
         return converter.toQueryResult(contentResolver, resultsIterator.next(), state);
     }
 

@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.FormSelectionFragment;
-import org.openhds.mobile.fragment.ValueSelectionFragment;
+import org.openhds.mobile.fragment.DataSelectionFragment;
 import org.openhds.mobile.fragment.navigate.DetailToggleFragment;
 import org.openhds.mobile.fragment.navigate.HierarchyButtonFragment;
 import org.openhds.mobile.fragment.navigate.VisitFragment;
@@ -27,7 +27,7 @@ import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
 import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
@@ -46,7 +46,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private static final int SEARCH_ACTIVITY_REQUEST_CODE = 1;
 
     private HierarchyButtonFragment hierarchyButtonFragment;
-    private ValueSelectionFragment valueFragment;
+    private DataSelectionFragment valueFragment;
     private FormSelectionFragment formFragment;
     private DetailToggleFragment detailToggleFragment;
     private DetailFragment defaultDetailFragment;
@@ -68,10 +68,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
     private FormHelper formHelper;
     private StateMachine stateMachine;
-    private Map<String, QueryResult> hierarchyPath;
+    private Map<String, DataWrapper> hierarchyPath;
     private Map<String, DetailFragment> detailFragsForStates;
-    private List<QueryResult> currentResults;
-    private QueryResult currentSelection;
+    private List<DataWrapper> currentResults;
+    private DataWrapper currentSelection;
     private QueryHelper queryHelper;
     private FieldWorker currentFieldWorker;
     private Visit currentVisit;
@@ -98,7 +98,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         formsForStates = builder.getFormsForStates();
         detailFragsForStates = builder.getDetailFragsForStates();
 
-        hierarchyPath = new HashMap<String, QueryResult>();
+        hierarchyPath = new HashMap<String, DataWrapper>();
         formHelper = new FormHelper(getContentResolver());
         stateMachine = new StateMachine(new HashSet<String>(stateSequence), stateSequence.get(0));
 
@@ -114,7 +114,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             // fromForm fresh activity
             hierarchyButtonFragment = new HierarchyButtonFragment();
             hierarchyButtonFragment.setNavigator(this);
-            valueFragment = new ValueSelectionFragment();
+            valueFragment = new DataSelectionFragment();
             valueFragment.setSelectionHandler(new ValueSelectionHandler());
             formFragment = new FormSelectionFragment();
             formFragment.setSelectionHandler(new FormSelectionHandler());
@@ -150,12 +150,12 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
             defaultDetailFragment = new DefaultDetailFragment();
 
-            valueFragment = (ValueSelectionFragment) fragmentManager.findFragmentByTag(VALUE_FRAGMENT_TAG);
+            valueFragment = (DataSelectionFragment) fragmentManager.findFragmentByTag(VALUE_FRAGMENT_TAG);
 
             // draw details if valuefrag is null, the drawing of valuefrag is
             // handled in onResume().
             if (null == valueFragment) {
-                valueFragment = new ValueSelectionFragment();
+                valueFragment = new DataSelectionFragment();
 
                 detailFragment = (DetailFragment) fragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG);
                 detailFragment.setNavigateActivity(this);
@@ -169,7 +169,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     if (null == extId) {
                         break;
                     }
-                    QueryResult qr = queryHelper.getIfExists(getContentResolver(), state, extId);
+                    DataWrapper qr = queryHelper.getIfExists(getContentResolver(), state, extId);
                     if (null == qr) {
                         break;
                     } else {
@@ -194,7 +194,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         for (String state : stateSequence) {
             if (hierarchyPath.containsKey(state)) {
-                QueryResult selected = hierarchyPath.get(state);
+                DataWrapper selected = hierarchyPath.get(state);
                 savedInstanceState.putString(state, selected.getExtId());
             }
         }
@@ -249,7 +249,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
         } else {
             String previousState = stateSequence.get(stateIndex - 1);
-            QueryResult previousSelection = hierarchyPath.get(previousState);
+            DataWrapper previousSelection = hierarchyPath.get(previousState);
             currentSelection = previousSelection;
             currentResults = queryHelper.getChildren(getContentResolver(), previousSelection, state);
         }
@@ -261,7 +261,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
         if (isAdded || !currentResults.isEmpty()) {
             showValueFragment();
-            valueFragment.populateValues(currentResults);
+            valueFragment.populateData(currentResults);
         } else {
             showDetailFragment();
             detailToggleFragment.setButtonHighlighted(true);
@@ -272,11 +272,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         }
     }
 
-    public Map<String, QueryResult> getHierarchyPath() {
+    public Map<String, DataWrapper> getHierarchyPath() {
         return hierarchyPath;
     }
 
-    public List<QueryResult> getCurrentResults() {
+    public List<DataWrapper> getCurrentResults() {
         return currentResults;
     }
 
@@ -286,7 +286,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
     private void updateButtonLabel(String state) {
 
-        QueryResult selected = hierarchyPath.get(state);
+        DataWrapper selected = hierarchyPath.get(state);
         if (null == selected) {
             String stateLabel = getResourceString(NavigateActivity.this, stateLabels.get(state));
             hierarchyButtonFragment.setButtonLabel(state, stateLabel, null);
@@ -335,7 +335,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         } else {
             // middle of the hierarchy
             String previousState = stateSequence.get(targetIndex - 1);
-            QueryResult previousSelection = hierarchyPath.get(previousState);
+            DataWrapper previousSelection = hierarchyPath.get(previousState);
             currentSelection = previousSelection;
             currentResults = queryHelper.getChildren(getContentResolver(), previousSelection, targetState);
         }
@@ -343,7 +343,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     }
 
     @Override
-    public void stepDown(QueryResult selected) {
+    public void stepDown(DataWrapper selected) {
         String currentState = getState();
 
         if (!currentState.equals(selected.getState())) {
@@ -412,7 +412,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     .replace(R.id.middle_column, valueFragment, VALUE_FRAGMENT_TAG).commit();
             getFragmentManager().executePendingTransactions();
 
-            valueFragment.populateValues(currentResults);
+            valueFragment.populateData(currentResults);
         }
     }
 
@@ -515,7 +515,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                 FormInstance.toListOfFiles(OdkCollectHelper.getAllFormInstances(getContentResolver())), this);
     }
 
-    public QueryResult getCurrentSelection() {
+    public DataWrapper getCurrentSelection() {
         return currentSelection;
     }
 
@@ -587,7 +587,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                 showDetailFragment();
             } else {
                 showValueFragment();
-                valueFragment.populateValues(currentResults);
+                valueFragment.populateData(currentResults);
             }
             updateToggleButton();
 
@@ -602,10 +602,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     }
 
     // Receive a value that the user clicked in ValueSelectionFragment.
-    private class ValueSelectionHandler implements ValueSelectionFragment.SelectionHandler {
+    private class ValueSelectionHandler implements DataSelectionFragment.SelectionHandler {
         @Override
-        public void handleSelectedValue(QueryResult queryResult) {
-            NavigateActivity.this.stepDown(queryResult);
+        public void handleSelectedData(DataWrapper dataWrapper) {
+            NavigateActivity.this.stepDown(dataWrapper);
         }
     }
 

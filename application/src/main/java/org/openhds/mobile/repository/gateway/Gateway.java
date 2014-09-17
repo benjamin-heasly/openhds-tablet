@@ -5,12 +5,11 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
-import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.QueryResultsIterator;
 import org.openhds.mobile.repository.ResultsIterator;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -94,7 +93,7 @@ public abstract class Gateway<T> {
     }
 
     // get the first result from a query as a QueryResult or null
-    public QueryResult getFirstQueryResult(ContentResolver contentResolver, Query query, String state) {
+    public DataWrapper getFirstQueryResult(ContentResolver contentResolver, Query query, String state) {
         T entity = getFirst(contentResolver, query);
         if (null == entity) {
             return null;
@@ -103,23 +102,23 @@ public abstract class Gateway<T> {
     }
 
     // get all results from a query as a list of QueryResults
-    public List<QueryResult> getQueryResultList(ContentResolver contentResolver, Query query, String state) {
-        List<QueryResult> queryResults = new ArrayList<QueryResult>();
+    public List<DataWrapper> getQueryResultList(ContentResolver contentResolver, Query query, String state) {
+        List<DataWrapper> dataWrappers = new ArrayList<DataWrapper>();
         Cursor cursor = query.select(contentResolver);
         List<T> entities = toList(cursor);
         for (T entity : entities) {
-            queryResults.add(converter.toQueryResult(contentResolver, entity, state));
+            dataWrappers.add(converter.toQueryResult(contentResolver, entity, state));
         }
-        return queryResults;
+        return dataWrappers;
     }
 
     // get an iterator over all results from a query as QueryResults
-    public Iterator<QueryResult> getQueryResultIterator(ContentResolver contentResolver, Query query, String state) {
+    public Iterator<DataWrapper> getQueryResultIterator(ContentResolver contentResolver, Query query, String state) {
         return new QueryResultsIterator<T>(contentResolver, query, converter, state);
     }
 
     // get an iterator over all results from a query as QueryResults, with given iterator window size
-    public Iterator<QueryResult> getQueryResultIterator(ContentResolver contentResolver, Query query, String state, int windowSize) {
+    public Iterator<DataWrapper> getQueryResultIterator(ContentResolver contentResolver, Query query, String state, int windowSize) {
         return new QueryResultsIterator<T>(contentResolver, query, converter, state, windowSize);
     }
 

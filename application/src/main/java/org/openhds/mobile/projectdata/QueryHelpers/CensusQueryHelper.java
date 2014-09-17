@@ -1,22 +1,14 @@
 package org.openhds.mobile.projectdata.QueryHelpers;
 
 import android.content.ContentResolver;
-import org.openhds.mobile.R;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Location;
-import org.openhds.mobile.model.LocationHierarchy;
-import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
-import org.openhds.mobile.repository.gateway.MembershipGateway;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class CensusQueryHelper implements QueryHelper {
@@ -33,7 +25,7 @@ public class CensusQueryHelper implements QueryHelper {
 
     public CensusQueryHelper() {}
 
-    public List<QueryResult> getAll(ContentResolver contentResolver, String state) {
+    public List<DataWrapper> getAll(ContentResolver contentResolver, String state) {
 
         if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
@@ -79,10 +71,10 @@ public class CensusQueryHelper implements QueryHelper {
             return individualGateway.getQueryResultList(contentResolver, individualGateway.findAll(), state);
         }
 
-        return new ArrayList<QueryResult>();
+        return new ArrayList<DataWrapper>();
     }
 
-    public QueryResult getIfExists(ContentResolver contentResolver, String state, String extId) {
+    public DataWrapper getIfExists(ContentResolver contentResolver, String state, String extId) {
 
         if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
                 || state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
@@ -108,7 +100,7 @@ public class CensusQueryHelper implements QueryHelper {
         return null;
     }
 
-    public List<QueryResult> getChildren(ContentResolver contentResolver, QueryResult qr, String childState) {
+    public List<DataWrapper> getChildren(ContentResolver contentResolver, DataWrapper qr, String childState) {
         String state = qr.getState();
 
         if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
@@ -133,6 +125,6 @@ public class CensusQueryHelper implements QueryHelper {
                     individualGateway.findByResidency(qr.getExtId()), childState);
         }
 
-        return new ArrayList<QueryResult>();
+        return new ArrayList<DataWrapper>();
     }
 }

@@ -4,8 +4,8 @@ import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 
 import java.util.Map;
@@ -59,7 +59,7 @@ public class UpdateFormFilters {
 
     private static boolean isIndividualDeceased(
             NavigateActivity navigateActivity,
-            Map<String, QueryResult> hierarchyPath) {
+            Map<String, DataWrapper> hierarchyPath) {
 
         String individualExtId = hierarchyPath.get(
                 ProjectActivityBuilder.UpdateActivityModule.INDIVIDUAL_STATE)

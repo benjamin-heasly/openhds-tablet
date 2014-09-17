@@ -9,33 +9,31 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import org.openhds.mobile.R;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
 import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
-public class ValueSelectionFragment extends Fragment {
+public class DataSelectionFragment extends Fragment {
 
     private SelectionHandler selectionHandler;
-    private ValueSelectionListAdapter queryResultAdapter;
+    private DataSelectionListAdapter dataWrapperAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout valueContainer = (LinearLayout) inflater.inflate(R.layout.value_selection_fragment, container, false);
-        return valueContainer;
+        return inflater.inflate(R.layout.data_selection_fragment, container, false);
     }
 
-    public void populateValues(List<QueryResult> values) {
-        queryResultAdapter = new ValueSelectionListAdapter(getActivity(), R.layout.generic_list_item, values);
-        ListView listView = (ListView) getActivity().findViewById(R.id.value_fragment_listview);
-        listView.setAdapter(queryResultAdapter);
-        listView.setOnItemClickListener(new ValueClickListener());
+    public void populateData(List<DataWrapper> dataWrappers) {
+        dataWrapperAdapter = new DataSelectionListAdapter(getActivity(), R.layout.generic_list_item, dataWrappers);
+        ListView listView = (ListView) getActivity().findViewById(R.id.data_fragment_listview);
+        listView.setAdapter(dataWrapperAdapter);
+        listView.setOnItemClickListener(new DataClickListener());
     }
 
     public void setSelectionHandler(SelectionHandler selectionHandler) {
@@ -43,31 +41,31 @@ public class ValueSelectionFragment extends Fragment {
     }
 
     public interface SelectionHandler {
-        public void handleSelectedValue(QueryResult queryResult);
+        public void handleSelectedData(DataWrapper dataWrapper);
     }
 
-    private class ValueClickListener implements OnItemClickListener {
+    private class DataClickListener implements OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            QueryResult selected = queryResultAdapter.getItem(position);
-            selectionHandler.handleSelectedValue(selected);
+            DataWrapper selected = dataWrapperAdapter.getItem(position);
+            selectionHandler.handleSelectedData(selected);
         }
     }
 
-    private class ValueSelectionListAdapter extends ArrayAdapter<QueryResult> {
+    private class DataSelectionListAdapter extends ArrayAdapter<DataWrapper> {
 
-        public ValueSelectionListAdapter(Context context, int resource, List<QueryResult> objects) {
+        public DataSelectionListAdapter(Context context, int resource, List<DataWrapper> objects) {
             super(context, resource, objects);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            QueryResult qr = queryResultAdapter.getItem(position);
+            DataWrapper qr = dataWrapperAdapter.getItem(position);
 
             if (convertView == null) {
                 convertView = makeTextWithPayload(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
-                        null, null, R.drawable.value_frag_selector, qr.getStringsPayload(), qr.getStringIdsPayload());
+                        null, null, R.drawable.data_frag_selector, qr.getStringsPayload(), qr.getStringIdsPayload());
             } else {
                 configureTextWithPayload(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId(),
                         qr.getStringsPayload(), qr.getStringIdsPayload());

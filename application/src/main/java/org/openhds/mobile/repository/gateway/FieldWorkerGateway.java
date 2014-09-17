@@ -6,9 +6,7 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.repository.Converter;
-import org.openhds.mobile.repository.QueryResult;
-
-import java.io.Serializable;
+import org.openhds.mobile.repository.DataWrapper;
 
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME;
@@ -64,12 +62,12 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
         }
 
         @Override
-        public QueryResult toQueryResult(ContentResolver contentResolver, FieldWorker fieldWorker, String state) {
-            QueryResult queryResult = new QueryResult();
-            queryResult.setExtId(fieldWorker.getExtId());
-            queryResult.setName(fieldWorker.getFirstName());
-            queryResult.setState(state);
-            return queryResult;
+        public DataWrapper toQueryResult(ContentResolver contentResolver, FieldWorker fieldWorker, String state) {
+            DataWrapper dataWrapper = new DataWrapper();
+            dataWrapper.setExtId(fieldWorker.getExtId());
+            dataWrapper.setName(fieldWorker.getFirstName());
+            dataWrapper.setState(state);
+            return dataWrapper;
         }
     }
 }

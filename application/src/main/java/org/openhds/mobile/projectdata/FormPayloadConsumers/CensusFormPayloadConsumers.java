@@ -12,7 +12,7 @@ import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
@@ -70,9 +70,9 @@ public class CensusFormPayloadConsumers {
         public boolean consumeFormPayload(Map<String, String> formPayload,
                                           NavigateActivity navigateActivity) {
 
-            Map<String, QueryResult> hierarchyPath = navigateActivity
+            Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
-            QueryResult selectedLocation = hierarchyPath
+            DataWrapper selectedLocation = hierarchyPath
                     .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
 
             String relationshipType = formPayload
@@ -123,9 +123,9 @@ public class CensusFormPayloadConsumers {
             postFillFormPayload(formPayload);
             boolean postFilled = true;
 
-            Map<String, QueryResult> hierarchyPath = navigateActivity
+            Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
-            QueryResult selectedLocation = hierarchyPath
+            DataWrapper selectedLocation = hierarchyPath
                     .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
 
             // Pull out useful strings from the formPayload

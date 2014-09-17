@@ -10,7 +10,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.SearchFragment;
-import org.openhds.mobile.fragment.ValueSelectionFragment;
+import org.openhds.mobile.fragment.DataSelectionFragment;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class FormSearchActivity extends Activity {
     private static final String VALUE_SELECTION_FRAGMENT_TAG = "valueSelectionFragment";
 
     private SearchFragment searchFragment;
-    private ValueSelectionFragment valueSelectionFragment;
+    private DataSelectionFragment dataSelectionFragment;
     private ArrayList<FormSearchPluginModule> formSearchPluginModules;
     private SearchPluginListAdapter searchPluginListAdapter;
 
@@ -42,10 +42,10 @@ public class FormSearchActivity extends Activity {
 
         if (null == savedInstanceState) {
             searchFragment = new SearchFragment();
-            valueSelectionFragment = new ValueSelectionFragment();
+            dataSelectionFragment = new DataSelectionFragment();
             getFragmentManager().beginTransaction()
                     .add(R.id.form_search_middle_column, searchFragment, SEARCH_FRAGMENT_TAG)
-                    .add(R.id.form_search_right_column, valueSelectionFragment, VALUE_SELECTION_FRAGMENT_TAG)
+                    .add(R.id.form_search_right_column, dataSelectionFragment, VALUE_SELECTION_FRAGMENT_TAG)
                     .commit();
 
             // what does the calling activity need the user to search for?
@@ -53,7 +53,7 @@ public class FormSearchActivity extends Activity {
 
         } else {
             searchFragment = (SearchFragment) getFragmentManager().findFragmentByTag(SEARCH_FRAGMENT_TAG);
-            valueSelectionFragment= (ValueSelectionFragment) getFragmentManager().findFragmentByTag(VALUE_SELECTION_FRAGMENT_TAG);
+            dataSelectionFragment = (DataSelectionFragment) getFragmentManager().findFragmentByTag(VALUE_SELECTION_FRAGMENT_TAG);
 
             // recall pending and completed searches
             formSearchPluginModules = savedInstanceState.getParcelableArrayList(FORM_SEARCH_PLUGINS_KEY);

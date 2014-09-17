@@ -7,7 +7,7 @@
     android:layout_marginRight="15dp">
 
     <ListView
-        android:id="@+id/value_fragment_listview"
+        android:id="@+id/data_fragment_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@android:color/transparent"

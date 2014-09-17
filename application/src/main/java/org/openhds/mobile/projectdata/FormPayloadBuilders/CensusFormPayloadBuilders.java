@@ -3,7 +3,7 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Individual;
@@ -35,7 +35,7 @@ public class CensusFormPayloadBuilders {
     private static void addNewLocationPayload(
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
-        QueryResult sectorQueryResult =
+        DataWrapper sectorDataWrapper =
                 navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE);
         ContentResolver contentResolver = navigateActivity.getContentResolver();
 
@@ -43,7 +43,7 @@ public class CensusFormPayloadBuilders {
         // sector name is <sectorname>
         LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
         LocationHierarchy sector = locationHierarchyGateway.getFirst(contentResolver,
-                locationHierarchyGateway.findById(sectorQueryResult.getExtId()));
+                locationHierarchyGateway.findById(sectorDataWrapper.getExtId()));
         formPayload.put(ProjectFormFields.Locations.HIERERCHY_EXTID, sector.getExtId());
         formPayload.put(ProjectFormFields.Locations.SECTOR_NAME, sector.getName());
 
@@ -170,7 +170,7 @@ public class CensusFormPayloadBuilders {
             PayloadTools.flagForReview(formPayload, true);
 
             // build complete individual form
-            Map<String, QueryResult> hierarchyPath = navigateActivity
+            Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
 
             String individualExtId = hierarchyPath

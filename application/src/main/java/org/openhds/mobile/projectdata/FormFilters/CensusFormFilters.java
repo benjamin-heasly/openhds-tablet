@@ -1,7 +1,7 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
@@ -16,7 +16,7 @@ public class CensusFormFilters {
 
 	private static boolean hasHeadOfHousehold(
 			NavigateActivity navigateActivity,
-			Map<String, QueryResult> hierarchyPath) {
+			Map<String, DataWrapper> hierarchyPath) {
 
 		String socialGroupExtId = hierarchyPath.get(
 				ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)

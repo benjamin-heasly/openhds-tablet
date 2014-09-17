@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import org.openhds.mobile.R;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
-import org.openhds.mobile.repository.QueryResult;
 import org.openhds.mobile.repository.search.SearchPluginModule;
 
 import java.util.ArrayList;
@@ -126,17 +126,17 @@ public class SearchFragment extends Fragment {
         final String[] columnNames = columnNamesAndValues.keySet().toArray(new String[nValues]);
         final String[] columnValues = wildCardValues.toArray(new String[nValues]);
         Query query = currentPluginModule.getGateway().findByCriteriaLike(columnNames, columnValues, columnNames[0]);
-        List<QueryResult> queryResults = currentPluginModule.getGateway().getQueryResultList(
+        List<DataWrapper> dataWrappers = currentPluginModule.getGateway().getQueryResultList(
                 getActivity().getContentResolver(), query, "searchFragment");
 
         // report the results to the listener
         if (null != resultsHandler) {
-            resultsHandler.handleSearchResults(queryResults);
+            resultsHandler.handleSearchResults(dataWrappers);
         }
     }
 
     public interface ResultsHandler {
-        public void handleSearchResults(List<QueryResult> queryResults);
+        public void handleSearchResults(List<DataWrapper> dataWrappers);
     }
 
     // Display a choice of search plugin modules.

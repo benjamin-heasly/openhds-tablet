@@ -6,7 +6,7 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Visit;
 import org.openhds.mobile.repository.Converter;
-import org.openhds.mobile.repository.QueryResult;
+import org.openhds.mobile.repository.DataWrapper;
 
 import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_DATE;
 import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_EXTID;
@@ -56,12 +56,12 @@ public class VisitGateway extends Gateway<Visit> {
         }
 
         @Override
-        public QueryResult toQueryResult(ContentResolver contentResolver, Visit visit, String state) {
-            QueryResult queryResult = new QueryResult();
-            queryResult.setExtId(visit.getVisitExtId());
-            queryResult.setName(visit.getLocationExtId());
-            queryResult.setState(state);
-            return queryResult;
+        public DataWrapper toQueryResult(ContentResolver contentResolver, Visit visit, String state) {
+            DataWrapper dataWrapper = new DataWrapper();
+            dataWrapper.setExtId(visit.getVisitExtId());
+            dataWrapper.setName(visit.getLocationExtId());
+            dataWrapper.setState(state);
+            return dataWrapper;
         }
     }
 }

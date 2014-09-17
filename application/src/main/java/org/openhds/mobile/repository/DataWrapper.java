@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * BSH
  */
-public class QueryResult {
+public class DataWrapper {
 
 	private String state;
 	private String extId;

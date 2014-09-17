@@ -6,8 +6,8 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
-import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A;
 import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B;
@@ -91,12 +91,12 @@ public class RelationshipGateway extends Gateway<Relationship> {
         }
 
         @Override
-        public QueryResult toQueryResult(ContentResolver contentResolver, Relationship relationship, String state) {
-            QueryResult queryResult = new QueryResult();
-            queryResult.setExtId(relationship.getIndividualA());
-            queryResult.setName(relationship.getType());
-            queryResult.setState(state);
-            return queryResult;
+        public DataWrapper toQueryResult(ContentResolver contentResolver, Relationship relationship, String state) {
+            DataWrapper dataWrapper = new DataWrapper();
+            dataWrapper.setExtId(relationship.getIndividualA());
+            dataWrapper.setName(relationship.getType());
+            dataWrapper.setState(state);
+            return dataWrapper;
         }
     }
 }

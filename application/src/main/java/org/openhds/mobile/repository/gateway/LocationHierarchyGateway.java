@@ -6,8 +6,8 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.LocationHierarchy;
 import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
-import org.openhds.mobile.repository.QueryResult;
 
 import static org.openhds.mobile.OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID;
 import static org.openhds.mobile.OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL;
@@ -65,12 +65,12 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
         }
 
         @Override
-        public QueryResult toQueryResult(ContentResolver contentResolver, LocationHierarchy locationHierarchy, String state) {
-            QueryResult queryResult = new QueryResult();
-            queryResult.setExtId(locationHierarchy.getExtId());
-            queryResult.setName(locationHierarchy.getName());
-            queryResult.setState(state);
-            return queryResult;
+        public DataWrapper toQueryResult(ContentResolver contentResolver, LocationHierarchy locationHierarchy, String state) {
+            DataWrapper dataWrapper = new DataWrapper();
+            dataWrapper.setExtId(locationHierarchy.getExtId());
+            dataWrapper.setName(locationHierarchy.getName());
+            dataWrapper.setState(state);
+            return dataWrapper;
         }
     }
 }
