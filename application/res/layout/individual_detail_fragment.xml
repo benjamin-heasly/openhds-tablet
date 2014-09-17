@@ -1,47 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="15dp"
-    android:layout_marginRight="15dp"
-    android:background="#222222"
-    android:baselineAligned="false"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/individual_detail_frag_extid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:textColor="#A3FFA3"
-        android:textSize="50sp" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:baselineAligned="false"
+            android:orientation="vertical" >>
 
     <LinearLayout
-        android:id="@+id/individual_detail_frag_personal_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@color/DarkerAcidGray"
-        android:orientation="vertical" >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#222222"
+            android:baselineAligned="false"
+            android:orientation="vertical" >
+
+        <TextView
+                android:id="@+id/individual_detail_frag_extid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:textColor="#A3FFA3"
+                android:textSize="50sp" />
+
+        <LinearLayout
+                android:id="@+id/individual_detail_frag_personal_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@color/DarkerAcidGray"
+                android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/individual_detail_frag_contact_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@color/DarkerAcidGray"
+                android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/individual_detail_frag_membership_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@color/DarkerAcidGray"
+                android:orientation="vertical" >
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/individual_detail_frag_contact_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@color/DarkerAcidGray"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/individual_detail_frag_membership_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@color/DarkerAcidGray"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

@@ -3,6 +3,7 @@ package org.openhds.mobile.fragment.navigate.detail;
 import java.util.List;
 
 import android.content.ContentResolver;
+import android.widget.ScrollView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Membership;
@@ -21,7 +22,7 @@ import org.openhds.mobile.repository.gateway.MembershipGateway;
 
 public class IndividualDetailFragment extends DetailFragment {
 
-    LinearLayout detailContainer;
+    ScrollView detailContainer;
     int greenLabel;
     int greenValue;
     int yellowLabel;
@@ -31,16 +32,16 @@ public class IndividualDetailFragment extends DetailFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
-        detailContainer = (LinearLayout) inflater.inflate(R.layout.individual_detail_fragment, container, false);
+        detailContainer = (ScrollView) inflater.inflate(R.layout.individual_detail_fragment, container, false);
 
-        greenLabel = getResources().getColor(R.color.LabelGreen);
-        greenValue = getResources().getColor(R.color.ValueGreen);
+        greenLabel = R.color.LabelGreen;
+        greenValue = R.color.ValueGreen;
 
-        yellowLabel = getResources().getColor(R.color.LabelYellow);
-        yellowValue = getResources().getColor(R.color.ValueYellow);
+        yellowLabel = R.color.LabelYellow;
+        yellowValue = R.color.ValueYellow;
 
-        pinkLabel = getResources().getColor(R.color.LabelPink);
-        pinkValue = getResources().getColor(R.color.ValuePink);
+        pinkLabel = R.color.LabelPink;
+        pinkValue = R.color.ValuePink;
 
         return detailContainer;
     }

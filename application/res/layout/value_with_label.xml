@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/gray_background_selector">
+
+    <CheckedTextView
+            android:id="@+id/label_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text = "Label"/>
+
+    <CheckedTextView
+            android:id="@+id/delimiter_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@id/label_text"
+            android:text = " : "/>
+
+    <CheckedTextView
+            android:id="@+id/value_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            android:layout_below="@id/label_text"
+            android:text = "value"/>
+</RelativeLayout>

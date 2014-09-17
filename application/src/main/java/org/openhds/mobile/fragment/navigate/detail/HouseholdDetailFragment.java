@@ -27,8 +27,8 @@ public class HouseholdDetailFragment extends DetailFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		detailContainer = (LinearLayout) inflater.inflate(R.layout.household_detail_fragment, container, false);
 
-		greenLabel = getResources().getColor(R.color.LabelGreen);
-		greenValue = getResources().getColor(R.color.ValueGreen);
+		greenLabel = R.color.LabelGreen;
+		greenValue = R.color.ValueGreen;
 
 		return detailContainer;
 	}

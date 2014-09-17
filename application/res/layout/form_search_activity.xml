@@ -7,9 +7,10 @@
 
     <ListView
             android:id="@+id/form_search_list_view"
+            android:choiceMode="singleChoice"
             android:layout_width="0px"
             android:layout_height="match_parent"
-            android:layout_weight="5"
+            android:layout_weight="4"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:background="@color/AcidGray"
@@ -21,7 +22,7 @@
             android:id="@+id/form_search_middle_column"
             android:layout_width="0px"
             android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_weight="5"
             android:background="@color/DarkerAcidGray"
             android:paddingTop="20dp" />
 
@@ -29,7 +30,7 @@
             android:id="@+id/form_search_right_column"
             android:layout_width="0px"
             android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_weight="5"
             android:background="@color/AcidGray"
             android:paddingTop="20dp" />
 

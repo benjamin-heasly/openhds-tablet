@@ -1,10 +1,12 @@
 package org.openhds.mobile.utilities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -130,64 +132,35 @@ public class LayoutUtils {
 
     // Create a pair of text views to represent some value plus its label, with given colors.
     public static RelativeLayout makeTextWithValueAndLabel(Activity activity, int labelId, String valueText,
-                                                           int labelColor, int valueColor, int missingColor) {
+                                                           int labelColorId, int valueColorId, int missingColorId) {
 
-        final int textSize = 20;
-
-        //create text views
-        TextView labelTextView = new TextView(activity);
-        labelTextView.setId(1);
-        labelTextView.setTextSize(textSize);
-
-        TextView delimiterTextView = new TextView(activity);
-        delimiterTextView.setId(2);
-        delimiterTextView.setTextSize(textSize);
-        delimiterTextView.setText(" : ");
-
-        TextView valueTextView = new TextView(activity);
-        valueTextView.setId(3);
-        valueTextView.setTextSize(textSize);
-
-        RelativeLayout layout = new RelativeLayout(activity);
-
-        // assemble text views into one layout
-        layout.addView(labelTextView);
-
-        RelativeLayout.LayoutParams delimiterParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        delimiterParams.addRule(RelativeLayout.RIGHT_OF, labelTextView.getId());
-        layout.addView(delimiterTextView, delimiterParams);
-
-        RelativeLayout.LayoutParams valueParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        valueParams.addRule(RelativeLayout.RIGHT_OF, delimiterTextView.getId());
-        layout.addView(valueTextView, valueParams);
-
-        configureTextWithValueAndLabel(layout, labelId, valueText, labelColor, valueColor, missingColor);
+        RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.value_with_label, null);
+        configureTextWithValueAndLabel(layout, labelId, valueText, labelColorId, valueColorId, missingColorId);
 
         return layout;
     }
 
     // Pass new data to text views created with makeTextWithValueAndLabel().
-    public static void configureTextWithValueAndLabel(RelativeLayout layout,int labelId, String valueText,
-                                                      int labelColor, int valueColor, int missingColor) {
+    public static void configureTextWithValueAndLabel(RelativeLayout layout, int labelId, String valueText,
+                                                      int labelColorId, int valueColorId, int missingColorId) {
 
-        TextView labelTextView = (TextView) layout.findViewById(1);
-        TextView delimiterTextView = (TextView) layout.findViewById(2);
-        TextView valueTextView = (TextView) layout.findViewById(3);
+        TextView labelTextView = (TextView) layout.findViewById(R.id.label_text);
+        TextView delimiterTextView = (TextView) layout.findViewById(R.id.delimiter_text);
+        TextView valueTextView = (TextView) layout.findViewById(R.id.value_text);
 
         labelTextView.setText(labelId);
         valueTextView.setText(valueText);
+
+        Context context = layout.getContext();
         if (null == valueText || valueText.isEmpty()) {
-            // TODO: must convert color id to actual color-int
-            labelTextView.setTextColor(missingColor);
-            delimiterTextView.setTextColor(missingColor);
-            valueTextView.setTextColor(missingColor);
+            labelTextView.setTextColor(context.getResources().getColor(missingColorId));
+            delimiterTextView.setTextColor(context.getResources().getColor(missingColorId));
+            valueTextView.setTextColor(context.getResources().getColor(missingColorId));
             valueTextView.setText(R.string.not_available);
         } else {
-            labelTextView.setTextColor(labelColor);
-            delimiterTextView.setTextColor(labelColor);
-            valueTextView.setTextColor(valueColor);
+            labelTextView.setTextColor(context.getResources().getColor(labelColorId));
+            delimiterTextView.setTextColor(context.getResources().getColor(labelColorId));
+            valueTextView.setTextColor(context.getResources().getColor(valueColorId));
         }
     }
 
