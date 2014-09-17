@@ -101,7 +101,7 @@ public class CensusQueryHelper implements QueryHelper {
     }
 
     public List<DataWrapper> getChildren(ContentResolver contentResolver, DataWrapper qr, String childState) {
-        String state = qr.getState();
+        String state = qr.getCategory();
 
         if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
                 || state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)

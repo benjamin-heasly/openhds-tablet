@@ -5,18 +5,34 @@
               android:baselineAligned="false"
               android:orientation="horizontal" >
 
-    <ListView
-            android:id="@+id/form_search_list_view"
-            android:choiceMode="singleChoice"
+    <LinearLayout
             android:layout_width="0px"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:background="@color/AcidGray"
-            android:orientation="vertical"
-            android:paddingTop="20dp" />
+            android:orientation="vertical" >
 
+        <ListView
+                android:id="@+id/form_search_list_view"
+                android:choiceMode="singleChoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:background="@color/AcidGray"
+                android:orientation="vertical"
+                android:paddingTop="20dp" />
+
+        <Button
+                android:id="@+id/done_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:padding="10dp"
+                android:text="@string/search_done_label"
+                android:background="@drawable/rounded_button_gray"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
 
     <FrameLayout
             android:id="@+id/form_search_middle_column"

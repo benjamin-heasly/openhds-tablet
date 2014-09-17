@@ -53,7 +53,7 @@ public class SearchFragment extends Fragment {
         this.resultsHandler = resultsHandler;
     }
 
-    public void setSearchPluginModules(List<SearchPluginModule> searchPluginModules) {
+    public void setSearchPluginModules(List<? extends SearchPluginModule> searchPluginModules) {
 
         Spinner spinner = (Spinner) getView().findViewById(R.id.search_fragment_spinner);
 
@@ -70,7 +70,8 @@ public class SearchFragment extends Fragment {
         }
 
         // allow the user to choose from 2 or more plugins
-        searchPluginAdapter = new SpinnerListAdapter(getActivity(), R.layout.generic_dropdown_item, searchPluginModules);
+        searchPluginAdapter = new SpinnerListAdapter(
+                getActivity(), R.layout.generic_dropdown_item, (List<SearchPluginModule>) searchPluginModules);
         spinner.setAdapter(searchPluginAdapter);
         spinner.setOnItemSelectedListener(new SpinnerClickHandler());
     }
@@ -83,10 +84,15 @@ public class SearchFragment extends Fragment {
     // Set up search fields for a selected search plugin module.
     private void setPluginModule(SearchPluginModule searchPluginModule) {
         currentPluginModule = searchPluginModule;
+        setTitle(searchPluginModule.getLabelId());
         configureEditTexts();
     }
 
     private void configureEditTexts() {
+        if (null == currentPluginModule) {
+            return;
+        }
+
         LinearLayout editTextContainer = (LinearLayout) getView().findViewById(R.id.search_fragment_container);
         editTextContainer.removeAllViews();
         for (String columnName : currentPluginModule.getColumnsAndLabels().keySet()) {
@@ -98,6 +104,10 @@ public class SearchFragment extends Fragment {
 
     // Gather column values from the current edit texts, exclude empty text.
     private Map<String, String> gatherColumnValues() {
+        if (null == currentPluginModule) {
+            return null;
+        }
+
         Map<String, String> columnValues = new HashMap<>();
         for (String columnName : currentPluginModule.getColumnsAndLabels().keySet()) {
             EditText editText = (EditText) getView().findViewWithTag(columnName);

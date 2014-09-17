@@ -94,7 +94,7 @@ public class MembershipGateway extends Gateway<Membership> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(membership.getIndividualExtId());
             dataWrapper.setName(membership.getRelationshipToHead());
-            dataWrapper.setState(state);
+            dataWrapper.setCategory(state);
             return dataWrapper;
         }
     }

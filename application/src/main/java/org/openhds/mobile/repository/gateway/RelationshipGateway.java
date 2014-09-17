@@ -95,7 +95,7 @@ public class RelationshipGateway extends Gateway<Relationship> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(relationship.getIndividualA());
             dataWrapper.setName(relationship.getType());
-            dataWrapper.setState(state);
+            dataWrapper.setCategory(state);
             return dataWrapper;
         }
     }

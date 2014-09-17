@@ -2,15 +2,19 @@ package org.openhds.mobile.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import org.openhds.mobile.R;
-import org.openhds.mobile.fragment.SearchFragment;
 import org.openhds.mobile.fragment.DataSelectionFragment;
+import org.openhds.mobile.fragment.SearchFragment;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 
 import java.util.ArrayList;
@@ -30,7 +34,9 @@ public class FormSearchActivity extends Activity {
     private SearchFragment searchFragment;
     private DataSelectionFragment dataSelectionFragment;
     private ArrayList<FormSearchPluginModule> formSearchPluginModules;
+    private FormSearchPluginModule currentFormSearchPluginModule;
     private SearchPluginListAdapter searchPluginListAdapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +64,26 @@ public class FormSearchActivity extends Activity {
             // recall pending and completed searches
             formSearchPluginModules = savedInstanceState.getParcelableArrayList(FORM_SEARCH_PLUGINS_KEY);
         }
+
+        searchFragment.setResultsHandler(new SearchResultsHandler());
+        dataSelectionFragment.setSelectionHandler(new DataSelectionHandler());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        Button doneButton = (Button) findViewById(R.id.done_button);
+        doneButton.setOnClickListener(new DoneButtonListener());
+
+        listView = (ListView) findViewById(R.id.form_search_list_view);
+        listView.setOnItemClickListener(new PluginClickListener());
+
         populateSearchList();
     }
 
     private void populateSearchList() {
         searchPluginListAdapter = new SearchPluginListAdapter(this, 0, formSearchPluginModules);
-        ListView listView = (ListView) findViewById(R.id.form_search_list_view);
         listView.setAdapter(searchPluginListAdapter);
     }
 
@@ -102,6 +117,43 @@ public class FormSearchActivity extends Activity {
                         plugin.getLabelId(), plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
             }
             return convertView;
+        }
+    }
+
+    private class PluginClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            currentFormSearchPluginModule = searchPluginListAdapter.getItem(position);
+
+            List<FormSearchPluginModule> plugins = new ArrayList<>();
+            plugins.add(currentFormSearchPluginModule);
+            searchFragment.setSearchPluginModules(plugins);
+            dataSelectionFragment.clearData();
+        }
+    }
+
+    private class SearchResultsHandler implements SearchFragment.ResultsHandler {
+        @Override
+        public void handleSearchResults(List<DataWrapper> dataWrappers) {
+            dataSelectionFragment.populateData(dataWrappers);
+        }
+    }
+
+    private class DataSelectionHandler implements DataSelectionFragment.SelectionHandler {
+        @Override
+        public void handleSelectedData(DataWrapper dataWrapper) {
+            currentFormSearchPluginModule.setFieldValue(dataWrapper.getExtId());
+            searchPluginListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private class DoneButtonListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Intent data = new Intent();
+            data.putParcelableArrayListExtra(FORM_SEARCH_PLUGINS_KEY, formSearchPluginModules);
+            setResult(RESULT_OK, data);
+            finish();
         }
     }
 }

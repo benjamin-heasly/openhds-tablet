@@ -66,7 +66,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(fieldWorker.getExtId());
             dataWrapper.setName(fieldWorker.getFirstName());
-            dataWrapper.setState(state);
+            dataWrapper.setCategory(state);
             return dataWrapper;
         }
     }

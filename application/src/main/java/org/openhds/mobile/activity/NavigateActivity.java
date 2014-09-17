@@ -346,9 +346,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     public void stepDown(DataWrapper selected) {
         String currentState = getState();
 
-        if (!currentState.equals(selected.getState())) {
+        if (!currentState.equals(selected.getCategory())) {
             throw new IllegalStateException("Selected state <"
-                    + selected.getState() + "> mismatch with current state <"
+                    + selected.getCategory() + "> mismatch with current state <"
                     + currentState + ">");
         }
 

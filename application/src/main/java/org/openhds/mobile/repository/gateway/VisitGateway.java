@@ -60,7 +60,7 @@ public class VisitGateway extends Gateway<Visit> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(visit.getVisitExtId());
             dataWrapper.setName(visit.getLocationExtId());
-            dataWrapper.setState(state);
+            dataWrapper.setCategory(state);
             return dataWrapper;
         }
     }

@@ -23,17 +23,28 @@ public class DataSelectionFragment extends Fragment {
 
     private SelectionHandler selectionHandler;
     private DataSelectionListAdapter dataWrapperAdapter;
+    private ListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.data_selection_fragment, container, false);
+        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.data_selection_fragment, container, false);
+
+        listView = (ListView) viewGroup.findViewById(R.id.data_fragment_listview);
+        listView.setOnItemClickListener(new DataClickListener());
+
+        return viewGroup;
     }
 
     public void populateData(List<DataWrapper> dataWrappers) {
         dataWrapperAdapter = new DataSelectionListAdapter(getActivity(), R.layout.generic_list_item, dataWrappers);
-        ListView listView = (ListView) getActivity().findViewById(R.id.data_fragment_listview);
         listView.setAdapter(dataWrapperAdapter);
-        listView.setOnItemClickListener(new DataClickListener());
+    }
+
+    public void clearData() {
+        if (null == dataWrapperAdapter) {
+            return;
+        }
+        dataWrapperAdapter.clear();
     }
 
     public void setSelectionHandler(SelectionHandler selectionHandler) {

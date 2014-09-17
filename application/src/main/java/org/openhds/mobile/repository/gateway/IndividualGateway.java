@@ -126,7 +126,7 @@ public class IndividualGateway extends Gateway<Individual> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(individual.getExtId());
             dataWrapper.setName(getFullName(individual));
-            dataWrapper.setState(state);
+            dataWrapper.setCategory(state);
 
             // for Bioko
             // add individual details to payload

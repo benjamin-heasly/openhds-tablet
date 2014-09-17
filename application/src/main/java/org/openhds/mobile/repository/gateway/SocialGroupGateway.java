@@ -57,7 +57,7 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(socialGroup.getExtId());
             dataWrapper.setName(socialGroup.getGroupName());
-            dataWrapper.setState(state);
+            dataWrapper.setCategory(state);
             return dataWrapper;
         }
     }

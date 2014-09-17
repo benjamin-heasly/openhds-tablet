@@ -143,6 +143,7 @@
 
     <!-- Search Labels-->
     <string name="search_database_label">Search</string>
+    <string name="search_done_label">Done</string>
     <string name="search_database_description">Search the Database</string>
     <string name="search_individual_label">Find an Individual</string>
     <string name="search_field_worker_label">Find a Field Worker</string>

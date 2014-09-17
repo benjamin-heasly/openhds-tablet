@@ -92,7 +92,7 @@ public class LocationGateway extends Gateway<Location> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(location.getExtId());
             dataWrapper.setName(location.getName());
-            dataWrapper.setState(state);
+            dataWrapper.setCategory(state);
             return dataWrapper;
         }
     }
