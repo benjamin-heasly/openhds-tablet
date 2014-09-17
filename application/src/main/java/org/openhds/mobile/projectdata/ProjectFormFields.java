@@ -245,4 +245,9 @@ public class ProjectFormFields {
         public static final String OUT_MIGRATION_REASON = "outMigrationReason";
     }
 
+    public static final class PregnancyObservation {
+        public static final String PREGNANCY_OBSERVATION_RECORDED_DATE = "recordedDate";
+
+    }
+
 }

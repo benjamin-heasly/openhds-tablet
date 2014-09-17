@@ -16,25 +16,30 @@ import java.util.Map;
 // button (aka it's amIValid() == false).
 public class UpdateFormFilters {
 
-	public static class StartAVisit implements FormFilter {
+    public static class StartAVisit implements FormFilter {
 
-		@Override
-		public boolean amIValid(NavigateActivity navigateActivity) {
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
 
-			if (null == navigateActivity.getCurrentVisit()) {
-				return true;
-			}
+            if (null == navigateActivity.getCurrentVisit()) {
+                return true;
+            }
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 
     public static class RegisterOutMigration implements FormFilter {
 
         @Override
         public boolean amIValid(NavigateActivity navigateActivity) {
 
-            if (null != navigateActivity.getCurrentVisit()) {
+            Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
+
+            boolean deceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+            boolean isOutMigrated = UpdateFormFilters.isIndividualOutMigrated(selectedIndividual);
+
+            if (null != navigateActivity.getCurrentVisit() && !deceased && !isOutMigrated) {
                 return true;
             }
 
@@ -47,9 +52,12 @@ public class UpdateFormFilters {
         @Override
         public boolean amIValid(NavigateActivity navigateActivity) {
 
-            boolean deceased = UpdateFormFilters.isIndividualDeceased(navigateActivity, navigateActivity.getHierarchyPath());
+            Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
 
-            if (null != navigateActivity.getCurrentVisit() && !deceased) {
+            boolean deceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+            boolean isOutMigrated = UpdateFormFilters.isIndividualOutMigrated(selectedIndividual);
+
+            if (null != navigateActivity.getCurrentVisit() && !deceased && !isOutMigrated) {
                 return true;
             }
 
@@ -57,18 +65,52 @@ public class UpdateFormFilters {
         }
     }
 
-    private static boolean isIndividualDeceased(
-            NavigateActivity navigateActivity,
-            Map<String, DataWrapper> hierarchyPath) {
+    public static class RecordPregnancyObservation implements FormFilter {
 
-        String individualExtId = hierarchyPath.get(
-                ProjectActivityBuilder.UpdateActivityModule.INDIVIDUAL_STATE)
-                .getExtId();
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
 
+            Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
+
+            boolean isDeceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+            boolean isFemale = UpdateFormFilters.isIndividualFemale(selectedIndividual);
+            boolean isOutMigrated = UpdateFormFilters.isIndividualOutMigrated(selectedIndividual);
+
+            if (null != navigateActivity.getCurrentVisit() && isFemale && !isDeceased && !isOutMigrated) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private static Individual getCurrentSelectedIndividual(NavigateActivity navigateActivity) {
+
+        Map<String, DataWrapper> hierarchyPath = navigateActivity.getHierarchyPath();
+        String individualExtId =
+                hierarchyPath.get(ProjectActivityBuilder.UpdateActivityModule.INDIVIDUAL_STATE).getExtId();
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-        Individual selectedIndividual = individualGateway.getFirst(navigateActivity.getContentResolver(),
+
+        return individualGateway.getFirst(navigateActivity.getContentResolver(),
                 individualGateway.findByExtIdPrefixDescending(individualExtId));
+    }
+
+    private static boolean isIndividualDeceased(Individual selectedIndividual) {
 
         return selectedIndividual.getEndType().equals(ProjectResources.Individual.END_TYPE_DEATH);
+
     }
+
+    private static boolean isIndividualFemale(Individual selectedIndividual) {
+
+        return selectedIndividual.getGender().equals(ProjectResources.Individual.GENDER_FEMALE);
+
+    }
+
+    private static boolean isIndividualOutMigrated(Individual selectedIndividual) {
+
+        return selectedIndividual.getEndType().equals(ProjectResources.Individual.RESIDENCY_END_TYPE_OMG);
+
+    }
+
 }

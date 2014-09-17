@@ -284,11 +284,16 @@ public class FormHelper {
                     Element child = dataDescendantsItr.next();
                     String name = child.getName();
 
+                    boolean isNestedElement = child.getParentElement().hasAttributes();
+
+                    if (child.getParentElement() != filledFormRoot && isNestedElement) {
+                        filledFormRoot.removeChild(name);
+                    }
+
                     if (formFieldData.containsKey(name) && null != formFieldData.get(name)) {
                         toModify.put(child, formFieldData.get(name));
-                    } else {
-                        toModify.put(child, "");
                     }
+
                 }
 
                 for (Element child : toModify.keySet()) {
