@@ -35,7 +35,8 @@
     <Spinner
             android:id="@+id/search_fragment_spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"/>
 
     <LinearLayout
             android:id="@+id/search_fragment_container"
@@ -43,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@android:color/transparent"
-            android:dividerHeight="15dp" />
+            android:dividerHeight="15dp"
+            android:paddingTop="15dp"/>
 
 </LinearLayout>

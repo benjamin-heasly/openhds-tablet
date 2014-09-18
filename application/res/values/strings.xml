@@ -198,10 +198,12 @@
     <string name="bioko_portal_description">Record the distribution of bednets</string>
 
     <!-- Form Types -->
+    <string name="form_type_other">Other</string>
     <string name="form_type_individual">Individual</string>
     <string name="form_type_location">Location</string>
     <string name="form_type_visit">Visit</string>
     <string name="form_type_out_migration">Out Migration</string>
+    <string name="form_type_in_migration">In Migration</string>
     <string name="form_type_bed_net">Bed Net</string>
     <string name="form_type_death">Death</string>
     <string name="form_instance_list_header">Recent Forms</string>
