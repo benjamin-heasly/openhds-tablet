@@ -53,10 +53,6 @@
     <string name="lastname_hint_lbl">Apellido</string>
     <string name="gender_lbl">Género</string>
     <string name="clear_lbl">Clear</string>
-    <string name="search_database_label">Buscar</string>
-    <string name="search_loc_lbl">Buscar Ubicación</string>
-    <string name="search_form_lbl">Buscar Impreso</string>
-    <string name="search_individual_lbl">Buscar por un Individuo</string>
     <string name="external_id_lbl">ExtId:</string>
     <string name="hierarchy1_select_lbl">Seleccionar una Región</string>
     <string name="hierarchy1_lbl">Región:</string>
@@ -100,7 +96,14 @@
     <string name="add_member_of_household_label">Añadir un Miembro del Domicilio</string>
     <string name="edit_individual_label">Editar Individuo</string>
     <string name="house_of_prefix">Casa de</string>
-    
+
+    <!-- Search Labels-->
+    <string name="search_database_label">TO TRANSLATE: Search</string>
+    <string name="search_done_label">TO TRANSLATE: Done</string>
+    <string name="search_database_description">TO TRANSLATE: Search the Database</string>
+    <string name="search_individual_label">TO TRANSLATE: Find an Individual</string>
+    <string name="search_field_worker_label">TO TRANSLATE: Find a Field Worker</string>
+
     <!-- Details Fragment Values -->
     <string name="toggle_fragment_button_show_details">Mostrar Detalles</string>
     <string name="toggle_fragment_button_none">Nada</string>
@@ -130,7 +133,7 @@
     <string name="db_val_relation_to_head_type_other_relative">Otro Pariente</string>
     <string name="db_val_relation_to_head_type_dont_know">No Sé</string>
         
-        <!-- IndividualDetailFragment Labels -->
+        <!-- Individual Labels -->
     <string name="individual_full_name_label">Nombre </string>
  	<string name="individual_other_names_label">Otros Nombres</string>
     <string name="individual_age_label">Edad</string>
@@ -145,7 +148,12 @@
     <string name="individual_member_status_label">Estado del Miembro</string>
     <string name="individual_socialgroup_extid_label">GrupoSocial Ext ID</string>
 
-    <!-- HouseHoldDetailFragment Labels -->
+    <!-- Field Worker Labels -->
+    <string name="field_worker_first_name_label">TO TRANSLATE: First Name</string>
+    <string name="field_worker_last_name_label">TO TRANSLATE: Last Name</string>
+    <string name="field_worker_id_label">TO TRANSLATE: Id</string>
+
+    <!-- HouseHold Labels -->
     <string name="household_name">Nombre del Domicilio</string>
     <string name="household_head_extid">Cabeza del Domicilio Ext ID</string>
     <string name="household_member_count">Numero de Miembros del Domicilio</string>
@@ -155,6 +163,7 @@
     <string name="finish_visit">Terminar la Visita</string>
     <string name="out_migration">Registrar una Migración</string>
     <string name="register_death">Registrar una Muerte</string>
+    <string name="in_migration">TO TRANSLATE: Register In-Migration</string>
 
     <!-- NavigateModuleInfo Strings -->
     <string name="census_portal_label">Iniciar Actividad de Censo</string>
@@ -169,10 +178,12 @@
     <string name="bioko_portal_description">Registrar la distribución de telas mosquiteras</string>
 
     <!-- Form Types -->
+    <string name="form_type_other">TO TRANSLATE: Other</string>
     <string name="form_type_individual">Individuo</string>
     <string name="form_type_location">Ubicación</string>
     <string name="form_type_visit">Visita</string>
     <string name="form_type_out_migration">Migración</string>
+    <string name="form_type_in_migration">TO TRANSLATE: In Migration</string>
     <string name="form_type_bed_net">Tela Mosquitera</string>
     <string name="form_type_death">Muerte</string>
 
