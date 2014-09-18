@@ -183,6 +183,7 @@
     <string name="start_a_visit">Start A Visit</string>
     <string name="finish_visit">Finish Visit</string>
     <string name="out_migration">Register Out-Migration</string>
+    <string name="in_migration">Register In-Migration</string>
 
     <!-- NavigateModuleInfo Strings -->
     <string name="census_portal_label">Start Census Activity</string>

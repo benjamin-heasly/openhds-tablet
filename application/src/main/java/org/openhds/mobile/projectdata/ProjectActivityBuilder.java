@@ -16,6 +16,8 @@ import org.openhds.mobile.projectdata.FormPayloadConsumers.UpdateFormPayloadCons
 import org.openhds.mobile.projectdata.QueryHelpers.CensusQueryHelper;
 import org.openhds.mobile.projectdata.QueryHelpers.NavigateModuleInfo;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.search.FormSearchPluginModule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -374,6 +376,19 @@ public class ProjectActivityBuilder {
                     new UpdateFormFilters.StartAVisit(),
                     new UpdateFormPayloadBuilders.StartAVisit(),
                     new UpdateFormPayloadConsumers.StartAVisit()));
+
+            FormSearchPluginModule individualSearch = new FormSearchPluginModule(
+                    GatewayRegistry.getLocationGateway(),
+                    R.string.search_individual_label,
+                    ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
+            ArrayList<FormSearchPluginModule> searches = new ArrayList<>();
+            searches.add(individualSearch);
+            individualFormList.add(new FormBehaviour("In_migration",
+                    R.string.in_migration,
+                    new UpdateFormFilters.RegisterInMigration(),
+                    new UpdateFormPayloadBuilders.RegisterInMigration(),
+                    null,
+                    searches));
 
             bottomFormList.add(new FormBehaviour("Out_migration",
                     R.string.out_migration,

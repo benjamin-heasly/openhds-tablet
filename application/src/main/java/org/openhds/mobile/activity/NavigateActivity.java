@@ -397,9 +397,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private void launchCurrentFormInSearchActivity() {
         FormBehaviour formBehaviour = formHelper.getFormBehaviour();
         if (null != formBehaviour) {
-            // put all the form search plugins in an intent so we know what the user needs to search for
+            // put form search plugins in the intent so we know what the user needs to search for
             Intent intent = new Intent(this, FormSearchActivity.class);
-            intent.putExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, formBehaviour.getFormSearchPluginModules().toArray());
+            intent.putParcelableArrayListExtra(
+                    FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, formBehaviour.getFormSearchPluginModules());
             startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE);
         }
     }
@@ -490,7 +491,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     break;
 
                 case SEARCH_ACTIVITY_REQUEST_CODE:
-                    // result intent contains the form fields and values that the user just search for
+                    // data intent contains the form fields and values that the user just search for
                     List<FormSearchPluginModule> formSearchPluginModules =
                             data.getParcelableArrayListExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY);
 

@@ -10,33 +10,53 @@ import java.util.Map;
 
 public class UpdateFormPayloadBuilders {
 
-	/**
-	 * 
-	 * Helper methods for FormPayloadBuilders
-	 * 
-	 */
+    /**
+     *
+     * Helper methods for FormPayloadBuilders
+     *
+     */
 
-	public static class StartAVisit implements FormPayloadBuilder {
+    public static class StartAVisit implements FormPayloadBuilder {
 
-		@Override
-		public void buildFormPayload(Map<String, String> formPayload,
-				NavigateActivity navigateActivity) {
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
 
-			PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, false);
 
             String visitDate = new SimpleDateFormat("yyyy-MM-dd").format(
-					Calendar.getInstance().getTime()).toString();
-			String locationExtId = navigateActivity.getHierarchyPath()
-					.get(UpdateActivityModule.HOUSEHOLD_STATE).getExtId();
-			String visitExtId = visitDate + "_" + locationExtId;
+                    Calendar.getInstance().getTime()).toString();
+            String locationExtId = navigateActivity.getHierarchyPath()
+                    .get(UpdateActivityModule.HOUSEHOLD_STATE).getExtId();
+            String visitExtId = visitDate + "_" + locationExtId;
 
-			formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
-			formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,
-					locationExtId);
-			formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
-		}
-	}
+            formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
+            formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,
+                    locationExtId);
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
+        }
+    }
+
+    public static class RegisterInMigration implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+
+            String locationExtId = navigateActivity.getHierarchyPath().get(UpdateActivityModule.HOUSEHOLD_STATE).getExtId();
+            formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+
+            formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_INTERNAL);
+
+            String migrationDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString();
+            formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_DATE, migrationDate);
+        }
+    }
 
     public static class RegisterOutMigration implements FormPayloadBuilder {
 

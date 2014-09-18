@@ -2,11 +2,13 @@ package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.Location;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
 
 import java.util.Map;
 
@@ -22,6 +24,25 @@ public class UpdateFormFilters {
         public boolean amIValid(NavigateActivity navigateActivity) {
 
             if (null == navigateActivity.getCurrentVisit()) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    public static class RegisterInMigration implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+
+            if (null == navigateActivity.getCurrentVisit()) {
+                return false;
+            }
+
+            String locationKey = ProjectActivityBuilder.UpdateActivityModule.HOUSEHOLD_STATE;
+            Map<String, DataWrapper> hierarchyPath = navigateActivity.getHierarchyPath();
+            if (hierarchyPath.containsKey(locationKey) && null != hierarchyPath.get(locationKey)) {
                 return true;
             }
 

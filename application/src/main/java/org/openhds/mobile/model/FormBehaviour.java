@@ -5,7 +5,7 @@ import org.openhds.mobile.projectdata.FormPayloadBuilders.FormPayloadBuilder;
 import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class FormBehaviour {
 
@@ -14,7 +14,9 @@ public class FormBehaviour {
     private FormFilter formFilter;
     private FormPayloadBuilder formPayloadBuilder;
     private FormPayloadConsumer formPayloadConsumer;
-    private List<FormSearchPluginModule> formSearchPluginModules;
+
+    // ArrayList, not just List, because of user with Android Parcelable interface.
+    private ArrayList<FormSearchPluginModule> formSearchPluginModules;
 
     public FormBehaviour(String formName,
                          int formLabelId,
@@ -29,7 +31,7 @@ public class FormBehaviour {
                          FormFilter formFilter,
                          FormPayloadBuilder formMapper,
                          FormPayloadConsumer formPayloadConsumer,
-                         List<FormSearchPluginModule> formSearchPluginModules) {
+                         ArrayList<FormSearchPluginModule> formSearchPluginModules) {
 
         this.formName = formName;
         this.formLabelId = formLabelId;
@@ -59,7 +61,7 @@ public class FormBehaviour {
         return formPayloadConsumer;
     }
 
-    public List<FormSearchPluginModule> getFormSearchPluginModules() {
+    public ArrayList<FormSearchPluginModule> getFormSearchPluginModules() {
         return formSearchPluginModules;
     }
 

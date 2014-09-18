@@ -238,6 +238,16 @@ public class ProjectFormFields {
 		
 	}
 
+    public static final class InMigrations {
+        public static final String IN_MIGRATION_TYPE = "migrationType";
+        public static final String IN_MIGRATION_DATE = "migrationDate";
+        public static final String IN_MIGRATION_ORIGIN = "migrationOrigin";
+        public static final String IN_MIGRATION_REASON = "migrationReason";
+
+        public static final String IN_MIGRATION_INTERNAL = "internal_inmigration";
+        public static final String IN_MIGRATION_EXTERNAL = "external_inmigration";
+    }
+
     public static final class OutMigrations {
         public static final String OUT_MIGRATION_INDIVIDUAL_EXTID = "outMigrationIndividualExtId";
         public static final String OUT_MIGRATION_DATE = "outMigrationDate";
