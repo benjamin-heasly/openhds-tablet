@@ -34,6 +34,9 @@ import static org.openhds.mobile.utilities.LayoutUtils.makeEditText;
 public class SearchFragment extends Fragment {
 
     private static final String LIKE_WILD_CARD = "%";
+    private static final String DATA_CATEGORY = "searchFragment";
+    private static final int RESULTS_PENDING = -1;
+    private static final int NO_SEARCH = -2;
 
     private SearchPluginModule currentPluginModule;
     private ResultsHandler resultsHandler;
@@ -54,37 +57,62 @@ public class SearchFragment extends Fragment {
     }
 
     public void setSearchPluginModules(List<? extends SearchPluginModule> searchPluginModules) {
-
         Spinner spinner = (Spinner) getView().findViewById(R.id.search_fragment_spinner);
 
-        if (null == searchPluginModules || 0 == searchPluginModules.size()) {
+        if (null == searchPluginModules || searchPluginModules.isEmpty()) {
             spinner.setVisibility(View.GONE);
             return;
         }
 
-        // activate the only plugin
+        // select the only plugin
         if (1 == searchPluginModules.size()) {
-            setPluginModule(searchPluginModules.get(0));
             spinner.setVisibility(View.GONE);
+            setPluginModule(searchPluginModules.get(0));
             return;
         }
 
         // allow the user to choose from 2 or more plugins
+        spinner.setVisibility(View.VISIBLE);
         searchPluginAdapter = new SpinnerListAdapter(
                 getActivity(), R.layout.generic_dropdown_item, (List<SearchPluginModule>) searchPluginModules);
         spinner.setAdapter(searchPluginAdapter);
         spinner.setOnItemSelectedListener(new SpinnerClickHandler());
+
+        // select the first plugin
+        setPluginModule(searchPluginModules.get(0));
     }
 
     public void setTitle(int titleId) {
-        TextView textView = (TextView) getView().findViewById(R.id.search_fragment_title);
-        textView.setText(titleId);
+        TextView titleText = (TextView) getView().findViewById(R.id.search_fragment_title);
+        titleText.setText(titleId);
+    }
+
+    private void updateStatus(int resultCount) {
+        TextView statusText = (TextView) getView().findViewById(R.id.search_fragment_status);
+
+        if (NO_SEARCH == resultCount) {
+            statusText.setVisibility(View.GONE);
+            return;
+        }
+        statusText.setVisibility(View.VISIBLE);
+
+        if (RESULTS_PENDING == resultCount) {
+            statusText.setText(R.string.search_in_progress_label);
+            getView().invalidate();
+            return;
+        }
+
+        final String resultsStatus = Integer.toString(resultCount)
+                + " "
+                + getActivity().getResources().getString(R.string.search_results_label);
+        statusText.setText(resultsStatus);
     }
 
     // Set up search fields for a selected search plugin module.
     private void setPluginModule(SearchPluginModule searchPluginModule) {
         currentPluginModule = searchPluginModule;
         setTitle(searchPluginModule.getLabelId());
+        updateStatus(NO_SEARCH);
         configureEditTexts();
     }
 
@@ -119,11 +147,16 @@ public class SearchFragment extends Fragment {
         return columnValues;
     }
 
-    private void performQuery() {
+    // Query based on user's text and return result count or code
+    private int performQuery() {
         Map<String, String> columnNamesAndValues = gatherColumnValues();
+        if (null == columnNamesAndValues) {
+            return NO_SEARCH;
+        }
+
         int nValues = columnNamesAndValues.size();
         if (0 == nValues) {
-            return;
+            return NO_SEARCH;
         }
 
         // surround the user's text with SQL LIKE wild cards
@@ -137,12 +170,14 @@ public class SearchFragment extends Fragment {
         final String[] columnValues = wildCardValues.toArray(new String[nValues]);
         Query query = currentPluginModule.getGateway().findByCriteriaLike(columnNames, columnValues, columnNames[0]);
         List<DataWrapper> dataWrappers = currentPluginModule.getGateway().getQueryResultList(
-                getActivity().getContentResolver(), query, "searchFragment");
+                getActivity().getContentResolver(), query, DATA_CATEGORY);
 
         // report the results to the listener
         if (null != resultsHandler) {
             resultsHandler.handleSearchResults(dataWrappers);
         }
+
+        return dataWrappers.size();
     }
 
     public interface ResultsHandler {
@@ -188,10 +223,18 @@ public class SearchFragment extends Fragment {
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {}
     }
+
+    // Perform the user's search when they click the search button.
     private class ButtonClickHandler implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            performQuery();
+            // TODO: this RESULTS_PENDING status will never show up.
+            // need to mode the searching to an async task to allow
+            // the UI to redraw while the search is running
+            // Gateway should provide a handy mechanism for this...
+            updateStatus(RESULTS_PENDING);
+            int resultCount = performQuery();
+            updateStatus(resultCount);
         }
     }
 }

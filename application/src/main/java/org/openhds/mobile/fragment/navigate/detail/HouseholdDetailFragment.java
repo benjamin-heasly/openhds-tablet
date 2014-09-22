@@ -48,17 +48,17 @@ public class HouseholdDetailFragment extends DetailFragment {
 			extIdTextView.setText(socialGroup.getExtId());
 
 			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
-                    R.string.household_name,
+                    R.string.social_group_name,
                     socialGroup.getGroupName(),
                     greenLabel, greenValue, R.color.NA_Gray));
 
 			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
-                    R.string.household_head_extid,
+                    R.string.social_group_head_ext_id,
                     socialGroup.getGroupHead(),
                     greenLabel, greenValue, R.color.NA_Gray));
 
 			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
-                    R.string.household_member_count,
+                    R.string.social_group_member_count,
                     getMemberCount(socialGroup.getExtId()),
                     greenLabel, greenValue, R.color.NA_Gray));
 

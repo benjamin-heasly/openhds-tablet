@@ -79,6 +79,8 @@ public class FormSearchActivity extends Activity {
         listView = (ListView) findViewById(R.id.form_search_list_view);
         listView.setOnItemClickListener(new PluginClickListener());
 
+        searchFragment.setSearchPluginModules(null);
+
         populateSearchList();
     }
 

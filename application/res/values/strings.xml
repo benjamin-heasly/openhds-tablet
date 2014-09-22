@@ -21,7 +21,6 @@
     <string name="field_worker_created">Field Worker Successfully Created</string>
     <string name="form_status">Form Status:</string>
     <string name="form_view_lbl">Form View</string>
-    <string name="hello">Hello, Android!</string>
     <string name="household_not_found">A household was not found for this Individual</string>
     <string name="idGenerationFailure">An error occurred while generating an id</string>
     <string name="location_lbl">Location:</string>
@@ -142,10 +141,14 @@
     <string name="db_val_relation_to_head_type_dont_know">Don\'t Know</string>
 
     <!-- Search Labels-->
+    <string name="search_database_description">Search the Database</string>
     <string name="search_database_label">Search</string>
     <string name="search_done_label">Done</string>
-    <string name="search_database_description">Search the Database</string>
+    <string name="search_in_progress_label">Searching&#8230;</string>
+    <string name="search_results_label">Results</string>
     <string name="search_individual_label">Find an Individual</string>
+    <string name="search_location_label">Find a Location</string>
+    <string name="search_social_group_label">Find a Household</string>
     <string name="search_field_worker_label">Find a Field Worker</string>
 
     <!-- Individual Labels -->
@@ -170,14 +173,21 @@
     <string name="field_worker_last_name_label">Last Name</string>
     <string name="field_worker_id_label">Id</string>
 
-    <!-- HouseHold Labels -->
-    <string name="household_name">Household Name</string>
-    <string name="household_head_extid">Head of Household Ext ID</string>
-    <string name="household_member_count">Number of Household Members</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_portal">PortalActivity</string>
+    <!-- Location Labels -->
+    <string name="location_name_label">Name</string>
+    <string name="location_ext_id_label">Id</string>
+    <string name="location_sector_label">Sector</string>
+    <string name="location_map_area_label">Map Area</string>
+    <string name="location_locality_label">Locality</string>
+    <string name="location_community_label">Community</string>
+    <string name="location_building_number_label">Building Number</string>
+    <string name="location_floor_number_label">Floor Number</string>
+
+    <!-- Social Group Labels -->
+    <string name="social_group_name">Household Name</string>
+    <string name="social_group_ext_id">Household Id</string>
+    <string name="social_group_head_ext_id">Head of Household Id</string>
+    <string name="social_group_member_count">Number of Household Members</string>
 
     <!-- UpdateActivity FormBehaviour Labels -->
     <string name="start_a_visit">Start A Visit</string>
@@ -190,6 +200,9 @@
     <string name="census_portal_label">Start Census Activity</string>
     <string name="census_portal_description">Add new or edit existing data.</string>
 
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_portal">PortalActivity</string>
     <string name="update_portal_label">Start Update Activity</string>
     <string name="update_portal_description">Conduct visits at locations and update changes since the last visit.</string>
 

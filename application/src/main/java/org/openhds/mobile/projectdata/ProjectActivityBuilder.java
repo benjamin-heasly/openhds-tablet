@@ -1,6 +1,5 @@
 package org.openhds.mobile.projectdata;
 
-import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.navigate.detail.DetailFragment;
 import org.openhds.mobile.fragment.navigate.detail.IndividualDetailFragment;
@@ -17,8 +16,8 @@ import org.openhds.mobile.projectdata.FormPayloadConsumers.UpdateFormPayloadCons
 import org.openhds.mobile.projectdata.QueryHelpers.CensusQueryHelper;
 import org.openhds.mobile.projectdata.QueryHelpers.NavigateModuleInfo;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
-import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
+import org.openhds.mobile.repository.search.SearchUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -378,18 +377,8 @@ public class ProjectActivityBuilder {
                     new UpdateFormPayloadBuilders.StartAVisit(),
                     new UpdateFormPayloadConsumers.StartAVisit()));
 
-            FormSearchPluginModule individualPlugin = new FormSearchPluginModule(
-                    GatewayRegistry.getIndividualGateway(),
-                    R.string.search_individual_label,
-                    ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
-            individualPlugin.getColumnsAndLabels().put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, R.string.individual_first_name_label);
-            individualPlugin.getColumnsAndLabels().put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, R.string.individual_last_name_label);
-            individualPlugin.getColumnsAndLabels().put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER, R.string.individual_personal_phone_number_label);
             ArrayList<FormSearchPluginModule> searches = new ArrayList<>();
-            searches.add(individualPlugin);
+            searches.add(SearchUtils.getIndividualPlugin(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
             individualFormList.add(new FormBehaviour("In_migration",
                     R.string.in_migration,
                     new UpdateFormFilters.RegisterInMigration(),

@@ -11,13 +11,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FormInstanceReviewFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.model.FormInstance;
-import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
+import org.openhds.mobile.repository.search.SearchUtils;
 import org.openhds.mobile.task.HttpTask.RequestContext;
 import org.openhds.mobile.task.SyncEntitiesTask;
 import org.openhds.mobile.task.SyncFieldworkersTask;
@@ -167,30 +166,14 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
     }
 
     private void searchDatabase() {
-        FormSearchPluginModule fieldWorkerPlugin = new FormSearchPluginModule(
-                GatewayRegistry.getFieldWorkerGateway(), R.string.search_field_worker_label, "fieldWorker");
-        fieldWorkerPlugin.getColumnsAndLabels().put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME, R.string.field_worker_first_name_label);
-        fieldWorkerPlugin.getColumnsAndLabels().put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME, R.string.field_worker_last_name_label);
-        fieldWorkerPlugin.getColumnsAndLabels().put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID, R.string.field_worker_id_label);
-
-        FormSearchPluginModule individualPlugin = new FormSearchPluginModule(
-                GatewayRegistry.getIndividualGateway(), R.string.search_individual_label, "individual");
-        individualPlugin.getColumnsAndLabels().put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, R.string.individual_first_name_label);
-        individualPlugin.getColumnsAndLabels().put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, R.string.individual_last_name_label);
-        individualPlugin.getColumnsAndLabels().put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER, R.string.individual_personal_phone_number_label);
-
-        ArrayList<FormSearchPluginModule> plugins = new ArrayList<>();
-        plugins.add(fieldWorkerPlugin);
-        plugins.add(individualPlugin);
+        ArrayList<FormSearchPluginModule> searchPluginModules = new ArrayList<>();
+        searchPluginModules.add(SearchUtils.getFieldWorkerPlugin("fieldWorker"));
+        searchPluginModules.add(SearchUtils.getIndividualPlugin("individual"));
+        searchPluginModules.add(SearchUtils.getLocationPlugin("location"));
+        searchPluginModules.add(SearchUtils.getSocialGroupPlugin("socialGroup"));
 
         Intent intent = new Intent(this, FormSearchActivity.class);
-        intent.putParcelableArrayListExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, plugins);
+        intent.putParcelableArrayListExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, searchPluginModules);
         startActivity(intent);
     }
 }

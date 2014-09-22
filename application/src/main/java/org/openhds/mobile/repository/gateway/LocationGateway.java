@@ -12,6 +12,7 @@ import org.openhds.mobile.repository.Query;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
+import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LATITUDE;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME;
@@ -55,9 +56,8 @@ public class LocationGateway extends Gateway<Location> {
             location.setMapAreaName(extractString(cursor, COLUMN_LOCATION_MAP_AREA_NAME));
             location.setLocalityName(extractString(cursor, COLUMN_LOCATION_LOCALITY_NAME));
             location.setCommunityName(extractString(cursor, COLUMN_LOCATION_COMMUNITY_NAME));
-
-            // for Bioko
             location.setBuildingNumber(extractInt(cursor, COLUMN_LOCATION_BUILDING_NUMBER));
+            location.setFloorNumber(extractInt(cursor, COLUMN_LOCATION_FLOOR_NUMBER));
 
             return location;
         }
@@ -75,9 +75,8 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_MAP_AREA_NAME, location.getMapAreaName());
             contentValues.put(COLUMN_LOCATION_LOCALITY_NAME, location.getLocalityName());
             contentValues.put(COLUMN_LOCATION_COMMUNITY_NAME, location.getCommunityName());
-
-            // for Bioko
             contentValues.put(COLUMN_LOCATION_BUILDING_NUMBER, location.getBuildingNumber());
+            contentValues.put(COLUMN_LOCATION_FLOOR_NUMBER, location.getFloorNumber());
 
             return contentValues;
         }

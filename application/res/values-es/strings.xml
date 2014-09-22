@@ -154,9 +154,9 @@
     <string name="field_worker_id_label">TO TRANSLATE: Id</string>
 
     <!-- HouseHold Labels -->
-    <string name="household_name">Nombre del Domicilio</string>
-    <string name="household_head_extid">Cabeza del Domicilio Ext ID</string>
-    <string name="household_member_count">Numero de Miembros del Domicilio</string>
+    <string name="social_group_name">Nombre del Domicilio</string>
+    <string name="social_group_head_ext_id">Cabeza del Domicilio Ext ID</string>
+    <string name="social_group_member_count">Numero de Miembros del Domicilio</string>
 
     <!-- UpdateActivity FormBehaviour Labels -->
     <string name="start_a_visit">Iniciar una Visita</string>

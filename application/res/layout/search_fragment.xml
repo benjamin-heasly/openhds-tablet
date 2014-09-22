@@ -13,12 +13,23 @@
                 android:id="@+id/search_fragment_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/search_fragment_button"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/search_fragment_button"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:gravity="right"
-                />
+                android:gravity="left"/>
+
+        <TextView
+                android:id="@+id/search_fragment_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="15dp"
+                android:paddingBottom="5dp"
+                android:layout_alignBottom="@+id/search_fragment_button"
+                android:layout_toLeftOf="@+id/search_fragment_button"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:gravity="right"/>
 
         <ImageButton
                 android:id="@+id/search_fragment_button"
