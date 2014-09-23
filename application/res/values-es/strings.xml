@@ -98,15 +98,15 @@
     <string name="house_of_prefix">Casa de</string>
 
     <!-- Search Labels-->
-    <string name="search_database_label">TO TRANSLATE: Search</string>
-    <string name="search_done_label">TO TRANSLATE: Done</string>
-    <string name="search_database_description">TO TRANSLATE: Search the Database</string>
-    <string name="search_individual_label">TO TRANSLATE: Find an Individual</string>
-    <string name="search_field_worker_label">TO TRANSLATE: Find a Field Worker</string>
-    <string name="search_results_label">TO TRANSLATE: Results</string>
-    <string name="search_in_progress_label">TO TRANSLATE: Searching&#8230;</string>
-    <string name="search_location_label">TO TRANSLATE: Find a Location</string>
-    <string name="search_social_group_label">TO TRANSLATE: Find a Household</string>
+    <string name="search_database_label">Buscar</string>
+    <string name="search_done_label">Acabado</string>
+    <string name="search_database_description">Buscar el Base de Datos</string>
+    <string name="search_individual_label">Encontrar un Individuo</string>
+    <string name="search_field_worker_label">Encontrar un Investigador de Campo</string>
+    <string name="search_results_label">Resultados</string>
+    <string name="search_in_progress_label">Buscando&#8230;</string>
+    <string name="search_location_label">Encontrar una Ubicación</string>
+    <string name="search_social_group_label">Encontrar un Domicilio</string>
 
 
     <!-- Details Fragment Values -->
@@ -154,32 +154,33 @@
     <string name="individual_socialgroup_extid_label">GrupoSocial Ext ID</string>
 
     <!-- Field Worker Labels -->
-    <string name="field_worker_first_name_label">TO TRANSLATE: First Name</string>
-    <string name="field_worker_last_name_label">TO TRANSLATE: Last Name</string>
-    <string name="field_worker_id_label">TO TRANSLATE: Id</string>
+    <string name="field_worker_first_name_label">Nombre</string>
+    <string name="field_worker_last_name_label">Apellido</string>
+    <string name="field_worker_id_label">Id</string>
 
     <!-- Location Labels -->
-    <string name="location_name_label">TO TRANSLATE: Name</string>
-    <string name="location_ext_id_label">TO TRANSLATE: Id</string>
-    <string name="location_sector_label">TO TRANSLATE: Sector</string>
-    <string name="location_map_area_label">TO TRANSLATE: Map Area</string>
-    <string name="location_locality_label">TO TRANSLATE: Locality</string>
-    <string name="location_community_label">TO TRANSLATE: Community</string>
-    <string name="location_building_number_label">TO TRANSLATE: Building Number</string>
-    <string name="location_floor_number_label">TO TRANSLATE: Floor Number</string>
+    <string name="location_name_label">Nombre</string>
+    <string name="location_ext_id_label">Id</string>
+    <string name="location_sector_label">Sector</string>
+    <string name="location_map_area_label">Área de Mapa</string>
+    <string name="location_locality_label">Localidad</string>
+    <string name="location_community_label">Comunidad</string>
+    <string name="location_building_number_label">Numero del Edificio</string>
+    <string name="location_floor_number_label">Numero del Piso</string>
 
     <!-- Social Group Labels -->
     <string name="social_group_name">Nombre del Domicilio</string>
-    <string name="social_group_ext_id">TO TRANSLATE: Household Id</string>
+    <string name="social_group_ext_id">Domicilio Id</string>
     <string name="social_group_head_ext_id">Cabeza del Domicilio Ext ID</string>
     <string name="social_group_member_count">Numero de Miembros del Domicilio</string>
 
     <!-- UpdateActivity FormBehaviour Labels -->
     <string name="start_a_visit">Iniciar una Visita</string>
     <string name="finish_visit">Terminar la Visita</string>
-    <string name="out_migration">Registrar una Migración</string>
+    <string name="out_migration">Registrar una Enmigración</string>
     <string name="register_death">Registrar una Muerte</string>
-    <string name="in_migration">TO TRANSLATE: Register In-Migration</string>
+    <string name="in_migration">Registrar una Inmigración</string>
+    <string name="record_pregnancy_observation">Registrar una Observación Embarazo</string>
 
     <!-- NavigateModuleInfo Strings -->
     <string name="census_portal_label">Iniciar Actividad de Censo</string>
@@ -194,14 +195,16 @@
     <string name="bioko_portal_description">Registrar la distribución de telas mosquiteras</string>
 
     <!-- Form Types -->
-    <string name="form_type_other">TO TRANSLATE: Other</string>
+    <string name="form_type_other">Otro</string>
     <string name="form_type_individual">Individuo</string>
     <string name="form_type_location">Ubicación</string>
     <string name="form_type_visit">Visita</string>
-    <string name="form_type_out_migration">Migración</string>
-    <string name="form_type_in_migration">TO TRANSLATE: In Migration</string>
+    <string name="form_type_out_migration">Enmigración</string>
+    <string name="form_type_in_migration">Inmigración</string>
     <string name="form_type_bed_net">Tela Mosquitera</string>
     <string name="form_type_death">Muerte</string>
+    <string name="form_type_pregnancy_observation">Observación Embarazo</string>
+
 
     <string name="field_worker_home_menu_text">Investigador de Campo Inicio</string>
     <string name="logout_menu_text">Cerrar Sesión</string>
@@ -211,8 +214,6 @@
     <string name="supervisor_checkbox_header">Aprobado</string>
     <string name="supervisor_approve_all">Aprobar Todo</string>
     <string name="supervisor_approve_selected">Aprobar Seleccionado</string>
-    <string name="sub_district_label">SubDistrict</string>
-    <string name="record_pregnancy_observation">Record a Pregnancy Observation</string>
-    <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
+    <string name="sub_district_label">SubDistrito</string>
 
 </resources>
