@@ -103,6 +103,11 @@
     <string name="search_database_description">TO TRANSLATE: Search the Database</string>
     <string name="search_individual_label">TO TRANSLATE: Find an Individual</string>
     <string name="search_field_worker_label">TO TRANSLATE: Find a Field Worker</string>
+    <string name="search_results_label">TO TRANSLATE: Results</string>
+    <string name="search_in_progress_label">TO TRANSLATE: Searching&#8230;</string>
+    <string name="search_location_label">TO TRANSLATE: Find a Location</string>
+    <string name="search_social_group_label">TO TRANSLATE: Find a Household</string>
+
 
     <!-- Details Fragment Values -->
     <string name="toggle_fragment_button_show_details">Mostrar Detalles</string>
@@ -153,8 +158,19 @@
     <string name="field_worker_last_name_label">TO TRANSLATE: Last Name</string>
     <string name="field_worker_id_label">TO TRANSLATE: Id</string>
 
-    <!-- HouseHold Labels -->
+    <!-- Location Labels -->
+    <string name="location_name_label">TO TRANSLATE: Name</string>
+    <string name="location_ext_id_label">TO TRANSLATE: Id</string>
+    <string name="location_sector_label">TO TRANSLATE: Sector</string>
+    <string name="location_map_area_label">TO TRANSLATE: Map Area</string>
+    <string name="location_locality_label">TO TRANSLATE: Locality</string>
+    <string name="location_community_label">TO TRANSLATE: Community</string>
+    <string name="location_building_number_label">TO TRANSLATE: Building Number</string>
+    <string name="location_floor_number_label">TO TRANSLATE: Floor Number</string>
+
+    <!-- Social Group Labels -->
     <string name="social_group_name">Nombre del Domicilio</string>
+    <string name="social_group_ext_id">TO TRANSLATE: Household Id</string>
     <string name="social_group_head_ext_id">Cabeza del Domicilio Ext ID</string>
     <string name="social_group_member_count">Numero de Miembros del Domicilio</string>
 
