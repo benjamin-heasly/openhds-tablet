@@ -49,13 +49,19 @@
             android:layout_height="wrap_content"
             android:paddingTop="20dp"/>
 
-    <LinearLayout
-            android:id="@+id/search_fragment_container"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="15dp"
-            android:paddingTop="15dp"/>
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+        <LinearLayout
+                android:id="@+id/search_fragment_container"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="15dp"
+                android:paddingTop="15dp"/>
+
+    </ScrollView>
 
 </LinearLayout>
