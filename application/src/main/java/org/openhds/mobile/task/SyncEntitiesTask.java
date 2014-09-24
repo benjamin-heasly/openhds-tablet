@@ -358,9 +358,15 @@ public class SyncEntitiesTask extends
                             } else if (tagName.equalsIgnoreCase("localityName")) {
                                 location.setLocalityName(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("buildingNumber")) {
-                                location.setBuildingNumber(Integer.parseInt(parser.nextText()));
+                                String buildingNumber = parser.nextText();
+                                if (null != buildingNumber && !buildingNumber.isEmpty()) {
+                                    location.setBuildingNumber(Integer.parseInt(buildingNumber));
+                                }
                             } else if (tagName.equalsIgnoreCase("floorNumber")) {
-                                location.setFloorNumber(Integer.parseInt(parser.nextText()));
+                                String floorNumber = parser.nextText();
+                                if (null != floorNumber && !floorNumber.isEmpty()) {
+                                    location.setFloorNumber(Integer.parseInt(floorNumber));
+                                }
                             } else if (tagName.equalsIgnoreCase("regionName")) {
                                 location.setRegionName(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("provinceName")) {
