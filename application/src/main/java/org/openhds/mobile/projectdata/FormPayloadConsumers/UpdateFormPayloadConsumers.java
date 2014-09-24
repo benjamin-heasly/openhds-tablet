@@ -3,12 +3,15 @@ package org.openhds.mobile.projectdata.FormPayloadConsumers;
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.Visit;
+import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
 import org.openhds.mobile.projectdata.FormAdapters.VisitFormAdapter;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.VisitGateway;
 
 import java.util.Map;
@@ -60,6 +63,31 @@ public class UpdateFormPayloadConsumers {
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
             // TODO Auto-generated method stub
+
+        }
+    }
+
+    public static class RegisterInMigration implements FormPayloadConsumer {
+        @Override
+        public boolean consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+            // update the individual's residency
+            String locationExtId = formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID);
+            String individualExtId = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
+
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            Individual individual = individualGateway.getFirst(navigateActivity.getContentResolver(),
+                    individualGateway.findById(individualExtId));
+            if (null == individual) {
+                return false;
+            }
+
+            individual.setCurrentResidence(locationExtId);
+            individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
+            return false;
+        }
+
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
 
         }
     }

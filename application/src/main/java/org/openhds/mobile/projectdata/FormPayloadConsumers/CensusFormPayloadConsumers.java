@@ -25,9 +25,9 @@ import java.util.Map;
 public class CensusFormPayloadConsumers {
 
     private static Location insertOrUpdateLocation(
-            Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
+            Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
-        Location location = LocationFormAdapter.fromForm(formPayLoad);
+        Location location = LocationFormAdapter.fromForm(formPayload);
 
         LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
         ContentResolver contentResolver = navigateActivity.getContentResolver();

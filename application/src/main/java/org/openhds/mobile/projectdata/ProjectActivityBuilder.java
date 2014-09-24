@@ -383,7 +383,7 @@ public class ProjectActivityBuilder {
                     R.string.in_migration,
                     new UpdateFormFilters.RegisterInMigration(),
                     new UpdateFormPayloadBuilders.RegisterInMigration(),
-                    null,
+                    new UpdateFormPayloadConsumers.RegisterInMigration(),
                     searches));
 
             bottomFormList.add(new FormBehaviour("Out_migration",

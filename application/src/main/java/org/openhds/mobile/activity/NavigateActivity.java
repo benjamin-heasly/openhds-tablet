@@ -488,7 +488,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                             }
                         }
                     }
-                    break;
+
+                    // encrypt files regardless
+                    EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(
+                            OdkCollectHelper.getAllFormInstances(getContentResolver())), this);
+                    return;
 
                 case SEARCH_ACTIVITY_REQUEST_CODE:
                     // data intent contains the form fields and values that the user just search for
@@ -502,18 +506,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
                     // now let the user finish filling in the form in ODK
                     launchCurrentFormInODK();
-                    break;
+                    return;
             }
         }
-
-        // restore the appropriate UI in the middle column
-        if(!shouldShowDetailFragment()) {
-            showValueFragment();
-        }
-
-        // encrypt files regardless
-        EncryptionHelper.encryptFiles(
-                FormInstance.toListOfFiles(OdkCollectHelper.getAllFormInstances(getContentResolver())), this);
     }
 
     public DataWrapper getCurrentSelection() {
