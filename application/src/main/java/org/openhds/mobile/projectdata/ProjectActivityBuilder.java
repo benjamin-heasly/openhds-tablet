@@ -390,7 +390,7 @@ public class ProjectActivityBuilder {
                     R.string.out_migration,
                     new UpdateFormFilters.RegisterOutMigration(),
                     new UpdateFormPayloadBuilders.RegisterOutMigration(),
-                    null));
+                    new UpdateFormPayloadConsumers.RegisterOutMigration()));
 
             bottomFormList.add(new FormBehaviour("Death",
                     R.string.register_death,

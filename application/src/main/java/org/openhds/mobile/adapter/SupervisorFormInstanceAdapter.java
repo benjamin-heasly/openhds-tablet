@@ -100,23 +100,18 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
     }
 
     public List<FormInstance> registerApproveSelectedAction() {
-        ArrayList<Integer> indexesToRemove = new ArrayList<>();
+        ArrayList<FormInstance> toRemove = new ArrayList<>();
         ArrayList<FormInstance> approvedFormInstanceList = new ArrayList<>();
 
         //collect list of instances that were checked for approval
         for (int i = 0; i < checkList.size(); i++) {
             if (checkList.get(i)) {
-                approvedFormInstanceList.add(formInstanceList.get(i));
-                indexesToRemove.add(i);
+                FormInstance formInstance = formInstanceList.get(i);
+                approvedFormInstanceList.add(formInstance);
+                toRemove.add(formInstance);
             }
         }
-
-        //remove the approved instances from the adapter's list
-        for (Integer index: indexesToRemove) {
-            FormInstance removed = formInstanceList.get(index);
-            formInstanceList.remove(index);
-            this.remove(removed);
-        }
+        formInstanceList.removeAll(toRemove);
 
         //reset all checkboxes to unchecked
         checkList = clearCheckListState();

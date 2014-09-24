@@ -67,6 +67,29 @@ public class UpdateFormPayloadConsumers {
         }
     }
 
+    public static class RegisterOutMigration implements FormPayloadConsumer {
+        @Override
+        public boolean consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+            // update the individual's residency end type
+            String individualExtId = formPayload.get(ProjectFormFields.OutMigrations.OUT_MIGRATION_INDIVIDUAL_EXTID);
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            Individual individual = individualGateway.getFirst(navigateActivity.getContentResolver(),
+                    individualGateway.findById(individualExtId));
+            if (null == individual) {
+                return false;
+            }
+
+            individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_OMG);
+            individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
+            return false;
+        }
+
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+
+        }
+    }
+
     public static class RegisterInMigration implements FormPayloadConsumer {
         @Override
         public boolean consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
@@ -82,6 +105,7 @@ public class UpdateFormPayloadConsumers {
             }
 
             individual.setCurrentResidence(locationExtId);
+            individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
             individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
             return false;
         }
