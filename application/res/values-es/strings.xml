@@ -126,6 +126,7 @@
     <string name="db_val_language_pref_bubi">Bubi</string>
     <string name="db_val_language_pref_english">Inglés</string>
     <string name="db_val_language_pref_french">Francés</string>
+    <string name="db_val_language_pref_other">Otra</string>
     <string name="db_val_status_permanent">Permanente</string>
     <string name="db_val_status_visitor">Visitante</string>
     <string name="db_val_relation_to_head_type_head">Cabeza</string>

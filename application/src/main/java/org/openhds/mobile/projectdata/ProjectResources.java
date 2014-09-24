@@ -38,6 +38,7 @@ public class ProjectResources {
         public static final String LANGUAGE_PREF_BUBE = "Bubi";
         public static final String LANGUAGE_PREF_ENGLISH = "English";
         public static final String LANGUAGE_PREF_FRENCH = "French";
+        public static final String LANGUAGE_PREF_OTHER = "Other";
 
         private static final String STATUS_PERMANENT = "Permanent";
         private static final String STATUS_VISITOR = "Visitor";
@@ -46,16 +47,12 @@ public class ProjectResources {
             Individual.put(AGE_UNITS_MONTHS, R.string.db_val_age_units_months);
             Individual.put(GENDER_MALE, R.string.db_val_gender_male);
             Individual.put(GENDER_FEMALE, R.string.db_val_gender_female);
-            Individual.put(LANGUAGE_PREF_SPANISH,
-                    R.string.db_val_language_pref_spanish);
-            Individual.put(LANGUAGE_PREF_FANG,
-                    R.string.db_val_language_pref_fang);
-            Individual.put(LANGUAGE_PREF_BUBE,
-                    R.string.db_val_language_pref_bubi);
-            Individual.put(LANGUAGE_PREF_ENGLISH,
-                    R.string.db_val_language_pref_english);
-            Individual.put(LANGUAGE_PREF_FRENCH,
-                    R.string.db_val_language_pref_french);
+            Individual.put(LANGUAGE_PREF_SPANISH,R.string.db_val_language_pref_spanish);
+            Individual.put(LANGUAGE_PREF_FANG, R.string.db_val_language_pref_fang);
+            Individual.put(LANGUAGE_PREF_BUBE, R.string.db_val_language_pref_bubi);
+            Individual.put(LANGUAGE_PREF_ENGLISH,R.string.db_val_language_pref_english);
+            Individual.put(LANGUAGE_PREF_FRENCH, R.string.db_val_language_pref_french);
+            Individual.put(LANGUAGE_PREF_OTHER, R.string.db_val_language_pref_other);
             Individual.put(STATUS_PERMANENT, R.string.db_val_status_permanent);
             Individual.put(STATUS_VISITOR, R.string.db_val_status_visitor);
         }

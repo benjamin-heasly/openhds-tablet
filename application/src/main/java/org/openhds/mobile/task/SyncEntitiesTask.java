@@ -762,7 +762,16 @@ public class SyncEntitiesTask extends
         while (notEndOfXmlDoc("relationships", parser)) {
             Relationship relationship = new Relationship();
 
-            parser.next(); // <individualA>
+            parser.next(); // <individualA> or <endDate>
+            if ("endDate".equals(parser.getName())) {
+                parser.next();// <endDate>
+                parser.next();
+                parser.next(); // </endDate>
+                parser.next();// <endType>
+                parser.next();
+                parser.next(); // </endType>
+            }
+
             parser.next();// <age>
             parser.next();
             parser.next(); // </age>

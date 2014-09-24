@@ -195,8 +195,10 @@ public class CensusFormPayloadBuilders {
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
             Membership membership = membershipGateway.getFirst(contentResolver,
                     membershipGateway.findBySocialGroupAndIndividual(householdExtId, individualExtId));
-            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
-                    membership.getRelationshipToHead());
+            if (null != membership) {
+                formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
+                        membership.getRelationshipToHead());
+            }
         }
     }
 }
