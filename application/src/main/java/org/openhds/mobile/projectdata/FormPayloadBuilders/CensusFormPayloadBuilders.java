@@ -2,23 +2,19 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.model.*;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
+import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
-import org.openhds.mobile.model.FieldWorker;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Location;
-import org.openhds.mobile.model.LocationHierarchy;
-import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.IndividualGateway;
-import org.openhds.mobile.repository.gateway.LocationGateway;
-import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
-import org.openhds.mobile.repository.gateway.MembershipGateway;
+import org.openhds.mobile.repository.Query;
+import org.openhds.mobile.repository.gateway.*;
 import org.openhds.mobile.utilities.LuhnValidator;
 
+import java.lang.reflect.Member;
 import java.util.Iterator;
 import java.util.Map;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
@@ -139,6 +135,31 @@ public class CensusFormPayloadBuilders {
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, false);
             addNewIndividualPayload(formPayload, navigateActivity);
+
+
+            ContentResolver resolver = navigateActivity.getContentResolver();
+
+            SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
+            SocialGroup socialGroup = socialGroupGateway.getFirst(resolver,
+                    socialGroupGateway.findById(navigateActivity.getCurrentSelection().getExtId()));
+
+            IndividualGateway individualGateway = new IndividualGateway();
+            Individual headOfHousehold = individualGateway.getFirst(resolver, individualGateway.findById(socialGroup.getGroupHead()));
+
+
+
+            // set's the member's "House Name" to the Location's name
+            formPayload.put(ProjectFormFields.Individuals.OTHER_NAMES, headOfHousehold.getOtherNames());
+
+            // set's the member's point of contanct info to the HoH
+            if(null != headOfHousehold.getPhoneNumber() && !headOfHousehold.getPhoneNumber().isEmpty()) {
+                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, Individual.getFullName(headOfHousehold));
+                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, headOfHousehold.getPhoneNumber());
+            } else {
+                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, headOfHousehold.getPointOfContactName());
+                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, headOfHousehold.getPointOfContactPhoneNumber());
+            }
+
 
         }
 
