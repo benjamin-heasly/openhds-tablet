@@ -25,6 +25,7 @@ import org.openhds.mobile.utilities.OdkCollectHelper;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getPreferenceString;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
@@ -137,8 +138,10 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
     }
 
     private void encryptAllForms() {
-        EncryptionHelper.encryptFiles(
-                FormInstance .toListOfFiles(OdkCollectHelper.getAllFormInstances(getContentResolver())), this);
+        List<FormInstance> allFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
+        if (null != allFormInstances) {
+            EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
+        }
     }
 
     private void syncDatabase() {

@@ -112,12 +112,14 @@ public class PortalActivity extends Activity implements OnClickListener {
     // Display a list of recent form instances not yet sent to the ODK server
     private void populateFormInstanceListView() {
         formInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
-        if (!formInstances.isEmpty()) {
-            FormInstanceAdapter adapter = new FormInstanceAdapter(
-                    this, R.id.form_instance_list_item, formInstances.toArray());
-            formInstanceView.setAdapter(adapter);
-            formInstanceView.setOnItemClickListener(new FormInstanceClickListener());
+        if (null == formInstances || formInstances.isEmpty()) {
+            return;
         }
+
+        FormInstanceAdapter adapter = new FormInstanceAdapter(
+                this, R.id.form_instance_list_item, formInstances.toArray());
+        formInstanceView.setAdapter(adapter);
+        formInstanceView.setOnItemClickListener(new FormInstanceClickListener());
     }
 
     // Launch an intent for ODK Collect when user clicks on a form instance.

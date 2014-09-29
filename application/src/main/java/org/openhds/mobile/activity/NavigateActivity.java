@@ -490,8 +490,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     }
 
                     // encrypt files regardless
-                    EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(
-                            OdkCollectHelper.getAllFormInstances(getContentResolver())), this);
+                    List<FormInstance> allFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
+                    if (null != allFormInstances) {
+                        EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
+                    }
                     return;
 
                 case SEARCH_ACTIVITY_REQUEST_CODE:
