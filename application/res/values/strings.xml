@@ -135,6 +135,8 @@
     <string name="db_val_relation_to_head_type_spouse">Spouse</string>
     <string name="db_val_relation_to_head_type_son_daughter">Son/Daughter</string>
     <string name="db_val_relation_to_head_type_brother_sister">Brother/Sister</string>
+    <string name="db_val_relation_to_head_type_cousin">Cousin</string>
+    <string name="db_val_relation_to_head_type_nephew_niece">Nephew/Niece</string>
     <string name="db_val_relation_to_head_type_parent">Parent</string>
     <string name="db_val_relation_to_head_type_grandchild">Grandchild</string>
     <string name="db_val_relation_to_head_type_not_related">Not Related</string>

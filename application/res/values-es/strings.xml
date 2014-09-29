@@ -133,6 +133,8 @@
     <string name="db_val_relation_to_head_type_spouse">Cónyuge</string>
     <string name="db_val_relation_to_head_type_son_daughter">Hijo/Hija</string>
     <string name="db_val_relation_to_head_type_brother_sister">Hermano/Hermana</string>
+    <string name="db_val_relation_to_head_type_cousin">Primo</string>
+    <string name="db_val_relation_to_head_type_nephew_niece">Sobrino/Sobrina</string>
     <string name="db_val_relation_to_head_type_parent">Padre</string>
     <string name="db_val_relation_to_head_type_grandchild">Nieto</string>
     <string name="db_val_relation_to_head_type_not_related">No Relacionada</string>

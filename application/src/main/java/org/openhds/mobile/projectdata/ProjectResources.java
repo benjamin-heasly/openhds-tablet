@@ -82,6 +82,8 @@ public class ProjectResources {
         public static final String RELATION_TO_HOH_TYPE_NOT_RELATED = "7";
         public static final String RELATION_TO_HOH_TYPE_OTHER_RELATIVE = "8";
         public static final String RELATION_TO_HOH_TYPE_DONT_KNOW = "9";
+        public static final String RELATION_TO_HOH_TYPE_COUSIN = "10";
+        public static final String RELATION_TO_HOH_TYPE_NEPHEW_NIECE = "11";
 
         static {
             Relationship.put(RELATION_TO_HOH_TYPE_HEAD,
@@ -92,6 +94,10 @@ public class ProjectResources {
                     R.string.db_val_relation_to_head_type_son_daughter);
             Relationship.put(RELATION_TO_HOH_TYPE_BROTHER_SISTER,
                     R.string.db_val_relation_to_head_type_brother_sister);
+            Relationship.put(RELATION_TO_HOH_TYPE_COUSIN,
+                    R.string.db_val_relation_to_head_type_cousin);
+            Relationship.put(RELATION_TO_HOH_TYPE_NEPHEW_NIECE,
+                    R.string.db_val_relation_to_head_type_nephew_niece);
             Relationship.put(RELATION_TO_HOH_TYPE_PARENT,
                     R.string.db_val_relation_to_head_type_parent);
             Relationship.put(RELATION_TO_HOH_TYPE_GRANDCHILD,
