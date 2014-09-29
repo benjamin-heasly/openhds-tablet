@@ -87,6 +87,10 @@ public class FormInstanceReviewFragment extends Fragment {
 
     private void fillEditedFormsList() {
         List<FormInstance> allFormInstances = OdkCollectHelper.getAllUnsentFormInstances(getActivity().getContentResolver());
+        if (null == allFormInstances) {
+            return;
+        }
+
         for (FormInstance instance : allFormInstances ) {
             File instanceFile = new File(instance.getFilePath());
             EncryptionHelper.decryptFile(instanceFile, getActivity());

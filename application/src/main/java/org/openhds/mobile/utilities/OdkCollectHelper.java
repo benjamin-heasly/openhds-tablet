@@ -27,6 +27,10 @@ public class OdkCollectHelper {
                 InstanceProviderAPI.InstanceColumns.STATUS}, InstanceProviderAPI.InstanceColumns.STATUS+" != ?",
                             new String[] {InstanceProviderAPI.STATUS_SUBMITTED}, null);
 
+        if (null == cursor) {
+            return null;
+        }
+
         while (cursor.moveToNext()) {
 
             FormInstance formInstance = new FormInstance();
@@ -77,6 +81,10 @@ public class OdkCollectHelper {
 				InstanceProviderAPI.InstanceColumns._ID,
                 InstanceProviderAPI.InstanceColumns.JR_FORM_ID,
                 InstanceProviderAPI.InstanceColumns.DISPLAY_NAME}, null, null, null);
+
+        if (null == cursor) {
+            return null;
+        }
 
 		while (cursor.moveToNext()) {
 
