@@ -60,14 +60,25 @@ public class CensusFormPayloadBuilders {
 
         // location with largest building number <locationBuildingNumber />
         int buildingNumber = 1;
+        // name and code of community will default to empty String if this sector has no neighboring location
+        String communityName = "";
+        String communityCode = "";
         Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver,
                 locationGateway.findByHierarchyDescendingBuildingNumber(sector.getExtId()));
         if (locationIterator.hasNext()) {
-            buildingNumber += locationIterator.next().getBuildingNumber();
+            Location location = locationIterator.next();
+            buildingNumber += location.getBuildingNumber();
+            communityName = location.getCommunityName();
+            communityCode = location.getCommunityCode();
         }
 
         formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, String.format(LIKE_WILD_CARD + "02d", buildingNumber));
+        formPayload.put(ProjectFormFields.Locations.COMMUNITY_NAME, communityName);
+        formPayload.put(ProjectFormFields.Locations.COMMUNITY_CODE, communityCode);
+
     }
+
+
 
     private static void addNewIndividualPayload(
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
