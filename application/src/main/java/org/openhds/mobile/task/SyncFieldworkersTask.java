@@ -76,10 +76,6 @@ public class SyncFieldworkersTask extends HttpTask<Void, Integer> {
 
         FieldWorker fieldWorker = new FieldWorker();
 
-        // skip uuid
-        parser.nextTag();
-        parser.nextText();
-
         parser.nextTag();
         fieldWorker.setExtId(parser.nextText());
 
@@ -89,8 +85,8 @@ public class SyncFieldworkersTask extends HttpTask<Void, Integer> {
         parser.nextTag();
         fieldWorker.setLastName(parser.nextText());
 
-        // TODO: field worker passwords should come from server
-        fieldWorker.setPassword("");
+        parser.nextTag();
+        fieldWorker.setPasswordHash(parser.nextText());
         return fieldWorker;
     }
 

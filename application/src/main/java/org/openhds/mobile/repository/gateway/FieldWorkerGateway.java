@@ -34,7 +34,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             fieldWorker.setExtId(extractString(cursor, COLUMN_FIELD_WORKER_EXTID));
             fieldWorker.setFirstName(extractString(cursor, COLUMN_FIELD_WORKER_FIRST_NAME));
             fieldWorker.setLastName(extractString(cursor, COLUMN_FIELD_WORKER_LAST_NAME));
-            fieldWorker.setPassword(extractString(cursor, COLUMN_FIELD_WORKER_PASSWORD));
+            fieldWorker.setPasswordHash(extractString(cursor, COLUMN_FIELD_WORKER_PASSWORD));
 
             // for Bioko
             int id = cursor.getInt(cursor.getColumnIndex(OpenHDS.FieldWorkers._ID));
@@ -51,7 +51,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             contentValues.put(COLUMN_FIELD_WORKER_EXTID, fieldWorker.getExtId());
             contentValues.put(COLUMN_FIELD_WORKER_FIRST_NAME, fieldWorker.getFirstName());
             contentValues.put(COLUMN_FIELD_WORKER_LAST_NAME, fieldWorker.getLastName());
-            contentValues.put(COLUMN_FIELD_WORKER_PASSWORD, fieldWorker.getPassword());
+            contentValues.put(COLUMN_FIELD_WORKER_PASSWORD, fieldWorker.getPasswordHash());
 
             return contentValues;
         }

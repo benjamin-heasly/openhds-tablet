@@ -378,9 +378,9 @@ public class SyncEntitiesTask extends
                             } else if (tagName.equalsIgnoreCase("districtName")) {
                                 location.setDistrictName(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("locationHierarchy")) {
-                                //<locationLevel>
+                                //<locationHierarchy>
                                 //    <extId>BA15M1000S056</extId>
-                                //</locationLevel>
+                                //</locationHierarchy>
                                 while (true) {
                                     tagName = parser.getName();
                                     if (null == tagName) {

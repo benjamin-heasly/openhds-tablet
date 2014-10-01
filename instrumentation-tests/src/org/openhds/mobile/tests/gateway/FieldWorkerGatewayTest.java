@@ -20,7 +20,7 @@ public class FieldWorkerGatewayTest extends GatewayTest<FieldWorker> {
         fieldWorker.setExtId(id);
         fieldWorker.setFirstName("2000-01-01 00:00:00");
         fieldWorker.setLastName("LASTNAME");
-        fieldWorker.setPassword("PASSWORD");
+        fieldWorker.setPasswordHash("PASSWORD_HASH");
 
         return fieldWorker;
     }

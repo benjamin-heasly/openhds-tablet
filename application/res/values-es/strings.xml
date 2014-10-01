@@ -27,7 +27,7 @@
     <string name="logout_btn">Cerrar sesión</string>
     <string name="main_txt">Administración de Impresos</string>
     <string name="owner_txt">Proprietario del Impreso ID:</string>
-    <string name="password">OpenHDS Contraseña</string>
+    <string name="passwordHash">OpenHDS Contraseña</string>
     <string name="retrieving_fieldworkers_interrupted">Descargar Investigadores de Campo se ha Interrumpido</string>
     <string name="send_to_odk_btn">Editar en ODK</string>
     <string name="syncDatabase">Sincronizar Base de Datos</string>
