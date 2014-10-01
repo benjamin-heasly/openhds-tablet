@@ -57,6 +57,7 @@ public class SearchUtils {
                 OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME, R.string.location_locality_label);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME, R.string.location_community_label);
+        plugin.getColumnsAndLabels().put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE, R.string.location_community_code_label);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER, R.string.location_building_number_label);
         plugin.getColumnsAndLabels().put(

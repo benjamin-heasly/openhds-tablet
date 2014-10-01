@@ -351,6 +351,8 @@ public class SyncEntitiesTask extends
                                 location.setLongitude(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("communityName")) {
                                 location.setCommunityName(parser.nextText());
+                            } else if (tagName.equalsIgnoreCase("communityCode")) {
+                                location.setCommunityCode(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("sectorName")) {
                                 location.setSectorName(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("mapAreaName")) {
@@ -375,7 +377,7 @@ public class SyncEntitiesTask extends
                                 location.setSubDistrictName(parser.nextText());
                             } else if (tagName.equalsIgnoreCase("districtName")) {
                                 location.setDistrictName(parser.nextText());
-                            } else if (tagName.equalsIgnoreCase("locationLevel")) {
+                            } else if (tagName.equalsIgnoreCase("locationHierarchy")) {
                                 //<locationLevel>
                                 //    <extId>BA15M1000S056</extId>
                                 //</locationLevel>
@@ -385,7 +387,7 @@ public class SyncEntitiesTask extends
                                         parser.next();
                                         continue;
 
-                                    } else if (tagName.equalsIgnoreCase("locationLevel")
+                                    } else if (tagName.equalsIgnoreCase("locationHierarchy")
                                             && parser.getEventType() == XmlPullParser.END_TAG) {
                                         break;
 

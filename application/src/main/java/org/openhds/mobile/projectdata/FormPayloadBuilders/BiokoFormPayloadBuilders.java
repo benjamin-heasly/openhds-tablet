@@ -1,9 +1,13 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.model.Location;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.LocationGateway;
 
+import java.util.Calendar;
 import java.util.Map;
 
 public class BiokoFormPayloadBuilders {
@@ -26,6 +30,16 @@ public class BiokoFormPayloadBuilders {
                     .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE).getExtId();
             formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
 
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+            Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
+                    locationGateway.findById(locationExtId));
+
+            String communityCode = location.getCommunityCode();
+            String yearPrefix = Integer.toString (Calendar.getInstance().get(Calendar.YEAR));
+            yearPrefix = yearPrefix.substring(2);
+            String netCode = yearPrefix + "-" + communityCode;
+
+            formPayload.put(ProjectFormFields.BedNet.BED_NET_CODE, netCode);
         }
 
     }

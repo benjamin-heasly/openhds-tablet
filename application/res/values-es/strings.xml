@@ -168,6 +168,7 @@
     <string name="location_map_area_label">Área de Mapa</string>
     <string name="location_locality_label">Localidad</string>
     <string name="location_community_label">Comunidad</string>
+    <string name="location_community_code_label">Codigo Comunidad</string>
     <string name="location_building_number_label">Numero del Edificio</string>
     <string name="location_floor_number_label">Numero del Piso</string>
 

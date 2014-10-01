@@ -12,6 +12,7 @@ public class Location implements Serializable {
 	private String longitude;
 	private String hierarchyExtId;
     private String communityName;
+    private String communityCode;
     private String localityName;
     private String mapAreaName;
     private String sectorName;
@@ -116,6 +117,14 @@ public class Location implements Serializable {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String getCommunityCode() {
+        return communityCode;
+    }
+
+    public void setCommunityCode(String communityCode) {
+        this.communityCode = communityCode;
     }
 
     public String getLocalityName() {

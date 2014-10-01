@@ -11,6 +11,7 @@ import org.openhds.mobile.repository.Query;
 
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
+import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY;
@@ -56,6 +57,7 @@ public class LocationGateway extends Gateway<Location> {
             location.setMapAreaName(extractString(cursor, COLUMN_LOCATION_MAP_AREA_NAME));
             location.setLocalityName(extractString(cursor, COLUMN_LOCATION_LOCALITY_NAME));
             location.setCommunityName(extractString(cursor, COLUMN_LOCATION_COMMUNITY_NAME));
+            location.setCommunityCode(extractString(cursor, COLUMN_LOCATION_COMMUNITY_CODE));
             location.setBuildingNumber(extractInt(cursor, COLUMN_LOCATION_BUILDING_NUMBER));
             location.setFloorNumber(extractInt(cursor, COLUMN_LOCATION_FLOOR_NUMBER));
 
@@ -75,6 +77,7 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_MAP_AREA_NAME, location.getMapAreaName());
             contentValues.put(COLUMN_LOCATION_LOCALITY_NAME, location.getLocalityName());
             contentValues.put(COLUMN_LOCATION_COMMUNITY_NAME, location.getCommunityName());
+            contentValues.put(COLUMN_LOCATION_COMMUNITY_CODE, location.getCommunityCode());
             contentValues.put(COLUMN_LOCATION_BUILDING_NUMBER, location.getBuildingNumber());
             contentValues.put(COLUMN_LOCATION_FLOOR_NUMBER, location.getFloorNumber());
 

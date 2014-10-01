@@ -182,6 +182,7 @@ public class OpenHDSProvider extends ContentProvider {
         locationsProjectionMap.put(
                 OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME,
                 OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME);
+        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE, OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE);
         locationsProjectionMap.put(
                 OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME,
                 OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME);
@@ -933,6 +934,8 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME
+                    + " TEXT,"
+                    + OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE
                     + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME
                     + " TEXT,"

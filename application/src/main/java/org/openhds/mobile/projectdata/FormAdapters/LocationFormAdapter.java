@@ -5,19 +5,7 @@ import org.openhds.mobile.projectdata.ProjectFormFields;
 
 import java.util.Map;
 
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME;
+import static org.openhds.mobile.OpenHDS.Locations.*;
 
 public class LocationFormAdapter {
 
@@ -32,6 +20,7 @@ public class LocationFormAdapter {
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HIERARCHY)));
         location.setCommunityName(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_COMMUNITY_NAME)));
+        location.setCommunityCode(formInstanceData.get(ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_COMMUNITY_CODE)));
         location.setLocalityName(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_LOCALITY_NAME)));
         location.setSectorName(formInstanceData.get(

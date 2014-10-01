@@ -77,6 +77,7 @@ public class ProjectFormFields {
         public static final String LOCATION_NAME = "locationName";
         public static final String LOCATION_TYPE = "locationType";
         public static final String COMMUNITY_NAME = "communityName";
+        public static final String COMMUNITY_CODE = "communityCode";
         public static final String MAP_AREA_NAME = "mapAreaName";
         public static final String LOCALITY_NAME = "localityName";
         public static final String SECTOR_NAME = "sectorName";
@@ -95,6 +96,7 @@ public class ProjectFormFields {
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID, LOCATION_EXTID);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_NAME, LOCATION_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME, COMMUNITY_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE, COMMUNITY_CODE);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME, MAP_AREA_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME, LOCALITY_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, SECTOR_NAME);
@@ -252,4 +254,9 @@ public class ProjectFormFields {
     public static final class PregnancyObservation {
         public static final String PREGNANCY_OBSERVATION_RECORDED_DATE = "recordedDate";
     }
+
+    public static final class BedNet {
+        public static final String BED_NET_CODE = "netCode";
+    }
+
 }

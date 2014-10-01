@@ -183,6 +183,7 @@
     <string name="location_map_area_label">Map Area</string>
     <string name="location_locality_label">Locality</string>
     <string name="location_community_label">Community</string>
+    <string name="location_community_code_label">Community Code</string>
     <string name="location_building_number_label">Building Number</string>
     <string name="location_floor_number_label">Floor Number</string>
 
