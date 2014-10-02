@@ -38,18 +38,22 @@ import java.util.Map;
  *
  * See DataPage for details about pages.
  *
- * After reading a full page, the parser sends the page to a listener for
- * further processing.  The listener can use the root element name and
+ * After reading a full page, the parser sends the page to a handler for
+ * further processing.  The handler can use the root element name and
  * page element name to decide how to process the data.
  *
- * The page parser considers only XML elements, ignores attributes and
- * namespaces.  It also ignores elements that don't have any text
- * inside.
+ * The handler is free to throw Exceptions, and the parser will send the
+ * Exception plus debugging data to a separate error handler for logging
+ * etc.  This allows the parser to keep reading the stream.
+ *
+ * This parser considers only XML elements and ignores attributes and
+ * namespaces.  It also ignores elements that don't have any text inside.
  *
  * BSH
  */
 public class XmlPageParser {
     private PageHandler pageHandler;
+    private PageErrorHandler pageErrorHandler;
 
     public PageHandler getPageHandler() {
         return pageHandler;
@@ -57,6 +61,14 @@ public class XmlPageParser {
 
     public void setPageHandler(PageHandler pageHandler) {
         this.pageHandler = pageHandler;
+    }
+
+    public PageErrorHandler getPageErrorHandler() {
+        return pageErrorHandler;
+    }
+
+    public void setPageErrorHandler(PageErrorHandler pageErrorHandler) {
+        this.pageErrorHandler = pageErrorHandler;
     }
 
     public int parsePages(InputStream inputStream) throws XmlPullParserException, IOException {
@@ -75,15 +87,12 @@ public class XmlPageParser {
 
         int eventType = pullParser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
-            if(eventType == XmlPullParser.START_DOCUMENT) {
 
-                // nothing to do at start of document
-                continue;
+            int depth = pullParser.getDepth();
 
-            } else if(eventType == XmlPullParser.START_TAG) {
+            if(eventType == XmlPullParser.START_TAG) {
 
                 // descend into a page
-                int depth = pullParser.getDepth();
                 if (1 == depth) {
                     // at root level, set the root element name
                     rootElementName = pullParser.getName();
@@ -94,7 +103,7 @@ public class XmlPageParser {
                     pageElementName = pullParser.getName();
                     elementPath = new ArrayList<>();
                     elementPath.add(pageElementName);
-                    dataPage = new DataPage(rootElementName, pageElementName);
+                    dataPage = new DataPage(rootElementName, pageElementName, pullParser.getPositionDescription());
 
                 } else if (2 < depth) {
                     // append another element to the page path
@@ -104,16 +113,9 @@ public class XmlPageParser {
             } else if(eventType == XmlPullParser.END_TAG) {
 
                 // ascend back out of a page
-                int depth = pullParser.getDepth();
-                if (1 == depth) {
-                    // at root level, do nothing
-                    continue;
-
-                } else if (2 == depth ) {
+                if (2 == depth ) {
                     // send finished page to the handler
-                    if (null != pageHandler) {
-                        pageHandler.handlePage(dataPage);
-                    }
+                    sendPageToHandler(dataPage);
 
                 } else if (2 < depth) {
                     // pop the last element off the page path
@@ -122,8 +124,13 @@ public class XmlPageParser {
 
             } else if(eventType == XmlPullParser.TEXT) {
 
-                // put the text data into the data page
-                dataPage.addText(elementPath, pullParser.getText());
+                if (depth > 1) {
+                    String trimmedText = pullParser.getText().trim();
+                    if (!trimmedText.isEmpty()) {
+                        // put new text into a data page
+                        dataPage.addText(elementPath, trimmedText);
+                    }
+                }
             }
 
             eventType = pullParser.next();
@@ -132,7 +139,23 @@ public class XmlPageParser {
         return nPages;
     }
 
+    private void sendPageToHandler(DataPage dataPage) {
+        if (null != pageHandler) {
+            try {
+                pageHandler.handlePage(dataPage);
+            } catch (Exception e) {
+                if (null != pageErrorHandler) {
+                    pageErrorHandler.handlePageError(dataPage, e);
+                }
+            }
+        }
+    }
+
     public interface PageHandler {
         public void handlePage(DataPage dataPage);
+    }
+
+    public interface PageErrorHandler {
+        public void handlePageError(DataPage dataPage, Exception e);
     }
 }

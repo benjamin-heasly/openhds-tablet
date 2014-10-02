@@ -78,7 +78,7 @@ public class SyncFieldWorkersTaskTest extends ProviderTestCase2<OpenHDSProvider>
 
         FieldWorkerGateway fieldWorkerGateway = GatewayRegistry.getFieldWorkerGateway();
         List<FieldWorker> fieldWorkers = fieldWorkerGateway.getList(contentResolver, fieldWorkerGateway.findAll());
-        assertEquals(7, fieldWorkers.size());
+        assertEquals(2, fieldWorkers.size());
     }
 
 }
