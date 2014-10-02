@@ -1,4 +1,4 @@
-package org.openhds.mobile.tests.aaparser;
+package org.openhds.mobile.tests.parser;
 
 import android.test.AndroidTestCase;
 import org.openhds.mobile.utilities.DataPage;
@@ -50,9 +50,10 @@ public class XmlPageParserTest extends AndroidTestCase {
         }
 
         @Override
-        public void handlePage(DataPage dataPage) {
+        public boolean handlePage(DataPage dataPage) {
             pageCount++;
             validateTestPage(dataPage);
+            return true;
         }
     }
 
@@ -65,11 +66,11 @@ public class XmlPageParserTest extends AndroidTestCase {
         UnhappyPageErrorHandler unhappyPageErrorHandler = new UnhappyPageErrorHandler();
         pageParser.setPageErrorHandler(unhappyPageErrorHandler);
 
-        // should error on first page, the parse the next two pages
+        // should error on first page, parse the second page, and quit before the third page
         InputStream inputStream = getContext().getAssets().open("testXml/page-parser-test.xml");
         pageParser.parsePages(inputStream);
 
-        assertEquals(3, unhappyPageHandler.getPageCount());
+        assertEquals(2, unhappyPageHandler.getPageCount());
         assertEquals(1, unhappyPageErrorHandler.getErrorCount());
     }
 
@@ -81,12 +82,18 @@ public class XmlPageParserTest extends AndroidTestCase {
         }
 
         @Override
-        public void handlePage(DataPage dataPage) {
+        public boolean handlePage(DataPage dataPage) {
             pageCount++;
             if (1 == pageCount) {
                 throw new RuntimeException("deliberate page handler error!");
             }
-            validateTestPage(dataPage);
+            if (2 == pageCount) {
+                validateTestPage(dataPage);
+
+                // tell the parser to abort
+                return false;
+            }
+            return true;
         }
     }
 
@@ -98,8 +105,9 @@ public class XmlPageParserTest extends AndroidTestCase {
         }
 
         @Override
-        public void handlePageError(DataPage dataPage, Exception e) {
+        public boolean handlePageError(DataPage dataPage, Exception e) {
             errorCount++;
+            return true;
         }
     }
 }

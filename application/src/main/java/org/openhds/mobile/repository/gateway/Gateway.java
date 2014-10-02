@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
@@ -62,6 +63,11 @@ public abstract class Gateway<T> {
     // true if entity was deleted
     public boolean deleteById(ContentResolver contentResolver, String id){
         return delete(contentResolver, tableUri, idColumnName, id) > 0;
+    }
+
+    // clear the whole table and return rows deleted--be careful
+    public int deleteAll(ContentResolver resolver) {
+        return resolver.delete(tableUri, null, null);
     }
 
     // true if entity was found with given id

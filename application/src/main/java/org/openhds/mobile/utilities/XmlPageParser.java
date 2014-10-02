@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Parse a potentially long XML data stream as smaller pages.
@@ -86,7 +84,8 @@ public class XmlPageParser {
         DataPage dataPage = null;
 
         int eventType = pullParser.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT) {
+        boolean shouldContinue = true;
+        while (eventType != XmlPullParser.END_DOCUMENT && shouldContinue) {
 
             int depth = pullParser.getDepth();
 
@@ -115,7 +114,7 @@ public class XmlPageParser {
                 // ascend back out of a page
                 if (2 == depth ) {
                     // send finished page to the handler
-                    sendPageToHandler(dataPage);
+                    shouldContinue = sendPageToHandler(dataPage);
 
                 } else if (2 < depth) {
                     // pop the last element off the page path
@@ -139,23 +138,25 @@ public class XmlPageParser {
         return nPages;
     }
 
-    private void sendPageToHandler(DataPage dataPage) {
+    private boolean sendPageToHandler(DataPage dataPage) {
+        boolean shouldContinue = true;
         if (null != pageHandler) {
             try {
-                pageHandler.handlePage(dataPage);
+                shouldContinue = pageHandler.handlePage(dataPage);
             } catch (Exception e) {
                 if (null != pageErrorHandler) {
-                    pageErrorHandler.handlePageError(dataPage, e);
+                    shouldContinue = pageErrorHandler.handlePageError(dataPage, e);
                 }
             }
         }
+        return shouldContinue;
     }
 
     public interface PageHandler {
-        public void handlePage(DataPage dataPage);
+        public boolean handlePage(DataPage dataPage);
     }
 
     public interface PageErrorHandler {
-        public void handlePageError(DataPage dataPage, Exception e);
+        public boolean handlePageError(DataPage dataPage, Exception e);
     }
 }
