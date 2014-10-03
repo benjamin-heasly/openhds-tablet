@@ -80,7 +80,14 @@
 			<version>17.0</version>
 		</dependency>
 
-		<!-- In theory, the sqlcipher .so files should be here as well -->
+
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.3m</version>
+        </dependency>
+
+        <!-- In theory, the sqlcipher .so files should be here as well -->
 		<!-- But the android m2e connector doesn't support them yet -->
 		<!-- So they are embedded in the libs/armeabi folder -->
 	</dependencies>

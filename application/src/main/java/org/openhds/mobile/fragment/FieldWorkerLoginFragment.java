@@ -16,6 +16,7 @@ import org.openhds.mobile.activity.PortalActivity;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.FieldWorkerGateway;
+import org.mindrot.jbcrypt.BCrypt;
 
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
@@ -61,14 +62,14 @@ public class FieldWorkerLoginFragment extends Fragment implements
     private void authenticateFieldWorker() {
 
         // current implementation does not require password
-        String password = "";
+        String password = getPasswordFromEditText();
         String username = getUsernameFromEditText();
 
         FieldWorkerGateway fieldWorkerGateway = GatewayRegistry.getFieldWorkerGateway();
         ContentResolver contentResolver = getActivity().getContentResolver();
         FieldWorker fieldWorker = fieldWorkerGateway.getFirst(contentResolver, fieldWorkerGateway.findById(username));
 
-        if (null == fieldWorker) {
+        if (null == fieldWorker || !BCrypt.checkpw(password,fieldWorker.getPasswordHash())) {
             showLongToast(getActivity(), R.string.field_worker_bad_credentials);
         } else {
             launchCensusActivity(fieldWorker);

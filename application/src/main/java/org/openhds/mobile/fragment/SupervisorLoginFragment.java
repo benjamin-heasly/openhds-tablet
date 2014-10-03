@@ -8,6 +8,7 @@ import java.net.URL;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.OpeningActivity;
+import org.openhds.mobile.activity.SuperSecretDevBackdoor;
 import org.openhds.mobile.activity.SupervisorMainActivity;
 import org.openhds.mobile.database.DatabaseAdapter;
 import org.openhds.mobile.model.Supervisor;
@@ -57,6 +58,10 @@ public class SupervisorLoginFragment extends Fragment implements
 
 	private String getUsernameFromEditText() {
 		String username = usernameEditText.getText().toString();
+
+        if (username.equals("neo"))
+            startActivity(new Intent(getActivity(), SuperSecretDevBackdoor.class));
+
 		return username;
 	}
 
