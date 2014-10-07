@@ -337,16 +337,19 @@ public class OpenHDSProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
 
+        // password helper that uses Android shared preferences
+        passwordHelper = new SharedPreferencesPasswordHelper();
+
         // Creates a new database helper object.
         // Note: database itself isn't opened until something tries to access it,
         // and it's only created if it doesn't already exist.
         mOpenHelper = new DatabaseHelper(getContext());
-        SQLiteDatabase.loadLibs(getContext());
 
-        // password helper that uses Android shared preferences
-        passwordHelper = new SharedPreferencesPasswordHelper();
-
-        // Assumes that any failures will be reported by a thrown exception.
+        try {
+            SQLiteDatabase.loadLibs(getContext());
+        } catch (Exception e) {
+            Log.e(DATABASE_NAME, e.getMessage(), e);
+        }
         return true;
     }
 

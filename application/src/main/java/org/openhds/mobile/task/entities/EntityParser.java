@@ -1,4 +1,4 @@
-package org.openhds.mobile.task;
+package org.openhds.mobile.task.entities;
 
 import org.openhds.mobile.utilities.DataPage;
 

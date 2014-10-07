@@ -1,4 +1,4 @@
-package org.openhds.mobile.task;
+package org.openhds.mobile.task.entities;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -7,18 +7,15 @@ import org.openhds.mobile.utilities.DataPage;
 import org.openhds.mobile.utilities.XmlPageParser;
 
 /**
- * Carry out a SyncEntityRequest.
+ * Carry out a ParseEntityTaskRequest.
  *
- * Request a stream of data from the OpenHDS server, parse the
- * stream into entities, and save entities to the database.
+ * Read an input stream, parse it into entities, and save entities to the database.
  *
  * BSH
  */
-public class SyncEntityTask extends AsyncTask<SyncEntityRequest, Integer, Integer> {
+public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, Integer> {
 
     public static final int RESULT_OK = 0;
-    public static final int RESULT_BAD_SERVER = 1;
-    public static final int RESULT_BAD_AUTH = 2;
     public static final int RESULT_BAD_PARSE = 3;
     public static final int RESULT_CANCELED = 4;
 
@@ -26,34 +23,32 @@ public class SyncEntityTask extends AsyncTask<SyncEntityRequest, Integer, Intege
 
     private ProgressDialog progressDialog;
     private ContentResolver contentResolver;
-    private SyncEntityRequest syncEntityRequest;
+    private ParseEntityTaskRequest parseEntityTaskRequest;
 
     private int entityCount;
 
-    public SyncEntityTask(ProgressDialog progressDialog, ContentResolver contentResolver) {
+    public ParseEntityTask(ProgressDialog progressDialog, ContentResolver contentResolver) {
         this.progressDialog = progressDialog;
         this.contentResolver = contentResolver;
     }
 
     @Override
     protected void onPreExecute () {
-        progressDialog.setTitle("Contacting Server");
+        progressDialog.setTitle("Processing");
         progressDialog.setMessage("Stand By.");
         entityCount = 0;
     }
 
     @Override
-    protected Integer doInBackground(SyncEntityRequest... syncEntityRequests) {
-        syncEntityRequest = syncEntityRequests[0];
+    protected Integer doInBackground(ParseEntityTaskRequest... parseEntityTaskRequests) {
+        parseEntityTaskRequest = parseEntityTaskRequests[0];
 
-        // build request
-        // make request
-        // RESULT_BAD_SERVER or RESULT_BAD_AUTH ?
+        // set up a page parser
 
-        // pass response to page parser
+        // pass input stream to page parser
         // catch for RESULT_BAD_PARSE
 
-        // persist last batch of entities
+        // persist the trailing batch of entities
 
         return RESULT_OK;
     }
@@ -61,7 +56,7 @@ public class SyncEntityTask extends AsyncTask<SyncEntityRequest, Integer, Intege
     @Override
     protected void onProgressUpdate (Integer... values) {
         entityCount = values[0];
-        progressDialog.setTitle(syncEntityRequest.getTitle());
+        progressDialog.setTitle(parseEntityTaskRequest.getTitle());
         progressDialog.setMessage("Synced: " + entityCount);
     }
 
@@ -71,14 +66,8 @@ public class SyncEntityTask extends AsyncTask<SyncEntityRequest, Integer, Intege
             case RESULT_OK:
                 progressDialog.setMessage("Great work!");
                 return;
-            case RESULT_BAD_SERVER:
-                progressDialog.setMessage("Could not connect to " + syncEntityRequest.getUrl());
-                return;
-            case RESULT_BAD_AUTH:
-                progressDialog.setMessage("Could not authenticate as " + syncEntityRequest.getUserName());
-                return;
             case RESULT_BAD_PARSE:
-                progressDialog.setMessage("Something went very wrong parsing response.");
+                progressDialog.setMessage("Something went wrong parsing input stream.");
                 return;
             case RESULT_CANCELED:
                 progressDialog.setMessage("User canceled the sync.");
@@ -99,7 +88,7 @@ public class SyncEntityTask extends AsyncTask<SyncEntityRequest, Integer, Intege
     private class EntityErrorHandler implements XmlPageParser.PageErrorHandler {
         @Override
         public boolean handlePageError(DataPage dataPage, Exception e) {
-            // log and report error
+            // log and toast error
             // check if canceled and return false
             return true;
         }
