@@ -25,6 +25,8 @@ public class HttpTaskTest  extends AndroidTestCase {
     private static final String TEST_GET_PARAM =  "sauce";
     private static final String TEST_GET_VALUE =  "ketchupymustard";
 
+    private static final String BAD_GET_URL =  "http://vedtrg.com/veiurgerg/serghuisrg/earg";
+
     private static final long TASK_TIMEOUT = 10;
 
     HttpTaskResponse httpTaskResponse;
@@ -53,6 +55,20 @@ public class HttpTaskTest  extends AndroidTestCase {
         // make sure the response contains some expected content
         assertTrue(response.contains(TEST_GET_PARAM));
         assertTrue(response.contains(TEST_GET_VALUE));
+    }
+
+    public void testGetBadUrl() throws Exception {
+        // start a task to GET from the httpbin service
+        HttpTaskRequest httpTaskRequest = new HttpTaskRequest("test", BAD_GET_URL, "", "");
+        HttpTask httpTask = new HttpTask(new ResponseHandler());
+        httpTask.execute(httpTaskRequest);
+
+        // wait for the task to complete
+        httpTask.get(TASK_TIMEOUT, TimeUnit.SECONDS);
+
+        // make sure we didn't get a response
+        assertNotNull(httpTaskResponse);
+        assertFalse(httpTaskResponse.isSuccess());
     }
 
     private class ResponseHandler implements HttpTask.HttpTaskResponseHandler {
