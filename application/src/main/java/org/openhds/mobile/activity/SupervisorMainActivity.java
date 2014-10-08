@@ -1,6 +1,7 @@
 package org.openhds.mobile.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -27,59 +28,75 @@ import org.openhds.mobile.utilities.OdkCollectHelper;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getPreferenceString;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
 
-public class SupervisorMainActivity extends Activity implements OnClickListener {
+public class SupervisorMainActivity extends Activity {
 
     private static final String REVIEW_FRAGMENT_TAG = "reviewFragment";
     private FrameLayout prefContainer;
     private LinearLayout supervisorButtonLayout;
-    private SyncDatabaseHelper syncDatabaseHelper;
     private FormInstanceReviewFragment reviewFragment;
+
+    private ProgressDialog progressDialog;
+
+    private SyncDatabaseHelper syncDatabaseHelper;
+    private Map<HttpTaskRequest, ParseEntityTaskRequest> toBeSynced;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supervisor_main);
 
+        syncDatabaseHelper = new SyncDatabaseHelper(this);
+        syncDatabaseHelper.setSyncCompleteListener(new DatabaseSyncListener());
+        toBeSynced = new HashMap<>();
+
         prefContainer = (FrameLayout) findViewById(R.id.login_pref_container);
         supervisorButtonLayout = (LinearLayout) findViewById(R.id.supervisor_activity_options);
-        syncDatabaseHelper = new SyncDatabaseHelper(this);
 
+        ButtonClickListener buttonClickListener = new ButtonClickListener();
         makeButton(this,
                 R.string.sync_database_description,
                 R.string.sync_database_label,
                 R.string.sync_database_label,
-                this, supervisorButtonLayout);
+                buttonClickListener,
+                supervisorButtonLayout);
 
         makeButton(this,
                 R.string.sync_field_worker_description,
                 R.string.sync_field_worker_label,
                 R.string.sync_field_worker_label,
-                this, supervisorButtonLayout);
+                buttonClickListener,
+                supervisorButtonLayout);
 
         makeButton(this,
                 R.string.search_database_description,
                 R.string.search_database_label,
                 R.string.search_database_label,
-                this, supervisorButtonLayout);
+                buttonClickListener,
+                supervisorButtonLayout);
 
         makeButton(this,
                 R.string.send_finalized_forms_description,
                 R.string.send_finalized_forms_label,
                 R.string.send_finalized_forms_label,
-                this, supervisorButtonLayout);
+                buttonClickListener,
+                supervisorButtonLayout);
 
         if (null == savedInstanceState)  {
             reviewFragment = new FormInstanceReviewFragment();
-            getFragmentManager().beginTransaction()
+            getFragmentManager()
+                    .beginTransaction()
                     .add(R.id.login_pref_container, new LoginPreferenceFragment())
                     .add(R.id.supervisor_edit_form_container, reviewFragment, REVIEW_FRAGMENT_TAG)
                     .commit();
+
         } else {
             reviewFragment = (FormInstanceReviewFragment) getFragmentManager().findFragmentByTag(REVIEW_FRAGMENT_TAG);
         }
@@ -93,7 +110,7 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
     }
 
     /**
-     * Defining what happens when a main menu item is selected
+     * Define what happens when a main menu item is selected.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -119,23 +136,25 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         return true;
     }
 
-    public void onClick(View v) {
-        Integer tag = (Integer) v.getTag();
-        if (tag.equals(R.string.sync_database_label)) {
-            syncDatabase();
-        } else if (tag.equals(R.string.sync_field_worker_label)) {
-            syncFieldWorkers();
-        } else if (tag.equals(R.string.search_database_label)) {
-            searchDatabase();
-        } else if (tag.equals(R.string.send_finalized_forms_label)) {
-            reviewFragment.sendApprovedForms();
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
+
+        progressDialog = new ProgressDialog(this);
+        syncDatabaseHelper.setProgressDialog(progressDialog);
+
         encryptAllForms();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (null != progressDialog) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+        syncDatabaseHelper.setProgressDialog(null);
     }
 
     private void encryptAllForms() {
@@ -145,11 +164,10 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         }
     }
 
-    private void syncDatabase() {
+    private void syncAllEntities() {
         String username = (String) getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
         String password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
         String openHdsBaseUrl = getPreferenceString(this, R.string.openhds_server_url_key, "");
-
     }
 
     private void syncFieldWorkers() {
@@ -163,6 +181,23 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         HttpTaskRequest httpTaskRequest = new HttpTaskRequest("Field Workers", url, username, password);
         ParseEntityTaskRequest<FieldWorker> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
                 "Field Workers", null, new FieldWorkerParser(), GatewayRegistry.getFieldWorkerGateway());
+        toBeSynced.put(httpTaskRequest, parseEntityTaskRequest);
+        syncNext();
+    }
+
+    // Proceed to sync the next entity.
+    private void syncNext() {
+        if (toBeSynced.isEmpty()) {
+            return;
+        }
+
+        HttpTaskRequest httpTaskRequest = null;
+        ParseEntityTaskRequest<?> parseEntityTaskRequest = null;
+        for (HttpTaskRequest key : toBeSynced.keySet()) {
+            httpTaskRequest = key;
+            parseEntityTaskRequest = toBeSynced.get(key);
+        }
+        toBeSynced.remove(httpTaskRequest);
         syncDatabaseHelper.startSync(httpTaskRequest, parseEntityTaskRequest);
     }
 
@@ -176,5 +211,33 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         Intent intent = new Intent(this, FormSearchActivity.class);
         intent.putParcelableArrayListExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, searchPluginModules);
         startActivity(intent);
+    }
+
+    private class ButtonClickListener implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Integer tag = (Integer) v.getTag();
+            if (tag.equals(R.string.sync_database_label)) {
+                syncAllEntities();
+            } else if (tag.equals(R.string.sync_field_worker_label)) {
+                syncFieldWorkers();
+            } else if (tag.equals(R.string.search_database_label)) {
+                searchDatabase();
+            } else if (tag.equals(R.string.send_finalized_forms_label)) {
+                reviewFragment.sendApprovedForms();
+            }
+        }
+    }
+
+    private class DatabaseSyncListener implements SyncDatabaseHelper.SyncCompleteListener {
+        @Override
+        public void onSyncComplete() {
+            syncNext();
+        }
+
+        @Override
+        public void onSyncError() {
+            syncNext();
+        }
     }
 }

@@ -31,24 +31,36 @@ import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
  * to startSync().  The InputStream from the HttpTaskRequest will be
  * assigned to the ParseEntityRequest automatically.
  *
+ * Notifies a listener when syncing is complete.
+ *
  * BSH
  */
-
 public class SyncDatabaseHelper {
 
     private Context context;
     private ProgressDialog progressDialog;
+
     private HttpTask httpTask;
     private HttpTaskRequest httpTaskRequest;
     private ParseEntityTask parseEntityTask;
     private ParseEntityTaskRequest<?> parseEntityTaskRequest;
+    private SyncCompleteListener syncCompleteListener;
 
     public SyncDatabaseHelper(Context context) {
         this.context = context;
+    }
 
-        progressDialog = new ProgressDialog(this.context);
-        progressDialog.setCancelable(true);
-        progressDialog.setOnCancelListener(new SyncCancelListener());
+    public void setProgressDialog(ProgressDialog progressDialog) {
+        this.progressDialog = progressDialog;
+
+        if (null != progressDialog) {
+            progressDialog.setCancelable(true);
+            progressDialog.setOnCancelListener(new SyncCancelListener());
+        }
+    }
+
+    public void setSyncCompleteListener(SyncCompleteListener syncCompleteListener) {
+        this.syncCompleteListener = syncCompleteListener;
     }
 
     public void startSync(HttpTaskRequest httpTaskRequest, ParseEntityTaskRequest<?> parseEntityTaskRequest) {
@@ -58,7 +70,18 @@ public class SyncDatabaseHelper {
         startHttpTask();
     }
 
+    public interface SyncCompleteListener {
+        public void onSyncComplete();
+        public void onSyncError();
+    }
+
     private void updateProgressDialog(String title, String message) {
+        if (null == progressDialog) {
+            return;
+        }
+
+        progressDialog.show();
+
         if (null != title) {
             progressDialog.setTitle(title);
         }
@@ -68,9 +91,15 @@ public class SyncDatabaseHelper {
         }
     }
 
+    private void hideProgressDialog() {
+        if (null == progressDialog) {
+            return;
+        }
+        progressDialog.show();
+    }
+
     // Connect to server and get a data stream.
     private void startHttpTask(){
-        progressDialog.show();
         updateProgressDialog(httpTaskRequest.getTitle(), "Connecting");
 
         httpTask = new HttpTask(new HttpResponseHandler());
@@ -85,7 +114,11 @@ public class SyncDatabaseHelper {
             String message = "Error " + httpTaskResponse.getHttpStatus() + ": " + httpTaskResponse.getMessage();
             showLongToast(context, message);
             updateProgressDialog(httpTaskRequest.getTitle(), message);
-            progressDialog.hide();
+
+            if (null != syncCompleteListener) {
+                syncCompleteListener.onSyncError();
+            }
+            hideProgressDialog();
             return;
         }
 
@@ -104,7 +137,12 @@ public class SyncDatabaseHelper {
         String message = "Complete" + ": " + Integer.toString(progress);
         showLongToast(context, message);
         updateProgressDialog(parseEntityTaskRequest.getTitle(), message);
-        progressDialog.hide();
+
+        if (null != syncCompleteListener) {
+            syncCompleteListener.onSyncComplete();
+        }
+
+        hideProgressDialog();
     }
 
     // User canceled the sync.
@@ -112,9 +150,9 @@ public class SyncDatabaseHelper {
         String message = "Canceled";
         showLongToast(context, message);
         updateProgressDialog(parseEntityTaskRequest.getTitle(), message);
-        progressDialog.hide();
 
         parseEntityTask.cancel(true);
+        hideProgressDialog();
     }
 
     private class HttpResponseHandler implements HttpTask.HttpTaskResponseHandler {
@@ -160,7 +198,7 @@ public class SyncDatabaseHelper {
                 case DialogInterface.BUTTON_NEGATIVE:
                     if (httpTask.getStatus() == AsyncTask.Status.RUNNING
                             || parseEntityTask.getStatus() == AsyncTask.Status.RUNNING) {
-                        progressDialog.show();
+                        updateProgressDialog(null, null);
                     }
                     return;
             }
