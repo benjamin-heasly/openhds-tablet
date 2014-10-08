@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<memberships>
+    <membership>
+        <collectedBy>
+            <extId>FWGG1</extId>
+        </collectedBy>
+        <endType>NA</endType>
+        <individual>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>1000000B</extId>
+        </individual>
+        <socialGroup>
+            <extId>M2152S018E20P1</extId>
+        </socialGroup>
+        <startDate>2014-10-06 00:00:00</startDate>
+        <startType>IndividualForm</startType>
+        <bIsToA>1</bIsToA>
+    </membership>
+    <membership>
+        <collectedBy>
+            <extId>FWGG1</extId>
+        </collectedBy>
+        <endType>NA</endType>
+        <individual>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>1000000B</extId>
+        </individual>
+        <socialGroup>
+            <extId>M335S17E18P1</extId>
+        </socialGroup>
+        <startDate>2014-10-06 00:00:00</startDate>
+        <startType>IndividualForm</startType>
+        <bIsToA>1</bIsToA>
+    </membership>
+</memberships>

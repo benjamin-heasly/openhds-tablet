@@ -9,6 +9,7 @@ import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.model.Membership;
 import org.openhds.mobile.model.Relationship;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.model.Visit;
@@ -19,6 +20,7 @@ import org.openhds.mobile.repository.gateway.FieldWorkerGateway;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.MembershipGateway;
 import org.openhds.mobile.repository.gateway.RelationshipGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 import org.openhds.mobile.repository.gateway.VisitGateway;
@@ -28,6 +30,7 @@ import org.openhds.mobile.task.parsing.entities.FieldWorkerParser;
 import org.openhds.mobile.task.parsing.entities.IndividualParser;
 import org.openhds.mobile.task.parsing.entities.LocationHierarchyParser;
 import org.openhds.mobile.task.parsing.entities.LocationParser;
+import org.openhds.mobile.task.parsing.entities.MembershipParser;
 import org.openhds.mobile.task.parsing.entities.RelationshipParser;
 import org.openhds.mobile.task.parsing.entities.SocialGroupParser;
 import org.openhds.mobile.task.parsing.entities.VisitParser;
@@ -222,6 +225,22 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         assertEquals(2, entities.size());
     }
 
+    public void testProcessMembershipXml() throws Exception {
+        String fileName = "testXml/memberships.xml";
+        InputStream inputStream = getContext().getAssets().open(fileName);
+        MembershipGateway gateway = GatewayRegistry.getMembershipGateway();
+        ParseEntityTaskRequest<Membership> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
+                fileName,
+                inputStream,
+                new MembershipParser(),
+                gateway);
 
+        // run the task and wait for it to finish
+        parseEntityTask.execute(parseEntityTaskRequest);
+        parseEntityTask.get(TASK_TIMEOUT, TimeUnit.SECONDS);
+        Thread.sleep(100);
 
+        List<Membership> entities = gateway.getList(contentResolver, gateway.findAll());
+        assertEquals(2, entities.size());
+    }
 }
