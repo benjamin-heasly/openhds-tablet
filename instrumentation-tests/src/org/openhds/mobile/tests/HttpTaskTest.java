@@ -33,6 +33,7 @@ public class HttpTaskTest  extends AndroidTestCase {
 
     public void testGetWithParam() throws Exception {
         // start a task to GET from the httpbin service
+        httpTaskResponse = null;
         final String testUrl = TEST_GET_URL + "?" + TEST_GET_PARAM + "=" + TEST_GET_VALUE;
         HttpTaskRequest httpTaskRequest = new HttpTaskRequest("test", testUrl, "", "");
         HttpTask httpTask = new HttpTask(new ResponseHandler());
@@ -40,6 +41,7 @@ public class HttpTaskTest  extends AndroidTestCase {
 
         // wait for the task to complete
         httpTask.get(TASK_TIMEOUT, TimeUnit.SECONDS);
+        Thread.sleep(100);
 
         // make sure we got a response
         assertNotNull(httpTaskResponse);
@@ -58,13 +60,15 @@ public class HttpTaskTest  extends AndroidTestCase {
     }
 
     public void testGetBadUrl() throws Exception {
-        // start a task to GET from the httpbin service
+        // start a task to GET from a bogus url
+        httpTaskResponse = null;
         HttpTaskRequest httpTaskRequest = new HttpTaskRequest("test", BAD_GET_URL, "", "");
         HttpTask httpTask = new HttpTask(new ResponseHandler());
         httpTask.execute(httpTaskRequest);
 
         // wait for the task to complete
         httpTask.get(TASK_TIMEOUT, TimeUnit.SECONDS);
+        Thread.sleep(100);
 
         // make sure we didn't get a response
         assertNotNull(httpTaskResponse);
