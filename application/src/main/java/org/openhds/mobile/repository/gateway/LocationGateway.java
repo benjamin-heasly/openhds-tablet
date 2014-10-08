@@ -90,7 +90,7 @@ public class LocationGateway extends Gateway<Location> {
         }
 
         @Override
-        public DataWrapper toQueryResult(ContentResolver contentResolver, Location location, String state) {
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Location location, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(location.getExtId());
             dataWrapper.setName(location.getName());

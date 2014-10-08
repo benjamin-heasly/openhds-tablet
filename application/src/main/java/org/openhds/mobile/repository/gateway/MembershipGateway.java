@@ -90,7 +90,7 @@ public class MembershipGateway extends Gateway<Membership> {
         }
 
         @Override
-        public DataWrapper toQueryResult(ContentResolver contentResolver, Membership membership, String state) {
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Membership membership, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(membership.getIndividualExtId());
             dataWrapper.setName(membership.getRelationshipToHead());

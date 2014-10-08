@@ -1,4 +1,4 @@
-package org.openhds.mobile.utilities;
+package org.openhds.mobile.task.parsing;
 
 import java.util.ArrayList;
 import java.util.Arrays;

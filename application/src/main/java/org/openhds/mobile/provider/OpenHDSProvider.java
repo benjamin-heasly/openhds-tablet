@@ -992,6 +992,8 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.FieldWorkers._ID + " INTEGER PRIMARY KEY,"
                     + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID
                     + " TEXT NOT NULL,"
+                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX
+                    + " TEXT NOT NULL,"
                     + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME
                     + " TEXT NOT NULL,"
                     + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME

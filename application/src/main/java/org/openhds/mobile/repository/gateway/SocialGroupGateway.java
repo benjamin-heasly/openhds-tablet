@@ -53,7 +53,7 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
         }
 
         @Override
-        public DataWrapper toQueryResult(ContentResolver contentResolver, SocialGroup socialGroup, String state) {
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, SocialGroup socialGroup, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(socialGroup.getExtId());
             dataWrapper.setName(socialGroup.getGroupName());

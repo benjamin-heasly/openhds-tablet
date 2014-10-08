@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
@@ -104,7 +103,7 @@ public abstract class Gateway<T> {
         if (null == entity) {
             return null;
         }
-        return converter.toQueryResult(contentResolver, entity, state);
+        return converter.toDataWrapper(contentResolver, entity, state);
     }
 
     // get all results from a query as a list of QueryResults
@@ -113,7 +112,7 @@ public abstract class Gateway<T> {
         Cursor cursor = query.select(contentResolver);
         List<T> entities = toList(cursor);
         for (T entity : entities) {
-            dataWrappers.add(converter.toQueryResult(contentResolver, entity, state));
+            dataWrappers.add(converter.toDataWrapper(contentResolver, entity, state));
         }
         return dataWrappers;
     }

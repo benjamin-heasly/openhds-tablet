@@ -1,1 +1,39 @@
-<?xml version="1.0" ?><relationships><relationship><individualA><age>0</age><memberships></memberships><residencies></residencies><dip>0</dip><extId>0700000B</extId></individualA><individualB><age>0</age><memberships></memberships><residencies></residencies><dip>0</dip><extId>0700000B</extId></individualB><startDate>2014-07-23 00:00:00</startDate><aIsToB>1</aIsToB></relationship><relationship><individualA><age>0</age><memberships></memberships><residencies></residencies><dip>0</dip><extId>07000018</extId></individualA><individualB><age>0</age><memberships></memberships><residencies></residencies><dip>0</dip><extId>0700000B</extId></individualB><startDate>2014-07-23 00:00:00</startDate><aIsToB>3</aIsToB></relationship></relationships>
+<?xml version="1.0"?>
+<relationships>
+    <relationship>
+        <individualA>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>0700000B</extId>
+        </individualA>
+        <individualB>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>0700000B</extId>
+        </individualB>
+        <startDate>2014-07-23 00:00:00</startDate>
+        <aIsToB>1</aIsToB>
+    </relationship>
+    <relationship>
+        <individualA>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>07000018</extId>
+        </individualA>
+        <individualB>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>0700000B</extId>
+        </individualB>
+        <startDate>2014-07-23 00:00:00</startDate>
+        <aIsToB>3</aIsToB>
+    </relationship>
+</relationships>

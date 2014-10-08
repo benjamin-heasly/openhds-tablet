@@ -15,6 +15,6 @@ public interface Converter<T> {
 
     public String getId(T entity);
 
-    public DataWrapper toQueryResult(ContentResolver contentResolver, T entity, String state);
+    public DataWrapper toDataWrapper(ContentResolver contentResolver, T entity, String state);
 
 }

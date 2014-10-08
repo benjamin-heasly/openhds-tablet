@@ -1,8 +1,8 @@
-package org.openhds.mobile.tests.parser;
+package org.openhds.mobile.tests.parsing;
 
 import android.test.AndroidTestCase;
-import org.openhds.mobile.utilities.DataPage;
-import org.openhds.mobile.utilities.XmlPageParser;
+import org.openhds.mobile.task.parsing.DataPage;
+import org.openhds.mobile.task.parsing.XmlPageParser;
 
 import java.io.InputStream;
 

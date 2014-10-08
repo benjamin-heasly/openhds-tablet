@@ -1,1 +1,25 @@
-<?xml version="1.0" ?><socialgroups><socialgroup><extId>My Location</extId><groupHead><age>0</age><memberships></memberships><residencies></residencies><dip>0</dip><extId>0700000B</extId></groupHead><groupName>Augusta</groupName></socialgroup><socialgroup><extId>Location Two</extId><groupHead><age>0</age><memberships></memberships><residencies></residencies><dip>0</dip><extId>0800000C</extId></groupHead><groupName>Smith</groupName></socialgroup></socialgroups>
+<?xml version="1.0"?>
+<socialgroups>
+    <socialgroup>
+        <extId>My Location</extId>
+        <groupHead>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>0700000B</extId>
+        </groupHead>
+        <groupName>Augusta</groupName>
+    </socialgroup>
+    <socialgroup>
+        <extId>Location Two</extId>
+        <groupHead>
+            <age>0</age>
+            <memberships/>
+            <residencies/>
+            <dip>0</dip>
+            <extId>0800000C</extId>
+        </groupHead>
+        <groupName>Smith</groupName>
+    </socialgroup>
+</socialgroups>

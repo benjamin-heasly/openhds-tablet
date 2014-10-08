@@ -56,7 +56,7 @@ public class FieldWorker implements Serializable {
 		return collectedIdPrefix;
 	}
 
-	public void setCollectedIdPrefix(String collectedIdPrefix) {
+	public void setIdPrefix(String collectedIdPrefix) {
 		this.collectedIdPrefix = collectedIdPrefix;
 	}
 }

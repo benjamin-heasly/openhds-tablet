@@ -1,6 +1,6 @@
-package org.openhds.mobile.task.entities;
+package org.openhds.mobile.task.parsing.entities;
 
-import org.openhds.mobile.utilities.DataPage;
+import org.openhds.mobile.task.parsing.DataPage;
 
 import java.util.ArrayList;
 import java.util.List;

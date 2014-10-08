@@ -1,4 +1,4 @@
-package org.openhds.mobile.utilities;
+package org.openhds.mobile.task.parsing;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

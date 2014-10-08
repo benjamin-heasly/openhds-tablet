@@ -176,6 +176,7 @@ public class OpenHDS {
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.fieldworker";
 
 		public static final String COLUMN_FIELD_WORKER_EXTID = "extId";
+        public static final String COLUMN_FIELD_WORKER_ID_PREFIX = "idPrefix";
 		public static final String COLUMN_FIELD_WORKER_PASSWORD = "password";
 		public static final String COLUMN_FIELD_WORKER_FIRST_NAME = "firstName";
 		public static final String COLUMN_FIELD_WORKER_LAST_NAME = "lastName";

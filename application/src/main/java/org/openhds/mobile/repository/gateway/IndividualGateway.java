@@ -122,7 +122,7 @@ public class IndividualGateway extends Gateway<Individual> {
         }
 
         @Override
-        public DataWrapper toQueryResult(ContentResolver contentResolver, Individual individual, String state) {
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Individual individual, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(individual.getExtId());
             dataWrapper.setName(getFullName(individual));

@@ -40,7 +40,7 @@ public class QueryResultsIterator<T> implements Iterator<DataWrapper> {
 
     @Override
     public DataWrapper next() {
-        return converter.toQueryResult(contentResolver, resultsIterator.next(), state);
+        return converter.toDataWrapper(contentResolver, resultsIterator.next(), state);
     }
 
     @Override

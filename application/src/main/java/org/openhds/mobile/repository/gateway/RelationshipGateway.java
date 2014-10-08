@@ -91,7 +91,7 @@ public class RelationshipGateway extends Gateway<Relationship> {
         }
 
         @Override
-        public DataWrapper toQueryResult(ContentResolver contentResolver, Relationship relationship, String state) {
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Relationship relationship, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(relationship.getIndividualA());
             dataWrapper.setName(relationship.getType());

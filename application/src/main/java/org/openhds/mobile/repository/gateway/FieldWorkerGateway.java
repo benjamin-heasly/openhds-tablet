@@ -10,10 +10,10 @@ import org.openhds.mobile.repository.DataWrapper;
 
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME;
+import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
-import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 
 
 /**
@@ -32,14 +32,10 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             FieldWorker fieldWorker = new FieldWorker();
 
             fieldWorker.setExtId(extractString(cursor, COLUMN_FIELD_WORKER_EXTID));
+            fieldWorker.setIdPrefix(extractString(cursor, COLUMN_FIELD_WORKER_ID_PREFIX));
             fieldWorker.setFirstName(extractString(cursor, COLUMN_FIELD_WORKER_FIRST_NAME));
             fieldWorker.setLastName(extractString(cursor, COLUMN_FIELD_WORKER_LAST_NAME));
             fieldWorker.setPasswordHash(extractString(cursor, COLUMN_FIELD_WORKER_PASSWORD));
-
-            // for Bioko
-            int id = cursor.getInt(cursor.getColumnIndex(OpenHDS.FieldWorkers._ID));
-            String idString = String.format(LIKE_WILD_CARD + "02d", id);
-            fieldWorker.setCollectedIdPrefix(idString);
 
             return fieldWorker;
         }
@@ -49,6 +45,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(COLUMN_FIELD_WORKER_EXTID, fieldWorker.getExtId());
+            contentValues.put(COLUMN_FIELD_WORKER_ID_PREFIX, fieldWorker.getCollectedIdPrefix());
             contentValues.put(COLUMN_FIELD_WORKER_FIRST_NAME, fieldWorker.getFirstName());
             contentValues.put(COLUMN_FIELD_WORKER_LAST_NAME, fieldWorker.getLastName());
             contentValues.put(COLUMN_FIELD_WORKER_PASSWORD, fieldWorker.getPasswordHash());
@@ -62,7 +59,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
         }
 
         @Override
-        public DataWrapper toQueryResult(ContentResolver contentResolver, FieldWorker fieldWorker, String state) {
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, FieldWorker fieldWorker, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(fieldWorker.getExtId());
             dataWrapper.setName(fieldWorker.getFirstName());
