@@ -19,20 +19,22 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
 
     private static final int BATCH_SIZE = 100;
 
-    private ProgressDialog progressDialog;
     private ContentResolver contentResolver;
     private ParseEntityTaskRequest parseEntityTaskRequest;
+    private ProgressListener progressListener;
 
     private int entityCount;
 
-    public ParseEntityTask(ProgressDialog progressDialog, ContentResolver contentResolver) {
-        this.progressDialog = progressDialog;
+    public ParseEntityTask(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
+    }
+
+    public void setProgressListener(ProgressListener progressListener) {
+        this.progressListener = progressListener;
     }
 
     @Override
     protected void onPreExecute () {
-        updateDialog("Processing", "Stand By.");
         entityCount = 0;
     }
 
@@ -59,37 +61,28 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
 
     @Override
     protected void onProgressUpdate (Integer... values) {
-        entityCount = values[0];
-        updateDialog(parseEntityTaskRequest.getTitle(), Integer.toString(entityCount));
+        int progress = values[0];
+        if (null != progressListener) {
+            progressListener.onProgressReport(progress);
+        }
     }
 
     @Override
     protected void onPostExecute (Integer result) {
-        if (result < 0) {
-            updateDialog(parseEntityTaskRequest.getTitle(), Integer.toString(result));
-            return;
+        if (null != progressListener) {
+            progressListener.onComplete(entityCount);
         }
-        updateDialog(parseEntityTaskRequest.getTitle(), Integer.toString(result));
+    }
+
+    public interface ProgressListener {
+        public void onProgressReport(int progress);
+        public void onComplete(int progress);
     }
 
     private void persistBatch() {
         List<?> entities = parseEntityTaskRequest.getEntityParser().getEntities();
         parseEntityTaskRequest.getGateway().insertMany(contentResolver, entities);
         entities.clear();
-    }
-
-    private void updateDialog(String title, String message) {
-        if (null == progressDialog) {
-            return;
-        }
-
-        if (null != title) {
-            progressDialog.setTitle(title);
-        }
-
-        if (null != message) {
-            progressDialog.setMessage(message);
-        }
     }
 
     private class EntityPageHandler implements XmlPageParser.PageHandler {
@@ -102,6 +95,7 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
             // persist entities in batches
             if (0 == entityCount % BATCH_SIZE) {
                 persistBatch();
+                publishProgress(entityCount);
             }
 
             // stop parsing if the user cancelled the task

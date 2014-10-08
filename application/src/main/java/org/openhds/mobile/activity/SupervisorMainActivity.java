@@ -14,12 +14,14 @@ import android.widget.LinearLayout;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FormInstanceReviewFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
+import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchUtils;
-import org.openhds.mobile.task.HttpTask.RequestContext;
-import org.openhds.mobile.task.SyncEntitiesTask;
-import org.openhds.mobile.task.SyncFieldworkersTask;
+import org.openhds.mobile.task.http.HttpTaskRequest;
+import org.openhds.mobile.task.parsing.ParseEntityTaskRequest;
+import org.openhds.mobile.task.parsing.entities.FieldWorkerParser;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
@@ -30,7 +32,6 @@ import java.util.List;
 import static org.openhds.mobile.utilities.ConfigUtils.getPreferenceString;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
-import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
 
 public class SupervisorMainActivity extends Activity implements OnClickListener {
 
@@ -149,23 +150,20 @@ public class SupervisorMainActivity extends Activity implements OnClickListener 
         String password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
         String openHdsBaseUrl = getPreferenceString(this, R.string.openhds_server_url_key, "");
 
-        SyncEntitiesTask currentTask = new SyncEntitiesTask(openHdsBaseUrl, username, password,
-                syncDatabaseHelper.getProgressDialog(), this, syncDatabaseHelper);
-        syncDatabaseHelper.setCurrentTask(currentTask);
-        syncDatabaseHelper.startSync();
     }
 
     private void syncFieldWorkers() {
         String username = (String) getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
         String password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
-        String path = getResourceString(this, R.string.field_workers_sync_url);
 
-        RequestContext requestContext =
-                new RequestContext().user(username).password(password).url(buildServerUrl(this, path));
-        SyncFieldworkersTask currentTask = new SyncFieldworkersTask(requestContext, getContentResolver(),
-                syncDatabaseHelper.getProgressDialog(), syncDatabaseHelper);
-        syncDatabaseHelper.setCurrentTask(currentTask);
-        syncDatabaseHelper.startSync();
+        String baseUrl = getResourceString(this, R.string.default_openhds_server_url);
+        String path = getResourceString(this, R.string.field_workers_sync_url);
+        String url = baseUrl + path;
+
+        HttpTaskRequest httpTaskRequest = new HttpTaskRequest("Field Workers", url, username, password);
+        ParseEntityTaskRequest<FieldWorker> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
+                "Field Workers", null, new FieldWorkerParser(), GatewayRegistry.getFieldWorkerGateway());
+        syncDatabaseHelper.startSync(httpTaskRequest, parseEntityTaskRequest);
     }
 
     private void searchDatabase() {

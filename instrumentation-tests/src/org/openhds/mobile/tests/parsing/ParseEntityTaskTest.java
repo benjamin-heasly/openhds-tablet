@@ -82,7 +82,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         databaseHelper.onUpgrade(db, 0, 0);
 
         // test the task against the mock content resolver with no progress dialog
-        parseEntityTask = new ParseEntityTask(null, contentResolver);
+        parseEntityTask = new ParseEntityTask(contentResolver);
     }
 
     @Override

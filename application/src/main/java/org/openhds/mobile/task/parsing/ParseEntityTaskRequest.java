@@ -38,6 +38,10 @@ public class ParseEntityTaskRequest<T> {
         return inputStream;
     }
 
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
     public EntityParser<T> getEntityParser() {
         return entityParser;
     }
