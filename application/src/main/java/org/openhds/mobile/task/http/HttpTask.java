@@ -16,6 +16,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -26,10 +27,10 @@ import java.net.URL;
  * BSH
  */
 public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse> {
-    public static final int RESULT_OK = 0;
-    public static final int RESULT_BAD_REQUEST = 1;
-    public static final int RESULT_BAD_CREDENTIALS = 2;
-    public static final int RESULT_BAD_RESPONSE = 3;
+    public static final String MESSAGE_SUCCESS = "Request successful";
+    public static final String MESSAGE_NO_REQUEST = "No request given";
+    public static final String MESSAGE_CLIENT_ERROR = "Client error";
+    public static final String MESSAGE_SERVER_ERROR = "Server error";
 
     private HttpTaskResponseHandler httpTaskResponseHandler;
 
@@ -42,7 +43,7 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
     @Override
     protected HttpTaskResponse doInBackground(HttpTaskRequest... httpTaskRequests) {
         if (null == httpTaskRequests || 0 == httpTaskRequests.length) {
-            return new HttpTaskResponse(RESULT_BAD_REQUEST, null);
+            return new HttpTaskResponse(false, MESSAGE_NO_REQUEST, 0, null);
         }
         HttpTaskRequest httpTaskRequest = httpTaskRequests[0];
 
@@ -54,32 +55,24 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
         try {
             HttpResponse httpResponse = executeHttpGet(httpClient, httpTaskRequest.getUrl());
             InputStream responseStream = httpResponse.getEntity().getContent();
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
 
-            // make up an appropriate task response
-            final int statusCode = httpResponse.getStatusLine().getStatusCode();
-            switch (statusCode) {
-                case HttpStatus.SC_OK:
-                    return new HttpTaskResponse(RESULT_OK, responseStream);
-
-                case HttpStatus.SC_FORBIDDEN:
-                    return new HttpTaskResponse(RESULT_BAD_CREDENTIALS, responseStream);
-
-                default:
-                    if (statusCode < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                        return new HttpTaskResponse(RESULT_BAD_REQUEST, responseStream);
-                    }
-                    return new HttpTaskResponse(RESULT_BAD_RESPONSE, responseStream);
+            if (HttpStatus.SC_OK == statusCode) {
+                return new HttpTaskResponse(true, MESSAGE_SUCCESS, statusCode, responseStream);
             }
 
-        } catch (IOException e) {
-            return new HttpTaskResponse(RESULT_BAD_REQUEST, null);
+            if (statusCode < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+                return new HttpTaskResponse(false, MESSAGE_CLIENT_ERROR, statusCode, responseStream);
+            }
 
-        } catch (AuthenticationException e) {
-            return new HttpTaskResponse(RESULT_BAD_CREDENTIALS, null);
+            return new HttpTaskResponse(false, MESSAGE_SERVER_ERROR, statusCode, responseStream);
+
+        } catch (Exception e) {
+            return new HttpTaskResponse(false, e.getClass().getName() +": " + e.getMessage(), 0, null);
         }
     }
 
-    // Add credentials to this http cleint.
+    // Add credentials to this http client.
     private void setHttpClientCredentials(DefaultHttpClient httpClient, String userName, String password) {
         AuthScope scope = new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM);
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(userName, password);
@@ -90,11 +83,11 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
 
     // Make a request with preemptive basic credentials.
     private HttpResponse executeHttpGet(DefaultHttpClient httpClient, String hostAddress)
-            throws  IOException, AuthenticationException {
+            throws  IOException, AuthenticationException, URISyntaxException {
 
         URL getUrl = new URL(hostAddress);
-        HttpGet httpGet = new HttpGet(getUrl.getPath());
-        HttpHost httpHost = new HttpHost(getUrl.getHost(), getUrl.getDefaultPort());
+        HttpGet httpGet = new HttpGet(getUrl.toURI());
+        HttpHost httpHost = new HttpHost(getUrl.getHost(), getUrl.getPort());
 
         // preemptive basic credentials
         Credentials credentials = httpClient.getCredentialsProvider().getCredentials(AuthScope.ANY);

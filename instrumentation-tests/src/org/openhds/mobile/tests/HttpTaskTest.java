@@ -6,34 +6,53 @@ import org.openhds.mobile.task.http.HttpTaskRequest;
 import org.openhds.mobile.task.http.HttpTaskResponse;
 
 import java.io.InputStream;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Try to get some data from google.com.
+ * Make sure we can make a GET request and return some data.
+ *
+ * Use a handy http testing service called httpbin:
+ *   http://httpbin.org/
+ * This allows us to make a request, and it and returns a
+ * JSON object describing our request.
  *
  * BSH
  */
 public class HttpTaskTest  extends AndroidTestCase {
 
-    private static final String GOOGLE_URL =  "http://www.google.com";
+    private static final String TEST_GET_URL =  "http://httpbin.org/get";
+    private static final String TEST_GET_PARAM =  "sauce";
+    private static final String TEST_GET_VALUE =  "ketchupymustard";
+
     private static final long TASK_TIMEOUT = 10;
 
     HttpTaskResponse httpTaskResponse;
 
-    public void testGetGoogle() throws Exception {
-        HttpTaskRequest httpTaskRequest = new HttpTaskRequest("test", GOOGLE_URL, "", "");
+    public void testGetWithParam() throws Exception {
+        // start a task to GET from the httpbin service
+        final String testUrl = TEST_GET_URL + "?" + TEST_GET_PARAM + "=" + TEST_GET_VALUE;
+        HttpTaskRequest httpTaskRequest = new HttpTaskRequest("test", testUrl, "", "");
         HttpTask httpTask = new HttpTask(new ResponseHandler());
         httpTask.execute(httpTaskRequest);
 
         // wait for the task to complete
         httpTask.get(TASK_TIMEOUT, TimeUnit.SECONDS);
 
+        // make sure we got a response
         assertNotNull(httpTaskResponse);
-        assertEquals(HttpTask.RESULT_OK, httpTaskResponse.getStatusCode());
-
+        assertTrue(httpTaskResponse.isSuccess());
         InputStream inputStream = httpTaskResponse.getInputStream();
         assertNotNull(inputStream);
+
+        // scan the whole input stream into a string
+        Scanner scanner = new java.util.Scanner(inputStream).useDelimiter("\\A");
+        String response = scanner.next();
         inputStream.close();
+
+        // make sure the response contains some expected content
+        assertTrue(response.contains(TEST_GET_PARAM));
+        assertTrue(response.contains(TEST_GET_VALUE));
     }
 
     private class ResponseHandler implements HttpTask.HttpTaskResponseHandler {

@@ -11,16 +11,28 @@ import java.io.InputStream;
  * BSH
  */
 public class HttpTaskResponse {
-    private int statusCode;
-    private InputStream inputStream;
+    private final boolean isSuccess;
+    private final String message;
+    private final int httpStatus;
+    private final InputStream inputStream;
 
-    public HttpTaskResponse(int statusCode, InputStream inputStream) {
-        this.statusCode = statusCode;
+    public HttpTaskResponse(boolean isSuccess, String message, int httpStatus, InputStream inputStream) {
+        this.isSuccess = isSuccess;
+        this.message = message;
+        this.httpStatus = httpStatus;
         this.inputStream = inputStream;
     }
 
-    public int getStatusCode() {
-        return statusCode;
+    public boolean isSuccess() {
+        return isSuccess;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public int getHttpStatus() {
+        return httpStatus;
     }
 
     public InputStream getInputStream() {
