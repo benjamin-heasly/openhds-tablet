@@ -50,13 +50,9 @@ public class SyncDatabaseHelper {
         this.context = context;
     }
 
-    public void setProgressDialog(ProgressDialog progressDialog) {
-        this.progressDialog = progressDialog;
-
-        if (null != progressDialog) {
-            progressDialog.setCancelable(true);
-            progressDialog.setOnCancelListener(new SyncCancelListener());
-        }
+    public interface SyncCompleteListener {
+        public void onSyncComplete();
+        public void onSyncError();
     }
 
     public void setSyncCompleteListener(SyncCompleteListener syncCompleteListener) {
@@ -67,19 +63,51 @@ public class SyncDatabaseHelper {
         this.httpTaskRequest = httpTaskRequest;
         this.parseEntityTaskRequest = parseEntityTaskRequest;
 
+        cancelSync();
+        setUpProgressDialog();
         startHttpTask();
     }
 
-    public interface SyncCompleteListener {
-        public void onSyncComplete();
-        public void onSyncError();
+    // User canceled the sync.
+    public void cancelSync() {
+        boolean showMessage = null != httpTask || null != parseEntityTask;
+
+        if (null != httpTask) {
+            httpTask.cancel(true);
+        }
+        httpTask = null;
+
+        if (null != parseEntityTask) {
+            parseEntityTask.cancel(true);
+        }
+        parseEntityTask = null;
+
+        if (showMessage) {
+            String message = "Canceled";
+            showLongToast(context, message);
+        }
+        tearDownProgressDialog();
+    }
+
+    private void setUpProgressDialog() {
+        tearDownProgressDialog();
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(true);
+        progressDialog.setOnCancelListener(new SyncCancelListener());
+    }
+
+    private void tearDownProgressDialog() {
+        if (null == progressDialog) {
+            return;
+        }
+        progressDialog.dismiss();
+        progressDialog = null;
     }
 
     private void updateProgressDialog(String title, String message) {
         if (null == progressDialog) {
             return;
         }
-
         progressDialog.show();
 
         if (null != title) {
@@ -89,13 +117,6 @@ public class SyncDatabaseHelper {
         if (null != message) {
             progressDialog.setMessage(message);
         }
-    }
-
-    private void hideProgressDialog() {
-        if (null == progressDialog) {
-            return;
-        }
-        progressDialog.show();
     }
 
     // Connect to server and get a data stream.
@@ -111,16 +132,22 @@ public class SyncDatabaseHelper {
         updateProgressDialog(parseEntityTaskRequest.getTitle(), "Reading");
 
         if (!httpTaskResponse.isSuccess()) {
-            String message = "Error " + httpTaskResponse.getHttpStatus() + ": " + httpTaskResponse.getMessage();
+            String message = httpTaskRequest.getTitle()
+                    + " error "
+                    + httpTaskResponse.getHttpStatus()
+                    + ": "
+                    + httpTaskResponse.getMessage();
             showLongToast(context, message);
-            updateProgressDialog(httpTaskRequest.getTitle(), message);
+            tearDownProgressDialog();
 
             if (null != syncCompleteListener) {
                 syncCompleteListener.onSyncError();
             }
-            hideProgressDialog();
             return;
         }
+
+        // done with the old http task
+        httpTask = null;
 
         // clear out the old database
         parseEntityTaskRequest.getGateway().deleteAll(context.getContentResolver());
@@ -134,25 +161,16 @@ public class SyncDatabaseHelper {
 
     // All done parsing, clean up.
     private void finishParseTask(int progress) {
-        String message = "Complete" + ": " + Integer.toString(progress);
+        String message = parseEntityTaskRequest.getTitle() + ": " + Integer.toString(progress);
         showLongToast(context, message);
-        updateProgressDialog(parseEntityTaskRequest.getTitle(), message);
+        tearDownProgressDialog();
+
+        // done with the parse entity task
+        parseEntityTask = null;
 
         if (null != syncCompleteListener) {
             syncCompleteListener.onSyncComplete();
         }
-
-        hideProgressDialog();
-    }
-
-    // User canceled the sync.
-    private void cancelSync() {
-        String message = "Canceled";
-        showLongToast(context, message);
-        updateProgressDialog(parseEntityTaskRequest.getTitle(), message);
-
-        parseEntityTask.cancel(true);
-        hideProgressDialog();
     }
 
     private class HttpResponseHandler implements HttpTask.HttpTaskResponseHandler {

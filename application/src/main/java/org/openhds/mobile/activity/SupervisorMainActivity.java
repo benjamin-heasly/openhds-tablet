@@ -1,7 +1,6 @@
 package org.openhds.mobile.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,14 +14,21 @@ import android.widget.LinearLayout;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FormInstanceReviewFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
-import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchUtils;
 import org.openhds.mobile.task.http.HttpTaskRequest;
 import org.openhds.mobile.task.parsing.ParseEntityTaskRequest;
+import org.openhds.mobile.task.parsing.entities.EntityParser;
 import org.openhds.mobile.task.parsing.entities.FieldWorkerParser;
+import org.openhds.mobile.task.parsing.entities.IndividualParser;
+import org.openhds.mobile.task.parsing.entities.LocationHierarchyParser;
+import org.openhds.mobile.task.parsing.entities.LocationParser;
+import org.openhds.mobile.task.parsing.entities.MembershipParser;
+import org.openhds.mobile.task.parsing.entities.RelationshipParser;
+import org.openhds.mobile.task.parsing.entities.SocialGroupParser;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
@@ -42,8 +48,6 @@ public class SupervisorMainActivity extends Activity {
     private FrameLayout prefContainer;
     private LinearLayout supervisorButtonLayout;
     private FormInstanceReviewFragment reviewFragment;
-
-    private ProgressDialog progressDialog;
 
     private SyncDatabaseHelper syncDatabaseHelper;
     private Map<HttpTaskRequest, ParseEntityTaskRequest> toBeSynced;
@@ -139,22 +143,13 @@ public class SupervisorMainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        progressDialog = new ProgressDialog(this);
-        syncDatabaseHelper.setProgressDialog(progressDialog);
-
         encryptAllForms();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        if (null != progressDialog) {
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-        syncDatabaseHelper.setProgressDialog(null);
+        syncDatabaseHelper.cancelSync();
     }
 
     private void encryptAllForms() {
@@ -165,24 +160,43 @@ public class SupervisorMainActivity extends Activity {
     }
 
     private void syncAllEntities() {
-        String username = (String) getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
-        String password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
-        String openHdsBaseUrl = getPreferenceString(this, R.string.openhds_server_url_key, "");
+        setUpSyncTasks("Memberships", R.string.sync_memberships_path,
+                new MembershipParser(), GatewayRegistry.getMembershipGateway());
+        setUpSyncTasks("Relationships", R.string.sync_relationships_path,
+                new RelationshipParser(), GatewayRegistry.getRelationshipGateway());
+        setUpSyncTasks("Social Groups", R.string.sync_social_groups_path,
+                new SocialGroupParser(), GatewayRegistry.getSocialGroupGateway());
+        setUpSyncTasks("Visits", R.string.sync_social_groups_path,
+                new SocialGroupParser(), GatewayRegistry.getSocialGroupGateway());
+        setUpSyncTasks("Individuals", R.string.sync_individuals_path,
+                new IndividualParser(), GatewayRegistry.getIndividualGateway());
+        setUpSyncTasks("Location Hierarchies", R.string.sync_location_hierarchies_path,
+                new LocationHierarchyParser(), GatewayRegistry.getLocationHierarchyGateway());
+        setUpSyncTasks("Locations", R.string.sync_locations_path,
+                new LocationParser(), GatewayRegistry.getLocationGateway());
+
+        syncNext();
     }
 
     private void syncFieldWorkers() {
-        String username = (String) getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
-        String password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
-
-        String baseUrl = getResourceString(this, R.string.default_openhds_server_url);
-        String path = getResourceString(this, R.string.field_workers_sync_url);
-        String url = baseUrl + path;
-
-        HttpTaskRequest httpTaskRequest = new HttpTaskRequest("Field Workers", url, username, password);
-        ParseEntityTaskRequest<FieldWorker> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                "Field Workers", null, new FieldWorkerParser(), GatewayRegistry.getFieldWorkerGateway());
-        toBeSynced.put(httpTaskRequest, parseEntityTaskRequest);
+        setUpSyncTasks("Field Workers", R.string.sync_field_workers_path,
+                new FieldWorkerParser(), GatewayRegistry.getFieldWorkerGateway());
         syncNext();
+    }
+
+    // Create tasks for syncing instances of entity type T.
+    private <T> void setUpSyncTasks(String title, int resourcePathId, EntityParser<T> parser, Gateway<T> gateway) {
+        String userName = (String) getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
+        String password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
+        String openHdsBaseUrl = getPreferenceString(this, R.string.openhds_server_url_key, "");
+
+        String path = getResourceString(this, resourcePathId);
+        String url = openHdsBaseUrl + path;
+        HttpTaskRequest httpTaskRequest = new HttpTaskRequest(title, url, userName, password);
+
+        ParseEntityTaskRequest<T> parseEntityTaskRequest = new ParseEntityTaskRequest<>(title, null, parser, gateway);
+
+        toBeSynced.put(httpTaskRequest, parseEntityTaskRequest);
     }
 
     // Proceed to sync the next entity.

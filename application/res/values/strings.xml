@@ -11,8 +11,6 @@
     <string name="configuration">Configuration</string>
     <string name="configureDatabase">Configure Database</string>
     <string name="databaseSync">Sync with OpenHDS Database</string>
-    <string name="default_interop_server_url">http://bioko-cims-test.rcg.usm.maine.edu:8080/openhds</string>
-    <string name="default_openhds_server_url">http://bioko-cims-test.rcg.usm.maine.edu:8080/openhds</string>
     <string name="delete_form_btn">Delete Form</string>
     <string name="download_form_button">Download Forms</string>
     <string name="failure_reasons_txt">Failure messages:</string>
@@ -82,8 +80,6 @@
     <string name="interop_server_url_key">interop_server_url</string>
     <string name="openhds_server_url_default_summary">Same URL used for OpenHDS Server via Web browser</string>
     <string name="openhds_server_url_title">OpenHDS Server URL</string>
-    <string name="supervisor_login_url">/api/rest/visits</string>
-    <string name="field_workers_sync_url">/api/rest/fieldworkers</string>
     <string name="landscape_layout_tag">landscape</string>
     <string name="portrait_layout_tag">portrait</string>
     <string name="supervisor_bad_credentials">Invalid supervisor credentials</string>
@@ -110,6 +106,19 @@
     <string name="add_member_of_household_label">Add Member of Household</string>
     <string name="edit_individual_label">Edit Individual</string>
     <string name="house_of_prefix">House of</string>
+
+    <!-- Server URLs and Paths -->
+    <string name="default_interop_server_url">http://bioko-cims-test.rcg.usm.maine.edu:8080/openhds</string>
+    <string name="default_openhds_server_url">http://bioko-cims-test.rcg.usm.maine.edu:8080/openhds</string>
+    <string name="supervisor_login_url">/api/rest/visits</string>
+    <string name="sync_field_workers_path">/api/rest/fieldworkers</string>
+    <string name="sync_individuals_path">/api/rest/individuals/cached</string>
+    <string name="sync_location_hierarchies_path">/api/rest/locationhierarchies</string>
+    <string name="sync_locations_path">/api/rest/locations/cached</string>
+    <string name="sync_memberships_path">/api/rest/memberships/cached</string>
+    <string name="sync_relationships_path">/api/rest/relationships/cached</string>
+    <string name="sync_social_groups_path">/api/rest/socialgroups/cached</string>
+    <string name="sync_visits_path">/api/rest/visits/cached</string>
 
     <!-- Details Fragment Values -->
     <string name="toggle_fragment_button_show_details">Show Details</string>
