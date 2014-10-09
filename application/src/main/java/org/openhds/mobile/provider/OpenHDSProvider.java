@@ -261,6 +261,9 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID,
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID);
         fieldworkersProjectionMap.put(
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX,
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX);
+        fieldworkersProjectionMap.put(
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME,
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME);
         fieldworkersProjectionMap.put(

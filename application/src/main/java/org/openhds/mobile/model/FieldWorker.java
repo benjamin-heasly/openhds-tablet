@@ -9,7 +9,7 @@ public class FieldWorker implements Serializable {
 	private String firstName;
 	private String lastName;
     private String passwordHash;
-	private String collectedIdPrefix;
+	private String idPrefix;
 
 	public FieldWorker() {
 	}
@@ -52,11 +52,11 @@ public class FieldWorker implements Serializable {
 		this.passwordHash = passwordHash;
 	}
 
-	public String getCollectedIdPrefix() {
-		return collectedIdPrefix;
+	public String getIdPrefix() {
+		return idPrefix;
 	}
 
 	public void setIdPrefix(String collectedIdPrefix) {
-		this.collectedIdPrefix = collectedIdPrefix;
+		this.idPrefix = collectedIdPrefix;
 	}
 }

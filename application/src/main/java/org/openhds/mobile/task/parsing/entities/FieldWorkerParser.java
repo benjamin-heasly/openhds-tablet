@@ -22,11 +22,6 @@ public class FieldWorkerParser extends EntityParser<FieldWorker> {
         fieldWorker.setFirstName(dataPage.getFirstString(asList(pageName, "firstName")));
         fieldWorker.setLastName(dataPage.getFirstString(asList(pageName, "lastName")));
 
-        // TODO: this is a temporary hack
-        if (null == fieldWorker.getCollectedIdPrefix()) {
-            fieldWorker.setIdPrefix("99");
-        }
-
         return fieldWorker;
     }
 }

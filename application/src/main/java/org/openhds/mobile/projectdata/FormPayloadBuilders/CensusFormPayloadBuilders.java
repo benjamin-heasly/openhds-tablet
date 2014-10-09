@@ -4,17 +4,14 @@ import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.*;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
-import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.gateway.*;
 import org.openhds.mobile.utilities.LuhnValidator;
 
-import java.lang.reflect.Member;
 import java.util.Iterator;
 import java.util.Map;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
@@ -86,7 +83,7 @@ public class CensusFormPayloadBuilders {
         FieldWorker fieldWorker = (FieldWorker) navigateActivity.getIntent()
                 .getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
 
-        String generatedIdPrefix = fieldWorker.getCollectedIdPrefix();
+        String generatedIdPrefix = fieldWorker.getIdPrefix();
 
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
         ContentResolver contentResolver = navigateActivity.getContentResolver();

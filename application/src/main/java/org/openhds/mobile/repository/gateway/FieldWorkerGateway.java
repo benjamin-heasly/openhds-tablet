@@ -44,8 +44,13 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
         public ContentValues toContentValues(FieldWorker fieldWorker) {
             ContentValues contentValues = new ContentValues();
 
+            // TODO: this is a temporary hack
+            if (null == fieldWorker.getIdPrefix()) {
+                fieldWorker.setIdPrefix("99");
+            }
+
             contentValues.put(COLUMN_FIELD_WORKER_EXTID, fieldWorker.getExtId());
-            contentValues.put(COLUMN_FIELD_WORKER_ID_PREFIX, fieldWorker.getCollectedIdPrefix());
+            contentValues.put(COLUMN_FIELD_WORKER_ID_PREFIX, fieldWorker.getIdPrefix());
             contentValues.put(COLUMN_FIELD_WORKER_FIRST_NAME, fieldWorker.getFirstName());
             contentValues.put(COLUMN_FIELD_WORKER_LAST_NAME, fieldWorker.getLastName());
             contentValues.put(COLUMN_FIELD_WORKER_PASSWORD, fieldWorker.getPasswordHash());
