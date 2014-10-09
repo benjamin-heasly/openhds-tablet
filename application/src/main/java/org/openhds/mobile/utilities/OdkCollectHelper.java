@@ -1,12 +1,12 @@
 package org.openhds.mobile.utilities;
 
-import static org.openhds.mobile.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
+import static org.openhds.mobile.provider.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
-import org.openhds.mobile.InstanceProviderAPI;
+import org.openhds.mobile.provider.InstanceProviderAPI;
 import org.openhds.mobile.model.FormInstance;
 
 import android.content.ContentResolver;

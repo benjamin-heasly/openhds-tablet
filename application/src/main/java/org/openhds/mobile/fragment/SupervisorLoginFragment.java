@@ -15,7 +15,7 @@ import org.openhds.mobile.R;
 import org.openhds.mobile.activity.OpeningActivity;
 import org.openhds.mobile.activity.SuperSecretDevBackdoor;
 import org.openhds.mobile.activity.SupervisorMainActivity;
-import org.openhds.mobile.database.DatabaseAdapter;
+import org.openhds.mobile.provider.DatabaseAdapter;
 import org.openhds.mobile.model.Supervisor;
 import org.openhds.mobile.task.SupervisorLoginTask;
 import org.openhds.mobile.task.http.HttpTask;

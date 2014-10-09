@@ -1,4 +1,4 @@
-package org.openhds.mobile;
+package org.openhds.mobile.provider;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

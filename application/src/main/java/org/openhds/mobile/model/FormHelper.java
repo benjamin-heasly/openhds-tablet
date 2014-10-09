@@ -12,8 +12,8 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.openhds.mobile.FormsProviderAPI;
-import org.openhds.mobile.InstanceProviderAPI;
+import org.openhds.mobile.provider.FormsProviderAPI;
+import org.openhds.mobile.provider.InstanceProviderAPI;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 

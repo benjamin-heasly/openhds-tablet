@@ -1,4 +1,4 @@
-package org.openhds.mobile.utilities;
+package org.openhds.mobile.task;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;

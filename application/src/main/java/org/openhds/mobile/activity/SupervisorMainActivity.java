@@ -31,7 +31,7 @@ import org.openhds.mobile.task.parsing.entities.RelationshipParser;
 import org.openhds.mobile.task.parsing.entities.SocialGroupParser;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
-import org.openhds.mobile.utilities.SyncDatabaseHelper;
+import org.openhds.mobile.task.SyncDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

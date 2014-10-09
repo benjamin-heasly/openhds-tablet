@@ -1,4 +1,4 @@
-package org.openhds.mobile.database;
+package org.openhds.mobile.provider;
 
 import android.content.ContentValues;
 import android.content.Context;
