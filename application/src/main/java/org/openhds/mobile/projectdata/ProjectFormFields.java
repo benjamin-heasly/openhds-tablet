@@ -257,6 +257,7 @@ public class ProjectFormFields {
 
     public static final class BedNet {
         public static final String BED_NET_CODE = "netCode";
+        public static final String HOUSEHOLD_SIZE = "householdSize";
     }
 
 }
