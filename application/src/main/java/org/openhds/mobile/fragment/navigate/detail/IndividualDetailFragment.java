@@ -92,8 +92,14 @@ public class IndividualDetailFragment extends DetailFragment {
                 getString(ProjectResources.Individual.getIndividualStringId(individual.getLanguagePreference())),
                 greenLabel, greenValue, R.color.NA_Gray));
 
+        // Nationality
+        personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+                R.string.individual_nationality_label,
+                getString(ProjectResources.Individual.getIndividualStringId(individual.getNationality())),
+                greenLabel, greenValue, R.color.NA_Gray));
+
         // age and birthday
-        personalInfoContainer .addView(makeTextWithValueAndLabel(getActivity(),
+        personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_age_label,
                 Individual.getAgeWithUnits(individual),
                 greenLabel, greenValue, R.color.NA_Gray));
