@@ -29,9 +29,11 @@ public class BiokoFormPayloadBuilders {
             formPayload.remove(ProjectFormFields.General.COLLECTION_DATE_TIME);
             formPayload.put(ProjectFormFields.General.DISTRIBUTION_DATE_TIME, distributionDateTime);
 
-            //pre-fill a netCode in YY-CCC form
             String locationExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE).getExtId();
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
+
+            //pre-fill a netCode in YY-CCC form
             String netCode = generateNetCode(navigateActivity, locationExtId);
             formPayload.put(ProjectFormFields.BedNet.BED_NET_CODE, netCode);
 
