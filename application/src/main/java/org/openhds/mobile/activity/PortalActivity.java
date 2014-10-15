@@ -20,6 +20,7 @@ import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+import org.openhds.mobile.projectdata.ModuleUiHelper;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
@@ -52,11 +53,14 @@ public class PortalActivity extends Activity implements OnClickListener {
         LinearLayout activitiesLayout = (LinearLayout) findViewById(R.id.portal_middle_column);
         List<String> activityModuleNames = ProjectActivityBuilder.getActivityModuleNames();
         for (String name : activityModuleNames) {
+
+            ModuleUiHelper moduleInfo = ProjectActivityBuilder.getModuleInfoByName(name);
+
             RelativeLayout layout = makeTextWithPayload(this,
-                    getString(ProjectActivityBuilder.getModuleInfoByName(name).getModuleLabelStringId()),
-                    getString(ProjectActivityBuilder.getModuleInfoByName(name).getModuleDescriptionStringId()),
+                    getString(moduleInfo.getModuleLabelStringId()),
+                    getString(moduleInfo.getModuleDescriptionStringId()),
                     name, this, activitiesLayout,
-                    ProjectActivityBuilder.getModuleInfoByName(name).getModuleColorId(), null, null);
+                    moduleInfo.getModulePortalDrawableId(), null, null,true);
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getLayoutParams();
             params.setMargins(0, 0, 0, 20);
@@ -82,13 +86,20 @@ public class PortalActivity extends Activity implements OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent();
         switch (item.getItemId()) {
+
             case R.id.logout_menu_button:
                 intent.setClass(this, OpeningActivity.class);
                 startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+
+
+
+
         }
+
+
     }
 
     @Override

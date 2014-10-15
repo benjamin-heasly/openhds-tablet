@@ -14,7 +14,6 @@ import org.openhds.mobile.projectdata.FormPayloadConsumers.BiokoFormPayloadConsu
 import org.openhds.mobile.projectdata.FormPayloadConsumers.CensusFormPayloadConsumers;
 import org.openhds.mobile.projectdata.FormPayloadConsumers.UpdateFormPayloadConsumers;
 import org.openhds.mobile.projectdata.QueryHelpers.CensusQueryHelper;
-import org.openhds.mobile.projectdata.QueryHelpers.NavigateModuleInfo;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchUtils;
@@ -120,7 +119,7 @@ public class ProjectActivityBuilder {
             detailFragsForStates.put(SECTOR_STATE, null);
             detailFragsForStates.put(HOUSEHOLD_STATE, null);
             detailFragsForStates.put(INDIVIDUAL_STATE, null);
-            detailFragsForStates.put(BOTTOM_STATE, null);
+            detailFragsForStates.put(BOTTOM_STATE,  new IndividualDetailFragment());
 
         }
 
@@ -149,7 +148,7 @@ public class ProjectActivityBuilder {
             return detailFragsForStates;
         }
 
-        public static class BiokoInfo implements NavigateModuleInfo {
+        public static class BiokoUiHelper implements ModuleUiHelper {
 
             @Override
             public int getModuleLabelStringId() {
@@ -162,9 +161,35 @@ public class ProjectActivityBuilder {
             }
 
             @Override
-            public int getModuleColorId() {
-                return R.color.PowderBlue;
+            public int getModulePortalDrawableId() {
+                return R.drawable.bioko_hierarchy_selector;
             }
+
+            @Override
+            public int getModuleTitleStringId() {
+                return R.string.bioko_activity_title;
+            }
+
+            @Override
+            public int getDataSelectionDrawableId() {
+                return R.drawable.bioko_data_selector;
+            }
+
+            @Override
+            public int getFormSelectionDrawableId() {
+                return R.drawable.bioko_form_selector;
+            }
+
+            @Override
+            public int getHierarchySelectionDrawableId() {
+                return R.drawable.bioko_hierarchy_selector;
+            }
+
+            @Override
+            public int getMiddleColumnDrawableId() {
+                return R.drawable.bioko_middle_column_drawable;
+            }
+
         }
 
     }
@@ -299,7 +324,7 @@ public class ProjectActivityBuilder {
             return new CensusQueryHelper();
         }
 
-        public static class CensusInfo implements NavigateModuleInfo {
+        public static class CensusUiHelper implements ModuleUiHelper {
 
             @Override
             public int getModuleLabelStringId() {
@@ -312,10 +337,37 @@ public class ProjectActivityBuilder {
             }
 
             @Override
-            public int getModuleColorId() {
-                return R.color.PowderBlue;
+            public int getModulePortalDrawableId() {
+                return R.drawable.census_hierarchy_selector;
+            }
+
+            @Override
+            public int getModuleTitleStringId() {
+                return R.string.census_activity_title;
+            }
+
+            @Override
+            public int getDataSelectionDrawableId() {
+                return R.drawable.census_data_selector;
+            }
+
+            @Override
+            public int getFormSelectionDrawableId() {
+                return R.drawable.census_form_selector;
+            }
+
+            @Override
+            public int getHierarchySelectionDrawableId() {
+                return R.drawable.census_hierarchy_selector;
+            }
+
+            @Override
+            public int getMiddleColumnDrawableId() {
+                return R.drawable.census_middle_column_drawable;
             }
         }
+
+
     }
 
     public static class UpdateActivityModule implements NavigatePluginModule {
@@ -457,7 +509,7 @@ public class ProjectActivityBuilder {
             return new CensusQueryHelper();
         }
 
-        public static class UpdateInfo implements NavigateModuleInfo{
+        public static class UpdateUiHelper implements ModuleUiHelper {
 
             @Override
             public int getModuleLabelStringId() {
@@ -470,8 +522,33 @@ public class ProjectActivityBuilder {
             }
 
             @Override
-            public int getModuleColorId() {
-                return R.color.Blue;
+            public int getModulePortalDrawableId() {
+                return R.drawable.update_hierarchy_selector;
+            }
+
+            @Override
+            public int getModuleTitleStringId() {
+                return R.string.update_activity_title;
+            }
+
+            @Override
+            public int getDataSelectionDrawableId() {
+                return R.drawable.update_data_selector;
+            }
+
+            @Override
+            public int getFormSelectionDrawableId() {
+                return R.drawable.update_form_selector;
+            }
+
+            @Override
+            public int getHierarchySelectionDrawableId() {
+                return R.drawable.update_hierarchy_selector;
+            }
+
+            @Override
+            public int getMiddleColumnDrawableId() {
+                return R.drawable.update_middle_column_drawable;
             }
         }
 
@@ -495,15 +572,13 @@ public class ProjectActivityBuilder {
         return activityModules;
     }
 
-
-
-    public static NavigateModuleInfo getModuleInfoByName(String name){
+    public static ModuleUiHelper getModuleInfoByName(String name){
         if (name.equals(CENSUS_ACTIVITY_MODULE)) {
-            return new CensusActivityModule.CensusInfo();
+            return new CensusActivityModule.CensusUiHelper();
         } else if (name.equals(UPDATE_ACTIVITY_MODULE)) {
-            return new UpdateActivityModule.UpdateInfo();
+            return new UpdateActivityModule.UpdateUiHelper();
         } else if (name.equals(BIOKO_ACTIVITY_MODULE)) {
-            return new BiokoActivityModule.BiokoInfo();
+            return new BiokoActivityModule.BiokoUiHelper();
         }
         return null;
     }
