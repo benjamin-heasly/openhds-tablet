@@ -144,7 +144,7 @@ public class CensusFormPayloadConsumers {
             // Update the name of the location
             Location location = locationGateway.getFirst(contentResolver,
                     locationGateway.findById(selectedLocation.getExtId()));
-            String locationName = individual.getOtherNames();
+            String locationName = individual.getLastName();
             location.setName(locationName);
             selectedLocation.setName(locationName);
             locationGateway.insertOrUpdate(contentResolver, location);
