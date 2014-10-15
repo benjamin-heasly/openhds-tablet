@@ -30,7 +30,7 @@ public class IndividualDetailFragment extends DetailFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         detailContainer = (ScrollView) inflater.inflate(R.layout.individual_detail_fragment, container, false);
 
-        labelColor = R.color.GrayButtonFill;
+        labelColor = R.color.GrayButtonBorder;
         valueColor = R.color.GrayButtonFillPressed;
 
         return detailContainer;

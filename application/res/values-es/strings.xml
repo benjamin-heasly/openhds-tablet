@@ -228,5 +228,6 @@
     <string name="census_activity_title">Census Activity</string>
     <string name="bioko_activity_title">Bed Net Activity</string>
     <string name="update_activity_title">Update Activity</string>
+    <string name="launching_odk_collect">Launching ODKCollect...</string>
 
 </resources>

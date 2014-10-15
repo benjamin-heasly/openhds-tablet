@@ -187,6 +187,7 @@
     <color name="GrayButtonFill">#C6C6C6</color>
     <color name="GrayButtonFillPressed">#FAF9F9</color>
     <color name="GrayMiddleColumnFill">#E5E6E5</color>
+    <color name="GrayMiddleColumnFillLighter">#FAF9F9</color>
     <color name="GrayListItemFill">#CDCDCC</color>
     <color name="GrayListItemFillPressed">#FAF9F9</color>
     <color name="DetailFragGray">#4D464646</color>

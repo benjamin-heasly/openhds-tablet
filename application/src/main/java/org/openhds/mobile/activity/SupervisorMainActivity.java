@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,12 +46,14 @@ import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
 public class SupervisorMainActivity extends Activity {
 
     private static final String REVIEW_FRAGMENT_TAG = "reviewFragment";
-    private FrameLayout prefContainer;
+    private static final String PREFERENCE_FRAGMENT_TAG = "preferenceFragment";
+    private LinearLayout prefContainer;
     private LinearLayout supervisorButtonLayout;
     private FormInstanceReviewFragment reviewFragment;
 
     private SyncDatabaseHelper syncDatabaseHelper;
     private Map<HttpTaskRequest, ParseEntityTaskRequest> toBeSynced;
+    PreferenceFragment preferenceFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,10 @@ public class SupervisorMainActivity extends Activity {
         syncDatabaseHelper.setSyncCompleteListener(new DatabaseSyncListener());
         toBeSynced = new HashMap<>();
 
-        prefContainer = (FrameLayout) findViewById(R.id.login_pref_container);
+        prefContainer = (LinearLayout) findViewById(R.id.supervisor_activity_options);
+
+
+
         supervisorButtonLayout = (LinearLayout) findViewById(R.id.supervisor_activity_options);
 
         ButtonClickListener buttonClickListener = new ButtonClickListener();
@@ -97,7 +103,6 @@ public class SupervisorMainActivity extends Activity {
             reviewFragment = new FormInstanceReviewFragment();
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.login_pref_container, new LoginPreferenceFragment())
                     .add(R.id.supervisor_edit_form_container, reviewFragment, REVIEW_FRAGMENT_TAG)
                     .commit();
 
@@ -119,18 +124,14 @@ public class SupervisorMainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.configure_server) {
-            boolean isShowingPreferences = View.VISIBLE == prefContainer.getVisibility();
-            boolean isPortraitMode = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-            if (isShowingPreferences) {
-                if (isPortraitMode) {
-                    supervisorButtonLayout.setVisibility(View.VISIBLE);
-                }
-                prefContainer.setVisibility(View.GONE);
-            } else {
-                if (isPortraitMode) {
-                    supervisorButtonLayout.setVisibility(View.GONE);
-                }
-                prefContainer.setVisibility(View.VISIBLE);
+            if (null == preferenceFragment || !preferenceFragment.isAdded()) {
+                preferenceFragment = new LoginPreferenceFragment();
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(prefContainer.getId(), preferenceFragment, PREFERENCE_FRAGMENT_TAG).commit();
+            }
+            else {
+                getFragmentManager().beginTransaction().remove(preferenceFragment).commit();
             }
         } else if (item.getItemId() == R.id.logout_menu_button) {
             Intent intent = new Intent();

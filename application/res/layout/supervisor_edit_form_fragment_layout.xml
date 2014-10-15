@@ -3,7 +3,6 @@
               android:layout_height="match_parent" >
 
 
-
     <Button
             android:layout_marginBottom="20dp"
             android:id="@+id/supervisor_approve_all_button"
@@ -45,22 +44,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/supervisor_edit_form_list_header"
-            android:visibility="gone"
             android:gravity="center"
             android:textAppearance="@android:style/TextAppearance.Large.Inverse"
             android:background="@drawable/form_list_header_drawable"/>
 
     <ListView
             android:id="@+id/supervisor_edit_form_list"
-            android:layout_width="450dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/supervisor_edit_form_list_header"
             android:dividerHeight="15dp"
             android:divider="@android:color/transparent"
             android:listSelector="@android:color/transparent"
-            android:paddingTop="20dp"
-            android:layout_marginBottom="120dp"/>
+            android:paddingTop="20dp"/>
 
 
 </RelativeLayout>
