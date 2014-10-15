@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
+import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class NavigateActivity extends Activity implements HierarchyNavigator {
 
@@ -408,6 +409,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         if (null != formBehaviour && null != formBehaviour.getFormName()) {
             formHelper.newFormInstance();
             Intent intent = formHelper.buildEditFormInstanceIntent();
+            showShortToast(this, R.string.launching_odk_collect);
             startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
         }
     }

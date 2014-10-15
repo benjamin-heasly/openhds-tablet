@@ -29,6 +29,7 @@ import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
+import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class PortalActivity extends Activity implements OnClickListener {
 
@@ -146,6 +147,7 @@ public class PortalActivity extends Activity implements OnClickListener {
             EncryptionHelper.decryptFile(selectedFile, getApplicationContext());
 
             Intent intent = new Intent(Intent.ACTION_EDIT, uri);
+            showShortToast(PortalActivity.this, R.string.launching_odk_collect);
             startActivityForResult(intent, 0);
         }
     }

@@ -21,6 +21,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
+
 
 public class SupervisorFormInstanceAdapter extends ArrayAdapter {
 
@@ -81,6 +83,7 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
                 EncryptionHelper.decryptFile(selectedFile, context);
 
                 Intent intent = new Intent(Intent.ACTION_EDIT, uri);
+                showShortToast(context, R.string.launching_odk_collect);
                 ((Activity) context).startActivityForResult(intent, 0);
             }
         });

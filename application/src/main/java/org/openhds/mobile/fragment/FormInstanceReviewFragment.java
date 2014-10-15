@@ -24,6 +24,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
+
 public class FormInstanceReviewFragment extends Fragment {
 
     private ListView editFormListView;
@@ -43,17 +45,14 @@ public class FormInstanceReviewFragment extends Fragment {
         editFormListView = (ListView) fragmentLayout.findViewById(R.id.supervisor_edit_form_list);
 
         headerView = (TextView) fragmentLayout.findViewById(R.id.supervisor_edit_form_list_header);
-
         approveAllButton = (TextView) fragmentLayout.findViewById(R.id.supervisor_approve_all_button);
         approveSelectedButton = (TextView) fragmentLayout.findViewById(R.id.supervisor_approve_selected_button);
-
         approveAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 approveAll();
             }
         });
-
         approveSelectedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +61,7 @@ public class FormInstanceReviewFragment extends Fragment {
         });
 
         populateEditFormListView(savedInstanceState);
-        setButtonVisibility();
+
 
         return fragmentLayout;
     }
@@ -78,9 +77,8 @@ public class FormInstanceReviewFragment extends Fragment {
         }
 
         if (null != editedForms && !editedForms.isEmpty()) {
-            adapter = new SupervisorFormInstanceAdapter(getActivity(), R.id.form_instance_list_item,
+            adapter = new SupervisorFormInstanceAdapter(getActivity(), R.id.form_instance_list_item_checkbox,
                     editedForms, approveCheckList);
-            headerView.setVisibility(View.VISIBLE);
             editFormListView.setAdapter(adapter);
         }
     }
@@ -112,23 +110,6 @@ public class FormInstanceReviewFragment extends Fragment {
     }
 
 
-    private void setButtonVisibility() {
-        if (null != editedForms && editedForms.size() > 0) {
-            approveAllButton.setVisibility(View.VISIBLE);
-            approveSelectedButton.setVisibility(View.VISIBLE);
-        } else {
-            approveAllButton.setVisibility(View.INVISIBLE);
-            approveSelectedButton.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void setHeaderVisibility() {
-        if (null != editedForms && editedForms.size() > 0) {
-            headerView.setVisibility(View.VISIBLE);
-        } else {
-            headerView.setVisibility(View.GONE);
-        }
-    }
 
     private void approveSelected() {
         if (null != adapter) {
@@ -138,8 +119,6 @@ public class FormInstanceReviewFragment extends Fragment {
                 editFormListView = null;
             }
         }
-        setButtonVisibility();
-        setHeaderVisibility();
     }
 
     private void approveAll() {
@@ -150,8 +129,6 @@ public class FormInstanceReviewFragment extends Fragment {
             editedForms.clear();
             editFormListView = null;
         }
-        setButtonVisibility();
-        setHeaderVisibility();
     }
 
     public void sendApprovedForms() {
@@ -165,6 +142,7 @@ public class FormInstanceReviewFragment extends Fragment {
                 EncryptionHelper.encryptFile(instanceFile, getActivity());
             }
         }
+        showShortToast(getActivity(), R.string.launching_odk_collect);
         startActivity(new Intent(Intent.ACTION_EDIT));
     }
 
