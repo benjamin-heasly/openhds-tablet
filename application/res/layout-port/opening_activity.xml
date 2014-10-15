@@ -19,20 +19,18 @@
             android:id="@+id/field_worker_login_container"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:paddingTop="100dp" 
-            />
+            android:paddingTop="100dp"/>
 
         <FrameLayout
             android:id="@+id/supervisor_login_container"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            />
+            android:layout_height="300dp"/>
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/login_pref_container"
         android:layout_width="350dp"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </LinearLayout>

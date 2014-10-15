@@ -242,6 +242,9 @@
     <string name="sub_district_label">SubDistrict</string>
     <string name="record_pregnancy_observation">Record a Pregnancy Observation</string>
     <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
+    <string name="census_activity_title">Census Activity</string>
+    <string name="bioko_activity_title">Bed Net Activity</string>
+    <string name="update_activity_title">Update Activity</string>
 
 
 </resources>

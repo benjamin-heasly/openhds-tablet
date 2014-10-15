@@ -17,7 +17,7 @@
                 android:paddingTop="5dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignTop="@+id/search_fragment_button"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="@android:style/TextAppearance.Large"
                 android:gravity="left"/>
 
         <TextView
@@ -28,7 +28,7 @@
                 android:paddingBottom="5dp"
                 android:layout_alignBottom="@+id/search_fragment_button"
                 android:layout_toLeftOf="@+id/search_fragment_button"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textAppearance="@android:style/TextAppearance.Small"
                 android:gravity="right"/>
 
         <ImageButton
@@ -38,7 +38,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_action_search"
-                android:background="@drawable/rounded_button_gray"
+                android:background="@drawable/gray_button_selector"
                 android:contentDescription="@string/search_database_label"/>
 
     </RelativeLayout>

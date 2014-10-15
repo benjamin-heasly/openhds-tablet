@@ -19,9 +19,11 @@
                 android:choiceMode="singleChoice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/AcidGray"
                 android:orientation="vertical"
-                android:dividerHeight="15dp" />
+                android:divider="@android:color/transparent"
+                android:listSelector="@android:color/transparent"
+                android:dividerHeight="15dp"
+                                             />
         />
 
         <Button
@@ -32,8 +34,8 @@
                 android:padding="10dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/search_done_label"
-                android:background="@drawable/rounded_button_gray"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:background="@drawable/gray_button_selector"
+                android:textAppearance="@android:style/TextAppearance.Large"/>
 
     </LinearLayout>
 
@@ -42,7 +44,7 @@
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:background="@color/DarkerAcidGray"
+            android:background="@drawable/gray_middle_column_drawable"
             android:paddingTop="20dp" />
 
     <FrameLayout
@@ -50,7 +52,6 @@
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:background="@color/AcidGray"
             android:paddingTop="20dp" />
 
 </LinearLayout>

@@ -2,49 +2,53 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent" >
 
-    <Button
-            android:id="@+id/supervisor_approve_all_button"
-            android:text="@string/supervisor_approve_all"
-            android:tag="@string/supervisor_approve_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="30dp"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:background="@drawable/rounded_button_sandy_brown"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+
 
     <Button
-            android:id="@+id/supervisor_approve_selected_button"
-            android:text="@string/supervisor_approve_selected"
-            android:tag="@string/supervisor_approve_selected"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/supervisor_approve_all_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/supervisor_approve_all_button"
-            android:layout_marginLeft="30dp"
-            android:layout_marginBottom="30dp"
+            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:background="@drawable/rounded_button_sandy_brown"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+            android:layout_alignTop="@+id/supervisor_approve_selected_button"
+            android:layout_toRightOf="@+id/view"
+            android:text="@string/supervisor_approve_all"
+            android:tag="@string/supervisor_approve_all"
+            android:background="@drawable/census_form_selector"
+            android:textAppearance="@android:style/TextAppearance.Large.Inverse"/>
+
+    <View
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/view"
+            android:layout_width="5dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true" />
+
+    <Button
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/supervisor_approve_selected_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/view"
+            android:text="@string/supervisor_approve_selected"
+            android:tag="@string/supervisor_approve_selected"
+            android:background="@drawable/census_form_selector"
+            android:textAppearance="@android:style/TextAppearance.Large.Inverse"/>
 
     <TextView
             android:id="@+id/supervisor_edit_form_list_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:layout_marginTop="20dp"
             android:text="@string/supervisor_edit_form_list_header"
             android:visibility="gone"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"
-            android:background="@color/SandyBrownDark"/>
+            android:gravity="center"
+            android:textAppearance="@android:style/TextAppearance.Large.Inverse"
+            android:background="@drawable/form_list_header_drawable"/>
 
     <ListView
             android:id="@+id/supervisor_edit_form_list"
@@ -52,6 +56,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/supervisor_edit_form_list_header"
+            android:dividerHeight="15dp"
+            android:divider="@android:color/transparent"
+            android:listSelector="@android:color/transparent"
+            android:paddingTop="20dp"
             android:layout_marginBottom="120dp"/>
 
 

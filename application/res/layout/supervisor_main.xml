@@ -20,7 +20,9 @@
         android:layout_height="match_parent"
         android:baselineAligned="false"
         android:orientation="vertical"
-        android:layout_marginLeft="50dp">
+        android:background="@drawable/gray_middle_column_drawable"
+        android:layout_marginLeft="50dp"
+        android:padding="15dp">
     </LinearLayout>
 
     <FrameLayout

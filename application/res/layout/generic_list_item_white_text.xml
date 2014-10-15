@@ -3,32 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="2.5dp"
-    android:paddingTop="2.5dp" >
+    android:paddingTop="2.5dp"
+    >
 
     <TextView
         android:id="@+id/primary_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingLeft="15dp"
         android:text="Bob Bobson"
-        android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+        android:textAppearance="@android:style/TextAppearance.Large.Inverse" />
 
     <TextView
         android:id="@+id/secondary_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/primary_text"
-        android:paddingLeft="15dp"
         android:text="b12345"
-        android:textAppearance="?android:attr/textAppearanceMediumInverse" />
+        android:textAppearance="@android:style/TextAppearance.Medium.Inverse" />
 
     <LinearLayout
         android:id="@+id/pay_load_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/secondary_text"
         android:orientation="vertical"
-        android:paddingLeft="15dp" >
+        >
     </LinearLayout>
+
+
 </RelativeLayout>

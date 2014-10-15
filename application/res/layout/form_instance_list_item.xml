@@ -3,12 +3,11 @@
                 android:id="@+id/form_instance_list_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/form_list_drawable"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingBottom="5dp"
-                android:background="@color/LavenderBlush"
                 android:paddingTop="5dp" >
-
 
         <TextView
                 android:id="@+id/form_instance_list_type"
@@ -16,7 +15,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:text="Form Type"
-                android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+                android:textAppearance="@android:style/TextAppearance.Large.Inverse"/>
 
         <TextView
                 android:id="@+id/form_instance_list_filename"
@@ -24,6 +23,6 @@
                 android:layout_height="match_parent"
                 android:text="File Name"
                 android:layout_below="@id/form_instance_list_type"
-                android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+                android:textAppearance="@android:style/TextAppearance.Large.Inverse" />
 
 </RelativeLayout>

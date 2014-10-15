@@ -4,9 +4,10 @@
         android:id="@+id/generic_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:textAlignment="center"
-        android:visibility="gone"
-        android:textAppearance="?android:attr/textAppearanceLargeInverse"
-        android:background="@color/SandyBrown"
-/>
+        android:gravity="center"
+        android:textAppearance="@android:style/TextAppearance.Large.Inverse"
+        android:background="@drawable/form_list_header_drawable"
+        android:paddingRight="15dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        />

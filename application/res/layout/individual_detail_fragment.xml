@@ -10,7 +10,6 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:background="#222222"
             android:baselineAligned="false"
             android:orientation="vertical" >
 
@@ -20,7 +19,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
-                android:textColor="#A3FFA3"
+                android:textColor="@color/White"
+                android:background="@drawable/detail_fragment_drawable"
                 android:textSize="50sp" />
 
         <LinearLayout
@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:background="@color/DarkerAcidGray"
+                android:background="@drawable/detail_fragment_drawable"
                 android:orientation="vertical" >
         </LinearLayout>
 
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:background="@color/DarkerAcidGray"
+                android:background="@drawable/detail_fragment_drawable"
                 android:orientation="vertical" >
         </LinearLayout>
 
@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:background="@color/DarkerAcidGray"
+                android:background="@drawable/detail_fragment_drawable"
                 android:orientation="vertical" >
         </LinearLayout>
 

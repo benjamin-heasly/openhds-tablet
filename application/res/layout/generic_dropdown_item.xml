@@ -6,5 +6,5 @@
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:visibility="visible"
-        android:textAppearance="?android:attr/textAppearanceLargeInverse"
+        android:textAppearance="@android:style/TextAppearance.Large.Inverse"
 />
