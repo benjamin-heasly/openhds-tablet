@@ -119,6 +119,9 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
         List<T> allEntities = gateway.getList(contentResolver, gateway.findAll());
         assertEquals(nEntities, allEntities.size());
+
+        int recordCount = gateway.countAll(contentResolver);
+        assertEquals(nEntities, recordCount);
     }
 
     public void testFindAll() {
