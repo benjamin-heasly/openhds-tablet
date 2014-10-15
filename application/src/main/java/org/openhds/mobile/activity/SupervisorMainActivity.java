@@ -14,71 +14,38 @@ import android.widget.LinearLayout;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FormInstanceReviewFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
+import org.openhds.mobile.fragment.SyncDatabaseFragment;
 import org.openhds.mobile.model.FormInstance;
-import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchUtils;
-import org.openhds.mobile.task.http.HttpTaskRequest;
-import org.openhds.mobile.task.parsing.ParseEntityTaskRequest;
-import org.openhds.mobile.task.parsing.entities.EntityParser;
-import org.openhds.mobile.task.parsing.entities.FieldWorkerParser;
-import org.openhds.mobile.task.parsing.entities.IndividualParser;
-import org.openhds.mobile.task.parsing.entities.LocationHierarchyParser;
-import org.openhds.mobile.task.parsing.entities.LocationParser;
-import org.openhds.mobile.task.parsing.entities.MembershipParser;
-import org.openhds.mobile.task.parsing.entities.RelationshipParser;
-import org.openhds.mobile.task.parsing.entities.SocialGroupParser;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
-import org.openhds.mobile.task.SyncDatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getPreferenceString;
-import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
 
 public class SupervisorMainActivity extends Activity {
 
-    private static final String REVIEW_FRAGMENT_TAG = "reviewFragment";
+    private static final String REVIEW_FRAGMENT_TAG = "formInstanceReviewFragment";
+    private static final String SYNC_FRAGMENT_TAG = "syncDatabaseFragment";
+
     private FrameLayout prefContainer;
     private LinearLayout supervisorButtonLayout;
-    private FormInstanceReviewFragment reviewFragment;
-
-    private SyncDatabaseHelper syncDatabaseHelper;
-    private Map<HttpTaskRequest, ParseEntityTaskRequest> toBeSynced;
+    private FormInstanceReviewFragment formInstanceReviewFragment;
+    private SyncDatabaseFragment syncDatabaseFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supervisor_main);
 
-        syncDatabaseHelper = new SyncDatabaseHelper(this);
-        syncDatabaseHelper.setSyncCompleteListener(new DatabaseSyncListener());
-        toBeSynced = new HashMap<>();
-
         prefContainer = (FrameLayout) findViewById(R.id.login_pref_container);
         supervisorButtonLayout = (LinearLayout) findViewById(R.id.supervisor_activity_options);
 
         ButtonClickListener buttonClickListener = new ButtonClickListener();
-        makeButton(this,
-                R.string.sync_database_description,
-                R.string.sync_database_label,
-                R.string.sync_database_label,
-                buttonClickListener,
-                supervisorButtonLayout);
-
-        makeButton(this,
-                R.string.sync_field_worker_description,
-                R.string.sync_field_worker_label,
-                R.string.sync_field_worker_label,
-                buttonClickListener,
-                supervisorButtonLayout);
-
         makeButton(this,
                 R.string.search_database_description,
                 R.string.search_database_label,
@@ -94,15 +61,19 @@ public class SupervisorMainActivity extends Activity {
                 supervisorButtonLayout);
 
         if (null == savedInstanceState)  {
-            reviewFragment = new FormInstanceReviewFragment();
+            formInstanceReviewFragment = new FormInstanceReviewFragment();
+            syncDatabaseFragment = new SyncDatabaseFragment();
+            syncDatabaseFragment.setRetainInstance(true);
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.login_pref_container, new LoginPreferenceFragment())
-                    .add(R.id.supervisor_edit_form_container, reviewFragment, REVIEW_FRAGMENT_TAG)
+                    .add(R.id.supervisor_edit_form_container, formInstanceReviewFragment, REVIEW_FRAGMENT_TAG)
+                    .add(R.id.supervisor_sync_database_container, syncDatabaseFragment, SYNC_FRAGMENT_TAG)
                     .commit();
 
         } else {
-            reviewFragment = (FormInstanceReviewFragment) getFragmentManager().findFragmentByTag(REVIEW_FRAGMENT_TAG);
+            formInstanceReviewFragment = (FormInstanceReviewFragment) getFragmentManager().findFragmentByTag(REVIEW_FRAGMENT_TAG);
+            syncDatabaseFragment = (SyncDatabaseFragment) getFragmentManager().findFragmentByTag(SYNC_FRAGMENT_TAG);
         }
     }
 
@@ -146,73 +117,11 @@ public class SupervisorMainActivity extends Activity {
         encryptAllForms();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        syncDatabaseHelper.cancelSync();
-    }
-
     private void encryptAllForms() {
         List<FormInstance> allFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
         if (null != allFormInstances) {
             EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
         }
-    }
-
-    private void syncAllEntities() {
-        setUpSyncTasks("Memberships", R.string.sync_memberships_path,
-                new MembershipParser(), GatewayRegistry.getMembershipGateway());
-        setUpSyncTasks("Relationships", R.string.sync_relationships_path,
-                new RelationshipParser(), GatewayRegistry.getRelationshipGateway());
-        setUpSyncTasks("Social Groups", R.string.sync_social_groups_path,
-                new SocialGroupParser(), GatewayRegistry.getSocialGroupGateway());
-        setUpSyncTasks("Visits", R.string.sync_social_groups_path,
-                new SocialGroupParser(), GatewayRegistry.getSocialGroupGateway());
-        setUpSyncTasks("Individuals", R.string.sync_individuals_path,
-                new IndividualParser(), GatewayRegistry.getIndividualGateway());
-        setUpSyncTasks("Location Hierarchies", R.string.sync_location_hierarchies_path,
-                new LocationHierarchyParser(), GatewayRegistry.getLocationHierarchyGateway());
-        setUpSyncTasks("Locations", R.string.sync_locations_path,
-                new LocationParser(), GatewayRegistry.getLocationGateway());
-
-        syncNext();
-    }
-
-    private void syncFieldWorkers() {
-        setUpSyncTasks("Field Workers", R.string.sync_field_workers_path,
-                new FieldWorkerParser(), GatewayRegistry.getFieldWorkerGateway());
-        syncNext();
-    }
-
-    // Create tasks for syncing instances of entity type T.
-    private <T> void setUpSyncTasks(String title, int resourcePathId, EntityParser<T> parser, Gateway<T> gateway) {
-        String userName = (String) getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
-        String password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
-        String openHdsBaseUrl = getPreferenceString(this, R.string.openhds_server_url_key, "");
-
-        String path = getResourceString(this, resourcePathId);
-        String url = openHdsBaseUrl + path;
-        HttpTaskRequest httpTaskRequest = new HttpTaskRequest(title, url, userName, password);
-
-        ParseEntityTaskRequest<T> parseEntityTaskRequest = new ParseEntityTaskRequest<>(title, null, parser, gateway);
-
-        toBeSynced.put(httpTaskRequest, parseEntityTaskRequest);
-    }
-
-    // Proceed to sync the next entity.
-    private void syncNext() {
-        if (toBeSynced.isEmpty()) {
-            return;
-        }
-
-        HttpTaskRequest httpTaskRequest = null;
-        ParseEntityTaskRequest<?> parseEntityTaskRequest = null;
-        for (HttpTaskRequest key : toBeSynced.keySet()) {
-            httpTaskRequest = key;
-            parseEntityTaskRequest = toBeSynced.get(key);
-        }
-        toBeSynced.remove(httpTaskRequest);
-        syncDatabaseHelper.startSync(httpTaskRequest, parseEntityTaskRequest);
     }
 
     private void searchDatabase() {
@@ -231,27 +140,11 @@ public class SupervisorMainActivity extends Activity {
         @Override
         public void onClick(View v) {
             Integer tag = (Integer) v.getTag();
-            if (tag.equals(R.string.sync_database_label)) {
-                syncAllEntities();
-            } else if (tag.equals(R.string.sync_field_worker_label)) {
-                syncFieldWorkers();
-            } else if (tag.equals(R.string.search_database_label)) {
+            if (tag.equals(R.string.search_database_label)) {
                 searchDatabase();
             } else if (tag.equals(R.string.send_finalized_forms_label)) {
-                reviewFragment.sendApprovedForms();
+                formInstanceReviewFragment.sendApprovedForms();
             }
-        }
-    }
-
-    private class DatabaseSyncListener implements SyncDatabaseHelper.SyncCompleteListener {
-        @Override
-        public void onSyncComplete() {
-            syncNext();
-        }
-
-        @Override
-        public void onSyncError() {
-            syncNext();
         }
     }
 }

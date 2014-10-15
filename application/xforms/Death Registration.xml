@@ -2,7 +2,7 @@
 		xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 		xmlns:jr="http://openrosa.org/javarosa">
 	<h:head><!-- ODK Aggregate upload time: 2013-07-16T12:22:41.393+0000 on http://localhost:8181/ODKAggregate -->
-		<h:title>Death Registration</h:title>
+		<h:titleId>Death Registration</h:titleId>
 		<model>
 			<instance>
 				<data id="death_registration">

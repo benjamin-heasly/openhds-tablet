@@ -97,7 +97,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         FieldWorkerGateway gateway = GatewayRegistry.getFieldWorkerGateway();
         ParseEntityTaskRequest<FieldWorker> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new FieldWorkerParser(),
                 gateway);
@@ -116,7 +116,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         IndividualGateway gateway = GatewayRegistry.getIndividualGateway();
         ParseEntityTaskRequest<Individual> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new IndividualParser(),
                 gateway);
@@ -135,7 +135,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         LocationHierarchyGateway gateway = GatewayRegistry.getLocationHierarchyGateway();
         ParseEntityTaskRequest<LocationHierarchy> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new LocationHierarchyParser(),
                 gateway);
@@ -154,7 +154,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         LocationGateway gateway = GatewayRegistry.getLocationGateway();
         ParseEntityTaskRequest<Location> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new LocationParser(),
                 gateway);
@@ -173,7 +173,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         RelationshipGateway gateway = GatewayRegistry.getRelationshipGateway();
         ParseEntityTaskRequest<Relationship> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new RelationshipParser(),
                 gateway);
@@ -192,7 +192,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         SocialGroupGateway gateway = GatewayRegistry.getSocialGroupGateway();
         ParseEntityTaskRequest<SocialGroup> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new SocialGroupParser(),
                 gateway);
@@ -211,7 +211,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         VisitGateway gateway = GatewayRegistry.getVisitGateway();
         ParseEntityTaskRequest<Visit> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new VisitParser(),
                 gateway);
@@ -230,7 +230,7 @@ public class ParseEntityTaskTest extends ProviderTestCase2<OpenHDSProvider> {
         InputStream inputStream = getContext().getAssets().open(fileName);
         MembershipGateway gateway = GatewayRegistry.getMembershipGateway();
         ParseEntityTaskRequest<Membership> parseEntityTaskRequest = new ParseEntityTaskRequest<>(
-                fileName,
+                0,
                 inputStream,
                 new MembershipParser(),
                 gateway);

@@ -60,9 +60,13 @@ public class RepositoryUtils {
     }
 
     public static int countRecords(ContentResolver contentResolver, Uri tableUri) {
+        int count = 0;
         Cursor cursor = contentResolver.query(tableUri, COUNT_COLUMN, null, null, null);
-        cursor.moveToFirst();
-        return cursor.getInt(0);
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
     }
 
     public static int delete(ContentResolver contentResolver, Uri tableUri, String columnName, String columnValue) {

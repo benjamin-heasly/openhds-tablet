@@ -10,7 +10,6 @@
     <string name="changeUsername">Change Username</string>
     <string name="configuration">Configuration</string>
     <string name="configureDatabase">Configure Database</string>
-    <string name="databaseSync">Sync with OpenHDS Database</string>
     <string name="delete_form_btn">Delete Form</string>
     <string name="download_form_button">Download Forms</string>
     <string name="failure_reasons_txt">Failure messages:</string>
@@ -33,14 +32,8 @@
     <string name="send_to_odk_btn">Edit in ODK</string>
     <string name="shared_pref_file_name">server_prefs</string>
     <string name="shared_pref_server_url_key">server_url</string>
-    <string name="syncDatabase">Sync Database</string>
-    <string name="syncDatabaseMessage">This procedure will attempt to download OpenHDS entities onto the device. Please be patient while the download is in progress.</string>
-    <string name="sync_entities_failure">Failed to Collect OpenHDS Entities</string>
     <string name="sync_forms_successful">Forms Collected Successfully</string>
     <string name="sync_forms_failure">Failed to Collect the forms</string>
-    <string name="sync_entities_successful">OpenHDS Entities Collected Successfully</string>
-    <string name="sync_interrupted">Collecting OpenHDS Entities has been interrupted</string>
-    <string name="sync_restarting">Sync restarting</string>
     <string name="unable_to_connect">Unable to connect</string>
     <string name="url_error">Sorry, invalid URL!</string>
     <string name="update">Update</string>
@@ -85,10 +78,6 @@
     <string name="supervisor_bad_credentials">Invalid supervisor credentials</string>
     <string name="preference_invalid_label">Invalid!</string>
     <string name="preference_invalid_warning">Invalid preference value</string>
-    <string name="sync_database_label">Sync Database</string>
-    <string name="sync_database_description">Syncs census data with server.</string>
-    <string name="sync_field_worker_label">Sync Field Workers</string>
-    <string name="sync_field_worker_description">Syncs field workers with server.</string>
     <string name="send_finalized_forms_label">Send Forms</string>
     <string name="send_finalized_forms_description">Send Finished Forms to ODKAggregate</string>
     <string name="field_worker_bad_credentials">Invalid field worker credentials</string>
@@ -167,6 +156,28 @@
     <string name="search_location_label">Find a Location</string>
     <string name="search_social_group_label">Find a Household</string>
     <string name="search_field_worker_label">Find a Field Worker</string>
+
+    <!-- Sync Labels-->
+    <string name="sync_database_label">Sync Database</string>
+    <string name="sync_database_canceled">canceled</string>
+    <string name="sync_database_description">Download data from the server</string>
+    <string name="sync_database_column_entity">Entity</string>
+    <string name="sync_database_column_records">Records</string>
+    <string name="sync_database_column_errors">Errors</string>
+    <string name="sync_database_column_action">Action</string>
+    <string name="sync_database_button_sync">Sync</string>
+    <string name="sync_database_button_cancel">Cancel</string>
+    <string name="sync_database_button_waiting">Waiting</string>
+    <string name="sync_database_button_sync_all">Sync All</string>
+    <string name="sync_database_button_cancel_all">Cancel All</string>
+    <string name="sync_database_label_field_workers">Field Workers</string>
+    <string name="sync_database_label_individuals">Individuals</string>
+    <string name="sync_database_label_locations">Locations</string>
+    <string name="sync_database_label_location_hierarchies">Location Hierarchies</string>
+    <string name="sync_database_label_memberships">Memberships</string>
+    <string name="sync_database_label_relationships">Relationships</string>
+    <string name="sync_database_label_social_groups">Social Groups</string>
+    <string name="sync_database_label_visits">Visits</string>
 
     <!-- Individual Labels -->
     <string name="individual_first_name_label">First Name</string>

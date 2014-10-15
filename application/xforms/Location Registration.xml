@@ -1,7 +1,7 @@
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
     <h:head><!-- ODK Aggregate upload time: 2013-07-25T10:40:28.616+0000 on https://openhds.ihi.or.tz/ODKAggregateUrban -->
-        <h:title>Location Registration</h:title>
+        <h:titleId>Location Registration</h:titleId>
         <model>
             <instance>
                 <data id="location_registration">

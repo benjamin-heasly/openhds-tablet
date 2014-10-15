@@ -76,6 +76,7 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
 
     public interface ProgressListener {
         public void onProgressReport(int progress);
+        public void onError(DataPage dataPage, Exception e);
         public void onComplete(int progress);
     }
 
@@ -106,7 +107,7 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
     private class EntityErrorHandler implements XmlPageParser.PageErrorHandler {
         @Override
         public boolean handlePageError(DataPage dataPage, Exception e) {
-            Log.e(getClass().getName(), "Error parsing page: " + dataPage.getPageDescription(), e);
+            progressListener.onError(dataPage, e);
 
             // stop parsing if the user cancelled the task
             return !isCancelled();

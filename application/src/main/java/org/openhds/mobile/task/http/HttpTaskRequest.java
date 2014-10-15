@@ -12,20 +12,20 @@ package org.openhds.mobile.task.http;
  * BSH
  */
 public class HttpTaskRequest {
-    private final String title;
+    private final int titleId;
     private final String url;
     private final String userName;
     private final String password;
 
-    public HttpTaskRequest(String title, String url, String userName, String password) {
-        this.title = title;
+    public HttpTaskRequest(int titleId, String url, String userName, String password) {
+        this.titleId = titleId;
         this.url = url;
         this.userName = userName;
         this.password = password;
     }
 
-    public String getTitle() {
-        return title;
+    public int getTitleId() {
+        return titleId;
     }
 
     public String getUrl() {
