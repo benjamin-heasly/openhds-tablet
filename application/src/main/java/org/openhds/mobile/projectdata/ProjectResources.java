@@ -40,6 +40,12 @@ public class ProjectResources {
         public static final String LANGUAGE_PREF_FRENCH = "French";
         public static final String LANGUAGE_PREF_OTHER = "Other";
 
+        public static final String NATIONALITY_EQUATO_GUINEAN = "Equato Guinean";
+        public static final String NATIONALITY_OTHER_AFRICAN_COUNTRY = "Other African Country";
+        public static final String NATIONALITY_ASIAN = "Asian";
+        public static final String NATIONALITY_OTHER_NON_AFRICAN_COUNTRY = "Other Non-African Country";
+        public static final String NATIONALITY_OTHER = "Other";
+
         private static final String STATUS_PERMANENT = "Permanent";
         private static final String STATUS_VISITOR = "Visitor";
         static {
@@ -55,6 +61,12 @@ public class ProjectResources {
             Individual.put(LANGUAGE_PREF_OTHER, R.string.db_val_language_pref_other);
             Individual.put(STATUS_PERMANENT, R.string.db_val_status_permanent);
             Individual.put(STATUS_VISITOR, R.string.db_val_status_visitor);
+            Individual.put(NATIONALITY_EQUATO_GUINEAN, R.string.db_val_nationality_equato_guinean);
+            Individual.put(NATIONALITY_OTHER_AFRICAN_COUNTRY, R.string.db_val_nationality_other_african_country);
+            Individual.put(NATIONALITY_ASIAN, R.string.db_val_nationality_asian);
+            Individual.put(NATIONALITY_OTHER_NON_AFRICAN_COUNTRY, R.string.db_val_nationality_other_non_african_country);
+            Individual.put(NATIONALITY_OTHER, R.string.db_val_nationality_other);
+
         }
 
         public static int getIndividualStringId(String key) {

@@ -133,6 +133,7 @@ public class ProjectFormFields {
         public static final String OTHER_PHONE_NUMBER = "individualOtherPhoneNumber";
         public static final String POINT_OF_CONTACT_NAME = "individualPointOfContactName";
         public static final String POINT_OF_CONTACT_PHONE_NUMBER = "individualPointOfContactPhoneNumber";
+        public static final String NATIONALITY = "individualNationality";
         public static final String LANGUAGE_PREFERENCE = "individualLanguagePreference";
         public static final String DIP = "individualDip";
         public static final String MOTHER_EXTID = "individualMotherExtId";
@@ -193,6 +194,9 @@ public class ProjectFormFields {
             columnsToFieldNames
                     .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
                             MEMBER_STATUS);
+            columnsToFieldNames.put(
+                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY,
+                    NATIONALITY);
 
         }
 
@@ -258,6 +262,7 @@ public class ProjectFormFields {
     public static final class BedNet {
         public static final String BED_NET_CODE = "netCode";
         public static final String HOUSEHOLD_SIZE = "householdSize";
+        public static final String LOCATION_EXTID = "locationExtId";
     }
 
 }

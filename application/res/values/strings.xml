@@ -151,6 +151,11 @@
     <string name="db_val_relation_to_head_type_not_related">Not Related</string>
     <string name="db_val_relation_to_head_type_other_relative">Other Relative</string>
     <string name="db_val_relation_to_head_type_dont_know">Don\'t Know</string>
+    <string name="db_val_nationality_equato_guinean">Equato Guinean</string>
+    <string name="db_val_nationality_other_african_country">Other African Country</string>
+    <string name="db_val_nationality_asian">Asian</string>
+    <string name="db_val_nationality_other_non_african_country">Other Non-African Country</string>
+    <string name="db_val_nationality_other">Other</string>
 
     <!-- Search Labels-->
     <string name="search_database_description">Search the Database</string>
@@ -176,6 +181,7 @@
     <string name="individual_point_of_contact_label">Point of Contact</string>
     <string name="individual_point_of_contact_phone_number_label">Point of Contact Phone Number</string>
     <string name="individual_language_preference_label">Language Preference</string>
+    <string name="individual_nationality_label">Nationality</string>
     <string name="individual_dip_label">DIP</string>
     <string name="individual_member_status_label">Member Status</string>
     <string name="individual_socialgroup_extid_label">SocialGroup Ext ID</string>
@@ -245,6 +251,5 @@
     <string name="census_activity_title">Census Activity</string>
     <string name="bioko_activity_title">Bed Net Activity</string>
     <string name="update_activity_title">Update Activity</string>
-
 
 </resources>

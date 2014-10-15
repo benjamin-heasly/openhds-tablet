@@ -20,6 +20,7 @@ public class RepositoryUtils {
     private static final String OFFSET = "OFFSET";
     private static final String WHERE_PLACEHOLDER = "?";
     private static final String WHERE_ALL = "1";
+    private static final String[] COUNT_COLUMN = new String[] {"COUNT(*) AS count"};
 
     public static Uri insert(ContentResolver contentResolver, Uri tableUri, ContentValues contentValues) {
         return contentResolver.insert(tableUri, contentValues);
@@ -56,6 +57,12 @@ public class RepositoryUtils {
         final String rangeStatement = buildRangeStatement(start, maxResults);
         final String orderByPlusRange = columnOrderBy + " " + rangeStatement;
         return contentResolver.query(tableUri, null, whereStatement, columnValues, orderByPlusRange);
+    }
+
+    public static int countRecords(ContentResolver contentResolver, Uri tableUri) {
+        Cursor cursor = contentResolver.query(tableUri, COUNT_COLUMN, null, null, null);
+        cursor.moveToFirst();
+        return cursor.getInt(0);
     }
 
     public static int delete(ContentResolver contentResolver, Uri tableUri, String columnName, String columnValue) {

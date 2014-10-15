@@ -20,6 +20,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.insert;
 import static org.openhds.mobile.repository.RepositoryUtils.bulkInsert;
 import static org.openhds.mobile.repository.RepositoryUtils.update;
 import static org.openhds.mobile.repository.RepositoryUtils.delete;
+import static org.openhds.mobile.repository.RepositoryUtils.countRecords;
 
 
 /**
@@ -73,6 +74,11 @@ public abstract class Gateway<T> {
     public boolean exists(ContentResolver contentResolver, String id) {
         Query query = findById(id);
         return null != getFirst(contentResolver, query);
+    }
+
+    // count all the records in the table
+    public int countAll(ContentResolver resolver) {
+        return countRecords(resolver, tableUri);
     }
 
     // get the first result from a query as an entity or null

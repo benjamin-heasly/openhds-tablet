@@ -35,6 +35,8 @@ public class IndividualParser extends EntityParser<Individual> {
         individual.setMemberStatus(dataPage.getFirstString(asList(pageName, "memberStatus")));
         individual.setPointOfContactPhoneNumber(dataPage.getFirstString(asList(pageName, "pointOfContactPhoneNumber")));
         individual.setLanguagePreference(dataPage.getFirstString(asList(pageName, "languagePreference")));
+        individual.setNationality(dataPage.getFirstString(asList(pageName, "nationality")));
+
 
         return individual;
     }
