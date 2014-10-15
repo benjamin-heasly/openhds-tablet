@@ -30,8 +30,17 @@ public class Individual implements Serializable {
 	private String pointOfContactPhoneNumber;
 	private String languagePreference;
 	private String memberStatus;
+    private String nationality;
 
-	public String getMemberStatus() {
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public String getMemberStatus() {
 		return memberStatus;
 	}
 

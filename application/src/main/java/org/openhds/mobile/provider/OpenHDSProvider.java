@@ -163,6 +163,9 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS);
         individualsProjectionMap.put(
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY);
+        individualsProjectionMap.put(
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID);
 
@@ -922,6 +925,8 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE
                     + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS
+                    + " TEXT,"
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY
                     + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID
                     + " TEXT);"

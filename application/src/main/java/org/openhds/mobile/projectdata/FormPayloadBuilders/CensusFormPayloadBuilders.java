@@ -154,12 +154,7 @@ public class CensusFormPayloadBuilders {
             IndividualGateway individualGateway = new IndividualGateway();
             Individual headOfHousehold = individualGateway.getFirst(resolver, individualGateway.findById(socialGroup.getGroupHead()));
 
-
-
-            // set's the member's "House Name" to the Location's name
-            formPayload.put(ProjectFormFields.Individuals.OTHER_NAMES, headOfHousehold.getOtherNames());
-
-            // set's the member's point of contanct info to the HoH
+            // set's the member's point of contact info to the HoH
             if(null != headOfHousehold.getPhoneNumber() && !headOfHousehold.getPhoneNumber().isEmpty()) {
                 formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, Individual.getFullName(headOfHousehold));
                 formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, headOfHousehold.getPhoneNumber());

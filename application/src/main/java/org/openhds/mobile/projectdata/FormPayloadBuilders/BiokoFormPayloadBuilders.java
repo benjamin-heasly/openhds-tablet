@@ -1,13 +1,17 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
+import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.model.Individual;
 import org.openhds.mobile.model.Location;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 public class BiokoFormPayloadBuilders {
@@ -15,8 +19,7 @@ public class BiokoFormPayloadBuilders {
     public static class DistributeBednets implements FormPayloadBuilder {
 
         @Override
-        public void buildFormPayload(Map<String, String> formPayload,
-                                     NavigateActivity navigateActivity) {
+        public void buildFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, false);
@@ -28,7 +31,21 @@ public class BiokoFormPayloadBuilders {
 
             String locationExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE).getExtId();
-            formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
+
+            //pre-fill a netCode in YY-CCC form
+            String netCode = generateNetCode(navigateActivity, locationExtId);
+            formPayload.put(ProjectFormFields.BedNet.BED_NET_CODE, netCode);
+
+            //pre-fill the householdSize for this particular household
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            ContentResolver contentResolver = navigateActivity.getContentResolver();
+            List<Individual> individuals = individualGateway.getList(contentResolver, individualGateway.findByResidency(locationExtId));
+            String householdSize = Integer.toString(individuals.size());
+            formPayload.put(ProjectFormFields.BedNet.HOUSEHOLD_SIZE, householdSize);
+        }
+
+        public String generateNetCode(NavigateActivity navigateActivity, String locationExtId) {
 
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
@@ -37,9 +54,8 @@ public class BiokoFormPayloadBuilders {
             String communityCode = location.getCommunityCode();
             String yearPrefix = Integer.toString (Calendar.getInstance().get(Calendar.YEAR));
             yearPrefix = yearPrefix.substring(2);
-            String netCode = yearPrefix + "-" + communityCode;
 
-            formPayload.put(ProjectFormFields.BedNet.BED_NET_CODE, netCode);
+            return yearPrefix + "-" + communityCode;
         }
 
     }
