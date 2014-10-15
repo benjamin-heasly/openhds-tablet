@@ -32,8 +32,8 @@ public class MapAdapter extends ArrayAdapter<AdapterContent> {
             row = inflater.inflate(layoutResourceId, parent, false);
            
             holder = new AdapterHolder();
-            holder.item1 = (TextView) row.findViewById(R.id.toptext);
-            holder.item2 = (TextView) row.findViewById(R.id.bottomtext);
+//            holder.item1 = (TextView) row.findViewById(R.id.toptext);
+//            holder.item2 = (TextView) row.findViewById(R.id.bottomtext);
            
             row.setTag(holder);
         }

@@ -27,7 +27,12 @@ public class HierarchyButtonFragment extends Fragment {
 
 	private HierarchyNavigator navigator;
 	private Map<String, RelativeLayout> viewsForStates;
+    private int hiearchySelectionDrawableId;
 
+
+    /*TODO: take in an object with references to SELECTED and NON-SELECTED drawables and point to them in
+    * TODO: setButtonHighligted();
+    */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		LinearLayout selectionContainer = (LinearLayout) inflater.inflate(
@@ -41,7 +46,7 @@ public class HierarchyButtonFragment extends Fragment {
 			final String description = null;
 			RelativeLayout layout = makeTextWithPayload(getActivity(),
                     getResourceString(getActivity(), labels.get(state)), description, state, listener,
-                    selectionContainer, 0, null, null);
+                    selectionContainer, hiearchySelectionDrawableId, null, null,true);
 			LayoutParams params = (LayoutParams) layout.getLayoutParams();
 			params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -67,15 +72,19 @@ public class HierarchyButtonFragment extends Fragment {
 		layout.setVisibility(isShown ? View.VISIBLE : View.INVISIBLE);
 	}
 
-	public void setButtonLabel(String state, String name, String id) {
+	public void setButtonLabel(String state, String name, String id, boolean centerText) {
 		RelativeLayout layout = viewsForStates.get(state);
 		if (null == layout) {
 			return;
 		}
-		configureTextWithPayload(getActivity(), layout, name, id, null, null);
+		configureTextWithPayload(getActivity(), layout, name, id, null, null, centerText);
 	}
 
-	private class HierarchyButtonListener implements OnClickListener {
+    public void setHiearchySelectionDrawableId(int hiearchySelectionDrawableId) {
+        this.hiearchySelectionDrawableId = hiearchySelectionDrawableId;
+    }
+
+    private class HierarchyButtonListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
 			navigator.jumpUp((String) v.getTag());
@@ -91,8 +100,8 @@ public class HierarchyButtonFragment extends Fragment {
 			return;
 		}
 
-		layout.setBackgroundColor(isHighlighted ? getResources().getColor(R.color.SommerBlue)
-				: getResources().getColor(R.color.WolfGray));
+        layout.setPressed(isHighlighted);
+        layout.setClickable(!isHighlighted);
 
 	}
 }

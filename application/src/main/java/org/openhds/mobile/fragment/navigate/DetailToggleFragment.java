@@ -34,7 +34,7 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 				R.layout.detail_toggle_fragment, container, false);
 
 		layout = makeTextWithPayload(getActivity(), null, null, null, this,
-                toggleContainer, 0, null, null);
+                toggleContainer, 0, null, null,true);
 		LayoutParams params = (LayoutParams) layout.getLayoutParams();
 		params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -88,7 +88,7 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 
 			configureTextWithPayload(getActivity(), layout, getResources()
                             .getString(R.string.toggle_fragment_button_show_children),
-                    null, null, null);
+                    null, null, null,true);
 
 		} else if (isEnabled && !isHighlighted) {
 			layout.setBackgroundColor(getResources().getColor(
@@ -96,7 +96,7 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 
 			configureTextWithPayload(getActivity(), layout, getResources()
                             .getString(R.string.toggle_fragment_button_show_details),
-                    null, null, null);
+                    null, null, null,true);
 
 		}
 

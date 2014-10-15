@@ -23,6 +23,7 @@ public class DataSelectionFragment extends Fragment {
 
     private SelectionHandler selectionHandler;
     private DataSelectionListAdapter dataWrapperAdapter;
+    private int dataSelectionDrawableId;
     private ListView listView;
 
     @Override
@@ -32,11 +33,13 @@ public class DataSelectionFragment extends Fragment {
         listView = (ListView) viewGroup.findViewById(R.id.data_fragment_listview);
         listView.setOnItemClickListener(new DataClickListener());
 
+
+
         return viewGroup;
     }
 
     public void populateData(List<DataWrapper> dataWrappers) {
-        dataWrapperAdapter = new DataSelectionListAdapter(getActivity(), R.layout.generic_list_item, dataWrappers);
+        dataWrapperAdapter = new DataSelectionListAdapter(getActivity(), R.layout.generic_list_item_white_text, dataWrappers);
         listView.setAdapter(dataWrapperAdapter);
     }
 
@@ -49,6 +52,10 @@ public class DataSelectionFragment extends Fragment {
 
     public void setSelectionHandler(SelectionHandler selectionHandler) {
         this.selectionHandler = selectionHandler;
+    }
+
+    public void setDataSelectionDrawableId(int dataSelectionDrawableId) {
+        this.dataSelectionDrawableId = dataSelectionDrawableId;
     }
 
     public interface SelectionHandler {
@@ -76,10 +83,10 @@ public class DataSelectionFragment extends Fragment {
 
             if (convertView == null) {
                 convertView = makeTextWithPayload(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
-                        null, null, R.drawable.data_frag_selector, qr.getStringsPayload(), qr.getStringIdsPayload());
+                        null, null, dataSelectionDrawableId, qr.getStringsPayload(), qr.getStringIdsPayload(), true);
             } else {
                 configureTextWithPayload(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId(),
-                        qr.getStringsPayload(), qr.getStringIdsPayload());
+                        qr.getStringsPayload(), qr.getStringIdsPayload(), true);
             }
 
             return convertView;
