@@ -23,25 +23,15 @@ import org.openhds.mobile.repository.gateway.MembershipGateway;
 public class IndividualDetailFragment extends DetailFragment {
 
     ScrollView detailContainer;
-    int greenLabel;
-    int greenValue;
-    int yellowLabel;
-    int yellowValue;
-    int pinkLabel;
-    int pinkValue;
+    int labelColor;
+    int valueColor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
         detailContainer = (ScrollView) inflater.inflate(R.layout.individual_detail_fragment, container, false);
 
-        greenLabel = R.color.LabelGreen;
-        greenValue = R.color.ValueGreen;
-
-        yellowLabel = R.color.LabelYellow;
-        yellowValue = R.color.ValueYellow;
-
-        pinkLabel = R.color.LabelPink;
-        pinkValue = R.color.ValuePink;
+        labelColor = R.color.GrayButtonBorder;
+        valueColor = R.color.GrayButtonFillPressed;
 
         return detailContainer;
     }
@@ -74,58 +64,58 @@ public class IndividualDetailFragment extends DetailFragment {
         personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_full_name_label,
                 individual.getFirstName() + " " + individual.getLastName(),
-                greenLabel, greenValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
         // Other names
         personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_other_names_label,
                 individual.getOtherNames(),
-                greenLabel, greenValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
 
         personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.gender_lbl,
                 getString(ProjectResources.Individual.getIndividualStringId(individual.getGender())),
-                greenLabel, greenValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
 
         // Language Preference
         personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_language_preference_label,
                 getString(ProjectResources.Individual.getIndividualStringId(individual.getLanguagePreference())),
-                greenLabel, greenValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
 
         // Nationality
         personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_nationality_label,
                 getString(ProjectResources.Individual.getIndividualStringId(individual.getNationality())),
-                greenLabel, greenValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
 
         // age and birthday
         personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_age_label,
                 Individual.getAgeWithUnits(individual),
-                greenLabel, greenValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
 
         personalInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_date_of_birth_label,
                 individual.getDob(),
-                greenLabel, greenValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
 
         // Contact Info
         contactInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_personal_phone_number_label,
                 individual.getPhoneNumber(),
-                pinkLabel, pinkValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
         contactInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_other_phone_number_label,
                 individual.getOtherPhoneNumber(),
-                pinkLabel, pinkValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
         contactInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_point_of_contact_label,
                 individual.getPointOfContactName(),
-                pinkLabel, pinkValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
         contactInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                 R.string.individual_point_of_contact_phone_number_label,
                 individual.getPointOfContactPhoneNumber(),
-                pinkLabel, pinkValue, R.color.NA_Gray));
+                labelColor, valueColor, R.color.NA_Gray));
 
         // Memberships
         for (Membership membership : memberships) {
@@ -134,13 +124,13 @@ public class IndividualDetailFragment extends DetailFragment {
                     getActivity(),
                     R.string.individual_relationship_to_head_label,
                     getString(ProjectResources.Relationship.getRelationshipStringId(membership.getRelationshipToHead())),
-                    yellowLabel, yellowValue, R.color.NA_Gray));
+                    labelColor, valueColor, R.color.NA_Gray));
 
             membershipInfoContainer.addView(makeTextWithValueAndLabel(
                     getActivity(),
                     R.string.individual_socialgroup_extid_label,
                     membership.getSocialGroupExtId(),
-                    yellowLabel, yellowValue, R.color.NA_Gray));
+                    labelColor, valueColor, R.color.NA_Gray));
         }
     }
 

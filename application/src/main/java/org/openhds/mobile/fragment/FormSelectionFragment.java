@@ -24,6 +24,7 @@ public class FormSelectionFragment extends Fragment {
 
     private SelectionHandler selectionHandler;
     private FormSelectionListAdapter formListAdapter;
+    private int formSelectionDrawableId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,11 +37,15 @@ public class FormSelectionFragment extends Fragment {
     }
 
     public void createFormButtons(List<FormBehaviour> values) {
-        formListAdapter = new FormSelectionListAdapter(getActivity(), R.layout.generic_list_item, values);
+        formListAdapter = new FormSelectionListAdapter(getActivity(), R.layout.generic_list_item_white_text, values);
 
         ListView listView = (ListView) getActivity().findViewById(R.id.form_fragment_listview);
         listView.setAdapter(formListAdapter);
         listView.setOnItemClickListener(new FormClickListener());
+    }
+
+    public void setFormSelectionDrawableId(int formSelectionDrawableId) {
+        this.formSelectionDrawableId = formSelectionDrawableId;
     }
 
     public interface SelectionHandler {
@@ -68,11 +73,11 @@ public class FormSelectionFragment extends Fragment {
 
             if (convertView == null) {
                 convertView = makeTextWithPayload(getActivity(), getString(form.getFormLabelId()), null,
-                        form.getFormLabelId(), null, null, R.drawable.form_frag_selector, null, null);
+                        form.getFormLabelId(), null, null, formSelectionDrawableId, null, null,true);
             }
 
             configureTextWithPayload(getActivity(),
-                    (RelativeLayout) convertView, getString(form.getFormLabelId()), null, null, null);
+                    (RelativeLayout) convertView, getString(form.getFormLabelId()), null, null, null,true);
             return convertView;
         }
     }

@@ -15,7 +15,7 @@
         android:layout_weight="1"
         android:paddingLeft="50dp"
         android:paddingRight="30dp"
-        android:paddingTop="100dp" />
+        android:paddingTop="100dp"/>
 
     <FrameLayout
         android:id="@+id/supervisor_login_container"
@@ -24,14 +24,14 @@
         android:layout_weight="1"
         android:paddingLeft="30dp"
         android:paddingRight="50dp"
-        android:paddingTop="100dp" />
+        android:paddingTop="100dp"/>
 
     <FrameLayout
         android:id="@+id/login_pref_container"
         android:layout_width="0px"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingTop="100dp"
-        android:visibility="gone" />
+        android:paddingTop="80dp"
+        android:visibility="gone"/>
 
 </LinearLayout>

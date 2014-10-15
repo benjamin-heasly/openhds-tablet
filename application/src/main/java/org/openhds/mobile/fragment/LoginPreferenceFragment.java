@@ -8,6 +8,10 @@ import static org.openhds.mobile.utilities.UrlUtils.isValidUrl;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import org.openhds.mobile.R;
 
 import android.content.SharedPreferences;
@@ -29,7 +33,17 @@ public class LoginPreferenceFragment extends PreferenceFragment implements
 		addPreferencesFromResource(R.xml.preferences);
 	}
 
-	@Override
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.preference_fragment, container, false);
+
+        return layout;
+    }
+
+    @Override
 	public void onResume() {
 		super.onResume();
 

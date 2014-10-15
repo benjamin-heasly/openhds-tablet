@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.FormSelectionFragment;
@@ -26,6 +27,7 @@ import org.openhds.mobile.model.Visit;
 import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
 import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+import org.openhds.mobile.projectdata.ModuleUiHelper;
 import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
@@ -39,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
+import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class NavigateActivity extends Activity implements HierarchyNavigator {
 
@@ -90,13 +93,17 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
         String builderName = (String) getIntent().getExtras().get(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA);
         NavigatePluginModule builder = ProjectActivityBuilder.getModuleByName(builderName);
-        setTitle(builderName);
+        ModuleUiHelper moduleInfo = ProjectActivityBuilder.getModuleInfoByName(builderName);
+        setTitle(getString(moduleInfo.getModuleTitleStringId()));
 
         stateLabels = builder.getStateLabels();
         stateSequence = builder.getStateSequence();
         queryHelper = builder.getQueryHelper();
         formsForStates = builder.getFormsForStates();
         detailFragsForStates = builder.getDetailFragsForStates();
+
+        //TODO: take in an object with references to drawables for hierarchyButtonFragment, valueFragment,
+        //TODO: formFragment, and valueFragment
 
         hierarchyPath = new HashMap<String, DataWrapper>();
         formHelper = new FormHelper(getContentResolver());
@@ -110,14 +117,22 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         // ACTIVITY BUILDING ZONE~ //
         // /////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        View middleColumn = findViewById(R.id.middle_column);
+        middleColumn.setBackgroundResource(moduleInfo.getMiddleColumnDrawableId());
+
+
         if (null == savedInstanceState) {
             // fromForm fresh activity
             hierarchyButtonFragment = new HierarchyButtonFragment();
             hierarchyButtonFragment.setNavigator(this);
+            hierarchyButtonFragment.setHiearchySelectionDrawableId(moduleInfo.getHierarchySelectionDrawableId());
             valueFragment = new DataSelectionFragment();
             valueFragment.setSelectionHandler(new ValueSelectionHandler());
+            valueFragment.setDataSelectionDrawableId(moduleInfo.getDataSelectionDrawableId());
             formFragment = new FormSelectionFragment();
             formFragment.setSelectionHandler(new FormSelectionHandler());
+            formFragment.setFormSelectionDrawableId(moduleInfo.getFormSelectionDrawableId());
             detailToggleFragment = new DetailToggleFragment();
             detailToggleFragment.setNavigateActivity(this);
             defaultDetailFragment = new DefaultDetailFragment();
@@ -138,9 +153,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             // restore saved activity state
             hierarchyButtonFragment = (HierarchyButtonFragment) fragmentManager.findFragmentByTag(HIERARCHY_BUTTON_FRAGMENT_TAG);
             hierarchyButtonFragment.setNavigator(this);
+            hierarchyButtonFragment.setHiearchySelectionDrawableId(moduleInfo.getHierarchySelectionDrawableId());
 
             formFragment = (FormSelectionFragment) fragmentManager.findFragmentByTag(FORM_FRAGMENT_TAG);
             formFragment.setSelectionHandler(new FormSelectionHandler());
+            formFragment.setFormSelectionDrawableId(moduleInfo.getFormSelectionDrawableId());
 
             detailToggleFragment = (DetailToggleFragment) fragmentManager.findFragmentByTag(TOGGLE_FRAGMENT_TAG);
             detailToggleFragment.setNavigateActivity(this);
@@ -161,6 +178,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                 detailFragment.setNavigateActivity(this);
             }
             valueFragment.setSelectionHandler(new ValueSelectionHandler());
+            valueFragment.setDataSelectionDrawableId(moduleInfo.getDataSelectionDrawableId());
 
             for (String state : stateSequence) {
                 if (savedInstanceState.containsKey(state)) {
@@ -289,10 +307,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         DataWrapper selected = hierarchyPath.get(state);
         if (null == selected) {
             String stateLabel = getResourceString(NavigateActivity.this, stateLabels.get(state));
-            hierarchyButtonFragment.setButtonLabel(state, stateLabel, null);
+            hierarchyButtonFragment.setButtonLabel(state, stateLabel, null, true);
             hierarchyButtonFragment.setButtonHighlighted(state, true);
         } else {
-            hierarchyButtonFragment.setButtonLabel(state, selected.getName(), selected.getExtId());
+            hierarchyButtonFragment.setButtonLabel(state, selected.getName(), selected.getExtId(), false);
             hierarchyButtonFragment.setButtonHighlighted(state, false);
         }
     }
@@ -326,6 +344,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             String state = stateSequence.get(i);
             hierarchyButtonFragment.setButtonAllowed(state, false);
             hierarchyPath.remove(state);
+
         }
 
         // prepare to stepDown() from this target state
@@ -390,6 +409,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         if (null != formBehaviour && null != formBehaviour.getFormName()) {
             formHelper.newFormInstance();
             Intent intent = formHelper.buildEditFormInstanceIntent();
+            showShortToast(this, R.string.launching_odk_collect);
             startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
         }
     }

@@ -145,14 +145,54 @@
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
     <color name="LabelGreen">#47B247</color>
-    <color name="ValueGreen">#A3FFA3</color>
+    <color name="ValueGreen">#29F200</color>
     <color name="LabelYellow">#CCCC52</color>
     <color name="ValueYellow">#FFFF66</color>
-    <color name="LabelPink">#995C99</color>
-    <color name="ValuePink">#E68AE6</color>
+    <color name="LabelPink">#B72770</color>
+    <color name="ValuePink">#D25896</color>
     <color name="NA_Gray">#4D4D4D</color>
     <color name="AcidGray">#303030</color>
     <color name="DarkerAcidGray">#222222</color>
     <color name="CustomMediumGray">#adadad</color>
+
+    <color name="CensusHierarchyBorder">#271674</color>
+    <color name="CensusHierarchyFill">#43309A</color>
+    <color name="CensusHierarchyFillPressed">#6757B1</color>
+    <color name="CensusDataBorder">#271674</color>
+    <color name="CensusDataFill">#B343309A</color>
+    <color name="CensusDataFillPressed">#B36757B1</color>
+    <color name="CensusMiddleColumnFill">#4DA599D9</color>
+
+    <color name="UpdateHierarchyBorder">#A30C1B</color>
+    <color name="UpdateHierarchyFill">#D72E3E</color>
+    <color name="UpdateHierarchyFillPressed">#F76775</color>
+    <color name="UpdateDataBorder">#A30C1B</color>
+    <color name="UpdateDataFill">#B3D72E3E</color>
+    <color name="UpdateDataFillPressed">#B3F76775</color>
+    <color name="UpdateMiddleColumnFill">#4DFBA6AE</color>
+
+    <color name="BiokoHierarchyBorder">#218D0B</color>
+    <color name="BiokoHierarchyFill">#41BA28</color>
+    <color name="BiokoHierarchyFillPressed">#6FD559</color>
+    <color name="BiokoDataBorder">#218D0B</color>
+    <color name="BiokoDataFill">#B341BA28</color>
+    <color name="BiokoDataFillPressed">#B36FD559</color>
+    <color name="BiokoMiddleColumnFill">#4DA9EB9C</color>
+
+    <color name="FormHierarchyBorder">#A84F0D</color>
+    <color name="FormHierarchyFill">#DF7A30</color>
+    <color name="FormHierarchyFillPressed">#FFAA6B</color>
+
+    <color name="GrayButtonBorder">#898989</color>
+    <color name="GrayButtonFill">#C6C6C6</color>
+    <color name="GrayButtonFillPressed">#FAF9F9</color>
+    <color name="GrayMiddleColumnFill">#E5E6E5</color>
+    <color name="GrayMiddleColumnFillLighter">#FAF9F9</color>
+    <color name="GrayListItemFill">#CDCDCC</color>
+    <color name="GrayListItemFillPressed">#FAF9F9</color>
+    <color name="DetailFragGray">#4D464646</color>
+
+
+
 
 </resources>

@@ -31,7 +31,7 @@ public class VisitFragment extends Fragment implements OnClickListener {
 				R.layout.visit_fragment, container, false);
 
 		layout = makeTextWithPayload(getActivity(), null, null, null, this,
-                toggleContainer, 0, null, null);
+                toggleContainer, 0, null, null, true);
 		LayoutParams params = (LayoutParams) layout.getLayoutParams();
 		params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -55,11 +55,10 @@ public class VisitFragment extends Fragment implements OnClickListener {
 		}
 		if (isEnabled) {
 			layout.setVisibility(ViewGroup.VISIBLE);
-			layout.setBackgroundColor(getResources().getColor(
-					R.color.LightGreen));
+			layout.setBackgroundResource(R.drawable.visit_selector);
 			configureTextWithPayload(getActivity(), layout, getResources()
                             .getString(R.string.finish_visit), null,
-                    null, null);
+                    null, null,true );
 			layout.setClickable(true);
 
 		} else {

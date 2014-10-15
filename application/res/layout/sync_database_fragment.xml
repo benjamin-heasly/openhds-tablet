@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="@string/sync_database_button_sync_all"
-            android:background="@drawable/rounded_button_gray"
+            android:background="@drawable/gray_button_selector"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView

@@ -2,11 +2,11 @@ package org.openhds.mobile.utilities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,9 +43,9 @@ public class LayoutUtils {
     public static RelativeLayout makeTextWithPayload(Activity activity, String primaryText, String secondaryText,
                                                      Object layoutTag, OnClickListener listener, ViewGroup container,
                                                      int background, Map<Integer, String> stringsPayLoad,
-                                                     Map<Integer, Integer> stringsIdsPayLoad) {
+                                                     Map<Integer, Integer> stringsIdsPayLoad, boolean centerText) {
 
-        RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.generic_list_item, null);
+        RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.generic_list_item_white_text, null);
         layout.setTag(layoutTag);
 
         if (null != listener) {
@@ -60,7 +60,7 @@ public class LayoutUtils {
             layout.setBackgroundResource(background);
         }
 
-        configureTextWithPayload(activity, layout, primaryText, secondaryText, stringsPayLoad, stringsIdsPayLoad);
+        configureTextWithPayload(activity, layout, primaryText, secondaryText, stringsPayLoad, stringsIdsPayLoad, centerText);
 
         return layout;
     }
@@ -68,7 +68,7 @@ public class LayoutUtils {
     // Pass new data to a layout that was created with makeTextWithPayload().
     public static void configureTextWithPayload(Activity activity, RelativeLayout layout, String primaryText,
                                                 String secondaryText, Map<Integer, String> stringsPayload,
-                                                Map<Integer, Integer> stringsIdsPayload) {
+                                                Map<Integer, Integer> stringsIdsPayload, boolean centerText) {
 
         TextView primary = (TextView) layout.findViewById(R.id.primary_text);
         TextView secondary = (TextView) layout.findViewById(R.id.secondary_text);
@@ -100,7 +100,8 @@ public class LayoutUtils {
                 }
 
                 TextView textView = new TextView(activity);
-                textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
+                textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                textView.setTextAppearance(activity, android.R.style.TextAppearance_Medium);
                 textView.setText(activity.getResources().getString(key) + ": " + value);
 
                 payLoadContainer.addView(textView);
@@ -116,7 +117,8 @@ public class LayoutUtils {
                 }
 
                 TextView textView = new TextView(activity);
-                textView.setTextAppearance(activity, android.R.style.TextAppearance_Small_Inverse);
+                textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                textView.setTextAppearance(activity, android.R.style.TextAppearance_Medium);
                 textView.setText(activity.getResources().getString(key) + ": " + value);
 
                 payLoadContainer.addView(textView);
@@ -127,6 +129,24 @@ public class LayoutUtils {
             payLoadContainer.setVisibility(View.GONE);
         } else {
             payLoadContainer.setVisibility(View.VISIBLE);
+        }
+
+        if(centerText){
+            primary.setGravity(Gravity.CENTER);
+            secondary.setGravity(Gravity.CENTER);
+            payLoadContainer.setGravity(Gravity.CENTER);
+            primary.setPadding(0,0,0,0);
+            secondary.setPadding(0,0,0,0);
+            payLoadContainer.setPadding(0,0,0,0);
+
+        } else {
+            primary.setGravity(Gravity.NO_GRAVITY);
+            secondary.setGravity(Gravity.NO_GRAVITY);
+            payLoadContainer.setGravity(Gravity.NO_GRAVITY);
+            primary.setPadding(15,0,0,0);
+            secondary.setPadding(15,0,0,0);
+            payLoadContainer.setPadding(15,0,0,0);
+
         }
     }
 

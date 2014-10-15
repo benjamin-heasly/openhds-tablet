@@ -2,14 +2,13 @@ package org.openhds.mobile.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FormInstanceReviewFragment;
@@ -31,18 +30,20 @@ public class SupervisorMainActivity extends Activity {
 
     private static final String REVIEW_FRAGMENT_TAG = "formInstanceReviewFragment";
     private static final String SYNC_FRAGMENT_TAG = "syncDatabaseFragment";
+    private static final String PREFERENCE_FRAGMENT_TAG = "preferenceFragment";
 
-    private FrameLayout prefContainer;
+    private LinearLayout prefContainer;
     private LinearLayout supervisorButtonLayout;
     private FormInstanceReviewFragment formInstanceReviewFragment;
     private SyncDatabaseFragment syncDatabaseFragment;
+    PreferenceFragment preferenceFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supervisor_main);
 
-        prefContainer = (FrameLayout) findViewById(R.id.login_pref_container);
+        prefContainer = (LinearLayout) findViewById(R.id.supervisor_activity_options);
         supervisorButtonLayout = (LinearLayout) findViewById(R.id.supervisor_activity_options);
 
         ButtonClickListener buttonClickListener = new ButtonClickListener();
@@ -66,9 +67,9 @@ public class SupervisorMainActivity extends Activity {
             syncDatabaseFragment.setRetainInstance(true);
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.login_pref_container, new LoginPreferenceFragment())
+                    .add(R.id.supervisor_activity_options, new LoginPreferenceFragment())
                     .add(R.id.supervisor_edit_form_container, formInstanceReviewFragment, REVIEW_FRAGMENT_TAG)
-                    .add(R.id.supervisor_sync_database_container, syncDatabaseFragment, SYNC_FRAGMENT_TAG)
+                    .add(R.id.supervisor_auxiliary_container, syncDatabaseFragment, SYNC_FRAGMENT_TAG)
                     .commit();
 
         } else {
@@ -90,18 +91,14 @@ public class SupervisorMainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.configure_server) {
-            boolean isShowingPreferences = View.VISIBLE == prefContainer.getVisibility();
-            boolean isPortraitMode = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-            if (isShowingPreferences) {
-                if (isPortraitMode) {
-                    supervisorButtonLayout.setVisibility(View.VISIBLE);
-                }
-                prefContainer.setVisibility(View.GONE);
-            } else {
-                if (isPortraitMode) {
-                    supervisorButtonLayout.setVisibility(View.GONE);
-                }
-                prefContainer.setVisibility(View.VISIBLE);
+            if (null == preferenceFragment || !preferenceFragment.isAdded()) {
+                preferenceFragment = new LoginPreferenceFragment();
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(prefContainer.getId(), preferenceFragment, PREFERENCE_FRAGMENT_TAG).commit();
+            }
+            else {
+                getFragmentManager().beginTransaction().remove(preferenceFragment).commit();
             }
         } else if (item.getItemId() == R.id.logout_menu_button) {
             Intent intent = new Intent();

@@ -2,8 +2,7 @@
                 android:id="@+id/value_with_label_container"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:background="@drawable/gray_background_selector">
+                android:padding="5dp">
 
     <CheckedTextView
             android:id="@+id/label_text"

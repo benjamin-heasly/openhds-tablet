@@ -50,10 +50,8 @@ public class OpeningActivity extends Activity {
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.login_pref_container, new LoginPreferenceFragment())
-                .add(R.id.field_worker_login_container,
-                        new FieldWorkerLoginFragment())
-                .add(R.id.supervisor_login_container,
-                        new SupervisorLoginFragment())
+                .add(R.id.field_worker_login_container, new FieldWorkerLoginFragment())
+                .add(R.id.supervisor_login_container, new SupervisorLoginFragment())
                 .commit();
     }
 

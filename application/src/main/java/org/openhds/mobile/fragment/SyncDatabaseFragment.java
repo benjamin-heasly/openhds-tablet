@@ -283,7 +283,12 @@ public class SyncDatabaseFragment extends Fragment {
 
     // Update column values and button status.
     private void updateTableRow(int entityId, int records, int errors, int actionId) {
-        TableRow tableRow = (TableRow) getView().findViewWithTag(entityId);
+        View view = getView();
+        if (null == view) {
+            return;
+        }
+
+        TableRow tableRow = (TableRow) view.findViewWithTag(entityId);
         TextView entityText = (TextView) tableRow.findViewById(R.id.entity_column);
         TextView recordsText = (TextView) tableRow.findViewById(R.id.records_column);
         TextView errorsText = (TextView) tableRow.findViewById(R.id.errors_column);
