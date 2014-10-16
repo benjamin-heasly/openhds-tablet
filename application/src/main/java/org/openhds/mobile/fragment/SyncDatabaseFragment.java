@@ -173,7 +173,7 @@ public class SyncDatabaseFragment extends Fragment {
         // update entity record counts directly from the database
         for (int entityId : allEntityIds) {
             int records = queryRecordCount(entityId);
-            int errors = allErrorCounts.containsKey(entityId) ? allErrorCounts.get(entityId) : 0;
+            int errors = allErrorCounts.containsKey(entityId) ? allErrorCounts.get(entityId) : UNKNOWN;
             updateTableRow(entityId, records, errors, IGNORE);
         }
     }
