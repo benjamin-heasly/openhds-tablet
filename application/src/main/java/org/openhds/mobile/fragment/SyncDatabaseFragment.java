@@ -172,9 +172,7 @@ public class SyncDatabaseFragment extends Fragment {
 
         // update entity record counts directly from the database
         for (int entityId : allEntityIds) {
-            int records = queryRecordCount(entityId);
-            int errors = allErrorCounts.containsKey(entityId) ? allErrorCounts.get(entityId) : UNKNOWN;
-            updateTableRow(entityId, records, errors, IGNORE);
+            resetTableRow(entityId);
         }
     }
 
@@ -182,6 +180,13 @@ public class SyncDatabaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         terminateSync(true);
+    }
+
+    // Refresh a table with stored data and ready to sync.
+    private void resetTableRow(int entityId) {
+        int records = queryRecordCount(entityId);
+        int errors = allErrorCounts.containsKey(entityId) ? allErrorCounts.get(entityId) : UNKNOWN;
+        updateTableRow(entityId, records, errors, R.string.sync_database_button_sync);
     }
 
     // Query the database for entity record counts.
@@ -198,7 +203,7 @@ public class SyncDatabaseFragment extends Fragment {
         }
 
         // mark the table row for this entity as "waiting"
-        updateTableRow(entityId, IGNORE, IGNORE, R.string.sync_database_button_waiting);
+        updateTableRow(entityId, UNKNOWN, UNKNOWN, R.string.sync_database_button_waiting);
 
         // add this entity to the queue and run it if ready
         queuedEntityIds.add(entityId);
@@ -215,9 +220,8 @@ public class SyncDatabaseFragment extends Fragment {
         currentEntityId = queuedEntityIds.remove();
 
         // reset the table row for this entity
-        int errorCount = 0;
-        allErrorCounts.put(currentEntityId, errorCount);
-        updateTableRow(currentEntityId, UNKNOWN, errorCount, R.string.sync_database_button_cancel);
+        allErrorCounts.put(currentEntityId, 0);
+        updateTableRow(currentEntityId, UNKNOWN, 0, R.string.sync_database_button_cancel);
 
         // start an http task for this entity
         httpTask = new HttpTask(new HttpResponseHandler());
@@ -369,6 +373,7 @@ public class SyncDatabaseFragment extends Fragment {
             } else if (queuedEntityIds.contains(entityId)) {
                 // button should change "waiting" to "sync"
                 queuedEntityIds.remove(entityId);
+                resetTableRow(entityId);
 
             } else {
                 // button should change from "sync" to "waiting"
