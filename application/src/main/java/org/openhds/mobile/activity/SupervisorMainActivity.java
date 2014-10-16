@@ -32,20 +32,16 @@ public class SupervisorMainActivity extends Activity {
     private static final String SYNC_FRAGMENT_TAG = "syncDatabaseFragment";
     private static final String PREFERENCE_FRAGMENT_TAG = "preferenceFragment";
 
-    private LinearLayout prefContainer;
-    private LinearLayout supervisorButtonLayout;
     private FormInstanceReviewFragment formInstanceReviewFragment;
     private SyncDatabaseFragment syncDatabaseFragment;
-    PreferenceFragment preferenceFragment;
+    private PreferenceFragment preferenceFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.supervisor_main);
 
-        prefContainer = (LinearLayout) findViewById(R.id.supervisor_activity_options);
-        supervisorButtonLayout = (LinearLayout) findViewById(R.id.supervisor_activity_options);
-
+        LinearLayout supervisorButtonLayout = (LinearLayout) findViewById(R.id.supervisor_activity_options);
         ButtonClickListener buttonClickListener = new ButtonClickListener();
         makeButton(this,
                 R.string.search_database_description,
@@ -65,46 +61,19 @@ public class SupervisorMainActivity extends Activity {
             formInstanceReviewFragment = new FormInstanceReviewFragment();
             syncDatabaseFragment = new SyncDatabaseFragment();
             syncDatabaseFragment.setRetainInstance(true);
+            preferenceFragment = new LoginPreferenceFragment();
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.supervisor_edit_form_container, formInstanceReviewFragment, REVIEW_FRAGMENT_TAG)
                     .add(R.id.supervisor_auxiliary_container, syncDatabaseFragment, SYNC_FRAGMENT_TAG)
+                    .add(R.id.supervisor_activity_options, preferenceFragment, PREFERENCE_FRAGMENT_TAG)
                     .commit();
 
         } else {
             formInstanceReviewFragment = (FormInstanceReviewFragment) getFragmentManager().findFragmentByTag(REVIEW_FRAGMENT_TAG);
             syncDatabaseFragment = (SyncDatabaseFragment) getFragmentManager().findFragmentByTag(SYNC_FRAGMENT_TAG);
+            preferenceFragment = (LoginPreferenceFragment) getFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.supervisor_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    /**
-     * Define what happens when a main menu item is selected.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.configure_server) {
-            if (null == preferenceFragment || !preferenceFragment.isAdded()) {
-                preferenceFragment = new LoginPreferenceFragment();
-                getFragmentManager()
-                        .beginTransaction()
-                        .add(prefContainer.getId(), preferenceFragment, PREFERENCE_FRAGMENT_TAG).commit();
-            }
-            else {
-                getFragmentManager().beginTransaction().remove(preferenceFragment).commit();
-            }
-        } else if (item.getItemId() == R.id.logout_menu_button) {
-            Intent intent = new Intent();
-            intent.setClass(this, OpeningActivity.class);
-            startActivity(intent);
-        }
-        return true;
     }
 
     @Override
