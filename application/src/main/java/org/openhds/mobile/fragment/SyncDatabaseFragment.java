@@ -181,7 +181,14 @@ public class SyncDatabaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        cancelSync();
+        terminateSync(true);
+    }
+
+    // Query the database for entity record counts.
+    private int queryRecordCount(int entityId) {
+        ParseEntityTaskRequest parseEntityTaskRequest = allParseTaskRequests.get(entityId);
+        Gateway gateway = parseEntityTaskRequest.getGateway();
+        return gateway.countAll(getActivity().getContentResolver());
     }
 
     // Add an entity to the queue to be synced.
@@ -195,11 +202,11 @@ public class SyncDatabaseFragment extends Fragment {
 
         // add this entity to the queue and run it if ready
         queuedEntityIds.add(entityId);
-        syncNextEntity();
+        startNextEntity();
     }
 
     // Take the next entity off the queue and start the sync process.
-    private void syncNextEntity() {
+    private void startNextEntity() {
         if (0 < currentEntityId || queuedEntityIds.isEmpty()) {
             return;
         }
@@ -235,13 +242,23 @@ public class SyncDatabaseFragment extends Fragment {
         int records = queryRecordCount(currentEntityId);
         updateTableRow(currentEntityId, records, allErrorCounts.get(currentEntityId), R.string.sync_database_button_sync);
         showProgressMessage(currentEntityId, Integer.toString(records));
-        cancelSync();
+        terminateSync(false);
     }
 
-    // Clean up after parsing is canceled by user or finishes naturally.
-    private void cancelSync() {
+    // Clean up tasks.  If a isError is true, counts as an error for the running task.
+    private void terminateSync(boolean isError) {
         if (0 < currentEntityId) {
-            updateTableRow(currentEntityId, IGNORE, allErrorCounts.get(currentEntityId), R.string.sync_database_button_sync);
+            // a task is currently running
+
+            // refresh the error count
+            int errorCount = allErrorCounts.get(currentEntityId);
+            if (isError) {
+                errorCount++;
+                allErrorCounts.put(currentEntityId, errorCount);
+            }
+            updateTableRow(currentEntityId, IGNORE, errorCount, R.string.sync_database_button_sync);
+
+            // unhook the parse entity task request from the http input stream
             ParseEntityTaskRequest parseEntityTaskRequest = allParseTaskRequests.get(currentEntityId);
             parseEntityTaskRequest.setInputStream(null);
         }
@@ -258,7 +275,7 @@ public class SyncDatabaseFragment extends Fragment {
         parseEntityTask = null;
 
         // proceed to the next entity if any
-        syncNextEntity();
+        startNextEntity();
     }
 
     // Show an error by logging, and toasting.
@@ -269,17 +286,11 @@ public class SyncDatabaseFragment extends Fragment {
         showLongToast(getActivity(), message);
     }
 
+    // Show progress by toasting.
     private void showProgressMessage(int entityId, String progressMessage) {
         String entityName = getResourceString(getActivity(), entityId);
         String message = entityName + ": " + progressMessage;
         showLongToast(getActivity(), message);
-    }
-
-    // Query the database for entity record counts.
-    private int queryRecordCount(int entityId) {
-        ParseEntityTaskRequest parseEntityTaskRequest = allParseTaskRequests.get(entityId);
-        Gateway gateway = parseEntityTaskRequest.getGateway();
-        return gateway.countAll(getActivity().getContentResolver());
     }
 
     // Update column values and button status.
@@ -352,7 +363,7 @@ public class SyncDatabaseFragment extends Fragment {
 
             if (entityId == currentEntityId) {
                 // button should change from "cancel" to "sync"
-                cancelSync();
+                terminateSync(true);
                 showProgressMessage(entityId, getResourceString(getActivity(), R.string.sync_database_canceled));
 
             } else if (queuedEntityIds.contains(entityId)) {
@@ -366,16 +377,13 @@ public class SyncDatabaseFragment extends Fragment {
         }
     }
 
-
     // Receive http response from server, or error data.
     private class HttpResponseHandler implements HttpTask.HttpTaskResponseHandler {
         @Override
         public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse) {
             if (!httpTaskResponse.isSuccess()) {
-                int errorCount = allErrorCounts.get(currentEntityId) + 1;
-                allErrorCounts.put(currentEntityId, errorCount);
                 showError(currentEntityId, httpTaskResponse.getHttpStatus(), httpTaskResponse.getMessage());
-                cancelSync();
+                terminateSync(true);
                 return;
             }
             httpResultToParser(httpTaskResponse);
@@ -391,7 +399,8 @@ public class SyncDatabaseFragment extends Fragment {
 
         @Override
         public void onError(DataPage dataPage, Exception e) {
-            int errorCount = allErrorCounts.get(currentEntityId) + 1;
+            int errorCount = allErrorCounts.get(currentEntityId);
+            errorCount++;
             allErrorCounts.put(currentEntityId, errorCount);
             updateTableRow(currentEntityId, IGNORE, errorCount, IGNORE);
             showError(currentEntityId, 0, e.getMessage());
