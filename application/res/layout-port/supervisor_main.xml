@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/supervisor_main_activity"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:tag="portrait" >
+              android:id="@+id/supervisor_main_activity"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:tag="portrait" >
 
 
     <LinearLayout
@@ -26,10 +26,8 @@
                 android:id="@+id/supervisor_edit_form_container"
                 android:layout_weight="3"
                 android:layout_width="0px"
-                android:layout_height="match_parent"/>
-
-
-
+                android:layout_height="match_parent"
+                android:padding="15dp"/>
 
     </LinearLayout>
 
@@ -37,7 +35,7 @@
             android:id="@+id/supervisor_auxiliary_container"
             android:layout_weight="4"
             android:layout_width="match_parent"
-            android:layout_height="0px"/>
-
+            android:layout_height="0px"
+            android:padding="15dp"/>
 
 </LinearLayout>

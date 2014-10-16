@@ -67,7 +67,6 @@ public class SupervisorMainActivity extends Activity {
             syncDatabaseFragment.setRetainInstance(true);
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.supervisor_activity_options, new LoginPreferenceFragment())
                     .add(R.id.supervisor_edit_form_container, formInstanceReviewFragment, REVIEW_FRAGMENT_TAG)
                     .add(R.id.supervisor_auxiliary_container, syncDatabaseFragment, SYNC_FRAGMENT_TAG)
                     .commit();
