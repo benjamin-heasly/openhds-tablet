@@ -52,6 +52,8 @@ public class SyncDatabaseFragment extends Fragment {
 
     // placeholder for integer value to ignore
     private static final int IGNORE = -1;
+    private static final int UNKNOWN = -2;
+    private static final String UNKNOWN_TEXT = "-";
 
     // list of entities for "sync all"
     private static final List<Integer> allEntityIds;
@@ -131,15 +133,15 @@ public class SyncDatabaseFragment extends Fragment {
     private ParseEntityTask parseEntityTask;
     private Queue<Integer> queuedEntityIds;
     private int currentEntityId;
-    private int currentErrorCount;
+    private Map<Integer, Integer> allErrorCounts;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         queuedEntityIds = new ArrayDeque<>();
+        allErrorCounts = new HashMap<>();
         currentEntityId = 0;
-        currentErrorCount = 0;
     }
 
     @Override
@@ -171,7 +173,8 @@ public class SyncDatabaseFragment extends Fragment {
         // update entity record counts directly from the database
         for (int entityId : allEntityIds) {
             int records = queryRecordCount(entityId);
-            updateTableRow(entityId, records, IGNORE, IGNORE);
+            int errors = allErrorCounts.containsKey(entityId) ? allErrorCounts.get(entityId) : 0;
+            updateTableRow(entityId, records, errors, IGNORE);
         }
     }
 
@@ -205,8 +208,9 @@ public class SyncDatabaseFragment extends Fragment {
         currentEntityId = queuedEntityIds.remove();
 
         // reset the table row for this entity
-        currentErrorCount = 0;
-        updateTableRow(currentEntityId, 0, currentErrorCount, R.string.sync_database_button_cancel);
+        int errorCount = 0;
+        allErrorCounts.put(currentEntityId, errorCount);
+        updateTableRow(currentEntityId, UNKNOWN, errorCount, R.string.sync_database_button_cancel);
 
         // start an http task for this entity
         httpTask = new HttpTask(new HttpResponseHandler());
@@ -229,7 +233,7 @@ public class SyncDatabaseFragment extends Fragment {
     // Clean up after the entity parser is all done.
     private void finishEntity() {
         int records = queryRecordCount(currentEntityId);
-        updateTableRow(currentEntityId, records, currentErrorCount, R.string.sync_database_button_sync);
+        updateTableRow(currentEntityId, records, allErrorCounts.get(currentEntityId), R.string.sync_database_button_sync);
         showProgressMessage(currentEntityId, Integer.toString(records));
         cancelSync();
     }
@@ -237,7 +241,7 @@ public class SyncDatabaseFragment extends Fragment {
     // Clean up after parsing is canceled by user or finishes naturally.
     private void cancelSync() {
         if (0 < currentEntityId) {
-            updateTableRow(currentEntityId, IGNORE, IGNORE, R.string.sync_database_button_sync);
+            updateTableRow(currentEntityId, IGNORE, allErrorCounts.get(currentEntityId), R.string.sync_database_button_sync);
             ParseEntityTaskRequest parseEntityTaskRequest = allParseTaskRequests.get(currentEntityId);
             parseEntityTaskRequest.setInputStream(null);
         }
@@ -257,14 +261,12 @@ public class SyncDatabaseFragment extends Fragment {
         syncNextEntity();
     }
 
-    // Show an error by logging, toasting, and adding to a list in the UI.
+    // Show an error by logging, and toasting.
     private void showError(int entityId, int errorCode, String errorMessage) {
         String entityName = getResourceString(getActivity(), entityId);
         String message = "Error syncing " + entityName + " (" + Integer.toString(errorCode) + "):" + errorMessage;
         Log.e(entityName, message);
         showLongToast(getActivity(), message);
-
-        // TODO: add to errors list view
     }
 
     private void showProgressMessage(int entityId, String progressMessage) {
@@ -272,7 +274,6 @@ public class SyncDatabaseFragment extends Fragment {
         String message = entityName + ": " + progressMessage;
         showLongToast(getActivity(), message);
     }
-
 
     // Query the database for entity record counts.
     private int queryRecordCount(int entityId) {
@@ -296,15 +297,23 @@ public class SyncDatabaseFragment extends Fragment {
 
         entityText.setText(entityId);
 
-        if (0 <= records) {
-            recordsText.setText(Integer.toString(records));
+        if (IGNORE != records) {
+            if (UNKNOWN == records) {
+                recordsText.setText(UNKNOWN_TEXT);
+            } else {
+                recordsText.setText(Integer.toString(records));
+            }
         }
 
-        if (0 <= errors) {
-            errorsText.setText(Integer.toString(errors));
+        if (IGNORE != errors) {
+            if (UNKNOWN == errors) {
+                errorsText.setText(UNKNOWN_TEXT);
+            } else {
+                errorsText.setText(Integer.toString(errors));
+            }
         }
 
-        if (0 <= actionId) {
+        if (IGNORE != actionId) {
             actionButton.setText(actionId);
             actionButton.setTag(entityId);
         }
@@ -363,8 +372,9 @@ public class SyncDatabaseFragment extends Fragment {
         @Override
         public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse) {
             if (!httpTaskResponse.isSuccess()) {
+                int errorCount = allErrorCounts.get(currentEntityId) + 1;
+                allErrorCounts.put(currentEntityId, errorCount);
                 showError(currentEntityId, httpTaskResponse.getHttpStatus(), httpTaskResponse.getMessage());
-                currentErrorCount++;
                 cancelSync();
                 return;
             }
@@ -381,8 +391,9 @@ public class SyncDatabaseFragment extends Fragment {
 
         @Override
         public void onError(DataPage dataPage, Exception e) {
-            currentErrorCount++;
-            updateTableRow(currentEntityId, IGNORE, currentErrorCount, IGNORE);
+            int errorCount = allErrorCounts.get(currentEntityId) + 1;
+            allErrorCounts.put(currentEntityId, errorCount);
+            updateTableRow(currentEntityId, IGNORE, errorCount, IGNORE);
             showError(currentEntityId, 0, e.getMessage());
         }
 
