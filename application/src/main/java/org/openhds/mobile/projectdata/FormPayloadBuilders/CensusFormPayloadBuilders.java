@@ -85,6 +85,11 @@ public class CensusFormPayloadBuilders {
 
         String generatedIdPrefix = fieldWorker.getIdPrefix();
 
+        //TODO this is a hack to pad the ID prefix just incase it is being checked on the server
+        if(generatedIdPrefix.length()<2){
+            generatedIdPrefix = "0"+ generatedIdPrefix;
+        }
+
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
         ContentResolver contentResolver = navigateActivity.getContentResolver();
 
