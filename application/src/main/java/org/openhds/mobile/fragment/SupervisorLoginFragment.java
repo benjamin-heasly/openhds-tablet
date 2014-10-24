@@ -55,10 +55,6 @@ public class SupervisorLoginFragment extends Fragment implements
 
     private String getUsernameFromEditText() {
         String username = usernameEditText.getText().toString();
-
-        if (username.equals("neo"))
-            startActivity(new Intent(getActivity(), SuperSecretDevBackdoor.class));
-
         return username;
     }
 

@@ -23,6 +23,18 @@ public class Location implements Serializable {
     private String subDistrictName;
     private String districtName;
 
+
+
+    private String hasRecievedBedNets;
+
+    public String getHasRecievedBedNets() {
+        return hasRecievedBedNets;
+    }
+
+    public void setHasRecievedBedNets(String hasRecievedBedNets) {
+        this.hasRecievedBedNets = hasRecievedBedNets;
+    }
+
     public int getBuildingNumber() {
         return buildingNumber;
     }

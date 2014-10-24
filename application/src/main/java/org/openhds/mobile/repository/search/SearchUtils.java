@@ -62,6 +62,8 @@ public class SearchUtils {
                 OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER, R.string.location_building_number_label);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER, R.string.location_floor_number_label);
+        plugin.getColumnsAndLabels().put(
+                OpenHDS.Locations.COLUMN_LOCATION_HAS_RECIEVED_BEDNETS, R.string.location_has_recieved_bednets);
 
         return plugin;
     }
