@@ -43,6 +43,10 @@ public class LocationFormAdapter {
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS)));
         location.setDescription(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_DESCRIPTION)));
+        location.setLongitude(formInstanceData.get(
+                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_LONGITUDE)));
+        location.setLatitude(formInstanceData.get(
+                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_LATITUDE)));
 
         return location;
     }
