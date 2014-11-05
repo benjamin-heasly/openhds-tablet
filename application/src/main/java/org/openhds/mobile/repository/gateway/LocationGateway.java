@@ -9,19 +9,7 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HAS_RECIEVED_BEDNETS;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LATITUDE;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME;
+import static org.openhds.mobile.OpenHDS.Locations.*;
 import static org.openhds.mobile.repository.RepositoryUtils.extractInt;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
@@ -62,6 +50,10 @@ public class LocationGateway extends Gateway<Location> {
             location.setBuildingNumber(extractInt(cursor, COLUMN_LOCATION_BUILDING_NUMBER));
             location.setFloorNumber(extractInt(cursor, COLUMN_LOCATION_FLOOR_NUMBER));
             location.setHasRecievedBedNets(extractString(cursor, COLUMN_LOCATION_HAS_RECIEVED_BEDNETS));
+            location.setDescription(extractString(cursor, COLUMN_LOCATION_DESCRIPTION));
+            location.setLongitude(extractString(cursor, COLUMN_LOCATION_LONGITUDE));
+            location.setLatitude(extractString(cursor, COLUMN_LOCATION_LATITUDE));
+
 
             return location;
         }
@@ -83,6 +75,10 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_BUILDING_NUMBER, location.getBuildingNumber());
             contentValues.put(COLUMN_LOCATION_FLOOR_NUMBER, location.getFloorNumber());
             contentValues.put(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS, location.getHasRecievedBedNets());
+            contentValues.put(COLUMN_LOCATION_DESCRIPTION, location.getDescription());
+            contentValues.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
+            contentValues.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
+
 
             return contentValues;
         }
