@@ -27,46 +27,46 @@ public class CensusQueryHelper implements QueryHelper {
 
     public List<DataWrapper> getAll(ContentResolver contentResolver, String state) {
 
-        if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)) {
+        if (state.equals(ProjectActivityBuilder.BiokoHierarchy.REGION_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByLevel(REGION_HIERARCHY_LEVEL_NAME), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.PROVINCE_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByLevel(PROVINCE_HIERARCHY_LEVEL_NAME), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.DISTRICT_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByLevel(DISTRICT_HIERARCHY_LEVEL_NAME), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.SUB_DISTRICT_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByLevel(SUB_DISTRICT_HIERARCHY_LEVEL_NAME), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.LOCALITY_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByLevel(LOCALITY_HIERARCHY_LEVEL_NAME), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.MAP_AREA_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByLevel(MAP_AREA_HIERARCHY_LEVEL_NAME), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE)) {
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByLevel(SECTOR_HIERARCHY_LEVEL_NAME), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             return locationGateway.getQueryResultList(contentResolver, locationGateway.findAll(), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             return individualGateway.getQueryResultList(contentResolver, individualGateway.findAll(), state);
         }
@@ -76,23 +76,23 @@ public class CensusQueryHelper implements QueryHelper {
 
     public DataWrapper getIfExists(ContentResolver contentResolver, String state, String extId) {
 
-        if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
+        if (state.equals(ProjectActivityBuilder.BiokoHierarchy.REGION_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.PROVINCE_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.DISTRICT_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.SUB_DISTRICT_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.LOCALITY_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.MAP_AREA_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE)) {
 
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getFirstQueryResult(
                     contentResolver, locationHierarchyGateway.findById(extId), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             return locationGateway.getFirstQueryResult(contentResolver, locationGateway.findById(extId), state);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             return individualGateway.getFirstQueryResult(contentResolver, individualGateway.findById(extId), state);
         }
@@ -103,23 +103,23 @@ public class CensusQueryHelper implements QueryHelper {
     public List<DataWrapper> getChildren(ContentResolver contentResolver, DataWrapper qr, String childState) {
         String state = qr.getCategory();
 
-        if (state.equals(ProjectActivityBuilder.CensusActivityModule.REGION_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE)
-                || state.equals(ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE)) {
+        if (state.equals(ProjectActivityBuilder.BiokoHierarchy.REGION_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.PROVINCE_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.DISTRICT_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.SUB_DISTRICT_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.LOCALITY_STATE)
+                || state.equals(ProjectActivityBuilder.BiokoHierarchy.MAP_AREA_STATE)) {
 
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
                     locationHierarchyGateway.findByParent(qr.getExtId()), childState);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             return locationGateway.getQueryResultList(contentResolver,
                     locationGateway.findByHierarchyDescendingBuildingNumber(qr.getExtId()), childState);
 
-        } else if (state.equals(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)) {
+        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             return individualGateway.getQueryResultList(contentResolver,
                     individualGateway.findByResidency(qr.getExtId()), childState);

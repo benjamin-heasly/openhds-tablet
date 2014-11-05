@@ -40,7 +40,7 @@ public class UpdateFormFilters {
                 return false;
             }
 
-            String locationKey = ProjectActivityBuilder.UpdateActivityModule.HOUSEHOLD_STATE;
+            String locationKey = ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE;
             Map<String, DataWrapper> hierarchyPath = navigateActivity.getHierarchyPath();
             if (hierarchyPath.containsKey(locationKey) && null != hierarchyPath.get(locationKey)) {
                 return true;
@@ -109,7 +109,7 @@ public class UpdateFormFilters {
 
         Map<String, DataWrapper> hierarchyPath = navigateActivity.getHierarchyPath();
         String individualExtId =
-                hierarchyPath.get(ProjectActivityBuilder.UpdateActivityModule.INDIVIDUAL_STATE).getExtId();
+                hierarchyPath.get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
 
         return individualGateway.getFirst(navigateActivity.getContentResolver(),

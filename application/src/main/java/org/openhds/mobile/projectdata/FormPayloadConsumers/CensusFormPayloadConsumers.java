@@ -73,7 +73,7 @@ public class CensusFormPayloadConsumers {
             Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
             DataWrapper selectedLocation = hierarchyPath
-                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE);
 
             String relationshipType = formPayload
                     .get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
@@ -126,7 +126,7 @@ public class CensusFormPayloadConsumers {
             Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
             DataWrapper selectedLocation = hierarchyPath
-                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE);
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE);
 
             // Pull out useful strings from the formPayload
             String relationshipType = formPayload

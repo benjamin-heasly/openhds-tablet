@@ -1,6 +1,12 @@
 package org.openhds.mobile.repository;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +20,7 @@ import java.util.Map;
  *
  * BSH
  */
-public class DataWrapper {
+public class DataWrapper implements Parcelable {
 
 	private String category;
 	private String extId;
@@ -59,4 +65,14 @@ public class DataWrapper {
 		return "QueryResult[name: " + name + " extId: " + extId + " category: "
 				+ category + " + payload size: " + stringsPayload.size() + "]";
 	}
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+
+    }
 }

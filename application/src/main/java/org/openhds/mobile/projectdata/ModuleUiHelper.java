@@ -1,7 +1,12 @@
 package org.openhds.mobile.projectdata;
 
 /**
- * Created by motech-admin on 7/11/14.
+ * ModuleUiHelper is a way of transporting the "look" of a particular NavigatePluginModule.
+ *
+ * It should contain the data necessary (mainly drawable ids) to send to DataSelectionFragment, FormSelectionFragment,
+ * HierarchySelectionFragment, and anything (UI) else that changes depending on the NavigatePluginModule.
+ *
+ * waffle
  */
 public interface ModuleUiHelper {
 

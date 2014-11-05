@@ -55,7 +55,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         List<String> activityModuleNames = ProjectActivityBuilder.getActivityModuleNames();
         for (String name : activityModuleNames) {
 
-            ModuleUiHelper moduleInfo = ProjectActivityBuilder.getModuleInfoByName(name);
+            ModuleUiHelper moduleInfo = ProjectActivityBuilder.getModuleByName(name).getModuleUiHelper();
 
             RelativeLayout layout = makeTextWithPayload(this,
                     getString(moduleInfo.getModuleLabelStringId()),

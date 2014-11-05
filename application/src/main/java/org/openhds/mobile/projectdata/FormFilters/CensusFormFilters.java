@@ -19,7 +19,7 @@ public class CensusFormFilters {
 			Map<String, DataWrapper> hierarchyPath) {
 
 		String socialGroupExtId = hierarchyPath.get(
-				ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
+				ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)
 				.getExtId();
 
         SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();

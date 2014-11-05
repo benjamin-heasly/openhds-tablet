@@ -29,7 +29,7 @@ public class CensusFormPayloadBuilders {
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
         DataWrapper sectorDataWrapper =
-                navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE);
+                navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE);
         ContentResolver contentResolver = navigateActivity.getContentResolver();
 
         // sector extid is <hierarchyExtId>
@@ -203,10 +203,10 @@ public class CensusFormPayloadBuilders {
                     .getHierarchyPath();
 
             String individualExtId = hierarchyPath
-                    .get(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE)
                     .getExtId();
             String householdExtId = hierarchyPath
-                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)
                     .getExtId();
 
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
