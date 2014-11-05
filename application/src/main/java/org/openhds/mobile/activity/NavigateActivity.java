@@ -506,6 +506,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                             if (needUpdate) {
                                 formHelper.updateExistingFormInstance();
                             }
+                            // TODO: let consumeFormPayload return a follow-up FormBehaviour that should be launched
+                            // TODO: change return type to a ConsumerResults which aggregates needUpdate and followUp
                         }
                     }
 
@@ -514,6 +516,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     if (null != allFormInstances) {
                         EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
                     }
+
+                    // TODO: launchForm() for follow-up, if any.
+
                     return;
 
                 case SEARCH_ACTIVITY_REQUEST_CODE:
