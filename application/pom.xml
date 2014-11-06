@@ -94,6 +94,12 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>res</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -115,6 +121,24 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>version-tag.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
                 <configuration>
@@ -126,6 +150,21 @@
                     </sdk>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>update-manifest</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>manifest-update</goal>
+                        </goals>
+                        <configuration>
+                            <manifest>
+                                <versionCode>${openhds.tag.number}</versionCode>
+                                <versionName>${openhds.tag.name}</versionName>
+                            </manifest>
+                        </configuration>
+                    </execution>
+                </executions>
                 <extensions>true</extensions>
             </plugin>
         </plugins>

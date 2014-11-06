@@ -1,6 +1,12 @@
 package org.openhds.mobile.activity;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
@@ -9,13 +15,7 @@ import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
+import static org.openhds.mobile.utilities.ConfigUtils.getAppFullName;
 
 import java.util.List;
 
@@ -38,6 +38,9 @@ public class OpeningActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setTitle(getAppFullName(this));
+
         setContentView(R.layout.opening_activity);
 
         loginPrefContainer = (FrameLayout) findViewById(R.id.login_pref_container);
