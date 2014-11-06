@@ -9,9 +9,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.Location;
 import org.openhds.mobile.model.SocialGroup;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 import java.util.List;
@@ -39,28 +41,36 @@ public class HouseholdDetailFragment extends DetailFragment {
 		SocialGroup socialGroup = getHousehold(navigateActivity.getCurrentSelection().getExtId());
 
 		if (null != socialGroup) {
-			LinearLayout socialGroupBasicInfoContainer =
+			LinearLayout householdBasicInfoContainer =
                     (LinearLayout) detailContainer.findViewById(R.id.household_detail_frag_basic_info);
 
-			socialGroupBasicInfoContainer.removeAllViews();
+			householdBasicInfoContainer.removeAllViews();
 
 			TextView extIdTextView = (TextView) detailContainer.findViewById(R.id.household_detail_frag_extid);
 			extIdTextView.setText(socialGroup.getExtId());
 
-			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+			householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                     R.string.social_group_name,
                     socialGroup.getGroupName(),
                     greenLabel, greenValue, R.color.NA_Gray));
 
-			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+			householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                     R.string.social_group_head_ext_id,
                     socialGroup.getGroupHead(),
                     greenLabel, greenValue, R.color.NA_Gray));
 
-			socialGroupBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+			householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
                     R.string.social_group_member_count,
                     getMemberCount(socialGroup.getExtId()),
                     greenLabel, greenValue, R.color.NA_Gray));
+
+            Location location = getLocation(navigateActivity.getCurrentSelection().getExtId());
+
+            householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+                    R.string.location_description_label,
+                    location.getDescription(),
+                    greenLabel, greenValue, R.color.NA_Gray));
+
 
 		} else {
 			TextView extIdTextView = (TextView) detailContainer.findViewById(R.id.household_detail_frag_extid);
@@ -76,6 +86,16 @@ public class HouseholdDetailFragment extends DetailFragment {
 
 		return socialGroup;
 	}
+
+    private Location getLocation(String extId) {
+
+        LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+        ContentResolver contentResolver = navigateActivity.getContentResolver();
+        Location location = locationGateway.getFirst(contentResolver, locationGateway.findById(extId));
+
+        return location;
+
+    }
 
 	private String getMemberCount(String extId) {
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();

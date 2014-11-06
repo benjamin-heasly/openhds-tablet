@@ -97,8 +97,8 @@
     <string name="house_of_prefix">House of</string>
 
     <!-- Server URLs and Paths -->
-    <string name="default_interop_server_url">http://bioko-cims-test.rcg.usm.maine.edu:8080/openhds</string>
-    <string name="default_openhds_server_url">http://bioko-cims-test.rcg.usm.maine.edu:8080/openhds</string>
+    <string name="default_interop_server_url">http://cims-bioko.org:8080/openhds</string>
+    <string name="default_openhds_server_url">http://cims-bioko.org:8080/openhds</string>
     <string name="supervisor_login_url">/api/rest/visits</string>
     <string name="sync_field_workers_path">/api/rest/fieldworkers</string>
     <string name="sync_individuals_path">/api/rest/individuals/cached</string>
@@ -212,6 +212,7 @@
     <string name="location_community_code_label">Community Code</string>
     <string name="location_building_number_label">Building Number</string>
     <string name="location_floor_number_label">Floor Number</string>
+    <string name="location_description_label">Description</string>
 
     <!-- Social Group Labels -->
     <string name="social_group_name">Household Name</string>
@@ -263,5 +264,6 @@
     <string name="bioko_activity_title">Bed Net Activity</string>
     <string name="update_activity_title">Update Activity</string>
     <string name="launching_odk_collect">Launching ODKCollect...</string>
+    <string name="location_has_recieved_bednets">Has Recieved Bed Nets</string>
 
 </resources>

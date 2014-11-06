@@ -29,7 +29,7 @@ public class CensusFormPayloadBuilders {
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
         DataWrapper sectorDataWrapper =
-                navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE);
+                navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE);
         ContentResolver contentResolver = navigateActivity.getContentResolver();
 
         // sector extid is <hierarchyExtId>
@@ -84,6 +84,11 @@ public class CensusFormPayloadBuilders {
                 .getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
 
         String generatedIdPrefix = fieldWorker.getIdPrefix();
+
+        //TODO this is a hack to pad the ID prefix just incase it is being checked on the server
+        if(generatedIdPrefix.length()<2){
+            generatedIdPrefix = "0"+ generatedIdPrefix;
+        }
 
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
         ContentResolver contentResolver = navigateActivity.getContentResolver();
@@ -198,10 +203,10 @@ public class CensusFormPayloadBuilders {
                     .getHierarchyPath();
 
             String individualExtId = hierarchyPath
-                    .get(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE)
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE)
                     .getExtId();
             String householdExtId = hierarchyPath
-                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE)
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)
                     .getExtId();
 
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();

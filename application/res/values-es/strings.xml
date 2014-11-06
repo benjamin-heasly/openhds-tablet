@@ -9,8 +9,8 @@
     <string name="configuration">Configuración</string>
     <string name="configureDatabase">Configurar Base de Datos </string>
     <string name="databaseSync">Sincronizar con OpenHDS Base de Datos</string>
-    <string name="default_interop_server_url">http://130.111.132.88:8080/openhds</string>
-    <string name="default_openhds_server_url">http://130.111.132.88:8080/openhds</string>
+    <string name="default_interop_server_url">http://cims-bioko.org:8080/openhds</string>
+    <string name="default_openhds_server_url">http://cims-bioko.org:8080/openhds</string>
     <string name="delete_form_btn">Borrar Impreso</string>
     <string name="download_form_button">Descargar Impresos</string>
     <string name="failure_reasons_txt">Mensajes de Falla:</string>
@@ -177,6 +177,7 @@
     <string name="location_community_code_label">Codigo Comunidad</string>
     <string name="location_building_number_label">Numero del Edificio</string>
     <string name="location_floor_number_label">Numero del Piso</string>
+    <string name="location_description_label">Descripción</string>
 
     <!-- Social Group Labels -->
     <string name="social_group_name">Nombre del Hogar</string>
@@ -229,5 +230,6 @@
     <string name="bioko_activity_title">Bed Net Activity</string>
     <string name="update_activity_title">Update Activity</string>
     <string name="launching_odk_collect">Launching ODKCollect...</string>
+    <string name="location_has_recieved_bednets">Has Recieved Bed Nets</string>
 
 </resources>

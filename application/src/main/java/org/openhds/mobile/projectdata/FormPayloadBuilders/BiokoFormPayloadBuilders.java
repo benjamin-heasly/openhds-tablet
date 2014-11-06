@@ -30,7 +30,7 @@ public class BiokoFormPayloadBuilders {
             formPayload.put(ProjectFormFields.General.DISTRIBUTION_DATE_TIME, distributionDateTime);
 
             String locationExtId = navigateActivity.getHierarchyPath()
-                    .get(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE).getExtId();
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
             formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
 
             //pre-fill a netCode in YY-CCC form

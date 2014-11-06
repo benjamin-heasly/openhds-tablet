@@ -1,6 +1,7 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder.UpdateActivityModule;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 
@@ -28,7 +29,7 @@ public class UpdateFormPayloadBuilders {
             String visitDate = new SimpleDateFormat("yyyy-MM-dd").format(
                     Calendar.getInstance().getTime()).toString();
             String locationExtId = navigateActivity.getHierarchyPath()
-                    .get(UpdateActivityModule.HOUSEHOLD_STATE).getExtId();
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
             String visitExtId = visitDate + "_" + locationExtId;
 
             formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
@@ -48,7 +49,7 @@ public class UpdateFormPayloadBuilders {
 
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
 
-            String locationExtId = navigateActivity.getHierarchyPath().get(UpdateActivityModule.HOUSEHOLD_STATE).getExtId();
+            String locationExtId = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
             formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
 
             formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_INTERNAL);
@@ -71,7 +72,7 @@ public class UpdateFormPayloadBuilders {
                     Calendar.getInstance().getTime()).toString();
 
             String individualExtId = navigateActivity.getHierarchyPath()
-                    .get(UpdateActivityModule.INDIVIDUAL_STATE).getExtId();
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
 
 
             formPayload.put(ProjectFormFields.OutMigrations.OUT_MIGRATION_DATE, outMigrationDate);

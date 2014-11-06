@@ -22,6 +22,24 @@ public class Location implements Serializable {
     private String provinceName;
     private String subDistrictName;
     private String districtName;
+    private String hasRecievedBedNets;
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getHasRecievedBedNets() {
+        return hasRecievedBedNets;
+    }
+
+    public void setHasRecievedBedNets(String hasRecievedBedNets) {
+        this.hasRecievedBedNets = hasRecievedBedNets;
+    }
 
     public int getBuildingNumber() {
         return buildingNumber;

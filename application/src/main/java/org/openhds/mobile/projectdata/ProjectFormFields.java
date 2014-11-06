@@ -30,34 +30,34 @@ public class ProjectFormFields {
 
         static {
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.REGION_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.REGION_STATE,
                     REGION_STATE_FIELD_NAME);
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.PROVINCE_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.PROVINCE_STATE,
                     PROVINCE_STATE_FIELD_NAME);
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.DISTRICT_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.DISTRICT_STATE,
                     DISTRICT_STATE_FIELD_NAME);
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.SUB_DISTRICT_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.SUB_DISTRICT_STATE,
                     SUB_DISTRICT_STATE_FIELD_NAME);
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.LOCALITY_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.LOCALITY_STATE,
                     LOCALITY_STATE_FIELD_NAME);
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.MAP_AREA_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.MAP_AREA_STATE,
                     MAP_AREA_STATE_FIELD_NAME);
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.SECTOR_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE,
                     SECTOR_STATE_FIELD_NAME);
             stateFieldNames
-                    .put(ProjectActivityBuilder.CensusActivityModule.HOUSEHOLD_STATE,
+                    .put(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE,
                             HOUSEHOLD_STATE_FIELD_NAME);
             stateFieldNames
-                    .put(ProjectActivityBuilder.CensusActivityModule.INDIVIDUAL_STATE,
+                    .put(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE,
                             INDIVIDUAL_STATE_FIELD_NAME);
             stateFieldNames.put(
-                    ProjectActivityBuilder.CensusActivityModule.BOTTOM_STATE,
+                    ProjectActivityBuilder.BiokoHierarchy.BOTTOM_STATE,
                     BOTTOM_STATE_FIELD_NAME);
 
         }
@@ -89,6 +89,10 @@ public class ProjectFormFields {
         public static final String SUB_DISTRICT_NAME = "subDistrictName";
         public static final String DISTRICT_NAME = "districtName";
 
+        public static final String DESCRIPTION = "description";
+        public static final String LONGITUDE = "longitude";
+        public static final String LATITUDE = "latitude";
+
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
         static {
@@ -106,6 +110,11 @@ public class ProjectFormFields {
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME, PROVINCE_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME, SUB_DISTRICT_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME, DISTRICT_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION, DESCRIPTION);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE, LONGITUDE);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE, LATITUDE);
+
+
 
         }
 
