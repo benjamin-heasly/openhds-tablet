@@ -28,7 +28,6 @@ import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
 import org.openhds.mobile.projectdata.NavigatePluginModule;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ModuleUiHelper;
-import org.openhds.mobile.projectdata.QueryHelpers.QueryHelper;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
@@ -64,6 +63,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private static final String VISIT_FRAGMENT_TAG = "hierarchyVisitFragment";
 
     private static final String VISIT_KEY = "visitKey";
+    private static final String HIERARCHY_PATH_KEYS = "hierarchyPathKeys";
+    private static final String HIERARCHY_PATH_VALUES = "hierarchyPathValues";
+    private static final String CURRENT_RESULTS_KEY = "currentResults";
+
+    private static final String SWIPPITY_SWAP_TAG = "";
 
     NavigatePluginModule builder;
 
@@ -80,47 +84,37 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigate_activity);
 
-        // /////////////////////////////////////////////////////////////////////////////////////////////
-        // ACTIVITY BUILDING ZONE~ //
-        // /////////////////////////////////////////////////////////////////////////////////////////////
-
         FieldWorker fieldWorker = (FieldWorker) getIntent().getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
         setCurrentFieldWorker(fieldWorker);
-
-
         String builderName = (String) getIntent().getExtras().get(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA);
         builder = ProjectActivityBuilder.getModuleByName(builderName);
-        setTitle(getString(builder.getModuleUiHelper().getModuleTitleStringId()));
-
 
         hierarchyPath = new HashMap<String, DataWrapper>();
         formHelper = new FormHelper(getContentResolver());
         stateMachine = new StateMachine(new HashSet<String>(getStateSequence()), getStateSequence().get(0));
 
+
         for (String state : getStateSequence()) {
             stateMachine.registerListener(state, new HierarchyStateListener());
         }
 
-        // /////////////////////////////////////////////////////////////////////////////////////////////
-        // ACTIVITY BUILDING ZONE~ //
-        // /////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        View middleColumn = findViewById(R.id.middle_column);
-        middleColumn.setBackgroundResource(builder.getModuleUiHelper().getMiddleColumnDrawableId());
-
-
         if (null == savedInstanceState) {
-            // fromForm fresh activity
+
+            if(null != getIntent().getStringExtra(SWIPPITY_SWAP_TAG)) {
+                ArrayList<String> hierarchyPathKeys = getIntent().getStringArrayListExtra(HIERARCHY_PATH_KEYS);
+                for (String key : hierarchyPathKeys) {
+                    hierarchyPath.put(key, (DataWrapper) getIntent().getParcelableExtra(key + HIERARCHY_PATH_VALUES));
+                }
+                currentResults = getIntent().getParcelableArrayListExtra(CURRENT_RESULTS_KEY);
+            }
+
+            //fresh activity
             hierarchyButtonFragment = new HierarchyButtonFragment();
             hierarchyButtonFragment.setNavigator(this);
-            hierarchyButtonFragment.setHiearchySelectionDrawableId(builder.getModuleUiHelper().getHierarchySelectionDrawableId());
             valueFragment = new DataSelectionFragment();
             valueFragment.setSelectionHandler(new ValueSelectionHandler());
-            valueFragment.setDataSelectionDrawableId(builder.getModuleUiHelper().getDataSelectionDrawableId());
             formFragment = new FormSelectionFragment();
             formFragment.setSelectionHandler(new FormSelectionHandler());
-            formFragment.setFormSelectionDrawableId(builder.getModuleUiHelper().getFormSelectionDrawableId());
             detailToggleFragment = new DetailToggleFragment();
             detailToggleFragment.setNavigateActivity(this);
             defaultDetailFragment = new DefaultDetailFragment();
@@ -135,26 +129,21 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     .add(R.id.right_column_bottom, visitFragment, VISIT_FRAGMENT_TAG)
                     .commit();
 
+
         } else {
 
             FragmentManager fragmentManager = getFragmentManager();
             // restore saved activity state
             hierarchyButtonFragment = (HierarchyButtonFragment) fragmentManager.findFragmentByTag(HIERARCHY_BUTTON_FRAGMENT_TAG);
             hierarchyButtonFragment.setNavigator(this);
-            hierarchyButtonFragment.setHiearchySelectionDrawableId(builder.getModuleUiHelper().getHierarchySelectionDrawableId());
-
             formFragment = (FormSelectionFragment) fragmentManager.findFragmentByTag(FORM_FRAGMENT_TAG);
             formFragment.setSelectionHandler(new FormSelectionHandler());
-            formFragment.setFormSelectionDrawableId(builder.getModuleUiHelper().getFormSelectionDrawableId());
-
             detailToggleFragment = (DetailToggleFragment) fragmentManager.findFragmentByTag(TOGGLE_FRAGMENT_TAG);
             detailToggleFragment.setNavigateActivity(this);
-
             visitFragment = (VisitFragment) fragmentManager.findFragmentByTag(VISIT_FRAGMENT_TAG);
             visitFragment.setNavigateActivity(this);
 
             defaultDetailFragment = new DefaultDetailFragment();
-
             valueFragment = (DataSelectionFragment) fragmentManager.findFragmentByTag(VALUE_FRAGMENT_TAG);
 
             // draw details if valuefrag is null, the drawing of valuefrag is
@@ -166,28 +155,27 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                 detailFragment.setNavigateActivity(this);
             }
             valueFragment.setSelectionHandler(new ValueSelectionHandler());
-            valueFragment.setDataSelectionDrawableId(builder.getModuleUiHelper().getDataSelectionDrawableId());
 
-            for (String state : getStateSequence()) {
-                if (savedInstanceState.containsKey(state)) {
-                    String extId = savedInstanceState.getString(state);
-
-                    if (null == extId) {
-                        break;
-                    }
-                    DataWrapper qr = builder.getQueryHelper().getIfExists(getContentResolver(), state, extId);
-                    if (null == qr) {
-                        break;
-                    } else {
-                        hierarchyPath.put(state, qr);
-                    }
-                } else {
-                    break;
-                }
+            ArrayList<String> hierarchyPathKeys = savedInstanceState.getStringArrayList(HIERARCHY_PATH_KEYS);
+            for(String key : hierarchyPathKeys){
+                hierarchyPath.put(key, (DataWrapper) savedInstanceState.getParcelable(key + HIERARCHY_PATH_VALUES));
             }
-
+            currentResults = savedInstanceState.getParcelableArrayList(CURRENT_RESULTS_KEY);
             setCurrentVisit((Visit)savedInstanceState.get(VISIT_KEY));
         }
+        setActivityVisualTheme(builder.getModuleUiHelper());
+    }
+
+    // Takes in a NavigatePluginModule's (builder) ModuleUiHelper and sets all the fragment's drawables
+    private void setActivityVisualTheme(ModuleUiHelper uiHelper){
+
+        setTitle(getString(uiHelper.getModuleTitleStringId()));
+        hierarchyButtonFragment.setHiearchySelectionDrawableId(uiHelper.getHierarchySelectionDrawableId());
+        valueFragment.setDataSelectionDrawableId(uiHelper.getDataSelectionDrawableId());
+        formFragment.setFormSelectionDrawableId(uiHelper.getFormSelectionDrawableId());
+        View middleColumn = findViewById(R.id.middle_column);
+        middleColumn.setBackgroundResource(uiHelper.getMiddleColumnDrawableId());
+
     }
 
     @Override
@@ -198,13 +186,14 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        for (String state : getStateSequence()) {
-            if (hierarchyPath.containsKey(state)) {
-                DataWrapper selected = hierarchyPath.get(state);
-                savedInstanceState.putString(state, selected.getExtId());
-            }
-        }
 
+        ArrayList<String> hierarchyPathKeys = new ArrayList<String>(hierarchyPath.keySet());
+        for (String key : hierarchyPathKeys) {
+            savedInstanceState.putParcelable(key + HIERARCHY_PATH_VALUES, hierarchyPath.get(key));
+        }
+        savedInstanceState.putStringArrayList(HIERARCHY_PATH_KEYS,hierarchyPathKeys);
+
+        savedInstanceState.putParcelableArrayList(CURRENT_RESULTS_KEY, (ArrayList<DataWrapper>)currentResults);
         savedInstanceState.putSerializable(VISIT_KEY, getCurrentVisit());
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -213,6 +202,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_bar_menu, menu);
+
+        menu.add(0, 0, 0, "Testerooni").setShortcut('3', 'c');
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -228,6 +220,21 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             case R.id.field_worker_home_menu_button:
                 intent.setClass(this, PortalActivity.class);
                 intent.putExtra(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA, getCurrentFieldWorker());
+                startActivity(intent);
+                return true;
+            case 0:
+                intent.setClass(this, NavigateActivity.class);
+                intent.putExtra(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA, getCurrentFieldWorker());
+                intent.putExtra(SWIPPITY_SWAP_TAG,SWIPPITY_SWAP_TAG);
+                intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA, ProjectActivityBuilder.getActivityModuleNames().get(1));
+                intent.putParcelableArrayListExtra(CURRENT_RESULTS_KEY, (ArrayList<DataWrapper>) currentResults);
+
+                ArrayList<String> hierarchyPathKeys = new ArrayList<String>(hierarchyPath.keySet());
+                for (String key : hierarchyPathKeys) {
+                    intent.putExtra(key + HIERARCHY_PATH_VALUES, hierarchyPath.get(key));
+                }
+                intent.putStringArrayListExtra(HIERARCHY_PATH_KEYS, hierarchyPathKeys);
+
                 startActivity(intent);
                 return true;
             default:
@@ -257,7 +264,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             String previousState = getStateSequence().get(stateIndex - 1);
             DataWrapper previousSelection = hierarchyPath.get(previousState);
             currentSelection = previousSelection;
-            currentResults = builder.getQueryHelper().getChildren(getContentResolver(), previousSelection, state);
+            if(null == currentResults) {
+                currentResults = builder.getQueryHelper().getChildren(getContentResolver(), previousSelection, state);
+            }
         }
 
         boolean isAdded = valueFragment.isAdded();
@@ -398,6 +407,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             formHelper.newFormInstance();
             Intent intent = formHelper.buildEditFormInstanceIntent();
             showShortToast(this, R.string.launching_odk_collect);
+
+            // clear currentResults to get the most up-to-date currentResults after the form is consumed
+            currentResults = null;
+
             startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
         }
     }
