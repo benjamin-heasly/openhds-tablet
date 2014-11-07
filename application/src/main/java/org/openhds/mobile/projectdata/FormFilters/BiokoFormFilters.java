@@ -28,4 +28,13 @@ public class BiokoFormFilters {
 
     }
 
+    public static class EvaluateLocation implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+
+            return true;
+        }
+    }
+
 }

@@ -35,4 +35,17 @@ public class BiokoFormPayloadConsumers {
 
     }
 
+    public static class EvaluateLocation implements FormPayloadConsumer {
+
+        @Override
+        public boolean consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+            return false;
+        }
+
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+
+        }
+    }
+
 }
