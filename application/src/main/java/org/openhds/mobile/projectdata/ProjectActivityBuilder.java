@@ -308,6 +308,12 @@ public class ProjectActivityBuilder {
                     new CensusFormPayloadBuilders.AddLocation(),
                     new CensusFormPayloadConsumers.AddLocation()));
 
+            individualFormList.add(new FormBehaviour("Location_evaluation",
+                    R.string.evaluate_location_label,
+                    new CensusFormFilters.EvaluateLocation(),
+                    new CensusFormPayloadBuilders.EvaluateLocation(),
+                    new CensusFormPayloadConsumers.EvaluateLocation()));
+
             individualFormList.add(new FormBehaviour("Individual",
                     R.string.create_head_of_household_label,
                     new CensusFormFilters.AddHeadOfHousehold(),

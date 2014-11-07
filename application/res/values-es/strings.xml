@@ -93,6 +93,7 @@
     <string name="bottom_label">Fondo</string>
     <string name="create_location">Crear un Domicilio</string>
     <string name="create_head_of_household_label">Crear Jefe del Hogar </string>
+    <string name="evaluate_location_label">Evaluar la Locación</string>
     <string name="add_member_of_household_label">Agregar un Miembro del Hogar</string>
     <string name="edit_individual_label">Editar Individuo</string>
     <string name="house_of_prefix">Casa de</string>
