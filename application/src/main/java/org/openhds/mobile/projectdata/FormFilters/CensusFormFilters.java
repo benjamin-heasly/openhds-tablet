@@ -35,6 +35,15 @@ public class CensusFormFilters {
         }
     }
 
+    public static class EvaluateLocation implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+
+            return true;
+        }
+    }
+
     public static class AddHeadOfHousehold implements FormFilter {
 
 		@Override

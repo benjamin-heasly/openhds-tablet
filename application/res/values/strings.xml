@@ -92,6 +92,7 @@
     <string name="bottom_label">Bottom</string>
     <string name="create_location">Create new Household</string>
     <string name="create_head_of_household_label">Create Head of Household</string>
+    <string name="evaluate_location_label">Evaluate Location</string>
     <string name="add_member_of_household_label">Add Member of Household</string>
     <string name="edit_individual_label">Edit Individual</string>
     <string name="house_of_prefix">House of</string>
@@ -251,6 +252,7 @@
     <string name="form_type_in_migration">In Migration</string>
     <string name="form_type_bed_net">Bed Net</string>
     <string name="form_type_death">Death</string>
+    <string name="form_type_location_evaluation">Location Evaluation</string>
     <string name="form_instance_list_header">Recent Forms</string>
     <string name="field_worker_home_menu_text">Field Worker Home</string>
     <string name="logout_menu_text">Logout</string>
