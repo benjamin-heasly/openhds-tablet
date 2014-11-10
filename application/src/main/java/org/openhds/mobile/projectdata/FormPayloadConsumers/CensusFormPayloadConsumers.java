@@ -20,6 +20,7 @@ import org.openhds.mobile.repository.gateway.MembershipGateway;
 import org.openhds.mobile.repository.gateway.RelationshipGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class CensusFormPayloadConsumers {
@@ -52,10 +53,11 @@ public class CensusFormPayloadConsumers {
     public static class AddLocation implements FormPayloadConsumer {
 
         @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload,
-                                          NavigateActivity navigateActivity) {
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload,
+                                                  NavigateActivity navigateActivity) {
             insertOrUpdateLocation(formPayload, navigateActivity);
-            return false;
+
+                return new ConsumerResults(false, null, null);
         }
 
         @Override
@@ -80,8 +82,8 @@ public class CensusFormPayloadConsumers {
     public static class AddMemberOfHousehold implements FormPayloadConsumer {
 
         @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload,
-                                          NavigateActivity navigateActivity) {
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload,
+                                                  NavigateActivity navigateActivity) {
 
             Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
@@ -117,7 +119,7 @@ public class CensusFormPayloadConsumers {
             Membership membership = new Membership(individual, socialGroup, relationshipType);
             membershipGateway.insertOrUpdate(contentResolver, membership);
 
-            return false;
+            return new ConsumerResults(false, null, null);
         }
 
         @Override
@@ -130,11 +132,10 @@ public class CensusFormPayloadConsumers {
     public static class AddHeadOfHousehold implements FormPayloadConsumer {
 
         @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload,
-                                          NavigateActivity navigateActivity) {
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload,
+                                                  NavigateActivity navigateActivity) {
 
             postFillFormPayload(formPayload);
-            boolean postFilled = true;
 
             Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
@@ -177,7 +178,7 @@ public class CensusFormPayloadConsumers {
             Relationship relationship = new Relationship(individual, individual, relationshipType, startDate);
             relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
-            return postFilled;
+            return new ConsumerResults(true, null, null);
         }
 
         @Override
@@ -192,11 +193,11 @@ public class CensusFormPayloadConsumers {
     public static class EditIndividual implements FormPayloadConsumer {
 
         @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload,
-                                          NavigateActivity navigateActivity) {
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload,
+                                                  NavigateActivity navigateActivity) {
             new AddMemberOfHousehold().consumeFormPayload(formPayload,
                     navigateActivity);
-            return false;
+            return new ConsumerResults(false, null, null);
 
         }
 

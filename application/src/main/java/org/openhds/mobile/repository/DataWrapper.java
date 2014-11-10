@@ -60,19 +60,90 @@ public class DataWrapper implements Parcelable {
 		return stringIdsPayload;
 	}
 
+    public DataWrapper(){
+    }
+
 	@Override
 	public String toString() {
 		return "QueryResult[name: " + name + " extId: " + extId + " category: "
 				+ category + " + payload size: " + stringsPayload.size() + "]";
 	}
 
+    // for Parcelable
+    private DataWrapper(Parcel parcel) {
+        category = parcel.readString();
+        extId = parcel.readString();
+        name = parcel.readString();
+
+        // INTEGER to STRING
+        final List<Integer> stringIds = new ArrayList<Integer>();
+        parcel.readList(stringIds, null);
+
+        final Bundle stringsPayloadBundle = parcel.readBundle();
+        stringsPayload = new HashMap<>();
+        for (Integer key : stringIds) {
+            stringsPayload.put(key, stringsPayloadBundle.getString(key.toString()));
+        }
+
+
+        // INTEGER to INTEGER
+        final List<Integer> moreStringIds = new ArrayList<Integer>();
+        parcel.readList(moreStringIds, null);
+
+        final Bundle stringIdsPayloadBundle = parcel.readBundle();
+        stringIdsPayload = new HashMap<>();
+        for (Integer key : moreStringIds) {
+            stringIdsPayload.put(key, stringIdsPayloadBundle.getInt(key.toString()));
+        }
+
+
+
+
+    }
+
+    // for Parcelable
     @Override
     public int describeContents() {
         return 0;
     }
 
+    // for Parcelable
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(category);
+        parcel.writeString(extId);
+        parcel.writeString(name);
 
+        // Pull apart the INTEGER to STRING payload and put into the parcel
+        final List<Integer> stringIds = new ArrayList<Integer>(stringsPayload.keySet());
+        parcel.writeList(stringIds);
+        Bundle stringsPayloadBundle = new Bundle();
+        for (Integer key : stringIds) {
+            stringsPayloadBundle.putString(key.toString(), stringsPayload.get(key));
+        }
+        parcel.writeBundle(stringsPayloadBundle);
+
+        // Pull apart the INTEGER to INTEGER payload and put into the parcel
+        final List<Integer> moreStringIds = new ArrayList<Integer>(stringIdsPayload.keySet());
+        parcel.writeList(moreStringIds);
+        Bundle stringIdsPayloadBundle = new Bundle();
+        for (Integer key : moreStringIds) {
+            stringIdsPayloadBundle.putInt(key.toString(), stringIdsPayload.get(key));
+        }
+        parcel.writeBundle(stringIdsPayloadBundle);
+    }
+
+    // for Parcelable
+    public static final Creator CREATOR = new Creator();
+
+    // for Parcelable
+    private static class Creator implements Parcelable.Creator<DataWrapper> {
+        public DataWrapper createFromParcel(Parcel in) {
+            return new DataWrapper(in);
+        }
+
+        public DataWrapper[] newArray(int size) {
+            return new DataWrapper[size];
+        }
     }
 }
