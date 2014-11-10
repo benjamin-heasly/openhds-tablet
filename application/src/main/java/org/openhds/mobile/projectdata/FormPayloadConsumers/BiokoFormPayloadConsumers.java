@@ -12,8 +12,8 @@ public class BiokoFormPayloadConsumers {
     public static class DistributeBednets implements FormPayloadConsumer {
 
         @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload,
-                                          NavigateActivity navigateActivity) {
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload,
+                                                  NavigateActivity navigateActivity) {
 
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
 
@@ -25,7 +25,7 @@ public class BiokoFormPayloadConsumers {
             locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
 
 
-            return false;
+            return new ConsumerResults(false, null, null);
         }
 
         @Override
