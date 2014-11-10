@@ -24,7 +24,6 @@ public class BiokoFormPayloadConsumers {
 
             locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
 
-
             return new ConsumerResults(false, null, null);
         }
 
