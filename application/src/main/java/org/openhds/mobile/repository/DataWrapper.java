@@ -75,24 +75,30 @@ public class DataWrapper implements Parcelable {
         extId = parcel.readString();
         name = parcel.readString();
 
-        // Android recommends parceling Maps as Bundles
+        // INTEGER to STRING
         final List<Integer> stringIds = new ArrayList<Integer>();
         parcel.readList(stringIds, null);
 
+        final Bundle stringsPayloadBundle = parcel.readBundle();
+        stringsPayload = new HashMap<>();
+        for (Integer key : stringIds) {
+            stringsPayload.put(key, stringsPayloadBundle.getString(key.toString()));
+        }
+
+
+        // INTEGER to INTEGER
+        final List<Integer> moreStringIds = new ArrayList<Integer>();
+        parcel.readList(moreStringIds, null);
 
         final Bundle stringIdsPayloadBundle = parcel.readBundle();
         stringIdsPayload = new HashMap<>();
-        final Bundle stringsPayloadBundle = parcel.readBundle();
-        stringsPayload = new HashMap<>();
-
-        for (Integer key : stringIds) {
-            if(0 != stringIdsPayloadBundle.getInt(key.toString())){
-                stringIdsPayload.put(key, stringIdsPayloadBundle.getInt(key.toString()));
-            }
-            if(null != stringsPayloadBundle.getString(key.toString())){
-                stringsPayload.put(key, stringsPayloadBundle.getString(key.toString()));
-            }
+        for (Integer key : moreStringIds) {
+            stringIdsPayload.put(key, stringIdsPayloadBundle.getInt(key.toString()));
         }
+
+
+
+
     }
 
     // for Parcelable
@@ -108,21 +114,22 @@ public class DataWrapper implements Parcelable {
         parcel.writeString(extId);
         parcel.writeString(name);
 
-        // Android recommends parceling Maps as Bundles
+        // Pull apart the INTEGER to STRING payload and put into the parcel
         final List<Integer> stringIds = new ArrayList<Integer>(stringsPayload.keySet());
         parcel.writeList(stringIds);
-
         Bundle stringsPayloadBundle = new Bundle();
-        Bundle stringIdsPayloadBundle = new Bundle();
         for (Integer key : stringIds) {
-            if(null != stringIdsPayload.get(key)) {
-                stringsPayloadBundle.putInt(key.toString(), stringIdsPayload.get(key));
-            }
-            if(null != stringsPayload.get(key)){
-                stringsPayloadBundle.putString(key.toString(), stringsPayload.get(key));
-            }
+            stringsPayloadBundle.putString(key.toString(), stringsPayload.get(key));
         }
         parcel.writeBundle(stringsPayloadBundle);
+
+        // Pull apart the INTEGER to INTEGER payload and put into the parcel
+        final List<Integer> moreStringIds = new ArrayList<Integer>(stringIdsPayload.keySet());
+        parcel.writeList(moreStringIds);
+        Bundle stringIdsPayloadBundle = new Bundle();
+        for (Integer key : moreStringIds) {
+            stringIdsPayloadBundle.putInt(key.toString(), stringIdsPayload.get(key));
+        }
         parcel.writeBundle(stringIdsPayloadBundle);
     }
 
