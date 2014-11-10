@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="54" android:versionName="test-tag-2" package="org.openhds.mobile">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="101" android:versionName="big-test" package="org.openhds.mobile">
 
     <uses-sdk android:minSdkVersion="11"/>
 
