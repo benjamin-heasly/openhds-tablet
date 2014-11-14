@@ -12,21 +12,16 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.openhds.mobile.provider.FormsProviderAPI;
-import org.openhds.mobile.provider.InstanceProviderAPI;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.provider.FormsProviderAPI;
+import org.openhds.mobile.provider.InstanceProviderAPI;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
@@ -241,7 +236,8 @@ public class FormHelper {
         // find a form definition with the name of the current form behaviour
         final String[] columnNames = new String[] {
                 FormsProviderAPI.FormsColumns.JR_FORM_ID,
-                FormsProviderAPI.FormsColumns.FORM_FILE_PATH };
+                FormsProviderAPI.FormsColumns.FORM_FILE_PATH,
+                FormsProviderAPI.FormsColumns.JR_VERSION};
         Cursor cursor = contentResolver.query(
                 FormsProviderAPI.FormsColumns.CONTENT_URI, columnNames,
                 FormsProviderAPI.FormsColumns.JR_FORM_ID + " " + LIKE + " ?",
@@ -250,9 +246,11 @@ public class FormHelper {
         // read the path and type for the new form instance
         String jrFormId;
         String formFilePath;
+        String versionNumber;
         if (cursor.moveToFirst()) {
             jrFormId = cursor.getString(0);
             formFilePath = cursor.getString(1);
+            versionNumber = cursor.getString(2);
             cursor.close();
         } else {
             cursor.close();
@@ -309,7 +307,7 @@ public class FormHelper {
             xmlOutput.output(filledForm, fileOutputStream);
             fileOutputStream.close();
 
-            contentUri = shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId);
+            contentUri = shareOdkFormInstance(editableFormFile, editableFormFile.getName(), jrFormId, versionNumber);
 
             return true;
 
@@ -319,11 +317,12 @@ public class FormHelper {
     }
 
     // ODKCollectHelper
-    private Uri shareOdkFormInstance(File targetFile, String displayName, String formId) {
+    private Uri shareOdkFormInstance(File targetFile, String displayName, String formId, String versionNumber) {
         ContentValues values = new ContentValues();
         values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
         values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
         values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
+        values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, versionNumber);
         return contentResolver.insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
     }
 

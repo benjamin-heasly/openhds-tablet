@@ -2,23 +2,16 @@ package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Location;
-import org.openhds.mobile.model.Membership;
-import org.openhds.mobile.model.Relationship;
-import org.openhds.mobile.model.SocialGroup;
+import org.openhds.mobile.model.*;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
 import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
+import org.openhds.mobile.projectdata.FormAdapters.VisitFormAdapter;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.IndividualGateway;
-import org.openhds.mobile.repository.gateway.LocationGateway;
-import org.openhds.mobile.repository.gateway.MembershipGateway;
-import org.openhds.mobile.repository.gateway.RelationshipGateway;
-import org.openhds.mobile.repository.gateway.SocialGroupGateway;
+import org.openhds.mobile.repository.gateway.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,8 +62,8 @@ public class CensusFormPayloadConsumers {
     public static class EvaluateLocation implements FormPayloadConsumer {
 
         @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
-            return false;
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+            return new ConsumerResults(false, null, null);
         }
 
         @Override
@@ -119,6 +112,10 @@ public class CensusFormPayloadConsumers {
             Membership membership = new Membership(individual, socialGroup, relationshipType);
             membershipGateway.insertOrUpdate(contentResolver, membership);
 
+            ConsumerResults pregnantResults;
+            if(null !=  (pregnantResults = checkIfPregnant(formPayload))){
+                return pregnantResults;
+            }
             return new ConsumerResults(false, null, null);
         }
 
@@ -178,7 +175,11 @@ public class CensusFormPayloadConsumers {
             Relationship relationship = new Relationship(individual, individual, relationshipType, startDate);
             relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
-            return new ConsumerResults(true, null, null);
+            ConsumerResults pregnantResults;
+            if(null !=  (pregnantResults = checkIfPregnant(formPayload))){
+                return pregnantResults;
+            }
+            return new ConsumerResults(false, null, null);
         }
 
         @Override
@@ -204,6 +205,63 @@ public class CensusFormPayloadConsumers {
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
             // TODO Auto-generated method stub
+
+        }
+
+    }
+
+    private static ConsumerResults checkIfPregnant(Map<String,String> formPayload){
+
+        String pregnant = formPayload.get(ProjectFormFields.Individuals.IS_PREGNANT_FLAG);
+
+        if(null != pregnant && pregnant.equals("Yes")) {
+            Map<String, String> hints = new HashMap<>();
+            hints.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            return new ConsumerResults(false, ProjectActivityBuilder.CensusActivityModule.visitPregObFormBehaviour, hints);
+        }
+
+        return null;
+    }
+
+
+    // Used for Form Launch Sequences
+    public static class StartAVisitForPregnancyObservation implements FormPayloadConsumer {
+
+        @Override
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            Visit visit = VisitFormAdapter.fromForm(formPayload);
+
+            VisitGateway visitGateway = GatewayRegistry.getVisitGateway();
+            ContentResolver contentResolver = navigateActivity.getContentResolver();
+            visitGateway.insertOrUpdate(contentResolver, visit);
+
+            navigateActivity.startVisit(visit);
+
+            return new ConsumerResults(false, ProjectActivityBuilder.CensusActivityModule.PregObFormBehaviour, navigateActivity.getPreviousConsumerResults().getFollowUpFormHints());
+        }
+
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+            // TODO Auto-generated method stub
+
+        }
+    }
+
+    public static class PregnancyObservation implements FormPayloadConsumer {
+
+        @Override
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            // Since this is happening as part of a sequence it made sense to me to automatically close the
+            // visit after completion of the sequence.
+            navigateActivity.finishVisit();
+
+            return new ConsumerResults(false, null, null);
+        }
+
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
 
         }
 

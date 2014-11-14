@@ -81,6 +81,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private Visit currentVisit;
     private HashMap<MenuItem, String> menuItemTags;
     private String currentModuleName;
+    private ConsumerResults previousConsumerResults;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -425,11 +428,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         formHelper.setFormBehaviour(formBehaviour);
 
 
-        Map<String, String> formFieldData;
-        if(null == followUpFormHints){
-            formFieldData = new HashMap<String, String>();
-        } else {
-            formFieldData = followUpFormHints;
+        Map<String, String> formFieldData = new HashMap<String, String>();
+        if(null != followUpFormHints){
+            formFieldData.putAll(followUpFormHints);
         }
 
         formBehaviour.getFormPayloadBuilder().buildFormPayload(formFieldData, this);
@@ -548,12 +549,12 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                         FormPayloadConsumer consumer = formBehaviour.getFormPayloadConsumer();
                         if (null != consumer) {
 
-                            ConsumerResults consumerResults = consumer.consumeFormPayload(formHelper.getFormInstanceData(), this);
-                            if (consumerResults.needsPostfill()) {
+                            previousConsumerResults = consumer.consumeFormPayload(formHelper.getFormInstanceData(), this);
+                            if (previousConsumerResults.needsPostfill()) {
                                 formHelper.updateExistingFormInstance();
                             }
-                            if (null != consumerResults.getFollowUpFormBehaviour()){
-                                launchForm(consumerResults.getFollowUpFormBehaviour(), consumerResults.getFollowUpFormHints());
+                            if (null != previousConsumerResults.getFollowUpFormBehaviour()){
+                                launchForm(previousConsumerResults.getFollowUpFormBehaviour(), previousConsumerResults.getFollowUpFormHints());
                                 return;
                             }
                         }
@@ -610,6 +611,10 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
     public Visit getCurrentVisit() {
         return currentVisit;
+    }
+
+    public ConsumerResults getPreviousConsumerResults() {
+        return previousConsumerResults;
     }
 
     public void setCurrentVisit(Visit currentVisit) {

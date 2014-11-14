@@ -154,6 +154,9 @@ public class ProjectFormFields {
         public static final String HOUSEHOLD_EXTID = "householdExtId";
         public static final String MEMBER_STATUS = "individualMemberStatus";
 
+
+        public static final String IS_PREGNANT_FLAG = "individualIsPregnantFlag";
+
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
         static {

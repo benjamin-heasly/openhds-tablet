@@ -79,14 +79,14 @@ public class DataSelectionFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            DataWrapper qr = dataWrapperAdapter.getItem(position);
+            DataWrapper dataWrapper = dataWrapperAdapter.getItem(position);
 
             if (convertView == null) {
-                convertView = makeTextWithPayload(getActivity(), qr.getName(), qr.getExtId(), qr.getName(),
-                        null, null, dataSelectionDrawableId, qr.getStringsPayload(), qr.getStringIdsPayload(), true);
+                convertView = makeTextWithPayload(getActivity(), dataWrapper.getName(), dataWrapper.getExtId(), dataWrapper.getName(),
+                        null, null, dataSelectionDrawableId, dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), true);
             } else {
-                configureTextWithPayload(getActivity(), (RelativeLayout) convertView, qr.getName(), qr.getExtId(),
-                        qr.getStringsPayload(), qr.getStringIdsPayload(), true);
+                configureTextWithPayload(getActivity(), (RelativeLayout) convertView, dataWrapper.getName(), dataWrapper.getExtId(),
+                        dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), true);
             }
 
             return convertView;

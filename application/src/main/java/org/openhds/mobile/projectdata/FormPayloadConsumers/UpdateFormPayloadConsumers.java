@@ -41,8 +41,8 @@ public class UpdateFormPayloadConsumers {
     public static class EvaluateLocation implements FormPayloadConsumer {
 
         @Override
-        public boolean consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
-            return false;
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+            return new ConsumerResults(false, null, null);
         }
 
         @Override
