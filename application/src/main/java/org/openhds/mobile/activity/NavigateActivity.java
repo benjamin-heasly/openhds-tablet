@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import org.jdom2.JDOMException;
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.FormSelectionFragment;
@@ -34,12 +35,14 @@ import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static org.openhds.mobile.utilities.ConfigUtils.getAppVersionNumber;
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
@@ -449,7 +452,31 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private void launchCurrentFormInODK() {
         FormBehaviour formBehaviour = formHelper.getFormBehaviour();
         if (null != formBehaviour && null != formBehaviour.getFormName()) {
-            formHelper.newFormInstance();
+
+            FormInstance formInstance;
+            try {
+                formInstance = formHelper.newFormInstance();
+            } catch (Exception e) {
+                showShortToast(this, "Error creating Form instance: " + e.getMessage());
+                return;
+            }
+
+            if(null == formInstance){
+                showShortToast(this, "Warning: Could not find '"+formBehaviour.getFormName()+"' form.");
+                return;
+            }
+
+            if(null == formInstance.getFormVersion()){
+                showShortToast(this, "Warning: Form has no defined Version Number.");
+                return;
+            }
+
+            String appVersionNumber = Integer.toString(getAppVersionNumber(this));
+
+            if(!formInstance.getFormVersion().equals(appVersionNumber)){
+                showShortToast(this, "Warning: Version difference between OpenHDS ("+appVersionNumber+") and ODK ("+formInstance.getFormVersion()+").");
+            }
+
             Intent intent = formHelper.buildEditFormInstanceIntent();
             showShortToast(this, R.string.launching_odk_collect);
 
@@ -457,6 +484,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             currentResults = null;
 
             startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
+            return;
+
         }
     }
 
