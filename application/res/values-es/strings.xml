@@ -11,7 +11,7 @@
     <string name="databaseSync">Sincronizar con OpenHDS Base de Datos</string>
     <string name="default_interop_server_url">http://cims-bioko.org:8080/openhds</string>
     <string name="default_openhds_server_url">http://cims-bioko.org:8080/openhds</string>
-    <string name="delete_form_btn">Borrar Impreso</string>
+    <string name="delete_form_btn">Borrar Impreso(s)</string>
     <string name="download_form_button">Descargar Impresos</string>
     <string name="failure_reasons_txt">Mensajes de Falla:</string>
     <string name="fatherNotFound">Un padre no se pudo encontrar</string>
@@ -36,6 +36,7 @@
     <string name="sync_forms_successful">Impresos recopilado con éxito</string>
     <string name="sync_forms_failure">Recopilación de Impresos Falló</string>
     <string name="send_finalized_forms_description">Enviar Impresos Finalizados a ODKAggregate</string>
+    <string name="send_finalized_forms_label">Enviar Impresos</string>
     <string name="sync_entities_successful">La Recopilacion de Entidades de OpenHDS ha sido exitosa</string>
     <string name="sync_interrupted">La Recopilacion de Entidades de OpenHDS ha sido interrumpida</string>
     <string name="sync_restarting">Sincronización reiniciando</string>
@@ -210,6 +211,7 @@
     <string name="form_type_other">Otro</string>
     <string name="form_type_individual">Individuo</string>
     <string name="form_type_location">Ubicación</string>
+    <string name="form_type_location_evaluation">Locación Evaluación</string>
     <string name="form_type_visit">Visita</string>
     <string name="form_type_out_migration">Enmigración</string>
     <string name="form_type_in_migration">Inmigración</string>
@@ -228,14 +230,19 @@
     <string name="supervisor_approve_all">Aprobar Todo</string>
     <string name="supervisor_approve_selected">Aprobar Seleccionado</string>
     <string name="sub_district_label">SubDistrito</string>
-    <string name="census_activity_title">Census Activity</string>
-    <string name="bioko_activity_title">Bed Net Activity</string>
-    <string name="update_activity_title">Update Activity</string>
-    <string name="launching_odk_collect">Launching ODKCollect...</string>
-    <string name="location_has_recieved_bednets">Has Recieved Bed Nets</string>
-    <string name="delete_button_label">Delete</string>
+    <string name="census_activity_title">Actividad de Censo</string>
+    <string name="bioko_activity_title">Actividad de Telas</string>
+    <string name="update_activity_title">Actividad Actualización</string>
+    <string name="launching_odk_collect">Iniciando ODKCollect...</string>
+    <string name="location_has_recieved_bednets">Ha Recibido Telas Mosquiteras</string>
+    <string name="delete_button_label">Eliminar</string>
     <string name="delete_forms_dialog_warning">Eliminación de los impresos puede provocar un comportamiento inesperado. Estás seguro?</string>
-    <string name="delete_warning_dialog_cancel_label">Cancel</string>
+    <string name="delete_warning_dialog_cancel_label">Cancelar</string>
     <string name="delete_dialog_warning_title">¡Aviso!</string>
+
+    <string name="delete_recent_forms_label">Eliminar Impresos</string>
+    <string name="delete_recent_forms_description">Eliminar los impresos desde la última sincronización</string>
+    <string name="approve_recent_forms_label">Aprobar Impresos</string>
+    <string name="approve_recent_forms_description">Aprobar los impresos desde la última sincronización</string>
 
 </resources>

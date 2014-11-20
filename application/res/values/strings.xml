@@ -10,7 +10,7 @@
     <string name="changeUsername">Change Username</string>
     <string name="configuration">Configuration</string>
     <string name="configureDatabase">Configure Database</string>
-    <string name="delete_form_btn">Delete Form</string>
+    <string name="delete_form_btn">Delete Form(s)</string>
     <string name="download_form_button">Download Forms</string>
     <string name="failure_reasons_txt">Failure messages:</string>
     <string name="fatherNotFound">A father could not be found</string>
