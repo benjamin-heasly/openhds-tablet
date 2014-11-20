@@ -281,7 +281,7 @@ public class ProjectActivityBuilder {
 
             @Override
             public int getFormSelectionDrawableId() {
-                return R.drawable.census_form_selector;
+                return R.drawable.census_form_selector_orange;
             }
 
             @Override
@@ -295,7 +295,23 @@ public class ProjectActivityBuilder {
             }
         }
 
+        public static FormBehaviour visitPregObFormBehaviour;
+
+        public static FormBehaviour PregObFormBehaviour;
+
         static {
+
+            visitPregObFormBehaviour = new FormBehaviour("Visit",
+                    R.string.start_a_visit,
+                    new UpdateFormFilters.StartAVisit(),
+                    new UpdateFormPayloadBuilders.StartAVisit(),
+                    new CensusFormPayloadConsumers.StartAVisitForPregnancyObservation());
+
+            PregObFormBehaviour = new FormBehaviour("Pregnancy_observation",
+                    R.string.record_pregnancy_observation,
+                    new UpdateFormFilters.RecordPregnancyObservation(),
+                    new UpdateFormPayloadBuilders.RecordPregnancyObservation(),
+                    new CensusFormPayloadConsumers.PregnancyObservation());
 
             ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
@@ -439,6 +455,7 @@ public class ProjectActivityBuilder {
                 return R.drawable.update_middle_column_drawable;
             }
         }
+
 
         static {
 

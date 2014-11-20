@@ -15,6 +15,15 @@ public class FormInstance implements Serializable {
 	private String filePath;
     private String fileName;
 	private String uriString;
+    private String formVersion;
+
+    public String getFormVersion() {
+        return formVersion;
+    }
+
+    public void setFormVersion(String formVersion) {
+        this.formVersion = formVersion;
+    }
 
     public String getFileName() { return fileName; }
 
