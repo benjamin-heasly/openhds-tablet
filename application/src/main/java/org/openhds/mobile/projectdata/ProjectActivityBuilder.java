@@ -281,7 +281,7 @@ public class ProjectActivityBuilder {
 
             @Override
             public int getFormSelectionDrawableId() {
-                return R.drawable.census_form_selector;
+                return R.drawable.census_form_selector_orange;
             }
 
             @Override

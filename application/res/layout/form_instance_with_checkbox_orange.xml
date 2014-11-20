@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/form_instance_list_item_checkbox"
+                android:id="@+id/form_instance_list_item_checkbox_orange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:paddingBottom="5dp"
-                android:background="@drawable/form_list_drawable"
+                android:background="@drawable/form_list_drawable_orange"
                 android:paddingTop="5dp" >
 
     <TextView

@@ -36,7 +36,7 @@ public class FormInstanceAdapter extends ArrayAdapter {
         int formTypeLocalizedId= ProjectResources.FormType.getFormTypeStringId(formType);
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.form_instance_list_item, null);
+            convertView = inflater.inflate(R.layout.form_instance_list_item_orange, null);
         }
 
         TextView formTypeView = (TextView) convertView.findViewById(R.id.form_instance_list_type);

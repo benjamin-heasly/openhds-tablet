@@ -221,7 +221,8 @@
     <string name="field_worker_home_menu_text">Encuestador Inicio</string>
     <string name="logout_menu_text">Terminar Sesión</string>
     <string name="form_instance_list_header">Formularios Recientes</string>
-    <string name="supervisor_edit_form_list_header">Formularios Editados</string>
+    <string name="checklist_fragment_listview_header_delete">Eliminar Impresos Recientes</string>
+    <string name="checklist_fragment_listview_header_approve">Aprobar Impresos Recientes</string>
     <string name="form_instance_supervisor_approval">Aprobar</string>
     <string name="supervisor_checkbox_header">Aprobado</string>
     <string name="supervisor_approve_all">Aprobar Todo</string>
@@ -232,5 +233,9 @@
     <string name="update_activity_title">Update Activity</string>
     <string name="launching_odk_collect">Launching ODKCollect...</string>
     <string name="location_has_recieved_bednets">Has Recieved Bed Nets</string>
+    <string name="delete_button_label">Delete</string>
+    <string name="delete_forms_dialog_warning">Eliminación de los impresos puede provocar un comportamiento inesperado. Estás seguro?</string>
+    <string name="delete_warning_dialog_cancel_label">Cancel</string>
+    <string name="delete_dialog_warning_title">¡Aviso!</string>
 
 </resources>

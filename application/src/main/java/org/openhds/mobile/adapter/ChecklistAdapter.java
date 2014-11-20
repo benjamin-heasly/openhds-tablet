@@ -1,6 +1,5 @@
 package org.openhds.mobile.adapter;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,10 +7,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.TextView;
+import android.widget.*;
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectResources;
@@ -24,24 +20,28 @@ import java.util.List;
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 
-public class SupervisorFormInstanceAdapter extends ArrayAdapter {
+public class ChecklistAdapter extends ArrayAdapter {
 
-    private ArrayList<FormInstance> formInstanceList;
-    private ArrayList<Boolean> checkList;
-    private Context context;
+    private List<FormInstance> formInstanceList;
+    private List<Boolean> checkList;
     private LayoutInflater inflater;
 
-    public SupervisorFormInstanceAdapter(Context context, int resource, ArrayList<FormInstance> formInstances, ArrayList<Boolean> checkList) {
-        super(context, resource, formInstances);
-        this.context = context;
-        this.formInstanceList = formInstances;
-        if (null != checkList) {
-            this.checkList = checkList;
-        } else {
-            this.checkList = clearCheckListState();
-        }
+
+    public ChecklistAdapter(Context context, int checklistItemId, List<FormInstance> formInstances) {
+        super(context, checklistItemId, formInstances);
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.formInstanceList = formInstances;
+        this.checkList = initializeCheckBoxes();
+
+    }
+
+    private ArrayList<Boolean> initializeCheckBoxes() {
+        ArrayList<Boolean> newCheckList = new ArrayList<>();
+        for (int i = 0; i < formInstanceList.size(); i++) {
+            newCheckList.add(false);
+        }
+        return newCheckList;
     }
 
     private static class ViewHolder {
@@ -55,7 +55,7 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
 
         final ViewHolder holder;
 
-        convertView = inflater.inflate(R.layout.form_instance_with_checkbox, null);
+        convertView = inflater.inflate(R.layout.form_instance_with_checkbox_orange, null);
         holder = new ViewHolder();
         holder.formType = (TextView) convertView.findViewById(R.id.form_instance_list_type);
         holder.fileName = (TextView) convertView.findViewById(R.id.form_instance_list_filename);
@@ -63,10 +63,10 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
         holder.checkBox = (CheckBox) convertView.findViewById(R.id.form_instance_check_box);
         holder.checkBox.setChecked(checkList.get(position));
 
-        FormInstance instance = (FormInstance) formInstanceList.get(position);
+        FormInstance instance = formInstanceList.get(position);
         String formType = instance.getFormName();
         int resourceId = ProjectResources.FormType.getFormTypeStringId(formType);
-        holder.formType.setText(context.getResources().getString(resourceId));
+        holder.formType.setText(getContext().getResources().getString(resourceId));
 
         String verboseFileName= instance.getFileName();
         //trim the file extension
@@ -80,11 +80,11 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
                 Uri uri = Uri.parse(selected.getUriString());
 
                 File selectedFile = new File(selected.getFilePath());
-                EncryptionHelper.decryptFile(selectedFile, context);
+                EncryptionHelper.decryptFile(selectedFile, getContext());
 
                 Intent intent = new Intent(Intent.ACTION_EDIT, uri);
-                showShortToast(context, R.string.launching_odk_collect);
-                ((Activity) context).startActivityForResult(intent, 0);
+                showShortToast(getContext(), R.string.launching_odk_collect);
+                ((Activity) getContext()).startActivityForResult(intent, 0);
             }
         });
 
@@ -99,56 +99,37 @@ public class SupervisorFormInstanceAdapter extends ArrayAdapter {
 
         convertView.setTag(holder);
         return convertView;
-
     }
 
-    public List<FormInstance> registerApproveSelectedAction() {
-        ArrayList<FormInstance> toRemove = new ArrayList<>();
-        ArrayList<FormInstance> approvedFormInstanceList = new ArrayList<>();
+    public List<FormInstance> getCheckedForms() {
 
-        //collect list of instances that were checked for approval
+        List<FormInstance> checkedForms = new ArrayList<>();
+
         for (int i = 0; i < checkList.size(); i++) {
             if (checkList.get(i)) {
                 FormInstance formInstance = formInstanceList.get(i);
-                approvedFormInstanceList.add(formInstance);
-                toRemove.add(formInstance);
+                checkedForms.add(formInstance);
             }
         }
-        formInstanceList.removeAll(toRemove);
 
-        //reset all checkboxes to unchecked
-        checkList = clearCheckListState();
-
-        notifyDataSetChanged();
-        return approvedFormInstanceList;
+        return checkedForms;
     }
 
-    private ArrayList<Boolean> clearCheckListState() {
-        ArrayList<Boolean> newCheckList = new ArrayList<>();
-        for (int i = 0; i < formInstanceList.size(); i++) {
-            newCheckList.add(false);
-        }
-        return newCheckList;
-    }
-
-    public List<FormInstance> registerApproveAllAction() {
-        ArrayList<FormInstance> allInstances = new ArrayList<>(formInstanceList);
-        clearInstanceList();
-        return allInstances;
-    }
-
-    public void clearInstanceList() {
-        formInstanceList.clear();
-        checkList.clear();
-        this.clear();
-        notifyDataSetChanged();
-    }
-
-    public ArrayList<FormInstance> getListOfEditedForms() {
+    public List<FormInstance> getFormInstanceList() {
         return formInstanceList;
     }
 
-    public ArrayList<Boolean> getCheckList() {
+    public void resetFormInstanceList(List<FormInstance> formInstanceList) {
+        this.formInstanceList = formInstanceList;
+        checkList = initializeCheckBoxes();
+        notifyDataSetChanged();
+    }
+
+    public List<Boolean> getCheckList() {
         return checkList;
+    }
+
+    public void setCheckList(List<Boolean> checkList) {
+        this.checkList = checkList;
     }
 }

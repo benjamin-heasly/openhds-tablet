@@ -166,7 +166,6 @@ public class FormHelper {
             return null;
         }
 
-        formFields = formFields;
         return formFields;
     }
 

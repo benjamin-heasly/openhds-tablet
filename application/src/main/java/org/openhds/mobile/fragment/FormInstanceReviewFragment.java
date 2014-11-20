@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.openhds.mobile.R;
-import org.openhds.mobile.adapter.SupervisorFormInstanceAdapter;
+import org.openhds.mobile.adapter.ChecklistFormInstanceAdapter;
 import org.openhds.mobile.model.FormHelper;
 import org.openhds.mobile.model.FormInstance;
 import org.openhds.mobile.projectdata.ProjectFormFields;
@@ -34,7 +34,7 @@ public class FormInstanceReviewFragment extends Fragment {
     private TextView approveAllButton;
     private TextView approveSelectedButton;
 
-    private SupervisorFormInstanceAdapter adapter;
+    private ChecklistFormInstanceAdapter adapter;
     private ArrayList<Boolean> approveCheckList;
     private ArrayList<FormInstance> editedForms;
 
@@ -42,11 +42,11 @@ public class FormInstanceReviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         editedForms = new ArrayList<FormInstance>();
         fragmentLayout = (RelativeLayout) inflater.inflate(R.layout.supervisor_edit_form_fragment_layout, container, false);
-        editFormListView = (ListView) fragmentLayout.findViewById(R.id.supervisor_edit_form_list);
+        editFormListView = (ListView) fragmentLayout.findViewById(R.id.checklist_fragment_listview);
 
-        headerView = (TextView) fragmentLayout.findViewById(R.id.supervisor_edit_form_list_header);
-        approveAllButton = (TextView) fragmentLayout.findViewById(R.id.supervisor_approve_all_button);
-        approveSelectedButton = (TextView) fragmentLayout.findViewById(R.id.supervisor_approve_selected_button);
+        headerView = (TextView) fragmentLayout.findViewById(R.id.checklist_fragment_listview_header);
+        approveAllButton = (TextView) fragmentLayout.findViewById(R.id.checklist_fragment_secondary_button);
+        approveSelectedButton = (TextView) fragmentLayout.findViewById(R.id.checklist_fragment_primary_button);
         approveAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,7 +77,7 @@ public class FormInstanceReviewFragment extends Fragment {
         }
 
         if (null != editedForms && !editedForms.isEmpty()) {
-            adapter = new SupervisorFormInstanceAdapter(getActivity(), R.id.form_instance_list_item_checkbox,
+            adapter = new ChecklistFormInstanceAdapter(getActivity(), R.id.form_instance_list_item_checkbox_orange,
                     editedForms, approveCheckList);
             editFormListView.setAdapter(adapter);
         }
@@ -108,8 +108,6 @@ public class FormInstanceReviewFragment extends Fragment {
             outState.putSerializable("editedForms", adapter.getListOfEditedForms());
         }
     }
-
-
 
     private void approveSelected() {
         if (null != adapter) {
