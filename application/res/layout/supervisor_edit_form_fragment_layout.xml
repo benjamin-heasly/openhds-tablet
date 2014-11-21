@@ -5,16 +5,14 @@
 
     <Button
             android:layout_marginBottom="20dp"
-            android:id="@+id/supervisor_approve_all_button"
+            android:id="@+id/checklist_fragment_secondary_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_alignTop="@+id/supervisor_approve_selected_button"
+            android:layout_alignTop="@+id/checklist_fragment_primary_button"
             android:layout_toRightOf="@+id/view"
-            android:text="@string/supervisor_approve_all"
-            android:tag="@string/supervisor_approve_all"
-            android:background="@drawable/census_form_selector"
+            android:background="@drawable/census_form_selector_orange"
             android:textAppearance="@android:style/TextAppearance.Large.Inverse"/>
 
     <View
@@ -28,36 +26,35 @@
     <Button
             android:layout_marginBottom="20dp"
             android:layout_alignParentBottom="true"
-            android:id="@+id/supervisor_approve_selected_button"
+            android:id="@+id/checklist_fragment_primary_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/view"
-            android:text="@string/supervisor_approve_selected"
-            android:tag="@string/supervisor_approve_selected"
-            android:background="@drawable/census_form_selector"
+            android:background="@drawable/census_form_selector_orange"
             android:textAppearance="@android:style/TextAppearance.Large.Inverse"/>
 
     <TextView
-            android:id="@+id/supervisor_edit_form_list_header"
+            android:id="@+id/checklist_fragment_listview_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/supervisor_edit_form_list_header"
             android:gravity="center"
             android:textAppearance="@android:style/TextAppearance.Large.Inverse"
-            android:background="@drawable/form_list_header_drawable"/>
+            android:background="@drawable/form_list_header_drawable_orange"/>
 
     <ListView
-            android:id="@+id/supervisor_edit_form_list"
+            android:id="@+id/checklist_fragment_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/supervisor_edit_form_list_header"
+            android:layout_below="@id/checklist_fragment_listview_header"
             android:dividerHeight="15dp"
             android:divider="@android:color/transparent"
             android:listSelector="@android:color/transparent"
-            android:paddingTop="20dp"/>
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:layout_above="@+id/checklist_fragment_primary_button"/>
 
 
 </RelativeLayout>

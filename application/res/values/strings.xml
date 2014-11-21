@@ -10,7 +10,7 @@
     <string name="changeUsername">Change Username</string>
     <string name="configuration">Configuration</string>
     <string name="configureDatabase">Configure Database</string>
-    <string name="delete_form_btn">Delete Form</string>
+    <string name="delete_form_btn">Delete Form(s)</string>
     <string name="download_form_button">Download Forms</string>
     <string name="failure_reasons_txt">Failure messages:</string>
     <string name="fatherNotFound">A father could not be found</string>
@@ -80,6 +80,10 @@
     <string name="preference_invalid_warning">Invalid preference value</string>
     <string name="send_finalized_forms_label">Send Forms</string>
     <string name="send_finalized_forms_description">Send Finished Forms to ODKAggregate</string>
+    <string name="delete_recent_forms_label">Delete Forms</string>
+    <string name="delete_recent_forms_description">Delete Forms Created Since Last Sync</string>
+    <string name="approve_recent_forms_label">Approve Forms</string>
+    <string name="approve_recent_forms_description">Approve Forms Created Since Last Sync</string>
     <string name="field_worker_bad_credentials">Invalid field worker credentials</string>
     <string name="region_label">Region</string>
     <string name="province_label">Province</string>
@@ -256,7 +260,9 @@
     <string name="form_instance_list_header">Recent Forms</string>
     <string name="field_worker_home_menu_text">Field Worker Home</string>
     <string name="logout_menu_text">Logout</string>
-    <string name="supervisor_edit_form_list_header">Edited Forms</string>
+    <string name="checklist_fragment_listview_header_delete">Delete Recent Forms</string>
+    <string name="checklist_fragment_listview_header_approve">Approve Recent Forms</string>
+
     <string name="supervisor_approve_all"> Approve All </string>
     <string name="supervisor_approve_selected"> Approve Selected </string>
     <string name="sub_district_label">SubDistrict</string>
@@ -267,5 +273,9 @@
     <string name="update_activity_title">Update Activity</string>
     <string name="launching_odk_collect">Launching ODKCollect...</string>
     <string name="location_has_recieved_bednets">Has Recieved Bed Nets</string>
+    <string name="delete_button_label">Delete Selected</string>
+    <string name="delete_forms_dialog_warning">Deleting forms may cause unexpected behavior. Are you sure?</string>
+    <string name="delete_warning_dialog_cancel_label">Cancel</string>
+    <string name="delete_dialog_warning_title">Warning</string>
 
 </resources>

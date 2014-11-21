@@ -121,6 +121,19 @@ public class OdkCollectHelper {
 		return formInstances;
 	}
 
+    public static void deleteInstance(ContentResolver resolver, Uri uri, String filePath) {
+        int result = resolver.delete(uri, InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH+"=?", new String[]{filePath});
+        result = result;
+    }
+
+    public static void setStatusSubmitted(ContentResolver resolver, Uri uri) {
+
+        ContentValues cv = new ContentValues();
+        cv.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_SUBMITTED);
+        resolver.update(uri, cv, null, null);
+
+    }
+
     public static void setStatusIncomplete(ContentResolver resolver, Uri uri) {
 
         ContentValues cv = new ContentValues();
