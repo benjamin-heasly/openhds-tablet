@@ -147,6 +147,7 @@
                     <resourceDirectory>${project.basedir}/res</resourceDirectory>
                     <sdk>
                         <platform>19</platform>
+			<path>/home/motech-admin/android-sdks/</path>
                     </sdk>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
