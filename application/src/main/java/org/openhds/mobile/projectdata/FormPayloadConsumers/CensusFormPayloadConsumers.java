@@ -63,6 +63,16 @@ public class CensusFormPayloadConsumers {
 
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+
+            Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
+                    locationGateway.findById(formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID)));
+
+            location.setStatus(formPayload.get(ProjectFormFields.Locations.EVALUATION));
+
+            locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
+
             return new ConsumerResults(false, null, null);
         }
 

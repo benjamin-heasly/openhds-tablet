@@ -4,7 +4,9 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.R;
 import org.openhds.mobile.model.Location;
+import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
@@ -51,6 +53,7 @@ public class LocationGateway extends Gateway<Location> {
             location.setFloorNumber(extractInt(cursor, COLUMN_LOCATION_FLOOR_NUMBER));
             location.setHasRecievedBedNets(extractString(cursor, COLUMN_LOCATION_HAS_RECIEVED_BEDNETS));
             location.setDescription(extractString(cursor, COLUMN_LOCATION_DESCRIPTION));
+            location.setStatus(extractString(cursor, COLUMN_LOCATION_STATUS));
             location.setLongitude(extractString(cursor, COLUMN_LOCATION_LONGITUDE));
             location.setLatitude(extractString(cursor, COLUMN_LOCATION_LATITUDE));
 
@@ -76,9 +79,9 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_FLOOR_NUMBER, location.getFloorNumber());
             contentValues.put(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS, location.getHasRecievedBedNets());
             contentValues.put(COLUMN_LOCATION_DESCRIPTION, location.getDescription());
+            contentValues.put(COLUMN_LOCATION_STATUS, location.getStatus());
             contentValues.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
             contentValues.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
-
 
             return contentValues;
         }
@@ -93,6 +96,19 @@ public class LocationGateway extends Gateway<Location> {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(location.getExtId());
             dataWrapper.setName(location.getName());
+            dataWrapper.getStringsPayload().put(R.string.location_description_label, location.getDescription());
+
+            if(null != location.getHasRecievedBedNets()) {
+                dataWrapper.getStringIdsPayload().put(R.string.location_has_recieved_bednets_label, ProjectResources.General.getGeneralStringId(location.getHasRecievedBedNets()));
+            }
+
+            if(null != location.getStatus()) {
+                String[] statusValues = location.getStatus().split(" ");
+                for (String value : statusValues) {
+                    dataWrapper.getStringIdsPayload().put(ProjectResources.Location.getLocationStringId(value), R.string.db_val_true);
+                }
+            }
+
             dataWrapper.setCategory(state);
             return dataWrapper;
         }

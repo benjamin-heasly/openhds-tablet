@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/secondary_text"
         android:orientation="vertical"
+        android:padding="10dp"
         >
     </LinearLayout>
 

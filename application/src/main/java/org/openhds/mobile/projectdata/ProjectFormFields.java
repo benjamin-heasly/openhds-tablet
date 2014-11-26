@@ -89,9 +89,12 @@ public class ProjectFormFields {
         public static final String SUB_DISTRICT_NAME = "subDistrictName";
         public static final String DISTRICT_NAME = "districtName";
 
+        public static final String STATUS = "status";
         public static final String DESCRIPTION = "description";
         public static final String LONGITUDE = "longitude";
         public static final String LATITUDE = "latitude";
+
+        public static final String EVALUATION = "evaluation";
 
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
@@ -111,6 +114,7 @@ public class ProjectFormFields {
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME, SUB_DISTRICT_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME, DISTRICT_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION, DESCRIPTION);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_STATUS, STATUS);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE, LONGITUDE);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE, LATITUDE);
 

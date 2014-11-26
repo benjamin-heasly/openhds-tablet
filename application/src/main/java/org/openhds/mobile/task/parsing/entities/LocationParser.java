@@ -29,6 +29,7 @@ public class LocationParser extends EntityParser<Location> {
         location.setBuildingNumber(dataPage.getFirstInt(asList(pageName, "buildingNumber")));
         location.setFloorNumber(dataPage.getFirstInt(asList(pageName, "floorNumber")));
         location.setDescription(dataPage.getFirstString(asList(pageName, "description")));
+        location.setStatus(dataPage.getFirstString(asList(pageName, "status")));
         location.setLongitude(dataPage.getFirstString(asList(pageName, "longitude")));
         location.setLatitude(dataPage.getFirstString(asList(pageName, "latitude")));
 
