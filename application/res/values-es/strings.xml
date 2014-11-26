@@ -152,9 +152,9 @@
 
 
     <!--Location DB val -->
-    <string name="db_val_location_status_never_available">Never Available</string>
-    <string name="db_val_location_status_rejected_intervention">Rejected Intervention</string>
-    <string name="db_val_location_status_uninhabited">Uninhabited</string>
+    <string name="db_val_location_status_never_available">No Están Disponibles</string>
+    <string name="db_val_location_status_rejected_intervention">Rechazó la Intervención</string>
+    <string name="db_val_location_status_uninhabited">Está Deshabitada</string>
 
 
     <!-- Individual Labels -->
