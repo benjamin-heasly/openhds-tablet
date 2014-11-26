@@ -9,8 +9,26 @@ public class ProjectResources {
 
     public static class General {
 
+        public static final Map<String, Integer> General = new HashMap<>();
+
         public static final String FORM_NEEDS_REVIEW = "0";
         public static final String FORM_NO_REVIEW_NEEDED = "1";
+
+        public static final String TRUE = "true";
+        public static final String FALSE = "false";
+
+        static{
+            General.put(TRUE, R.string.db_val_true);
+            General.put(FALSE, R.string.db_val_false);
+        }
+
+        public static int getGeneralStringId(String key) {
+            if (General.containsKey(key)) {
+                return General.get(key);
+            } else {
+                return 0;
+            }
+        }
 
     }
 
@@ -72,6 +90,36 @@ public class ProjectResources {
         public static int getIndividualStringId(String key) {
             if (Individual.containsKey(key)) {
                 return Individual.get(key);
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public static final class Location {
+
+		/*
+		 * LOCATION mapping of Database/Form VALUES to String resources IDs
+		 */
+
+        public static final Map<String, Integer> Location = new HashMap<>();
+
+
+        private static final String STATUS_NEVER_AVAILABLE = "neverAvailable";
+        private static final String STATUS_REJECTED_INTERVENTION = "rejectedIntervention";
+        private static final String STATUS_UNINHABITED = "uninhabited";
+
+        static {
+            Location.put(STATUS_NEVER_AVAILABLE, R.string.db_val_location_status_never_available);
+            Location.put(STATUS_REJECTED_INTERVENTION, R.string.db_val_location_status_rejected_intervention);
+            Location.put(STATUS_UNINHABITED, R.string.db_val_location_status_uninhabited);
+
+
+        }
+
+        public static int getLocationStringId(String key) {
+            if (Location.containsKey(key)) {
+                return Location.get(key);
             } else {
                 return 0;
             }

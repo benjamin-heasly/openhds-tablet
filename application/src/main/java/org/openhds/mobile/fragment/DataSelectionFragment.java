@@ -83,10 +83,10 @@ public class DataSelectionFragment extends Fragment {
 
             if (convertView == null) {
                 convertView = makeTextWithPayload(getActivity(), dataWrapper.getName(), dataWrapper.getExtId(), dataWrapper.getName(),
-                        null, null, dataSelectionDrawableId, dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), true);
+                        null, null, dataSelectionDrawableId, dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), false);
             } else {
                 configureTextWithPayload(getActivity(), (RelativeLayout) convertView, dataWrapper.getName(), dataWrapper.getExtId(),
-                        dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), true);
+                        dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), false);
             }
 
             return convertView;

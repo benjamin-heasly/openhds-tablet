@@ -1,9 +1,11 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.model.Location;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 import java.util.Map;
@@ -40,7 +42,15 @@ public class CensusFormFilters {
         @Override
         public boolean amIValid(NavigateActivity navigateActivity) {
 
-            return true;
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+
+            Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
+                    locationGateway.findById(navigateActivity.getCurrentSelection().getExtId()));
+
+            if( null == location.getStatus()){
+                return true;
+            }
+            return false;
         }
     }
 

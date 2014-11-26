@@ -99,12 +99,9 @@ public class LayoutUtils {
                     continue;
                 }
 
-                TextView textView = new TextView(activity);
-                textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextAppearance(activity, android.R.style.TextAppearance_Medium);
-                textView.setText(activity.getResources().getString(key) + ": " + value);
-
-                payLoadContainer.addView(textView);
+                RelativeLayout relativeLayout = makeSmallTextWithValueAndLabel(activity, key, value, R.color.Black, R.color.AcidGray, R.color.AliceBlue);
+                relativeLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                payLoadContainer.addView(relativeLayout);
             }
         }
 
@@ -116,12 +113,9 @@ public class LayoutUtils {
                     continue;
                 }
 
-                TextView textView = new TextView(activity);
-                textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setTextAppearance(activity, android.R.style.TextAppearance_Medium);
-                textView.setText(activity.getResources().getString(key) + ": " + value);
-
-                payLoadContainer.addView(textView);
+                RelativeLayout relativeLayout = makeSmallTextWithValueAndLabel(activity, key, value, R.color.Black, R.color.AcidGray, R.color.AliceBlue);
+                relativeLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                payLoadContainer.addView(relativeLayout);
             }
         }
 
@@ -140,27 +134,37 @@ public class LayoutUtils {
             payLoadContainer.setPadding(0,0,0,0);
 
         } else {
-            primary.setGravity(Gravity.NO_GRAVITY);
-            secondary.setGravity(Gravity.NO_GRAVITY);
+            primary.setGravity(Gravity.CENTER);
+            secondary.setGravity(Gravity.CENTER);
             payLoadContainer.setGravity(Gravity.NO_GRAVITY);
-            primary.setPadding(15,0,0,0);
-            secondary.setPadding(15,0,0,0);
+            primary.setPadding(0,0,0,0);
+            secondary.setPadding(0,0,0,0);
             payLoadContainer.setPadding(15,0,0,0);
 
         }
     }
 
     // Create a pair of text views to represent some value plus its label, with given colors.
-    public static RelativeLayout makeTextWithValueAndLabel(Activity activity, int labelId, String valueText,
-                                                           int labelColorId, int valueColorId, int missingColorId) {
+    public static RelativeLayout makeLargeTextWithValueAndLabel(Activity activity, int labelId, String valueText,
+                                                                int labelColorId, int valueColorId, int missingColorId) {
 
-        RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.value_with_label, null);
+        RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.value_with_label_large, null);
         configureTextWithValueAndLabel(layout, labelId, valueText, labelColorId, valueColorId, missingColorId);
 
         return layout;
     }
 
-    // Pass new data to text views created with makeTextWithValueAndLabel().
+    // Create a pair of text views to represent some value plus its label, with given colors.
+    public static RelativeLayout makeSmallTextWithValueAndLabel(Activity activity, int labelId, String valueText,
+                                                                int labelColorId, int valueColorId, int missingColorId) {
+
+        RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.value_with_label_small, null);
+        configureTextWithValueAndLabel(layout, labelId, valueText, labelColorId, valueColorId, missingColorId);
+
+        return layout;
+    }
+
+    // Pass new data to text views created with makeLargeTextWithValueAndLabel().
     public static void configureTextWithValueAndLabel(RelativeLayout layout, int labelId, String valueText,
                                                       int labelColorId, int valueColorId, int missingColorId) {
 

@@ -38,19 +38,6 @@ public class UpdateFormPayloadConsumers {
         }
     }
 
-    public static class EvaluateLocation implements FormPayloadConsumer {
-
-        @Override
-        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
-            return new ConsumerResults(false, null, null);
-        }
-
-        @Override
-        public void postFillFormPayload(Map<String, String> formPayload) {
-
-        }
-    }
-
     public static class RegisterDeath implements FormPayloadConsumer {
 
         @Override

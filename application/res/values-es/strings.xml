@@ -119,6 +119,8 @@
     <string name="details_not_available">Detalles no Disponsibles</string>
 
     <!-- Database/Form Values -->
+    <string name="db_val_true">True</string>
+    <string name="db_val_false">False</string>
     <string name="db_val_age_units_years">Años</string>
     <string name="db_val_age_units_months">Meses</string>
     <string name="db_val_gender_male">Masculino</string>
@@ -147,8 +149,15 @@
     <string name="db_val_nationality_asian">Asiatico</string>
     <string name="db_val_nationality_other_non_african_country">Otro pais No-Africano</string>
     <string name="db_val_nationality_other">Otro</string>
-        
-        <!-- Individual Labels -->
+
+
+    <!--Location DB val -->
+    <string name="db_val_location_status_never_available">Never Available</string>
+    <string name="db_val_location_status_rejected_intervention">Rejected Intervention</string>
+    <string name="db_val_location_status_uninhabited">Uninhabited</string>
+
+
+    <!-- Individual Labels -->
     <string name="individual_full_name_label">Nombre </string>
  	<string name="individual_other_names_label">Nombre de casa (sobrenombre)</string>
     <string name="individual_age_label">Edad</string>
@@ -180,6 +189,9 @@
     <string name="location_building_number_label">Numero del Edificio</string>
     <string name="location_floor_number_label">Numero del Piso</string>
     <string name="location_description_label">Descripción</string>
+    <string name="location_status_label">Status</string>
+    <string name="location_coordinates_label">Latitude/Longitude</string>
+    <string name="location_has_recieved_bednets_label">Ha Recibido Telas Mosquiteras</string>
 
     <!-- Social Group Labels -->
     <string name="social_group_name">Nombre del Hogar</string>
@@ -234,7 +246,6 @@
     <string name="bioko_activity_title">Actividad de Telas</string>
     <string name="update_activity_title">Actividad Actualización</string>
     <string name="launching_odk_collect">Iniciando ODKCollect...</string>
-    <string name="location_has_recieved_bednets">Ha Recibido Telas Mosquiteras</string>
     <string name="delete_button_label">Eliminar</string>
     <string name="delete_forms_dialog_warning">Eliminación de los impresos puede provocar un comportamiento inesperado. Estás seguro?</string>
     <string name="delete_warning_dialog_cancel_label">Cancelar</string>

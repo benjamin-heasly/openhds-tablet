@@ -180,12 +180,6 @@ public class ProjectActivityBuilder {
             ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
-            individualFormList.add(new FormBehaviour("Location_evaluation",
-                    R.string.evaluate_location_label,
-                    new BiokoFormFilters.EvaluateLocation(),
-                    new BiokoFormPayloadBuilders.EvaluateLocation(),
-                    new BiokoFormPayloadConsumers.EvaluateLocation()));
-
             individualFormList.add(new FormBehaviour("Bed_net",
                     R.string.distribute_bednets,
                     new BiokoFormFilters.DistributeBednets(),
@@ -475,12 +469,6 @@ public class ProjectActivityBuilder {
                     new UpdateFormFilters.StartAVisit(),
                     new UpdateFormPayloadBuilders.StartAVisit(),
                     new UpdateFormPayloadConsumers.StartAVisit()));
-
-            individualFormList.add(new FormBehaviour("Location_evaluation",
-                    R.string.evaluate_location_label,
-                    new UpdateFormFilters.EvaluateLocation(),
-                    new UpdateFormPayloadBuilders.EvaluateLocation(),
-                    new UpdateFormPayloadConsumers.EvaluateLocation()));
 
             ArrayList<FormSearchPluginModule> searches = new ArrayList<>();
             searches.add(SearchUtils.getIndividualPlugin(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
