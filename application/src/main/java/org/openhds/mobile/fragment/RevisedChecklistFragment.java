@@ -29,6 +29,8 @@ public class RevisedChecklistFragment extends Fragment {
     public static String DELETE_MODE = "delete";
     public static String APPROVE_MODE = "approve";
 
+    private String currentMode;
+
     private ListView listView;
     private ChecklistAdapter adapter;
     private TextView headerView;
@@ -49,6 +51,10 @@ public class RevisedChecklistFragment extends Fragment {
 
     }
 
+    public void resetCurrentMode() {
+        setMode(currentMode);
+    }
+
     public void setMode(String mode) {
         if (mode.equalsIgnoreCase(RevisedChecklistFragment.DELETE_MODE)) {
             setupDeleteMode();
@@ -59,6 +65,7 @@ public class RevisedChecklistFragment extends Fragment {
 
     private void setupDeleteMode() {
 
+        currentMode = RevisedChecklistFragment.DELETE_MODE;
         adapter = setupDeleteAdapter();
         listView.setAdapter(adapter);
 
@@ -96,6 +103,7 @@ public class RevisedChecklistFragment extends Fragment {
 
     private void setupApproveMode() {
 
+        currentMode = RevisedChecklistFragment.APPROVE_MODE;
         adapter = setupApproveAdapter();
         listView.setAdapter(adapter);
 

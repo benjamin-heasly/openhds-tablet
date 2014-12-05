@@ -94,6 +94,7 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
     protected void onResume() {
         super.onResume();
         encryptAllForms();
+        revisedChecklistFragment.resetCurrentMode();
     }
 
     private void encryptAllForms() {
