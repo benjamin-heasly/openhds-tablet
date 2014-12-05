@@ -28,11 +28,11 @@ import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class SupervisorMainActivity extends Activity implements DeleteWarningDialogListener {
 
-    private static final String CHECKLIST_FRAGMENT_TAG = "revisedChecklistFragment";
+    private static final String CHECKLIST_FRAGMENT_TAG = "checklistFragment";
     private static final String SYNC_FRAGMENT_TAG = "syncDatabaseFragment";
     private static final String PREFERENCE_FRAGMENT_TAG = "preferenceFragment";
 
-    private RevisedChecklistFragment revisedChecklistFragment;
+    private ChecklistFragment checklistFragment;
     private SyncDatabaseFragment syncDatabaseFragment;
     private PreferenceFragment preferenceFragment;
 
@@ -72,19 +72,19 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
                 supervisorButtonLayout);
 
         if (null == savedInstanceState)  {
-            revisedChecklistFragment = new RevisedChecklistFragment();
+            checklistFragment = new ChecklistFragment();
             syncDatabaseFragment = new SyncDatabaseFragment();
             syncDatabaseFragment.setRetainInstance(true);
             preferenceFragment = new LoginPreferenceFragment();
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.supervisor_edit_form_container, revisedChecklistFragment, CHECKLIST_FRAGMENT_TAG)
+                    .add(R.id.supervisor_edit_form_container, checklistFragment, CHECKLIST_FRAGMENT_TAG)
                     .add(R.id.supervisor_auxiliary_container, syncDatabaseFragment, SYNC_FRAGMENT_TAG)
                     .add(R.id.supervisor_activity_options, preferenceFragment, PREFERENCE_FRAGMENT_TAG)
                     .commit();
 
         } else {
-            revisedChecklistFragment = (RevisedChecklistFragment) getFragmentManager().findFragmentByTag(CHECKLIST_FRAGMENT_TAG);
+            checklistFragment = (ChecklistFragment) getFragmentManager().findFragmentByTag(CHECKLIST_FRAGMENT_TAG);
             syncDatabaseFragment = (SyncDatabaseFragment) getFragmentManager().findFragmentByTag(SYNC_FRAGMENT_TAG);
             preferenceFragment = (LoginPreferenceFragment) getFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
         }
@@ -94,7 +94,7 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
     protected void onResume() {
         super.onResume();
         encryptAllForms();
-        revisedChecklistFragment.resetCurrentMode();
+        checklistFragment.resetCurrentMode();
     }
 
     private void encryptAllForms() {
@@ -138,7 +138,7 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
 
     public void onDialogPositiveClick(DialogFragment dialogFragment) {
 
-        revisedChecklistFragment.processDeleteRequest(false);
+        checklistFragment.processDeleteRequest(false);
 
     }
 
@@ -157,9 +157,9 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
             } else if (tag.equals(R.string.send_finalized_forms_label)) {
                 sendApprovedForms();
             } else if (tag.equals(R.string.delete_recent_forms_label)) {
-                revisedChecklistFragment.setMode(RevisedChecklistFragment.DELETE_MODE);
+                checklistFragment.setMode(ChecklistFragment.DELETE_MODE);
             } else if (tag.equals(R.string.approve_recent_forms_label)) {
-                revisedChecklistFragment.setMode(RevisedChecklistFragment.APPROVE_MODE);
+                checklistFragment.setMode(ChecklistFragment.APPROVE_MODE);
             }
         }
     }

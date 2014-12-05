@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RevisedChecklistFragment extends Fragment {
+public class ChecklistFragment extends Fragment {
 
     public static String DELETE_MODE = "delete";
     public static String APPROVE_MODE = "approve";
@@ -56,16 +56,16 @@ public class RevisedChecklistFragment extends Fragment {
     }
 
     public void setMode(String mode) {
-        if (mode.equalsIgnoreCase(RevisedChecklistFragment.DELETE_MODE)) {
+        if (mode.equalsIgnoreCase(ChecklistFragment.DELETE_MODE)) {
             setupDeleteMode();
-        } else if (mode.equalsIgnoreCase(RevisedChecklistFragment.APPROVE_MODE)) {
+        } else if (mode.equalsIgnoreCase(ChecklistFragment.APPROVE_MODE)) {
             setupApproveMode();
         }
     }
 
     private void setupDeleteMode() {
 
-        currentMode = RevisedChecklistFragment.DELETE_MODE;
+        currentMode = ChecklistFragment.DELETE_MODE;
         adapter = setupDeleteAdapter();
         listView.setAdapter(adapter);
 
@@ -103,7 +103,7 @@ public class RevisedChecklistFragment extends Fragment {
 
     private void setupApproveMode() {
 
-        currentMode = RevisedChecklistFragment.APPROVE_MODE;
+        currentMode = ChecklistFragment.APPROVE_MODE;
         adapter = setupApproveAdapter();
         listView.setAdapter(adapter);
 
