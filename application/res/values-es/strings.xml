@@ -255,5 +255,6 @@
     <string name="delete_recent_forms_description">Eliminar los impresos desde la última sincronización</string>
     <string name="approve_recent_forms_label">Aprobar Impresos</string>
     <string name="approve_recent_forms_description">Aprobar los impresos desde la última sincronización</string>
+    <string name="uuid">UUID</string>
 
 </resources>

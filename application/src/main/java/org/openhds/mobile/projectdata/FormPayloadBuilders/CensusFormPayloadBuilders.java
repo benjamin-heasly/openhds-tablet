@@ -14,6 +14,8 @@ import org.openhds.mobile.utilities.LuhnValidator;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
+
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 
 
@@ -116,7 +118,15 @@ public class CensusFormPayloadBuilders {
 
         formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
                 individualExtId);
+
+        //this is a hack to make the ODK form birthday constraints work - might not be necessary anymore.
         formPayload.put(ProjectFormFields.Individuals.AGE_UNITS, "Years");
+
+        formPayload.put(ProjectFormFields.General.ENTITY_EXTID,
+                individualExtId);
+        formPayload.put(ProjectFormFields.General.ENTITY_UUID,
+                UUID.randomUUID().toString().replace("-",""));
+
 
 
     }

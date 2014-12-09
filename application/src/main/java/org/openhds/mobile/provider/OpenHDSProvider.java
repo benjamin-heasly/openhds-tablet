@@ -101,6 +101,8 @@ public class OpenHDSProvider extends ContentProvider {
         // general individual columns
         individualsProjectionMap.put(OpenHDS.Individuals._ID,
                 OpenHDS.Individuals._ID);
+        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID);
         individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB);
         individualsProjectionMap.put(
@@ -272,6 +274,9 @@ public class OpenHDSProvider extends ContentProvider {
         fieldworkersProjectionMap.put(
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID,
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID);
+        fieldworkersProjectionMap.put(
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID,
+                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID);
         fieldworkersProjectionMap.put(
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX,
                 OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX);
@@ -898,7 +903,9 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Individuals.TABLE_NAME
                     + " ("
                     + OpenHDS.Individuals._ID
-                    + " INTEGER PRIMARY KEY,"
+                    + " INTEGER,"
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID
+                    + " TEXT PRIMARY KEY NOT NULL,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB
                     + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID
@@ -1009,7 +1016,9 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT NOT NULL);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.FieldWorkers.TABLE_NAME + " ("
-                    + OpenHDS.FieldWorkers._ID + " INTEGER PRIMARY KEY,"
+                    + OpenHDS.FieldWorkers._ID + " INTEGER,"
+                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID
+                    + " TEXT PRIMARY KEY NOT NULL,"
                     + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID
                     + " TEXT NOT NULL,"
                     + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX

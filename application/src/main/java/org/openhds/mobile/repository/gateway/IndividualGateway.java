@@ -13,6 +13,7 @@ import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB;
@@ -47,7 +48,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 public class IndividualGateway extends Gateway<Individual> {
 
     public IndividualGateway() {
-        super(OpenHDS.Individuals.CONTENT_ID_URI_BASE, COLUMN_INDIVIDUAL_EXTID, new IndividualConverter());
+        super(OpenHDS.Individuals.CONTENT_ID_URI_BASE, COLUMN_INDIVIDUAL_UUID, new IndividualConverter());
     }
 
     public Query findByResidency(String residencyId) {
@@ -67,6 +68,7 @@ public class IndividualGateway extends Gateway<Individual> {
         public Individual fromCursor(Cursor cursor) {
             Individual individual = new Individual();
 
+            individual.setUuid(extractString(cursor, COLUMN_INDIVIDUAL_UUID));
             individual.setExtId(extractString(cursor, COLUMN_INDIVIDUAL_EXTID));
             individual.setFirstName(extractString(cursor, COLUMN_INDIVIDUAL_FIRST_NAME));
             individual.setLastName(extractString(cursor, COLUMN_INDIVIDUAL_LAST_NAME));
@@ -96,6 +98,7 @@ public class IndividualGateway extends Gateway<Individual> {
         public ContentValues toContentValues(Individual individual) {
             ContentValues contentValues = new ContentValues();
 
+            contentValues.put(COLUMN_INDIVIDUAL_UUID, individual.getUuid());
             contentValues.put(COLUMN_INDIVIDUAL_EXTID, individual.getExtId());
             contentValues.put(COLUMN_INDIVIDUAL_FIRST_NAME, individual.getFirstName());
             contentValues.put(COLUMN_INDIVIDUAL_LAST_NAME, individual.getLastName());
@@ -123,12 +126,13 @@ public class IndividualGateway extends Gateway<Individual> {
 
         @Override
         public String getId(Individual individual) {
-            return individual.getExtId();
+            return individual.getUuid();
         }
 
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Individual individual, String state) {
             DataWrapper dataWrapper = new DataWrapper();
+            dataWrapper.setUuid(individual.getUuid());
             dataWrapper.setExtId(individual.getExtId());
             dataWrapper.setName(getFullName(individual));
             dataWrapper.setCategory(state);

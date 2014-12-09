@@ -16,6 +16,7 @@ public class IndividualParser extends EntityParser<Individual> {
     protected Individual toEntity(DataPage dataPage) {
         Individual individual = new Individual();
 
+        individual.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
         individual.setExtId(dataPage.getFirstString(asList(pageName, "extId")));
         individual.setFirstName(dataPage.getFirstString(asList(pageName, "firstName")));
         individual.setLastName(dataPage.getFirstString(asList(pageName, "lastName")));

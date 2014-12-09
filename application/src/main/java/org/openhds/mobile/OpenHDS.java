@@ -33,6 +33,8 @@ public class OpenHDS {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.individual";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.individual";
 
+        public static final String COLUMN_INDIVIDUAL_UUID = "uuid";
+
 		// general individual columns
 		public static final String COLUMN_INDIVIDUAL_EXTID = "extId";
 		public static final String COLUMN_INDIVIDUAL_FIRST_NAME = "firstName";
@@ -180,6 +182,8 @@ public class OpenHDS {
 
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.fieldworker";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.fieldworker";
+
+        public static final String COLUMN_FIELD_WORKER_UUID = "uuid";
 
 		public static final String COLUMN_FIELD_WORKER_EXTID = "extId";
         public static final String COLUMN_FIELD_WORKER_ID_PREFIX = "idPrefix";
