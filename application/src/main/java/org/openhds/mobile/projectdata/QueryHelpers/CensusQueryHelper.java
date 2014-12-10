@@ -74,7 +74,6 @@ public class CensusQueryHelper implements QueryHelper {
         return new ArrayList<DataWrapper>();
     }
 
-
     //TODO: stop accepting extId and replace all with uuid when uuid is fully implemented.
     public DataWrapper getIfExists(ContentResolver contentResolver, String state, String extId, String uuid) {
 

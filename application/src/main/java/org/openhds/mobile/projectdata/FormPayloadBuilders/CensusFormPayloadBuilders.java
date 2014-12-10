@@ -76,7 +76,7 @@ public class CensusFormPayloadBuilders {
         formPayload.put(ProjectFormFields.Locations.COMMUNITY_NAME, communityName);
         formPayload.put(ProjectFormFields.Locations.COMMUNITY_CODE, communityCode);
         formPayload.put(ProjectFormFields.General.ENTITY_UUID, IdHelper.generateEntityUuid());
-        formPayload.put(ProjectFormFields.General.ENTITY_EXTID, IdHelper.generateEntityUuid());
+
 
     }
 

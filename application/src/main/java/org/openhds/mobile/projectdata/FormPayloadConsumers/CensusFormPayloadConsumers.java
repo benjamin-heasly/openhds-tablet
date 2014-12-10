@@ -50,12 +50,13 @@ public class CensusFormPayloadConsumers {
                                                   NavigateActivity navigateActivity) {
             insertOrUpdateLocation(formPayload, navigateActivity);
 
-                return new ConsumerResults(false, null, null);
+                return new ConsumerResults(true, null, null);
         }
 
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
             // TODO Auto-generated method stub
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID));
         }
     }
 
