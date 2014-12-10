@@ -176,6 +176,8 @@ public class OpenHDSProvider extends ContentProvider {
                 .put(OpenHDS.Locations._ID, OpenHDS.Locations._ID);
         locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID,
                 OpenHDS.Locations.COLUMN_LOCATION_EXTID);
+        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_UUID,
+                OpenHDS.Locations.COLUMN_LOCATION_UUID);
         locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY,
                 OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY);
         locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE,
@@ -953,9 +955,11 @@ public class OpenHDSProvider extends ContentProvider {
                     + ")");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " ("
-                    + OpenHDS.Locations._ID + " INTEGER PRIMARY KEY,"
+                    + OpenHDS.Locations._ID + " INTEGER,"
                     + OpenHDS.Locations.COLUMN_LOCATION_EXTID
                     + " TEXT NOT NULL,"
+                    + OpenHDS.Locations.COLUMN_LOCATION_UUID
+                    + " TEXT NOT NULL PRIMARY KEY,"
                     + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY
                     + " TEXT NOT NULL,"
                     + OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"

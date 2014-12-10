@@ -12,6 +12,9 @@ public class LocationFormAdapter {
     public static Location fromForm(Map<String, String> formInstanceData) {
         Location location = new Location();
 
+
+        location.setUuid(formInstanceData.get(
+                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_UUID)));
         location.setExtId(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_EXTID)));
         location.setName(formInstanceData.get(

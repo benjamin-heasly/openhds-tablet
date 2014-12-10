@@ -122,6 +122,9 @@ public class ProjectFormFields {
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_STATUS, STATUS);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE, LONGITUDE);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE, LATITUDE);
+            columnsToFieldNames.put(
+                    OpenHDS.Locations.COLUMN_LOCATION_UUID,
+                    General.ENTITY_UUID);
 
 
 

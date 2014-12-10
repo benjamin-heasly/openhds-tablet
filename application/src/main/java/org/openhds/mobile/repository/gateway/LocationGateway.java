@@ -21,7 +21,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 public class LocationGateway extends Gateway<Location> {
 
     public LocationGateway() {
-        super(OpenHDS.Locations.CONTENT_ID_URI_BASE, COLUMN_LOCATION_EXTID, new LocationConverter());
+        super(OpenHDS.Locations.CONTENT_ID_URI_BASE, COLUMN_LOCATION_UUID, new LocationConverter());
     }
 
     public Query findByHierarchy(String hierarchyId) {
@@ -39,6 +39,7 @@ public class LocationGateway extends Gateway<Location> {
         public Location fromCursor(Cursor cursor) {
             Location location = new Location();
 
+            location.setUuid(extractString(cursor, COLUMN_LOCATION_UUID));
             location.setExtId(extractString(cursor, COLUMN_LOCATION_EXTID));
             location.setHierarchyExtId(extractString(cursor, COLUMN_LOCATION_HIERARCHY));
             location.setLatitude(extractString(cursor, COLUMN_LOCATION_LATITUDE));
@@ -65,6 +66,7 @@ public class LocationGateway extends Gateway<Location> {
         public ContentValues toContentValues(Location location) {
             ContentValues contentValues = new ContentValues();
 
+            contentValues.put(COLUMN_LOCATION_UUID, location.getUuid());
             contentValues.put(COLUMN_LOCATION_EXTID, location.getExtId());
             contentValues.put(COLUMN_LOCATION_HIERARCHY, location.getHierarchyExtId());
             contentValues.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
@@ -88,12 +90,14 @@ public class LocationGateway extends Gateway<Location> {
 
         @Override
         public String getId(Location location) {
-            return location.getExtId();
+            return location.getUuid();
         }
 
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Location location, String state) {
+
             DataWrapper dataWrapper = new DataWrapper();
+            dataWrapper.setUuid(location.getUuid());
             dataWrapper.setExtId(location.getExtId());
             dataWrapper.setName(location.getName());
             dataWrapper.getStringsPayload().put(R.string.location_description_label, location.getDescription());

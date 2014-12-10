@@ -74,7 +74,9 @@ public class CensusQueryHelper implements QueryHelper {
         return new ArrayList<DataWrapper>();
     }
 
-    public DataWrapper getIfExists(ContentResolver contentResolver, String state, String extId) {
+
+    //TODO: stop accepting extId and replace all with uuid when uuid is fully implemented.
+    public DataWrapper getIfExists(ContentResolver contentResolver, String state, String extId, String uuid) {
 
         if (state.equals(ProjectActivityBuilder.BiokoHierarchy.REGION_STATE)
                 || state.equals(ProjectActivityBuilder.BiokoHierarchy.PROVINCE_STATE)
@@ -90,11 +92,11 @@ public class CensusQueryHelper implements QueryHelper {
 
         } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
-            return locationGateway.getFirstQueryResult(contentResolver, locationGateway.findById(extId), state);
+            return locationGateway.getFirstQueryResult(contentResolver, locationGateway.findById(uuid), state);
 
         } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-            return individualGateway.getFirstQueryResult(contentResolver, individualGateway.findById(extId), state);
+            return individualGateway.getFirstQueryResult(contentResolver, individualGateway.findById(uuid), state);
         }
 
         return null;

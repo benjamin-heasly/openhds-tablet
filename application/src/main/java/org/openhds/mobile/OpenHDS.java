@@ -77,6 +77,8 @@ public class OpenHDS {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.location";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.location";
 
+        public static final String COLUMN_LOCATION_UUID = "uuid";
+
 		public static final String COLUMN_LOCATION_EXTID = "extId";
 		public static final String COLUMN_LOCATION_NAME = "name";
 		public static final String COLUMN_LOCATION_LATITUDE = "latitude";

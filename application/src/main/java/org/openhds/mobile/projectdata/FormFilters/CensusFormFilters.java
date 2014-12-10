@@ -45,7 +45,7 @@ public class CensusFormFilters {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
 
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
-                    locationGateway.findById(navigateActivity.getCurrentSelection().getExtId()));
+                    locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
             if( null == location.getStatus()){
                 return true;

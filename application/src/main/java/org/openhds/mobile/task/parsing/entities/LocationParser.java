@@ -16,6 +16,8 @@ public class LocationParser extends EntityParser<Location> {
     protected Location toEntity(DataPage dataPage) {
         Location location = new Location();
 
+
+        location.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
         location.setExtId(dataPage.getFirstString(asList(pageName, "extId")));
         location.setHierarchyExtId(dataPage.getFirstString(asList(pageName, "locationHierarchy", "extId")));
         location.setLatitude(dataPage.getFirstString(asList(pageName, "latitude")));

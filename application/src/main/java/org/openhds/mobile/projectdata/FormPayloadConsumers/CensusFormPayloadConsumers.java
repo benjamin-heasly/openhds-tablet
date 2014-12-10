@@ -67,7 +67,7 @@ public class CensusFormPayloadConsumers {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
 
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
-                    locationGateway.findById(formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID)));
+                    locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
             location.setStatus(formPayload.get(ProjectFormFields.Locations.EVALUATION));
 
@@ -164,7 +164,7 @@ public class CensusFormPayloadConsumers {
 
             // Update the name of the location
             Location location = locationGateway.getFirst(contentResolver,
-                    locationGateway.findById(selectedLocation.getExtId()));
+                    locationGateway.findById(selectedLocation.getUuid()));
             String locationName = individual.getLastName();
             location.setName(locationName);
             selectedLocation.setName(locationName);

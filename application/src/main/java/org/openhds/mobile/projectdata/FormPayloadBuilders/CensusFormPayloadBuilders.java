@@ -10,6 +10,7 @@ import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.*;
+import org.openhds.mobile.utilities.IdHelper;
 import org.openhds.mobile.utilities.LuhnValidator;
 
 import java.util.Iterator;
@@ -74,6 +75,8 @@ public class CensusFormPayloadBuilders {
         formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, String.format(LIKE_WILD_CARD + "02d", buildingNumber));
         formPayload.put(ProjectFormFields.Locations.COMMUNITY_NAME, communityName);
         formPayload.put(ProjectFormFields.Locations.COMMUNITY_CODE, communityCode);
+        formPayload.put(ProjectFormFields.General.ENTITY_UUID, IdHelper.generateEntityUuid());
+        formPayload.put(ProjectFormFields.General.ENTITY_EXTID, IdHelper.generateEntityUuid());
 
     }
 
@@ -85,47 +88,18 @@ public class CensusFormPayloadBuilders {
         FieldWorker fieldWorker = (FieldWorker) navigateActivity.getIntent()
                 .getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
 
-        String generatedIdPrefix = fieldWorker.getIdPrefix();
-
-        //TODO this is a hack to pad the ID prefix just incase it is being checked on the server
-        if(generatedIdPrefix.length()<2){
-            generatedIdPrefix = "0"+ generatedIdPrefix;
-        }
-
-        IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-        ContentResolver contentResolver = navigateActivity.getContentResolver();
-
-        Iterator<Individual> individualIterator = individualGateway.getIterator(contentResolver,
-                individualGateway.findByExtIdPrefixDescending(generatedIdPrefix));
-        int nextSequence = 0;
-        if (individualIterator.hasNext()) {
-            String lastExtId = individualIterator.next().getExtId();
-            int prefixLength = generatedIdPrefix.length();
-            int checkDigitLength = 1;
-            String lastSequenceNumber = lastExtId.substring(prefixLength + 1,
-                    lastExtId.length() - checkDigitLength);
-            nextSequence = Integer.parseInt(lastSequenceNumber) + 1;
-        }
-
-        // TODO: break out 5-digit number format, don't use string literal here.
-        String generatedIdSeqNum = String.format(LIKE_WILD_CARD + "05d", nextSequence);
-
-        Character generatedIdCheck = LuhnValidator
-                .generateCheckCharacter(generatedIdSeqNum + generatedIdSeqNum);
-
-        String individualExtId = generatedIdPrefix + generatedIdSeqNum
-                + generatedIdCheck.toString();
+        String individualExtId = IdHelper.generateIndividualExtId(navigateActivity.getContentResolver(), fieldWorker);
 
         formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
                 individualExtId);
 
-        //this is a hack to make the ODK form birthday constraints work - might not be necessary anymore.
-        formPayload.put(ProjectFormFields.Individuals.AGE_UNITS, "Years");
+//        //TODO: this is a hack to make the ODK form birthday constraints work - might not be necessary anymore.
+//        formPayload.put(ProjectFormFields.Individuals.AGE_UNITS, "Years");
 
         formPayload.put(ProjectFormFields.General.ENTITY_EXTID,
                 individualExtId);
         formPayload.put(ProjectFormFields.General.ENTITY_UUID,
-                UUID.randomUUID().toString().replace("-",""));
+                IdHelper.generateEntityUuid());
 
 
 
