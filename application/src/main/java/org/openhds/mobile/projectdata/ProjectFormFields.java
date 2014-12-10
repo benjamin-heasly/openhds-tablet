@@ -167,6 +167,7 @@ public class ProjectFormFields {
         public static final String RELATIONSHIP_TO_HEAD = "individualRelationshipToHeadOfHousehold";
         public static final String HEAD_PREFILLED_FLAG = "headPrefilledFlag";
         public static final String HOUSEHOLD_EXTID = "householdExtId";
+        public static final String HOUSEHOLD_UUID = "householdUuid";
         public static final String MEMBER_STATUS = "individualMemberStatus";
 
 

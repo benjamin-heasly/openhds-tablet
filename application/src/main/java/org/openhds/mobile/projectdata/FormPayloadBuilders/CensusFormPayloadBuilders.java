@@ -96,6 +96,10 @@ public class CensusFormPayloadBuilders {
 //        //TODO: this is a hack to make the ODK form birthday constraints work - might not be necessary anymore.
 //        formPayload.put(ProjectFormFields.Individuals.AGE_UNITS, "Years");
 
+        //TODO: when locationHierarchies have uuid's pull all the uuid's from the hierarchyPath
+
+        formPayload.put(ProjectFormFields.Individuals.HOUSEHOLD_UUID, navigateActivity.getCurrentSelection().getUuid());
+
         formPayload.put(ProjectFormFields.General.ENTITY_EXTID,
                 individualExtId);
         formPayload.put(ProjectFormFields.General.ENTITY_UUID,
