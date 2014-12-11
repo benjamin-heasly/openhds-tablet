@@ -111,7 +111,7 @@ public class CensusFormPayloadConsumers {
             SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver,
                     socialGroupGateway.findById(selectedLocation.getExtId()));
             Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
-                    individualGateway.findById(socialGroup.getGroupHead()));
+                    individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHead()));
 
             // INSERT or UPDATE RELATIONSHIP
             RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();

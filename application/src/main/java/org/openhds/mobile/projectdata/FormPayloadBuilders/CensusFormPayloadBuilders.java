@@ -161,7 +161,9 @@ public class CensusFormPayloadBuilders {
                     socialGroupGateway.findById(navigateActivity.getCurrentSelection().getExtId()));
 
             IndividualGateway individualGateway = new IndividualGateway();
-            Individual headOfHousehold = individualGateway.getFirst(resolver, individualGateway.findById(socialGroup.getGroupHead()));
+            //HoH is found by searching by extId, since we're currently dependent on the groupHead property of socialgroup
+            //Set as the individual's extId
+            Individual headOfHousehold = individualGateway.getFirst(resolver, individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHead()));
 
             // set's the member's point of contact info to the HoH
             if(null != headOfHousehold.getPhoneNumber() && !headOfHousehold.getPhoneNumber().isEmpty()) {
