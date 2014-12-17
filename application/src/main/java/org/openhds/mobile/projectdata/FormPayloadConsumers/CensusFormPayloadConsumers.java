@@ -2,7 +2,8 @@ package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.*;
+import org.openhds.mobile.model.core.*;
+import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
 import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
 import org.openhds.mobile.projectdata.FormAdapters.VisitFormAdapter;
@@ -12,6 +13,7 @@ import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.*;
+import org.openhds.mobile.utilities.IdHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -111,16 +113,16 @@ public class CensusFormPayloadConsumers {
             SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver,
                     socialGroupGateway.findById(selectedLocation.getExtId()));
             Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
-                    individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHead()));
+                    individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHeadUuid()));
 
             // INSERT or UPDATE RELATIONSHIP
             RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
-            Relationship relationship = new Relationship(individual, currentHeadOfHousehold, relationshipType, startDate);
+            Relationship relationship = new Relationship(individual, currentHeadOfHousehold, relationshipType, startDate, IdHelper.generateEntityUuid());
             relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
             // INSERT or UPDATE MEMBERSHIP
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
-            Membership membership = new Membership(individual, socialGroup, relationshipType);
+            Membership membership = new Membership(individual, socialGroup, relationshipType, IdHelper.generateEntityUuid());
             membershipGateway.insertOrUpdate(contentResolver, membership);
 
             ConsumerResults pregnantResults;
@@ -173,17 +175,17 @@ public class CensusFormPayloadConsumers {
 
             // create social group
             SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
-            SocialGroup socialGroup = new SocialGroup(selectedLocation.getExtId(), selectedLocation.getExtId(), individual);
+            SocialGroup socialGroup = new SocialGroup(selectedLocation.getExtId(), selectedLocation.getExtId(), individual, IdHelper.generateEntityUuid());
             socialGroupGateway.insertOrUpdate(contentResolver, socialGroup);
 
             // create membership
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
-            Membership membership = new Membership(individual, socialGroup, relationshipType);
+            Membership membership = new Membership(individual, socialGroup, relationshipType, IdHelper.generateEntityUuid());
             membershipGateway.insertOrUpdate(contentResolver, membership);
 
             // Set head of household's relationship to himself.
             RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
-            Relationship relationship = new Relationship(individual, individual, relationshipType, startDate);
+            Relationship relationship = new Relationship(individual, individual, relationshipType, startDate, IdHelper.generateEntityUuid());
             relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
             ConsumerResults pregnantResults;

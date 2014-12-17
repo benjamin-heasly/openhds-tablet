@@ -4,14 +4,15 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.model.Visit;
+import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 
 import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_DATE;
+import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_UUID;
 import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_EXTID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID;
+import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID;
+import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
 
@@ -30,10 +31,11 @@ public class VisitGateway extends Gateway<Visit> {
         public Visit fromCursor(Cursor cursor) {
             Visit visit = new Visit();
 
+            visit.setUuid(extractString(cursor, COLUMN_VISIT_UUID));
             visit.setVisitExtId(extractString(cursor, COLUMN_VISIT_EXTID));
             visit.setVisitDate(extractString(cursor, COLUMN_VISIT_DATE));
-            visit.setLocationExtId(extractString(cursor, COLUMN_VISIT_LOCATION_EXTID));
-            visit.setFieldWorkerExtId(extractString(cursor, COLUMN_VISIT_FIELDWORKER_EXTID));
+            visit.setLocationUuid(extractString(cursor, COLUMN_VISIT_LOCATION_UUID));
+            visit.setFieldWorkerUuid(extractString(cursor, COLUMN_VISIT_FIELDWORKER_UUID));
 
             return visit;
         }
@@ -43,23 +45,24 @@ public class VisitGateway extends Gateway<Visit> {
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(COLUMN_VISIT_EXTID, visit.getVisitExtId());
+            contentValues.put(COLUMN_VISIT_UUID, visit.getUuid());
             contentValues.put(COLUMN_VISIT_DATE, visit.getVisitDate());
-            contentValues.put(COLUMN_VISIT_LOCATION_EXTID, visit.getLocationExtId());
-            contentValues.put(COLUMN_VISIT_FIELDWORKER_EXTID, visit.getFieldWorkerExtId());
+            contentValues.put(COLUMN_VISIT_LOCATION_UUID, visit.getLocationUuid());
+            contentValues.put(COLUMN_VISIT_FIELDWORKER_UUID, visit.getFieldWorkerUuid());
 
             return contentValues;
         }
 
         @Override
         public String getId(Visit visit) {
-            return visit.getVisitExtId();
+            return visit.getUuid();
         }
 
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Visit visit, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setExtId(visit.getVisitExtId());
-            dataWrapper.setName(visit.getLocationExtId());
+            dataWrapper.setName(visit.getLocationUuid());
             dataWrapper.setCategory(state);
             return dataWrapper;
         }

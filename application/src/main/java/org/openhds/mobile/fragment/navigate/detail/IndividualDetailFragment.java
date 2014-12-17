@@ -5,8 +5,8 @@ import java.util.List;
 import android.content.ContentResolver;
 import android.widget.ScrollView;
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Membership;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.core.Membership;
 import org.openhds.mobile.projectdata.ProjectResources;
 
 import static org.openhds.mobile.utilities.LayoutUtils.makeLargeTextWithValueAndLabel;
@@ -132,11 +132,6 @@ public class IndividualDetailFragment extends DetailFragment {
                     getString(ProjectResources.Relationship.getRelationshipStringId(membership.getRelationshipToHead())),
                     labelColor, valueColor, R.color.NA_Gray));
 
-            membershipInfoContainer.addView(makeLargeTextWithValueAndLabel(
-                    getActivity(),
-                    R.string.individual_socialgroup_extid_label,
-                    membership.getSocialGroupExtId(),
-                    labelColor, valueColor, R.color.NA_Gray));
         }
     }
 

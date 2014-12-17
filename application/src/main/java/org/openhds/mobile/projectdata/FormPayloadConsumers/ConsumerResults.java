@@ -1,6 +1,6 @@
 package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
-import org.openhds.mobile.model.FormBehaviour;
+import org.openhds.mobile.model.form.FormBehaviour;
 
 import java.util.Map;
 

@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.model.core.LocationHierarchy;
 import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
 
 

@@ -33,7 +33,7 @@ public class UpdateFormPayloadBuilders {
             String visitExtId = visitDate + "_" + locationExtId;
 
             formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
-            formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,
+            formPayload.put(ProjectFormFields.Visits.LOCATION_UUID,
                     locationExtId);
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
         }

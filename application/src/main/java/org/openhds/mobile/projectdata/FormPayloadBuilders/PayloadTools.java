@@ -2,7 +2,7 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.repository.DataWrapper;
-import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 

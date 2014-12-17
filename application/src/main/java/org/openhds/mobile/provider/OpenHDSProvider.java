@@ -124,8 +124,8 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER);
         individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID);
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID,
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID);
         individualsProjectionMap.put(
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE,
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE);
@@ -234,6 +234,9 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID,
                 OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID);
         hierarchyitemsProjectionMap.put(
+                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID,
+                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID);
+        hierarchyitemsProjectionMap.put(
                 OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL,
                 OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL);
         hierarchyitemsProjectionMap.put(
@@ -249,14 +252,19 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.Visits.COLUMN_VISIT_DATE);
         visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_EXTID,
                 OpenHDS.Visits.COLUMN_VISIT_EXTID);
-        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID,
-                OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID);
-        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID,
-                OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID);
+        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_UUID,
+                OpenHDS.Visits.COLUMN_VISIT_UUID);
+        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID,
+                OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID);
+        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID,
+                OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID);
 
         relationshipsProjectionMap = new HashMap<String, String>();
         relationshipsProjectionMap.put(OpenHDS.Relationships._ID,
                 OpenHDS.Relationships._ID);
+        relationshipsProjectionMap.put(
+                OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID,
+                OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID);
         relationshipsProjectionMap.put(
                 OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A,
                 OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A);
@@ -296,11 +304,14 @@ public class OpenHDSProvider extends ContentProvider {
         socialgroupsProjectionMap.put(OpenHDS.SocialGroups._ID,
                 OpenHDS.SocialGroups._ID);
         socialgroupsProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID,
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID);
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID,
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID);
         socialgroupsProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID,
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID);
+                OpenHDS.SocialGroups.COLUMN_LOCATION_UUID,
+                OpenHDS.SocialGroups.COLUMN_LOCATION_UUID);
+        socialgroupsProjectionMap.put(
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID,
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID);
         socialgroupsProjectionMap.put(
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME,
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME);
@@ -312,28 +323,31 @@ public class OpenHDSProvider extends ContentProvider {
         socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups._ID, "s."
                 + OpenHDS.SocialGroups._ID);
         socialgroupsJoinProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, "s."
-                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID);
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID, "s."
+                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID);
         socialgroupsJoinProjectionMap
-                .put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID,
+                .put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID,
                         "s."
-                                + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID);
+                                + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID);
         socialgroupsJoinProjectionMap.put(
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, "s."
                         + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME);
         socialgroupsJoinProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID, "x."
-                        + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID);
+                OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID, "x."
+                        + OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID);
 
         membershipsProjectionMap = new HashMap<String, String>();
         membershipsProjectionMap.put(OpenHDS.Memberships._ID,
                 OpenHDS.Memberships._ID);
         membershipsProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID,
-                OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID);
+                OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID,
+                OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID);
         membershipsProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID,
-                OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID);
+                OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID,
+                OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID);
+        membershipsProjectionMap.put(
+                OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID,
+                OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID);
         membershipsProjectionMap.put(
                 OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD,
                 OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD);
@@ -413,8 +427,8 @@ public class OpenHDSProvider extends ContentProvider {
             case INDIVIDUAL_SG:
                 qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join "
                         + OpenHDS.Memberships.TABLE_NAME + " x on s."
-                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " = x."
-                        + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID);
+                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + " = x."
+                        + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID);
                 qb.setProjectionMap(socialgroupsJoinProjectionMap);
                 break;
             case LOCATIONS:
@@ -485,7 +499,7 @@ public class OpenHDSProvider extends ContentProvider {
             case SOCIALGROUPS_BY_LOCATION:
                 qb.setTables(OpenHDS.SocialGroups.TABLE_NAME);
                 qb.setProjectionMap(socialgroupsProjectionMap);
-                selectionArgs = addSocialGroupExtIds(
+                selectionArgs = addSocialGroupUuid(
                         qb,
                         uri.getPathSegments().get(
                                 OpenHDS.SocialGroups.LOCATION_PATH_POSITION));
@@ -493,11 +507,11 @@ public class OpenHDSProvider extends ContentProvider {
             case SOCIALGROUPS_BY_INDIVIDUAL:
                 qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join "
                         + OpenHDS.Memberships.TABLE_NAME + " x on s."
-                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " = x."
-                        + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID);
+                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + " = x."
+                        + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID);
                 qb.setProjectionMap(socialgroupsJoinProjectionMap);
                 qb.appendWhere("x."
-                        + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID
+                        + OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID
                         + " = '"
                         + uri.getPathSegments().get(
                         OpenHDS.SocialGroups.LOCATION_PATH_POSITION) + "'");
@@ -549,26 +563,26 @@ public class OpenHDSProvider extends ContentProvider {
         return c;
     }
 
-    private String[] addSocialGroupExtIds(SQLiteQueryBuilder qb, String string) {
+    private String[] addSocialGroupUuid(SQLiteQueryBuilder qb, String string) {
         SQLiteDatabase db = mOpenHelper.getReadableDatabase(passwordHelper.getPassword());
         // get all individuals at location
         Cursor c = db.query(OpenHDS.Individuals.TABLE_NAME,
-                new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID },
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID
+                new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID },
+                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID
                         + " = ?", new String[] { string }, null, null, null);
 
         // iterate over all individuals and collect their memberships
         // this results in a subset of households at the location
-        Set<String> socialGroupExtIds = new HashSet<String>();
+        Set<String> socialGroupUuids = new HashSet<String>();
         while (c.moveToNext()) {
             Cursor c2 = db
                     .query(OpenHDS.Memberships.TABLE_NAME,
-                            new String[] { OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID },
-                            OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID
+                            new String[] { OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID },
+                            OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID
                                     + " = ?", new String[] { c.getString(0) },
                             null, null, null);
             while (c2.moveToNext()) {
-                socialGroupExtIds.add(c2.getString(0));
+                socialGroupUuids.add(c2.getString(0));
             }
             c2.close();
         }
@@ -576,17 +590,17 @@ public class OpenHDSProvider extends ContentProvider {
 
         // generate the SQL IN clause with the subset of social group ids
         StringBuilder placeholders = new StringBuilder();
-        if (socialGroupExtIds.size() > 0) {
+        if (socialGroupUuids.size() > 0) {
             placeholders.append("?");
         }
 
-        for (int i = 1; i < socialGroupExtIds.size(); i++) {
+        for (int i = 1; i < socialGroupUuids.size(); i++) {
             placeholders.append(",?");
         }
 
-        qb.appendWhere(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + " IN ("
+        qb.appendWhere(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + " IN ("
                 + placeholders.toString() + ")");
-        return socialGroupExtIds.toArray(new String[] {});
+        return socialGroupUuids.toArray(new String[] {});
     }
 
     @Override
@@ -922,7 +936,7 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER
                     + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID
                     + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE
                     + " TEXT,"
@@ -951,7 +965,7 @@ public class OpenHDSProvider extends ContentProvider {
                     + " CREATE INDEX IDX_INDIVIDUAL_BY_RESIDENCE ON "
                     + OpenHDS.Individuals.TABLE_NAME
                     + "("
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID
+                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID
                     + ")");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " ("
@@ -988,7 +1002,9 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.HierarchyItems.TABLE_NAME
                     + " (" + OpenHDS.HierarchyItems._ID
-                    + " INTEGER PRIMARY KEY,"
+                    + " INTEGER,"
+                    + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID
+                    + " TEXT NOT NULL PRIMARY KEY,"
                     + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID
                     + " TEXT NOT NULL,"
                     + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL
@@ -999,17 +1015,21 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT NOT NULL);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Visits.TABLE_NAME + " ("
-                    + OpenHDS.Visits._ID + " INTEGER PRIMARY KEY,"
+                    + OpenHDS.Visits._ID + " INTEGER,"
+                    + OpenHDS.Visits.COLUMN_VISIT_UUID
+                    + " TEXT NOT NULL PRIMARY KEY,"
                     + OpenHDS.Visits.COLUMN_VISIT_DATE + " TEXT NOT NULL,"
                     + OpenHDS.Visits.COLUMN_VISIT_EXTID + " TEXT NOT NULL,"
-                    + OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID
+                    + OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID
                     + " TEXT NOT NULL,"
-                    + OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID
+                    + OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID
                     + " TEXT NOT NULL);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Relationships.TABLE_NAME
                     + " (" + OpenHDS.Relationships._ID
-                    + " INTEGER PRIMARY KEY,"
+                    + " INTEGER,"
+                    + OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID
+                    + " TEXT NOT NULL PRIMARY KEY,"
                     + OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A
                     + " TEXT NOT NULL,"
                     + OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B
@@ -1038,10 +1058,12 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.SocialGroups.TABLE_NAME
                     + " ("
                     + OpenHDS.SocialGroups._ID
-                    + " INTEGER PRIMARY KEY,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID
+                    + " INTEGER,"
+                    + OpenHDS.SocialGroups.COLUMN_LOCATION_UUID
                     + " TEXT NOT NULL,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID
+                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID
+                    + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID
                     + " TEXT NOT NULL,"
                     + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME
                     + " TEXT NOT NULL);");
@@ -1050,10 +1072,12 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Memberships.TABLE_NAME
                     + " ("
                     + OpenHDS.Memberships._ID
-                    + " INTEGER PRIMARY KEY,"
-                    + OpenHDS.Memberships.COLUMN_INDIVIDUAL_EXTID
+                    + " INTEGER,"
+                    + OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID
+                    + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID
                     + " TEXT NOT NULL,"
-                    + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_EXTID
+                    + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID
                     + " TEXT NOT NULL,"
                     + OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD
                     + " TEXT NOT NULL);");

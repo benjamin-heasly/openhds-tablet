@@ -1,14 +1,12 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
-import org.openhds.mobile.repository.gateway.LocationGateway;
 
 import java.util.Map;
 

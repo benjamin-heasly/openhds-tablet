@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 
@@ -18,7 +18,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 public class FieldWorkerGateway extends Gateway<FieldWorker> {
 
     public FieldWorkerGateway() {
-        super(OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE, COLUMN_FIELD_WORKER_EXTID, new FieldWorkerConverter());
+        super(OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE, COLUMN_FIELD_WORKER_UUID, new FieldWorkerConverter());
     }
 
     private static class FieldWorkerConverter implements Converter<FieldWorker> {
@@ -58,7 +58,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
 
         @Override
         public String getId(FieldWorker fieldWorker) {
-            return fieldWorker.getExtId();
+            return fieldWorker.getUuid();
         }
 
         @Override

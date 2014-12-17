@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.PortalActivity;
-import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.FieldWorkerGateway;
 import org.mindrot.jbcrypt.BCrypt;

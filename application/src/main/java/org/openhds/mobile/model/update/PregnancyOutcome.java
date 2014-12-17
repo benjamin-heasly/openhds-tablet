@@ -1,4 +1,6 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.update;
+
+import org.openhds.mobile.model.core.Individual;
 
 import java.io.Serializable;
 import java.util.ArrayList;

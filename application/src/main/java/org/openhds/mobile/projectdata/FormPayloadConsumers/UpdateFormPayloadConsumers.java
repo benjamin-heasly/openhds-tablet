@@ -2,8 +2,8 @@ package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Visit;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.projectdata.FormAdapters.VisitFormAdapter;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
@@ -101,7 +101,7 @@ public class UpdateFormPayloadConsumers {
                 return new ConsumerResults(false, null, null);
             }
 
-            individual.setCurrentResidence(locationExtId);
+            individual.setCurrentResidenceUuid(locationExtId);
             individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
             individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
             return new ConsumerResults(false, null, null);

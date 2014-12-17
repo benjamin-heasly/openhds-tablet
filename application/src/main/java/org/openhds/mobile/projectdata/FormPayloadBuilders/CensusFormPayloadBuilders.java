@@ -2,7 +2,7 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.*;
+import org.openhds.mobile.model.core.*;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
@@ -11,11 +11,9 @@ import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.*;
 import org.openhds.mobile.utilities.IdHelper;
-import org.openhds.mobile.utilities.LuhnValidator;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 
@@ -163,7 +161,7 @@ public class CensusFormPayloadBuilders {
             IndividualGateway individualGateway = new IndividualGateway();
             //HoH is found by searching by extId, since we're currently dependent on the groupHead property of socialgroup
             //Set as the individual's extId
-            Individual headOfHousehold = individualGateway.getFirst(resolver, individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHead()));
+            Individual headOfHousehold = individualGateway.getFirst(resolver, individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHeadUuid()));
 
             // set's the member's point of contact info to the HoH
             if(null != headOfHousehold.getPhoneNumber() && !headOfHousehold.getPhoneNumber().isEmpty()) {

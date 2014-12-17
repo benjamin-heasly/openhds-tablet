@@ -1,11 +1,10 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.core;
 
 import java.io.Serializable;
 
 public class FieldWorker implements Serializable {
 
 	private static final long serialVersionUID = -8973040054481039466L;
-
 
     private String uuid;
 	private String extId;
@@ -14,15 +13,6 @@ public class FieldWorker implements Serializable {
     private String passwordHash;
 	private String idPrefix;
 
-	public FieldWorker() {
-	}
-
-	public FieldWorker(String extId, String firstName, String lastName, String uuid) {
-		this.extId = extId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-        this.uuid = uuid;
-	}
 
     public String getUuid() {
         return uuid;
@@ -31,7 +21,6 @@ public class FieldWorker implements Serializable {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
-
 
     public String getExtId() {
 		return extId;

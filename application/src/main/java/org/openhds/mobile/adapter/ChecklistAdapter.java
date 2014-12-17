@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
 
