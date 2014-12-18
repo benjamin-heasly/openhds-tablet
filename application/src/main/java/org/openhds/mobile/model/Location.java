@@ -24,6 +24,15 @@ public class Location implements Serializable {
     private String districtName;
     private String hasRecievedBedNets;
     private String description;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getDescription() {
         return description;

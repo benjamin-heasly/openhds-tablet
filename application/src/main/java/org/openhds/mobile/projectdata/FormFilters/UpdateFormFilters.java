@@ -31,15 +31,6 @@ public class UpdateFormFilters {
         }
     }
 
-    public static class EvaluateLocation implements FormFilter {
-
-        @Override
-        public boolean amIValid(NavigateActivity navigateActivity) {
-
-            return true;
-        }
-    }
-
     public static class RegisterInMigration implements FormFilter {
 
         @Override

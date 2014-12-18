@@ -39,22 +39,6 @@ public class UpdateFormPayloadBuilders {
         }
     }
 
-    public static class EvaluateLocation implements FormPayloadBuilder {
-
-        @Override
-        public void buildFormPayload(Map<String, String> formPayload,
-                                     NavigateActivity navigateActivity) {
-
-            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
-            PayloadTools.flagForReview(formPayload, false);
-
-            String locationExtId = navigateActivity.getHierarchyPath()
-                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
-            formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
-
-        }
-    }
-
     public static class RegisterInMigration implements FormPayloadBuilder {
 
         @Override

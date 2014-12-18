@@ -18,7 +18,7 @@ import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 import java.util.List;
 
-import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithValueAndLabel;
+import static org.openhds.mobile.utilities.LayoutUtils.makeLargeTextWithValueAndLabel;
 
 public class HouseholdDetailFragment extends DetailFragment {
 	LinearLayout detailContainer;
@@ -49,24 +49,24 @@ public class HouseholdDetailFragment extends DetailFragment {
 			TextView extIdTextView = (TextView) detailContainer.findViewById(R.id.household_detail_frag_extid);
 			extIdTextView.setText(socialGroup.getExtId());
 
-			householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+			householdBasicInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
                     R.string.social_group_name,
                     socialGroup.getGroupName(),
                     greenLabel, greenValue, R.color.NA_Gray));
 
-			householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+			householdBasicInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
                     R.string.social_group_head_ext_id,
                     socialGroup.getGroupHead(),
                     greenLabel, greenValue, R.color.NA_Gray));
 
-			householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+			householdBasicInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
                     R.string.social_group_member_count,
                     getMemberCount(socialGroup.getExtId()),
                     greenLabel, greenValue, R.color.NA_Gray));
 
             Location location = getLocation(navigateActivity.getCurrentSelection().getExtId());
 
-            householdBasicInfoContainer.addView(makeTextWithValueAndLabel(getActivity(),
+            householdBasicInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
                     R.string.location_description_label,
                     location.getDescription(),
                     greenLabel, greenValue, R.color.NA_Gray));

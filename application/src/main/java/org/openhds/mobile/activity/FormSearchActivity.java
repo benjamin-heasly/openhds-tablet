@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithValueAndLabel;
-import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithValueAndLabel;
+import static org.openhds.mobile.utilities.LayoutUtils.makeLargeTextWithValueAndLabel;
 
 
 public class FormSearchActivity extends Activity {
@@ -113,7 +113,7 @@ public class FormSearchActivity extends Activity {
             FormSearchPluginModule plugin = getItem(position);
 
             if (convertView == null) {
-                convertView = makeTextWithValueAndLabel(FormSearchActivity.this,
+                convertView = makeLargeTextWithValueAndLabel(FormSearchActivity.this,
                         plugin.getLabelId(), plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
             } else {
                 configureTextWithValueAndLabel((RelativeLayout) convertView,
