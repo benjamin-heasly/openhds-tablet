@@ -39,7 +39,7 @@ public class IndividualDetailFragment extends DetailFragment {
     @Override
     public void setUpDetails() {
 
-        Individual individual = getIndividual(navigateActivity.getCurrentSelection().getExtId());
+        Individual individual = getIndividual(navigateActivity.getCurrentSelection().getUuid());
 
         List<Membership> memberships = getMemberships(individual.getExtId());
 
@@ -99,6 +99,12 @@ public class IndividualDetailFragment extends DetailFragment {
                 individual.getDob(),
                 labelColor, valueColor, R.color.NA_Gray));
 
+        //UUID
+        personalInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
+                R.string.uuid,
+                individual.getUuid(),
+                labelColor, valueColor, R.color.NA_Gray));
+
         // Contact Info
         contactInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
                 R.string.individual_personal_phone_number_label,
@@ -134,10 +140,10 @@ public class IndividualDetailFragment extends DetailFragment {
         }
     }
 
-    private Individual getIndividual(String extId) {
+    private Individual getIndividual(String uuid) {
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
         ContentResolver contentResolver = navigateActivity.getContentResolver();
-        Individual individual = individualGateway.getFirst(contentResolver, individualGateway.findById(extId));
+        Individual individual = individualGateway.getFirst(contentResolver, individualGateway.findById(uuid));
 
         return individual;
     }

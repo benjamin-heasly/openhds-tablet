@@ -6,6 +6,8 @@ public class Location implements Serializable {
 
 	private static final long serialVersionUID = 230186771721044764L;
 
+
+    private String uuid;
 	private String extId;
 	private String name;
 	private String latitude;
@@ -25,6 +27,15 @@ public class Location implements Serializable {
     private String hasRecievedBedNets;
     private String description;
     private String status;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
 
     public String getStatus() {
         return status;

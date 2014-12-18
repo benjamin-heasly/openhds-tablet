@@ -13,5 +13,5 @@ public interface QueryHelper {
 			DataWrapper qr, String childState);
 
 	public DataWrapper getIfExists(ContentResolver contentResolver,
-			String state, String extId);
+			String state, String extId, String uuid);
 }

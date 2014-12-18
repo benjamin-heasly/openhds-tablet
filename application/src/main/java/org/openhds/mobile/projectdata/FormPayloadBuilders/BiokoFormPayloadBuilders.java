@@ -31,10 +31,12 @@ public class BiokoFormPayloadBuilders {
 
             String locationExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
             formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
 
             //pre-fill a netCode in YY-CCC form
-            String netCode = generateNetCode(navigateActivity, locationExtId);
+            String netCode = generateNetCode(navigateActivity, locationUuid);
             formPayload.put(ProjectFormFields.BedNet.BED_NET_CODE, netCode);
 
             //pre-fill the householdSize for this particular household
@@ -45,11 +47,11 @@ public class BiokoFormPayloadBuilders {
             formPayload.put(ProjectFormFields.BedNet.HOUSEHOLD_SIZE, householdSize);
         }
 
-        public String generateNetCode(NavigateActivity navigateActivity, String locationExtId) {
+        public String generateNetCode(NavigateActivity navigateActivity, String locationUuid) {
 
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
-                    locationGateway.findById(locationExtId));
+                    locationGateway.findById(locationUuid));
 
             String communityCode = location.getCommunityCode();
             String yearPrefix = Integer.toString (Calendar.getInstance().get(Calendar.YEAR));

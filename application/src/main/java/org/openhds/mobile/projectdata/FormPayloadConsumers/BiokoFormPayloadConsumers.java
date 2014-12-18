@@ -18,7 +18,7 @@ public class BiokoFormPayloadConsumers {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
 
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
-                    locationGateway.findById(navigateActivity.getCurrentSelection().getExtId()));
+                    locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
             location.setHasRecievedBedNets("true");
 

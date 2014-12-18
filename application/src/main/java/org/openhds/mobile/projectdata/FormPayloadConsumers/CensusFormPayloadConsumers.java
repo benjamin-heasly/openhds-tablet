@@ -50,12 +50,13 @@ public class CensusFormPayloadConsumers {
                                                   NavigateActivity navigateActivity) {
             insertOrUpdateLocation(formPayload, navigateActivity);
 
-                return new ConsumerResults(false, null, null);
+                return new ConsumerResults(true, null, null);
         }
 
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
             // TODO Auto-generated method stub
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID));
         }
     }
 
@@ -67,7 +68,7 @@ public class CensusFormPayloadConsumers {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
 
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
-                    locationGateway.findById(formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID)));
+                    locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
             location.setStatus(formPayload.get(ProjectFormFields.Locations.EVALUATION));
 
@@ -110,7 +111,7 @@ public class CensusFormPayloadConsumers {
             SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver,
                     socialGroupGateway.findById(selectedLocation.getExtId()));
             Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
-                    individualGateway.findById(socialGroup.getGroupHead()));
+                    individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHead()));
 
             // INSERT or UPDATE RELATIONSHIP
             RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
@@ -164,7 +165,7 @@ public class CensusFormPayloadConsumers {
 
             // Update the name of the location
             Location location = locationGateway.getFirst(contentResolver,
-                    locationGateway.findById(selectedLocation.getExtId()));
+                    locationGateway.findById(selectedLocation.getUuid()));
             String locationName = individual.getLastName();
             location.setName(locationName);
             selectedLocation.setName(locationName);

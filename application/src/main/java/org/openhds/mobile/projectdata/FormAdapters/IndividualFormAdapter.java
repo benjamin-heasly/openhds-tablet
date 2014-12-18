@@ -13,6 +13,8 @@ public class IndividualFormAdapter {
     public static Individual fromForm(Map<String, String> formInstanceData) {
         Individual individual = new Individual();
 
+        individual.setUuid(formInstanceData.get(
+                ProjectFormFields.Individuals.getFieldNameFromColumn(COLUMN_INDIVIDUAL_UUID)));
         individual.setExtId(formInstanceData.get(
                 ProjectFormFields.Individuals.getFieldNameFromColumn(COLUMN_INDIVIDUAL_EXTID)));
         individual.setFirstName(formInstanceData.get(
@@ -59,6 +61,7 @@ public class IndividualFormAdapter {
     public static Map<String, String> toForm( Individual individual) {
         Map<String, String> formFields = new HashMap<String, String>();
 
+        formFields.put(ProjectFormFields.General.ENTITY_UUID, individual.getUuid());
         formFields.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individual.getExtId());
         formFields.put(ProjectFormFields.Individuals.FIRST_NAME, individual.getFirstName());
         formFields.put(ProjectFormFields.Individuals.LAST_NAME, individual.getLastName());

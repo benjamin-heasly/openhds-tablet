@@ -9,11 +9,16 @@ public class ProjectFormFields {
 
     public static final class General {
 
+        public static final String PROCESSED_BY_MIRTH = "processedByMirth";
+        public static final String ENTITY_UUID = "entityUuid";
+        public static final String ENTITY_EXTID = "entityExtId";
         public static final String NEEDS_REVIEW = "needsReview";
-
         public static final String COLLECTION_DATE_TIME = "collectionDateTime";
+        public static final String FIELD_WORKER_UUID = "fieldWorkerUuid";
+        public static final String FIELD_WORKER_EXTID = "fieldWorkerExtId";
+
+
         public static final String DISTRIBUTION_DATE_TIME = "distributionDateTime";
-        public static final String COLLECTED_BY_FIELD_WORKER_EXTID = "fieldWorkerExtId";
 
         public static final String REGION_STATE_FIELD_NAME = "regionExtId";
         public static final String PROVINCE_STATE_FIELD_NAME = "provinceExtId";
@@ -117,6 +122,9 @@ public class ProjectFormFields {
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_STATUS, STATUS);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE, LONGITUDE);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE, LATITUDE);
+            columnsToFieldNames.put(
+                    OpenHDS.Locations.COLUMN_LOCATION_UUID,
+                    General.ENTITY_UUID);
 
 
 
@@ -132,6 +140,9 @@ public class ProjectFormFields {
     }
 
     public static final class Individuals {
+
+
+
 
         // for individuals table
         public static final String INDIVIDUAL_EXTID = "individualExtId";
@@ -156,6 +167,7 @@ public class ProjectFormFields {
         public static final String RELATIONSHIP_TO_HEAD = "individualRelationshipToHeadOfHousehold";
         public static final String HEAD_PREFILLED_FLAG = "headPrefilledFlag";
         public static final String HOUSEHOLD_EXTID = "householdExtId";
+        public static final String HOUSEHOLD_UUID = "householdUuid";
         public static final String MEMBER_STATUS = "individualMemberStatus";
 
 
@@ -213,6 +225,9 @@ public class ProjectFormFields {
             columnsToFieldNames.put(
                     OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY,
                     NATIONALITY);
+            columnsToFieldNames.put(
+                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID,
+                    General.ENTITY_UUID);
 
         }
 

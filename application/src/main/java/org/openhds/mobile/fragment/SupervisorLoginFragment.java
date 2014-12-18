@@ -67,6 +67,7 @@ public class SupervisorLoginFragment extends Fragment implements
         // supervisor_login_url needs to be a secured resource on the sever
         // for example openhds/api/rest/socialgroups
         String path = getResourceString(getActivity(), R.string.supervisor_login_url);
+
         return buildServerUrl(getActivity(), path);
     }
 

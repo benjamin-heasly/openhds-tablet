@@ -8,11 +8,7 @@ import org.openhds.mobile.model.FieldWorker;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 
-import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID;
-import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME;
-import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX;
-import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME;
-import static org.openhds.mobile.OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD;
+import static org.openhds.mobile.OpenHDS.FieldWorkers.*;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
 
@@ -36,6 +32,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             fieldWorker.setFirstName(extractString(cursor, COLUMN_FIELD_WORKER_FIRST_NAME));
             fieldWorker.setLastName(extractString(cursor, COLUMN_FIELD_WORKER_LAST_NAME));
             fieldWorker.setPasswordHash(extractString(cursor, COLUMN_FIELD_WORKER_PASSWORD));
+            fieldWorker.setUuid(extractString(cursor, COLUMN_FIELD_WORKER_UUID));
 
             return fieldWorker;
         }
@@ -54,6 +51,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             contentValues.put(COLUMN_FIELD_WORKER_FIRST_NAME, fieldWorker.getFirstName());
             contentValues.put(COLUMN_FIELD_WORKER_LAST_NAME, fieldWorker.getLastName());
             contentValues.put(COLUMN_FIELD_WORKER_PASSWORD, fieldWorker.getPasswordHash());
+            contentValues.put(COLUMN_FIELD_WORKER_UUID, fieldWorker.getUuid());
 
             return contentValues;
         }
@@ -69,6 +67,7 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             dataWrapper.setExtId(fieldWorker.getExtId());
             dataWrapper.setName(fieldWorker.getFirstName());
             dataWrapper.setCategory(state);
+            dataWrapper.setUuid(fieldWorker.getUuid());
             return dataWrapper;
         }
     }

@@ -233,7 +233,7 @@ public class DatabaseAdapter {
 
 	public void updateOdkUri(long id, Uri uri) {
 		ContentValues cv = new ContentValues();
-		cv.put(KEY_ODK_URI, uri.toString());
+		//cv.put(KEY_ODK_URI, uri.toString());
 
 		updateFormSubmission(id, cv);
 	}

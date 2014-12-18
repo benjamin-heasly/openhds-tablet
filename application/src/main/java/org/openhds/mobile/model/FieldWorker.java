@@ -5,6 +5,9 @@ import java.io.Serializable;
 public class FieldWorker implements Serializable {
 
 	private static final long serialVersionUID = -8973040054481039466L;
+
+
+    private String uuid;
 	private String extId;
 	private String firstName;
 	private String lastName;
@@ -14,13 +17,23 @@ public class FieldWorker implements Serializable {
 	public FieldWorker() {
 	}
 
-	public FieldWorker(String extId, String firstName, String lastName) {
+	public FieldWorker(String extId, String firstName, String lastName, String uuid) {
 		this.extId = extId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+        this.uuid = uuid;
 	}
 
-	public String getExtId() {
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+
+    public String getExtId() {
 		return extId;
 	}
 
