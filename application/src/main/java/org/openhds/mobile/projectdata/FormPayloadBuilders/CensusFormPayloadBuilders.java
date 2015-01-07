@@ -44,12 +44,12 @@ public class CensusFormPayloadBuilders {
 
         // map area name is <mapAreaName>
         LocationHierarchy mapArea = locationHierarchyGateway.getFirst(contentResolver,
-                locationHierarchyGateway.findById(sector.getParent()));
+                locationHierarchyGateway.findById(sector.getParentUuid()));
         formPayload.put(ProjectFormFields.Locations.MAP_AREA_NAME, mapArea.getName());
 
         // locality is <localityName>
         LocationHierarchy locality = locationHierarchyGateway.getFirst(contentResolver,
-                locationHierarchyGateway.findById(mapArea.getParent()));
+                locationHierarchyGateway.findById(mapArea.getParentUuid()));
         formPayload.put(ProjectFormFields.Locations.LOCALITY_NAME, locality.getName());
 
         // default to 1 for <locationFloorNumber />

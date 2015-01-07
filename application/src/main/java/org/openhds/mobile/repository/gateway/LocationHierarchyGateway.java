@@ -40,7 +40,7 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
             locationHierarchy.setExtId(extractString(cursor, COLUMN_HIERARCHY_EXTID));
             locationHierarchy.setName(extractString(cursor, COLUMN_HIERARCHY_NAME));
             locationHierarchy.setLevel(extractString(cursor, COLUMN_HIERARCHY_LEVEL));
-            locationHierarchy.setParent(extractString(cursor, COLUMN_HIERARCHY_PARENT));
+            locationHierarchy.setParentUuid(extractString(cursor, COLUMN_HIERARCHY_PARENT));
 
             return locationHierarchy;
         }
@@ -53,7 +53,7 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
             contentValues.put(COLUMN_HIERARCHY_EXTID, locationHierarchy.getExtId());
             contentValues.put(COLUMN_HIERARCHY_NAME, locationHierarchy.getName());
             contentValues.put(COLUMN_HIERARCHY_LEVEL, locationHierarchy.getLevel());
-            contentValues.put(COLUMN_HIERARCHY_PARENT, locationHierarchy.getParent());
+            contentValues.put(COLUMN_HIERARCHY_PARENT, locationHierarchy.getParentUuid());
 
             return contentValues;
         }

@@ -18,7 +18,7 @@ public class SocialGroupParser extends EntityParser<SocialGroup> {
 
         socialGroup.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
         socialGroup.setGroupHeadUuid(dataPage.getFirstString(asList(pageName, "groupHead", "uuid")));
-        socialGroup.setGroupHeadUuid(dataPage.getFirstString(asList(pageName, "location", "uuid")));
+        socialGroup.setLocationUuid(dataPage.getFirstString(asList(pageName, "location", "uuid")));
         socialGroup.setGroupName(dataPage.getFirstString(asList(pageName, "groupName")));
 
         return socialGroup;

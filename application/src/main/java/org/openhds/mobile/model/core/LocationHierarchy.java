@@ -8,7 +8,7 @@ public class LocationHierarchy implements Serializable {
 
     private String extId;
     private String name;
-    private String parent;
+    private String parentUuid;
     private String level;
     private String uuid;
 
@@ -38,12 +38,12 @@ public class LocationHierarchy implements Serializable {
         this.name = name;
     }
 
-    public String getParent() {
-        return parent;
+    public String getParentUuid() {
+        return parentUuid;
     }
 
-    public void setParent(String parent) {
-        this.parent = parent;
+    public void setParentUuid(String parentUuid) {
+        this.parentUuid = parentUuid;
     }
 
     public String getLevel() {

@@ -20,7 +20,7 @@ public class LocationHierarchyGatewayTest extends GatewayTest<LocationHierarchy>
         locationHierarchy.setExtId(id);
         locationHierarchy.setName(name);
         locationHierarchy.setLevel("HIERARCHY");
-        locationHierarchy.setParent("PARENT");
+        locationHierarchy.setParentUuid("PARENT");
 
         return locationHierarchy;
     }
