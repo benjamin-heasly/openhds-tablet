@@ -25,12 +25,12 @@ public class LocationGateway extends Gateway<Location> {
     }
 
     public Query findByHierarchy(String hierarchyId) {
-        return new Query(tableUri, COLUMN_LOCATION_HIERARCHY, hierarchyId, COLUMN_LOCATION_UUID);
+        return new Query(tableUri, COLUMN_LOCATION_HIERARCHY_UUID, hierarchyId, COLUMN_LOCATION_UUID);
     }
 
     // for Bioko
     public Query findByHierarchyDescendingBuildingNumber(String hierarchyId) {
-        return new Query(tableUri, COLUMN_LOCATION_HIERARCHY, hierarchyId, COLUMN_LOCATION_BUILDING_NUMBER + " DESC");
+        return new Query(tableUri, COLUMN_LOCATION_HIERARCHY_UUID, hierarchyId, COLUMN_LOCATION_BUILDING_NUMBER + " DESC");
     }
 
     private static class LocationConverter implements Converter<Location> {
@@ -41,7 +41,8 @@ public class LocationGateway extends Gateway<Location> {
 
             location.setUuid(extractString(cursor, COLUMN_LOCATION_UUID));
             location.setExtId(extractString(cursor, COLUMN_LOCATION_EXTID));
-            location.setHierarchyUuid(extractString(cursor, COLUMN_LOCATION_HIERARCHY));
+            location.setHierarchyUuid(extractString(cursor, COLUMN_LOCATION_HIERARCHY_UUID));
+            location.setHierarchyExtId(extractString(cursor, COLUMN_LOCATION_HIERARCHY_EXTID));
             location.setLatitude(extractString(cursor, COLUMN_LOCATION_LATITUDE));
             location.setLongitude(extractString(cursor, COLUMN_LOCATION_LONGITUDE));
             location.setName(extractString(cursor, COLUMN_LOCATION_NAME));
@@ -68,7 +69,8 @@ public class LocationGateway extends Gateway<Location> {
 
             contentValues.put(COLUMN_LOCATION_UUID, location.getUuid());
             contentValues.put(COLUMN_LOCATION_EXTID, location.getExtId());
-            contentValues.put(COLUMN_LOCATION_HIERARCHY, location.getHierarchyUuid());
+            contentValues.put(COLUMN_LOCATION_HIERARCHY_UUID, location.getHierarchyUuid());
+            contentValues.put(COLUMN_LOCATION_HIERARCHY_EXTID, location.getHierarchyExtId());
             contentValues.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
             contentValues.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
             contentValues.put(COLUMN_LOCATION_NAME, location.getName());

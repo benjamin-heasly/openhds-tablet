@@ -37,8 +37,9 @@ public class CensusFormPayloadBuilders {
         // sector name is <sectorname>
         LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
         LocationHierarchy sector = locationHierarchyGateway.getFirst(contentResolver,
-                locationHierarchyGateway.findById(sectorDataWrapper.getExtId()));
+                locationHierarchyGateway.findById(sectorDataWrapper.getUuid()));
         formPayload.put(ProjectFormFields.Locations.HIERERCHY_EXTID, sector.getExtId());
+        formPayload.put(ProjectFormFields.Locations.HIERERCHY_UUID, sector.getUuid());
         formPayload.put(ProjectFormFields.Locations.SECTOR_NAME, sector.getName());
 
         // map area name is <mapAreaName>
@@ -62,7 +63,7 @@ public class CensusFormPayloadBuilders {
         String communityName = "";
         String communityCode = "";
         Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver,
-                locationGateway.findByHierarchyDescendingBuildingNumber(sector.getExtId()));
+                locationGateway.findByHierarchyDescendingBuildingNumber(sector.getUuid()));
         if (locationIterator.hasNext()) {
             Location location = locationIterator.next();
             buildingNumber += location.getBuildingNumber();
@@ -74,7 +75,6 @@ public class CensusFormPayloadBuilders {
         formPayload.put(ProjectFormFields.Locations.COMMUNITY_NAME, communityName);
         formPayload.put(ProjectFormFields.Locations.COMMUNITY_CODE, communityCode);
         formPayload.put(ProjectFormFields.General.ENTITY_UUID, IdHelper.generateEntityUuid());
-
 
     }
 
@@ -156,7 +156,7 @@ public class CensusFormPayloadBuilders {
 
             SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
             SocialGroup socialGroup = socialGroupGateway.getFirst(resolver,
-                    socialGroupGateway.findById(navigateActivity.getCurrentSelection().getExtId()));
+                    socialGroupGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
             IndividualGateway individualGateway = new IndividualGateway();
             //HoH is found by searching by extId, since we're currently dependent on the groupHead property of socialgroup
@@ -193,6 +193,8 @@ public class CensusFormPayloadBuilders {
 
     }
 
+
+    // This is (as of ascii-asteroid 2) not being called/utilized
     public static class EditIndividual implements FormPayloadBuilder {
 
         @Override
@@ -206,17 +208,17 @@ public class CensusFormPayloadBuilders {
             Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
 
-            String individualExtId = hierarchyPath
+            String individualUuid = hierarchyPath
                     .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE)
-                    .getExtId();
-            String householdExtId = hierarchyPath
+                    .getUuid();
+            String householdUuid = hierarchyPath
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)
-                    .getExtId();
+                    .getUuid();
 
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             ContentResolver contentResolver = navigateActivity.getContentResolver();
             Individual individual = individualGateway.getFirst(contentResolver,
-                    individualGateway.findById(individualExtId));
+                    individualGateway.findById(individualUuid));
 
             formPayload.putAll(IndividualFormAdapter.toForm(individual));
 
@@ -227,7 +229,7 @@ public class CensusFormPayloadBuilders {
 
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
             Membership membership = membershipGateway.getFirst(contentResolver,
-                    membershipGateway.findBySocialGroupAndIndividual(householdExtId, individualExtId));
+                    membershipGateway.findBySocialGroupAndIndividual(householdUuid, individualUuid));
             if (null != membership) {
                 formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
                         membership.getRelationshipToHead());

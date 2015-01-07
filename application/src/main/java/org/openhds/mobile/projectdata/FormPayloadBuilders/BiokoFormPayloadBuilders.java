@@ -42,7 +42,7 @@ public class BiokoFormPayloadBuilders {
             //pre-fill the householdSize for this particular household
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             ContentResolver contentResolver = navigateActivity.getContentResolver();
-            List<Individual> individuals = individualGateway.getList(contentResolver, individualGateway.findByResidency(locationExtId));
+            List<Individual> individuals = individualGateway.getList(contentResolver, individualGateway.findByResidency(locationUuid));
             String householdSize = Integer.toString(individuals.size());
             formPayload.put(ProjectFormFields.BedNet.HOUSEHOLD_SIZE, householdSize);
         }

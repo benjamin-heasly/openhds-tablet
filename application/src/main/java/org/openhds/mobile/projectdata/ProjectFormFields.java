@@ -78,6 +78,7 @@ public class ProjectFormFields {
 
     public static final class Locations {
         public static final String HIERERCHY_UUID = "hierarchyUuid";
+        public static final String HIERERCHY_EXTID = "hierarchyExtId";
         public static final String LOCATION_EXTID = "locationExtId";
         public static final String LOCATION_NAME = "locationName";
         public static final String LOCATION_TYPE = "locationType";
@@ -104,7 +105,8 @@ public class ProjectFormFields {
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
         static {
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, HIERERCHY_UUID);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID, HIERERCHY_UUID);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID, HIERERCHY_EXTID);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID, LOCATION_EXTID);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_NAME, LOCATION_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME, COMMUNITY_NAME);

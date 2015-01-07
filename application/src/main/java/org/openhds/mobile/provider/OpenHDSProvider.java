@@ -178,8 +178,10 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.Locations.COLUMN_LOCATION_EXTID);
         locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_UUID,
                 OpenHDS.Locations.COLUMN_LOCATION_UUID);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY,
-                OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY);
+        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID,
+                OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID);
+        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID,
+                OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID);
         locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE,
                 OpenHDS.Locations.COLUMN_LOCATION_LATITUDE);
         locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE,
@@ -974,7 +976,9 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT NOT NULL,"
                     + OpenHDS.Locations.COLUMN_LOCATION_UUID
                     + " TEXT NOT NULL PRIMARY KEY,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY
+                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID
+                    + " TEXT NOT NULL,"
+                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID
                     + " TEXT NOT NULL,"
                     + OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE + " TEXT,"
@@ -998,7 +1002,7 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_NAME
                     + " TEXT NOT NULL);"
                     + " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON "
-                    + OpenHDS.Locations.TABLE_NAME + "(" + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY + ")");
+                    + OpenHDS.Locations.TABLE_NAME + "(" + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID + ")");
 
             db.execSQL("CREATE TABLE " + OpenHDS.HierarchyItems.TABLE_NAME
                     + " (" + OpenHDS.HierarchyItems._ID

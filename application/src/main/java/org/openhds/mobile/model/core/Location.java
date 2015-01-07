@@ -13,6 +13,7 @@ public class Location implements Serializable {
 	private String latitude;
 	private String longitude;
 	private String hierarchyUuid;
+    private String hierarchyExtId;
     private String communityName;
     private String communityCode;
     private String localityName;
@@ -148,6 +149,14 @@ public class Location implements Serializable {
 	public void setHierarchyUuid(String hierarchyUuid) {
 		this.hierarchyUuid = hierarchyUuid;
 	}
+
+    public String getHierarchyExtId() {
+        return hierarchyExtId;
+    }
+
+    public void setHierarchyExtId(String hierarchyExtId) {
+        this.hierarchyExtId = hierarchyExtId;
+    }
 
     public String getCommunityName() {
         return communityName;

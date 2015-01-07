@@ -83,7 +83,8 @@ public class OpenHDS {
 		public static final String COLUMN_LOCATION_NAME = "name";
 		public static final String COLUMN_LOCATION_LATITUDE = "latitude";
 		public static final String COLUMN_LOCATION_LONGITUDE = "longitude";
-		public static final String COLUMN_LOCATION_HIERARCHY = "hierarchy";
+		public static final String COLUMN_LOCATION_HIERARCHY_UUID = "hierarchyUuid";
+		public static final String COLUMN_LOCATION_HIERARCHY_EXTID = "hierarchyExtId";
         public static final String COLUMN_LOCATION_COMMUNITY_NAME = "communityName";
         public static final String COLUMN_LOCATION_COMMUNITY_CODE = "communityCode";
         public static final String COLUMN_LOCATION_LOCALITY_NAME = "localityName";

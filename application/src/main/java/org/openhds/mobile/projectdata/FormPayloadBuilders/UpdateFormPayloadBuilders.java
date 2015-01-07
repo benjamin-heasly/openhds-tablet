@@ -30,12 +30,15 @@ public class UpdateFormPayloadBuilders {
                     Calendar.getInstance().getTime()).toString();
             String locationExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid= navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
             String visitExtId = visitDate + "_" + locationExtId;
 
             formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
             formPayload.put(ProjectFormFields.Visits.LOCATION_UUID,
-                    locationExtId);
+                    locationUuid);
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
+
         }
     }
 
