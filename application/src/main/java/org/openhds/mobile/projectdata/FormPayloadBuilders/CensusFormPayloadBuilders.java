@@ -78,8 +78,6 @@ public class CensusFormPayloadBuilders {
 
     }
 
-
-
     private static void addNewIndividualPayload(
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
@@ -90,9 +88,6 @@ public class CensusFormPayloadBuilders {
 
         formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
                 individualExtId);
-
-//        //TODO: this is a hack to make the ODK form birthday constraints work - might not be necessary anymore.
-//        formPayload.put(ProjectFormFields.Individuals.AGE_UNITS, "Years");
 
         //TODO: when locationHierarchies have uuid's pull all the uuid's from the hierarchyPath
 
@@ -172,6 +167,11 @@ public class CensusFormPayloadBuilders {
                 formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, headOfHousehold.getPointOfContactPhoneNumber());
             }
 
+            // we need to add the socialgroup, membership, and relationship UUID for when they're created in
+            // the consumers. We add them now so they are a part of the form when it is passed up.
+            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_UUID, IdHelper.generateEntityUuid());
+            formPayload.put(ProjectFormFields.Individuals.MEMBERSHIP_UUID, IdHelper.generateEntityUuid());
+
 
         }
 
@@ -187,12 +187,17 @@ public class CensusFormPayloadBuilders {
             PayloadTools.flagForReview(formPayload, false);
             addNewIndividualPayload(formPayload, navigateActivity);
 
+            // we need to add the socialgroup, membership, and relationship UUID for when they're created in
+            // the consumers. We add them now so they are a part of the form when it is passed up.
+            formPayload.put(ProjectFormFields.Individuals.SOCIALGROUP_UUID, IdHelper.generateEntityUuid());
+            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_UUID, IdHelper.generateEntityUuid());
+            formPayload.put(ProjectFormFields.Individuals.MEMBERSHIP_UUID, IdHelper.generateEntityUuid());
+
             formPayload.put(ProjectFormFields.Individuals.HEAD_PREFILLED_FLAG, "true");
 
         }
 
     }
-
 
     // This is (as of ascii-asteroid 2) not being called/utilized
     public static class EditIndividual implements FormPayloadBuilder {

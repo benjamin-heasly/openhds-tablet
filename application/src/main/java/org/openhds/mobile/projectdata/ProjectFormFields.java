@@ -165,12 +165,15 @@ public class ProjectFormFields {
         public static final String MOTHER_EXTID = "individualMotherExtId";
         public static final String FATHER_EXTID = "individualFatherExtId";
 
-        // TODO: for relationships and memberships tables
+
         public static final String RELATIONSHIP_TO_HEAD = "individualRelationshipToHeadOfHousehold";
         public static final String HEAD_PREFILLED_FLAG = "headPrefilledFlag";
-        public static final String HOUSEHOLD_UUID = "householdUuid";
         public static final String MEMBER_STATUS = "individualMemberStatus";
 
+        public static final String HOUSEHOLD_UUID = "householdUuid";
+        public static final String MEMBERSHIP_UUID = "membershipUuid";
+        public static final String RELATIONSHIP_UUID = "relationshipUuid";
+        public static final String SOCIALGROUP_UUID = "socialgroupUuid";
 
         public static final String IS_PREGNANT_FLAG = "individualIsPregnantFlag";
 

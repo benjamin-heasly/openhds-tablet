@@ -7,6 +7,7 @@ import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
+import org.openhds.mobile.repository.Query;
 
 import static org.openhds.mobile.OpenHDS.SocialGroups.*;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
@@ -19,6 +20,11 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
 
     public SocialGroupGateway() {
         super(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, COLUMN_SOCIAL_GROUP_UUID, new SocialGroupConverter());
+    }
+
+    public Query findByLocationUuid(String locationUuid) {
+        return new Query(
+                tableUri, COLUMN_LOCATION_UUID, locationUuid, COLUMN_SOCIAL_GROUP_UUID);
     }
 
     private static class SocialGroupConverter implements Converter<SocialGroup> {

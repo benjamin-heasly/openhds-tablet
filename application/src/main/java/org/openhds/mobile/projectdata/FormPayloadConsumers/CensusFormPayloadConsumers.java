@@ -111,18 +111,20 @@ public class CensusFormPayloadConsumers {
 
             // get head of household by household id
             SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver,
-                    socialGroupGateway.findById(selectedLocation.getExtId()));
+                    socialGroupGateway.findByLocationUuid(selectedLocation.getUuid()));
+
+
             Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
                     individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHeadUuid()));
 
             // INSERT or UPDATE RELATIONSHIP
             RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
-            Relationship relationship = new Relationship(individual, currentHeadOfHousehold, relationshipType, startDate, IdHelper.generateEntityUuid());
+            Relationship relationship = new Relationship(individual, currentHeadOfHousehold, relationshipType, startDate, formPayload.get(ProjectFormFields.Individuals.RELATIONSHIP_UUID));
             relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
             // INSERT or UPDATE MEMBERSHIP
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
-            Membership membership = new Membership(individual, socialGroup, relationshipType, IdHelper.generateEntityUuid());
+            Membership membership = new Membership(individual, socialGroup, relationshipType, formPayload.get(ProjectFormFields.Individuals.MEMBERSHIP_UUID));
             membershipGateway.insertOrUpdate(contentResolver, membership);
 
             ConsumerResults pregnantResults;
@@ -175,17 +177,17 @@ public class CensusFormPayloadConsumers {
 
             // create social group
             SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
-            SocialGroup socialGroup = new SocialGroup(selectedLocation.getExtId(), selectedLocation.getExtId(), individual, IdHelper.generateEntityUuid());
+            SocialGroup socialGroup = new SocialGroup(selectedLocation.getUuid(), selectedLocation.getExtId(), individual, formPayload.get(ProjectFormFields.Individuals.SOCIALGROUP_UUID));
             socialGroupGateway.insertOrUpdate(contentResolver, socialGroup);
 
             // create membership
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
-            Membership membership = new Membership(individual, socialGroup, relationshipType, IdHelper.generateEntityUuid());
+            Membership membership = new Membership(individual, socialGroup, relationshipType, formPayload.get(ProjectFormFields.Individuals.MEMBERSHIP_UUID));
             membershipGateway.insertOrUpdate(contentResolver, membership);
 
             // Set head of household's relationship to himself.
             RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
-            Relationship relationship = new Relationship(individual, individual, relationshipType, startDate, IdHelper.generateEntityUuid());
+            Relationship relationship = new Relationship(individual, individual, relationshipType, startDate, formPayload.get(ProjectFormFields.Individuals.RELATIONSHIP_UUID));
             relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
             ConsumerResults pregnantResults;
@@ -235,7 +237,6 @@ public class CensusFormPayloadConsumers {
 
         return null;
     }
-
 
     // Used for Form Launch Sequences
     public static class StartAVisitForPregnancyObservation implements FormPayloadConsumer {
