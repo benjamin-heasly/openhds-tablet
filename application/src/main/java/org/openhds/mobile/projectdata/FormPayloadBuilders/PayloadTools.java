@@ -28,6 +28,7 @@ public class PayloadTools {
         Map<String, DataWrapper> hierarchyPath = navigateActivity
                 .getHierarchyPath();
 
+        //TODO: Add all the hierarchy Uuids as well?
         // Add all the extIds from the HierarchyPath
         for (String state : stateSequence) {
             if (null != hierarchyPath.get(state)) {

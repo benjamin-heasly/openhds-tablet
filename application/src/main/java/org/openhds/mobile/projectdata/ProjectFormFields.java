@@ -77,9 +77,11 @@ public class ProjectFormFields {
     }
 
     public static final class Locations {
+        public static final String HIERERCHY_PARENT_UUID = "hierarchyParentUuid";
         public static final String HIERERCHY_UUID = "hierarchyUuid";
         public static final String HIERERCHY_EXTID = "hierarchyExtId";
         public static final String LOCATION_EXTID = "locationExtId";
+        public static final String LOCATION_UUID = "locationUuid";
         public static final String LOCATION_NAME = "locationName";
         public static final String LOCATION_TYPE = "locationType";
         public static final String COMMUNITY_NAME = "communityName";
@@ -148,6 +150,7 @@ public class ProjectFormFields {
 
         // for individuals table
         public static final String INDIVIDUAL_EXTID = "individualExtId";
+        public static final String INDIVIDUAL_UUID = "individualUuid";
         public static final String FIRST_NAME = "individualFirstName";
         public static final String LAST_NAME = "individualLastName";
         public static final String OTHER_NAMES = "individualOtherNames";
@@ -288,7 +291,6 @@ public class ProjectFormFields {
     }
 
     public static final class OutMigrations {
-        public static final String OUT_MIGRATION_INDIVIDUAL_EXTID = "outMigrationIndividualExtId";
         public static final String OUT_MIGRATION_DATE = "outMigrationDate";
         public static final String OUT_MIGRATION_NAME_OF_DESITINATION = "outMigrationNameOfDestination";
         public static final String OUT_MIGRATION_REASON = "outMigrationReason";
@@ -302,6 +304,7 @@ public class ProjectFormFields {
         public static final String BED_NET_CODE = "netCode";
         public static final String HOUSEHOLD_SIZE = "householdSize";
         public static final String LOCATION_EXTID = "locationExtId";
+        public static final String LOCATION_UUID = "locationUuid";
     }
 
 }

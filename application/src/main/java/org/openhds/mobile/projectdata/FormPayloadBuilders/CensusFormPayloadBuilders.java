@@ -40,6 +40,7 @@ public class CensusFormPayloadBuilders {
                 locationHierarchyGateway.findById(sectorDataWrapper.getUuid()));
         formPayload.put(ProjectFormFields.Locations.HIERERCHY_EXTID, sector.getExtId());
         formPayload.put(ProjectFormFields.Locations.HIERERCHY_UUID, sector.getUuid());
+        formPayload.put(ProjectFormFields.Locations.HIERERCHY_PARENT_UUID, sector.getParentUuid());
         formPayload.put(ProjectFormFields.Locations.SECTOR_NAME, sector.getName());
 
         // map area name is <mapAreaName>
@@ -89,8 +90,6 @@ public class CensusFormPayloadBuilders {
         formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
                 individualExtId);
 
-        //TODO: when locationHierarchies have uuid's pull all the uuid's from the hierarchyPath
-
         formPayload.put(ProjectFormFields.Individuals.HOUSEHOLD_UUID, navigateActivity.getCurrentSelection().getUuid());
 
         formPayload.put(ProjectFormFields.General.ENTITY_EXTID,
@@ -131,7 +130,12 @@ public class CensusFormPayloadBuilders {
 
             String locationExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
-            formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
+            String locationUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
+            formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
 
         }
     }
@@ -151,7 +155,7 @@ public class CensusFormPayloadBuilders {
 
             SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
             SocialGroup socialGroup = socialGroupGateway.getFirst(resolver,
-                    socialGroupGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
+                    socialGroupGateway.findByLocationUuid(navigateActivity.getCurrentSelection().getUuid()));
 
             IndividualGateway individualGateway = new IndividualGateway();
             //HoH is found by searching by extId, since we're currently dependent on the groupHead property of socialgroup
@@ -171,6 +175,7 @@ public class CensusFormPayloadBuilders {
             // the consumers. We add them now so they are a part of the form when it is passed up.
             formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_UUID, IdHelper.generateEntityUuid());
             formPayload.put(ProjectFormFields.Individuals.MEMBERSHIP_UUID, IdHelper.generateEntityUuid());
+            formPayload.put(ProjectFormFields.Individuals.SOCIALGROUP_UUID, socialGroup.getUuid());
 
 
         }

@@ -34,6 +34,10 @@ public class BiokoFormPayloadBuilders {
             String locationUuid = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
             formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
+
 
             //pre-fill a netCode in YY-CCC form
             String netCode = generateNetCode(navigateActivity, locationUuid);

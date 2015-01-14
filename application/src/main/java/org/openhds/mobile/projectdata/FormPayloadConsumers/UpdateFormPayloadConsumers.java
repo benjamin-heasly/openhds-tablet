@@ -68,10 +68,10 @@ public class UpdateFormPayloadConsumers {
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
             // update the individual's residency end type
-            String individualExtId = formPayload.get(ProjectFormFields.OutMigrations.OUT_MIGRATION_INDIVIDUAL_EXTID);
+            String individualUuid = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID);
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             Individual individual = individualGateway.getFirst(navigateActivity.getContentResolver(),
-                    individualGateway.findById(individualExtId));
+                    individualGateway.findById(individualUuid));
             if (null == individual) {
                 return new ConsumerResults(false, null, null);
             }
@@ -87,6 +87,7 @@ public class UpdateFormPayloadConsumers {
         }
     }
 
+    //TODO: Individuals are never in the payload??
     public static class RegisterInMigration implements FormPayloadConsumer {
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
