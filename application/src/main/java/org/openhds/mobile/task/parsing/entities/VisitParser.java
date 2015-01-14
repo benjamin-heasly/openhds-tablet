@@ -16,7 +16,7 @@ public class VisitParser extends EntityParser<Visit> {
     protected Visit toEntity(DataPage dataPage) {
         Visit visit = new Visit();
 
-        visit.setVisitExtId(dataPage.getFirstString(asList(pageName, "extId")));
+        visit.setExtId(dataPage.getFirstString(asList(pageName, "extId")));
         visit.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
         visit.setLocationUuid(dataPage.getFirstString(asList(pageName, "visitLocation", "uuid")));
         visit.setVisitDate(dataPage.getFirstString(asList(pageName, "visitDate")));

@@ -6,7 +6,7 @@ public class Visit implements Serializable {
 
 	private static final long serialVersionUID = 4419294254197721658L;
 
-	private String visitExtId;
+	private String extId;
 	private String locationUuid;
 	private String visitDate;
 	private String fieldWorkerUuid;
@@ -20,12 +20,12 @@ public class Visit implements Serializable {
         this.uuid = uuid;
     }
 
-	public String getVisitExtId() {
-		return visitExtId;
+	public String getExtId() {
+		return extId;
 	}
 
-	public void setVisitExtId(String visitExtId) {
-		this.visitExtId = visitExtId;
+	public void setExtId(String extId) {
+		this.extId = extId;
 	}
 
 	public String getLocationUuid() {

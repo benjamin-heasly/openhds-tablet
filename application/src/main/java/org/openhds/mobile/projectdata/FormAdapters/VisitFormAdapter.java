@@ -18,7 +18,7 @@ public class VisitFormAdapter {
 
         visit.setUuid(formInstanceData.get(
                 ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_UUID)));
-        visit.setVisitExtId(formInstanceData.get(
+        visit.setExtId(formInstanceData.get(
                 ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_EXTID)));
         visit.setVisitDate(formInstanceData.get(
                 ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_DATE)));

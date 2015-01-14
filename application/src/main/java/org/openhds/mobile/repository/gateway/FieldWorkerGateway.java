@@ -7,6 +7,7 @@ import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
+import org.openhds.mobile.repository.Query;
 
 import static org.openhds.mobile.OpenHDS.FieldWorkers.*;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
@@ -19,6 +20,10 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
 
     public FieldWorkerGateway() {
         super(OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE, COLUMN_FIELD_WORKER_UUID, new FieldWorkerConverter());
+    }
+
+    public Query findByExtId(String extId) {
+        return new Query(tableUri, COLUMN_FIELD_WORKER_EXTID, extId, COLUMN_FIELD_WORKER_UUID);
     }
 
     private static class FieldWorkerConverter implements Converter<FieldWorker> {

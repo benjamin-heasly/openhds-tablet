@@ -32,7 +32,7 @@ public class VisitGateway extends Gateway<Visit> {
             Visit visit = new Visit();
 
             visit.setUuid(extractString(cursor, COLUMN_VISIT_UUID));
-            visit.setVisitExtId(extractString(cursor, COLUMN_VISIT_EXTID));
+            visit.setExtId(extractString(cursor, COLUMN_VISIT_EXTID));
             visit.setVisitDate(extractString(cursor, COLUMN_VISIT_DATE));
             visit.setLocationUuid(extractString(cursor, COLUMN_VISIT_LOCATION_UUID));
             visit.setFieldWorkerUuid(extractString(cursor, COLUMN_VISIT_FIELDWORKER_UUID));
@@ -44,7 +44,7 @@ public class VisitGateway extends Gateway<Visit> {
         public ContentValues toContentValues(Visit visit) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(COLUMN_VISIT_EXTID, visit.getVisitExtId());
+            contentValues.put(COLUMN_VISIT_EXTID, visit.getExtId());
             contentValues.put(COLUMN_VISIT_UUID, visit.getUuid());
             contentValues.put(COLUMN_VISIT_DATE, visit.getVisitDate());
             contentValues.put(COLUMN_VISIT_LOCATION_UUID, visit.getLocationUuid());
@@ -61,7 +61,7 @@ public class VisitGateway extends Gateway<Visit> {
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Visit visit, String state) {
             DataWrapper dataWrapper = new DataWrapper();
-            dataWrapper.setExtId(visit.getVisitExtId());
+            dataWrapper.setExtId(visit.getExtId());
             dataWrapper.setName(visit.getLocationUuid());
             dataWrapper.setCategory(state);
             return dataWrapper;
