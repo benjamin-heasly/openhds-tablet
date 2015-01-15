@@ -50,6 +50,38 @@ public class CensusFormPayloadConsumers {
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload,
                                                   NavigateActivity navigateActivity) {
+
+            ContentResolver contentResolver = navigateActivity.getContentResolver();
+
+            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
+            LocationHierarchy mapArea = locationHierarchyGateway.getFirst(contentResolver,
+                    locationHierarchyGateway.findById(formPayload.get(ProjectFormFields.Locations.HIERERCHY_PARENT_UUID)));
+
+
+            String sectorName =  formPayload.get(ProjectFormFields.Locations.SECTOR_NAME);
+            String sectorExtId = mapArea.getExtId() + sectorName;
+
+            LocationHierarchy sector = locationHierarchyGateway.getFirst(contentResolver,
+                    locationHierarchyGateway.findByExtId(sectorExtId));
+
+            if(null == sector){
+                sector = new LocationHierarchy();
+                sector.setUuid(IdHelper.generateEntityUuid());
+                sector.setParentUuid(mapArea.getUuid());
+                sector.setExtId(sectorExtId);
+                sector.setName(sectorName);
+                sector.setLevel(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE);
+                locationHierarchyGateway.insertOrUpdate(contentResolver,sector);
+
+                formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NEEDS_REVIEW);
+                formPayload.put(ProjectFormFields.Locations.HIERERCHY_UUID, sector.getUuid());
+                formPayload.put(ProjectFormFields.Locations.HIERERCHY_PARENT_UUID, sector.getParentUuid());
+                formPayload.put(ProjectFormFields.Locations.HIERERCHY_EXTID, sector.getExtId());
+
+            }
+
+
+
             insertOrUpdateLocation(formPayload, navigateActivity);
 
                 return new ConsumerResults(true, null, null);
@@ -252,7 +284,7 @@ public class CensusFormPayloadConsumers {
 
             navigateActivity.startVisit(visit);
 
-            return new ConsumerResults(false, ProjectActivityBuilder.CensusActivityModule.PregObFormBehaviour, navigateActivity.getPreviousConsumerResults().getFollowUpFormHints());
+            return new ConsumerResults(false, ProjectActivityBuilder.CensusActivityModule.pregObFormBehaviour, navigateActivity.getPreviousConsumerResults().getFollowUpFormHints());
         }
 
         @Override

@@ -116,6 +116,7 @@ public class CensusFormPayloadBuilders {
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, false);
             addNewLocationPayload(formPayload, navigateActivity);
+
         }
     }
 

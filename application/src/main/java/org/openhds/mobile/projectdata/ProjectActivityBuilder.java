@@ -291,7 +291,9 @@ public class ProjectActivityBuilder {
 
         public static FormBehaviour visitPregObFormBehaviour;
 
-        public static FormBehaviour PregObFormBehaviour;
+        public static FormBehaviour pregObFormBehaviour;
+
+        public static FormBehaviour addLocationFormBehaviour;
 
         static {
 
@@ -301,11 +303,17 @@ public class ProjectActivityBuilder {
                     new UpdateFormPayloadBuilders.StartAVisit(),
                     new CensusFormPayloadConsumers.StartAVisitForPregnancyObservation());
 
-            PregObFormBehaviour = new FormBehaviour("Pregnancy_observation",
+            pregObFormBehaviour = new FormBehaviour("Pregnancy_observation",
                     R.string.record_pregnancy_observation,
                     new UpdateFormFilters.RecordPregnancyObservation(),
                     new UpdateFormPayloadBuilders.RecordPregnancyObservation(),
                     new CensusFormPayloadConsumers.PregnancyObservation());
+
+            addLocationFormBehaviour = new FormBehaviour("Location",
+                    R.string.create_location,
+                    new CensusFormFilters.AddLocation(),
+                    new CensusFormPayloadBuilders.AddLocation(),
+                    new CensusFormPayloadConsumers.AddLocation());
 
             ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> provinceFormList = new ArrayList<FormBehaviour>();
@@ -318,11 +326,7 @@ public class ProjectActivityBuilder {
             ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
-            householdFormList.add(new FormBehaviour("Location",
-                    R.string.create_location,
-                    new CensusFormFilters.AddLocation(),
-                    new CensusFormPayloadBuilders.AddLocation(),
-                    new CensusFormPayloadConsumers.AddLocation()));
+            householdFormList.add(addLocationFormBehaviour);
 
             individualFormList.add(new FormBehaviour("Location_evaluation",
                     R.string.evaluate_location_label,
