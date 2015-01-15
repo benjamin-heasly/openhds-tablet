@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.repository.Query;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 
@@ -56,8 +56,8 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         Individual individual2 = makeTestEntity("TEST2", "test 2");
         Individual individual3 = makeTestEntity("TEST3", "test 3");
 
-        individual1.setCurrentResidence("FINDME");
-        individual2.setCurrentResidence("FINDME");
+        individual1.setCurrentResidenceUuid("FINDME");
+        individual2.setCurrentResidenceUuid("FINDME");
 
         individualGateway.insertOrUpdate(contentResolver, individual1);
         individualGateway.insertOrUpdate(contentResolver, individual2);
@@ -144,7 +144,7 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         individual.setGender("M");
         individual.setMother("MOTHER");
         individual.setFather("FATHER");
-        individual.setCurrentResidence("LOCATION");
+        individual.setCurrentResidenceUuid("LOCATION");
         individual.setEndType("N/A");
         individual.setOtherId("OTHER");
         individual.setOtherNames(name);

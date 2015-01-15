@@ -44,7 +44,7 @@ public class OpenHDS {
 		public static final String COLUMN_INDIVIDUAL_GENDER = "gender";
 		public static final String COLUMN_INDIVIDUAL_MOTHER = "mother";
 		public static final String COLUMN_INDIVIDUAL_FATHER = "father";
-		public static final String COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID = "currentResidence";
+		public static final String COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID = "currentResidence";
 		public static final String COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE = "endType";
 
 		// extensions for bioko project
@@ -83,7 +83,8 @@ public class OpenHDS {
 		public static final String COLUMN_LOCATION_NAME = "name";
 		public static final String COLUMN_LOCATION_LATITUDE = "latitude";
 		public static final String COLUMN_LOCATION_LONGITUDE = "longitude";
-		public static final String COLUMN_LOCATION_HIERARCHY = "hierarchy";
+		public static final String COLUMN_LOCATION_HIERARCHY_UUID = "hierarchyUuid";
+		public static final String COLUMN_LOCATION_HIERARCHY_EXTID = "hierarchyExtId";
         public static final String COLUMN_LOCATION_COMMUNITY_NAME = "communityName";
         public static final String COLUMN_LOCATION_COMMUNITY_CODE = "communityCode";
         public static final String COLUMN_LOCATION_LOCALITY_NAME = "localityName";
@@ -118,6 +119,8 @@ public class OpenHDS {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.hierarchyitem";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.hierarchyitem";
 
+        public static final String COLUMN_HIERARCHY_UUID = "uuid";
+
 		public static final String COLUMN_HIERARCHY_EXTID = "extId";
 		public static final String COLUMN_HIERARCHY_NAME = "name";
 		public static final String COLUMN_HIERARCHY_PARENT = "parent";
@@ -140,10 +143,12 @@ public class OpenHDS {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.visit";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.visit";
 
+        public static final String COLUMN_VISIT_UUID = "uuid";
+
 		public static final String COLUMN_VISIT_EXTID = "extId";
 		public static final String COLUMN_VISIT_DATE = "date";
-		public static final String COLUMN_VISIT_LOCATION_EXTID = "locationExtId";
-		public static final String COLUMN_VISIT_FIELDWORKER_EXTID = "fieldWorkerExtId";
+		public static final String COLUMN_VISIT_LOCATION_UUID = "location_uuid";
+		public static final String COLUMN_VISIT_FIELDWORKER_UUID = "fieldWorkerUuid";
 
 	}
 
@@ -162,6 +167,8 @@ public class OpenHDS {
 
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.relationship";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.relationship";
+
+        public static final String COLUMN_RELATIONSHIP_UUID = "uuid";
 
 		public static final String COLUMN_RELATIONSHIP_INDIVIDUAL_A = "individualA";
 		public static final String COLUMN_RELATIONSHIP_INDIVIDUAL_B = "individualB";
@@ -222,9 +229,12 @@ public class OpenHDS {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.socialgroups";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.socialgroups";
 
-		public static final String COLUMN_SOCIAL_GROUP_EXTID = "extId";
+        public static final String COLUMN_SOCIAL_GROUP_UUID = "uuid";
+
+        public static final String COLUMN_LOCATION_UUID = "location_uuid";
+
 		public static final String COLUMN_SOCIAL_GROUP_NAME = "groupName";
-		public static final String COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID = "groupHead_extId";
+		public static final String COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID = "groupHead_uuid";
 	}
 
 	public static final class Memberships implements BaseColumns {
@@ -243,8 +253,10 @@ public class OpenHDS {
 		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.openhds.memberships";
 		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.openhds.memberships";
 
-		public static final String COLUMN_SOCIAL_GROUP_EXTID = "socialGroup_extId";
-		public static final String COLUMN_INDIVIDUAL_EXTID = "individual_extId";
+        public static final String COLUMN_MEMBERSHIP_UUID = "uuid";
+
+		public static final String COLUMN_SOCIAL_GROUP_UUID = "socialGroup_uuid";
+		public static final String COLUMN_INDIVIDUAL_UUID = "individual_uuid";
 		public static final String COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD = "relationshipToHead";
 	}
 }

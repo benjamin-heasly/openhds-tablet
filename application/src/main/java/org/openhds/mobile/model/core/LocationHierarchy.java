@@ -1,4 +1,4 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.core;
 
 import java.io.Serializable;
 
@@ -8,10 +8,19 @@ public class LocationHierarchy implements Serializable {
 
     private String extId;
     private String name;
-    private String parent;
+    private String parentUuid;
     private String level;
+    private String uuid;
 
-    private static LocationHierarchy hierarchy;
+
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getExtId() {
         return extId;
@@ -29,12 +38,12 @@ public class LocationHierarchy implements Serializable {
         this.name = name;
     }
 
-    public String getParent() {
-        return parent;
+    public String getParentUuid() {
+        return parentUuid;
     }
 
-    public void setParent(String parent) {
-        this.parent = parent;
+    public void setParentUuid(String parentUuid) {
+        this.parentUuid = parentUuid;
     }
 
     public String getLevel() {
@@ -45,13 +54,4 @@ public class LocationHierarchy implements Serializable {
         this.level = level;
     }
 
-    public static LocationHierarchy emptyHierarchy() {
-        if (hierarchy == null) {
-            hierarchy = new LocationHierarchy();
-            hierarchy.setExtId("");
-            hierarchy.setName("");
-        }
-        
-        return hierarchy;
-    }
 }

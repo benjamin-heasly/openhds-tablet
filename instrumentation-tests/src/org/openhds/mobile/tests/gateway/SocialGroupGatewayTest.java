@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.SocialGroup;
+import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 
@@ -17,9 +17,9 @@ public class SocialGroupGatewayTest extends GatewayTest<SocialGroup> {
     protected SocialGroup makeTestEntity(String id, String name) {
         SocialGroup socialGroup = new SocialGroup();
 
-        socialGroup.setExtId(id);
+        socialGroup.setUuid(id);
         socialGroup.setGroupName(name);
-        socialGroup.setGroupHead("HEAD");
+        socialGroup.setGroupHeadUuid("HEAD");
 
         return socialGroup;
     }

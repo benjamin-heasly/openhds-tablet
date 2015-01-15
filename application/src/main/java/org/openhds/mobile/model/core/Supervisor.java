@@ -1,4 +1,4 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.core;
 
 /**
  * A Supervisor is someone capable of downloading partial forms

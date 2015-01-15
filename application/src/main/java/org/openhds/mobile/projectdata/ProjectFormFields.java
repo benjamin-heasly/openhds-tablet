@@ -10,11 +10,11 @@ public class ProjectFormFields {
     public static final class General {
 
         public static final String PROCESSED_BY_MIRTH = "processedByMirth";
+        public static final String COLLECTION_DATE_TIME = "collectionDateTime";
+        public static final String FIELD_WORKER_UUID = "fieldWorkerUuid";
         public static final String ENTITY_UUID = "entityUuid";
         public static final String ENTITY_EXTID = "entityExtId";
         public static final String NEEDS_REVIEW = "needsReview";
-        public static final String COLLECTION_DATE_TIME = "collectionDateTime";
-        public static final String FIELD_WORKER_UUID = "fieldWorkerUuid";
         public static final String FIELD_WORKER_EXTID = "fieldWorkerExtId";
 
 
@@ -77,8 +77,11 @@ public class ProjectFormFields {
     }
 
     public static final class Locations {
+        public static final String HIERERCHY_PARENT_UUID = "hierarchyParentUuid";
+        public static final String HIERERCHY_UUID = "hierarchyUuid";
         public static final String HIERERCHY_EXTID = "hierarchyExtId";
         public static final String LOCATION_EXTID = "locationExtId";
+        public static final String LOCATION_UUID = "locationUuid";
         public static final String LOCATION_NAME = "locationName";
         public static final String LOCATION_TYPE = "locationType";
         public static final String COMMUNITY_NAME = "communityName";
@@ -104,7 +107,8 @@ public class ProjectFormFields {
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
         static {
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY, HIERERCHY_EXTID);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID, HIERERCHY_UUID);
+            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID, HIERERCHY_EXTID);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID, LOCATION_EXTID);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_NAME, LOCATION_NAME);
             columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME, COMMUNITY_NAME);
@@ -146,6 +150,7 @@ public class ProjectFormFields {
 
         // for individuals table
         public static final String INDIVIDUAL_EXTID = "individualExtId";
+        public static final String INDIVIDUAL_UUID = "individualUuid";
         public static final String FIRST_NAME = "individualFirstName";
         public static final String LAST_NAME = "individualLastName";
         public static final String OTHER_NAMES = "individualOtherNames";
@@ -163,13 +168,15 @@ public class ProjectFormFields {
         public static final String MOTHER_EXTID = "individualMotherExtId";
         public static final String FATHER_EXTID = "individualFatherExtId";
 
-        // TODO: for relationships and memberships tables
+
         public static final String RELATIONSHIP_TO_HEAD = "individualRelationshipToHeadOfHousehold";
         public static final String HEAD_PREFILLED_FLAG = "headPrefilledFlag";
-        public static final String HOUSEHOLD_EXTID = "householdExtId";
-        public static final String HOUSEHOLD_UUID = "householdUuid";
         public static final String MEMBER_STATUS = "individualMemberStatus";
 
+        public static final String HOUSEHOLD_UUID = "householdUuid";
+        public static final String MEMBERSHIP_UUID = "membershipUuid";
+        public static final String RELATIONSHIP_UUID = "relationshipUuid";
+        public static final String SOCIALGROUP_UUID = "socialgroupUuid";
 
         public static final String IS_PREGNANT_FLAG = "individualIsPregnantFlag";
 
@@ -217,8 +224,8 @@ public class ProjectFormFields {
             columnsToFieldNames.put(
                     OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER, FATHER_EXTID);
             columnsToFieldNames
-                    .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID,
-                            HOUSEHOLD_EXTID);
+                    .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID,
+                            HOUSEHOLD_UUID);
             columnsToFieldNames
                     .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
                             MEMBER_STATUS);
@@ -242,9 +249,10 @@ public class ProjectFormFields {
 
     public static final class Visits {
         public static final String VISIT_EXTID = "visitExtId";
+        public static final String VISIT_UUID = "visitUuid";
         public static final String VISIT_DATE = "visitDate";
-        public static final String LOCATION_EXTID = "locationExtId";
-        public static final String FIELDWORKER_EXTID = "fieldWorkerExtId";
+        public static final String LOCATION_UUID = "locationUuid";
+        public static final String FIELDWORKER_UUID = "fieldWorkerUuid";
 
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
@@ -253,14 +261,17 @@ public class ProjectFormFields {
                     OpenHDS.Visits.COLUMN_VISIT_EXTID,
                     VISIT_EXTID);
             columnsToFieldNames.put(
+                    OpenHDS.Visits.COLUMN_VISIT_UUID,
+                    VISIT_UUID);
+            columnsToFieldNames.put(
                     OpenHDS.Visits.COLUMN_VISIT_DATE,
                     VISIT_DATE);
             columnsToFieldNames.put(
-                    OpenHDS.Visits.COLUMN_VISIT_LOCATION_EXTID,
-                    LOCATION_EXTID);
+                    OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID,
+                    LOCATION_UUID);
             columnsToFieldNames.put(
-                    OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_EXTID,
-                    FIELDWORKER_EXTID);
+                    OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID,
+                    FIELDWORKER_UUID);
         }
 
         public static String getFieldNameFromColumn(String column) {
@@ -280,7 +291,6 @@ public class ProjectFormFields {
     }
 
     public static final class OutMigrations {
-        public static final String OUT_MIGRATION_INDIVIDUAL_EXTID = "outMigrationIndividualExtId";
         public static final String OUT_MIGRATION_DATE = "outMigrationDate";
         public static final String OUT_MIGRATION_NAME_OF_DESITINATION = "outMigrationNameOfDestination";
         public static final String OUT_MIGRATION_REASON = "outMigrationReason";
@@ -294,6 +304,7 @@ public class ProjectFormFields {
         public static final String BED_NET_CODE = "netCode";
         public static final String HOUSEHOLD_SIZE = "householdSize";
         public static final String LOCATION_EXTID = "locationExtId";
+        public static final String LOCATION_UUID = "locationUuid";
     }
 
 }

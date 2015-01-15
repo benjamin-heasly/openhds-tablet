@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.projectdata.ProjectResources;
 
 public class FormInstanceAdapter extends ArrayAdapter {

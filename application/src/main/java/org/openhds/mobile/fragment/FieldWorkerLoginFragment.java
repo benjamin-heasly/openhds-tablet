@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.PortalActivity;
-import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.FieldWorkerGateway;
 import org.mindrot.jbcrypt.BCrypt;
@@ -67,7 +67,7 @@ public class FieldWorkerLoginFragment extends Fragment implements
 
         FieldWorkerGateway fieldWorkerGateway = GatewayRegistry.getFieldWorkerGateway();
         ContentResolver contentResolver = getActivity().getContentResolver();
-        FieldWorker fieldWorker = fieldWorkerGateway.getFirst(contentResolver, fieldWorkerGateway.findById(username));
+        FieldWorker fieldWorker = fieldWorkerGateway.getFirst(contentResolver, fieldWorkerGateway.findByExtId(username));
 
         if (null == fieldWorker || !BCrypt.checkpw(password,fieldWorker.getPasswordHash())) {
             showLongToast(getActivity(), R.string.field_worker_bad_credentials);

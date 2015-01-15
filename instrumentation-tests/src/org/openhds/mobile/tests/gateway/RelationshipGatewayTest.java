@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.Relationship;
+import org.openhds.mobile.model.core.Relationship;
 import org.openhds.mobile.repository.gateway.RelationshipGateway;
 
 
@@ -17,8 +17,8 @@ public class RelationshipGatewayTest extends GatewayTest<Relationship> {
     protected Relationship makeTestEntity(String id, String name) {
         Relationship relationship = new Relationship();
 
-        relationship.setIndividualA(id);
-        relationship.setIndividualB("INDIVIDUALB");
+        relationship.setIndividualAUuid(id);
+        relationship.setIndividualBUuid("INDIVIDUALB");
         relationship.setStartDate("2000-01-01 00:00:00");
         relationship.setType("TYPE");
 

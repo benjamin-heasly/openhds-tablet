@@ -1,6 +1,6 @@
 package org.openhds.mobile.task.parsing.entities;
 
-import org.openhds.mobile.model.Membership;
+import org.openhds.mobile.model.core.Membership;
 import org.openhds.mobile.task.parsing.DataPage;
 
 import static java.util.Arrays.asList;
@@ -16,9 +16,10 @@ public class MembershipParser extends EntityParser<Membership> {
     protected Membership toEntity(DataPage dataPage) {
         Membership membership = new Membership();
 
-        membership.setIndividualExtId(dataPage.getFirstString(asList(pageName, "individual", "extId")));
+        membership.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
+        membership.setIndividualUuid(dataPage.getFirstString(asList(pageName, "individual", "uuid")));
         membership.setRelationshipToHead(dataPage.getFirstString(asList(pageName, "bIsToA")));
-        membership.setSocialGroupExtId(dataPage.getFirstString(asList(pageName, "socialGroup", "extId")));
+        membership.setSocialGroupUuid(dataPage.getFirstString(asList(pageName, "socialGroup", "uuid")));
 
         return membership;
     }
