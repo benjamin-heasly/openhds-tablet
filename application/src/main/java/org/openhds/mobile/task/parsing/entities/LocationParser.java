@@ -1,6 +1,6 @@
 package org.openhds.mobile.task.parsing.entities;
 
-import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.core.Location;
 import org.openhds.mobile.task.parsing.DataPage;
 
 import static java.util.Arrays.asList;
@@ -16,9 +16,9 @@ public class LocationParser extends EntityParser<Location> {
     protected Location toEntity(DataPage dataPage) {
         Location location = new Location();
 
-
         location.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
         location.setExtId(dataPage.getFirstString(asList(pageName, "extId")));
+        location.setHierarchyUuid(dataPage.getFirstString(asList(pageName, "locationHierarchy", "uuid")));
         location.setHierarchyExtId(dataPage.getFirstString(asList(pageName, "locationHierarchy", "extId")));
         location.setLatitude(dataPage.getFirstString(asList(pageName, "latitude")));
         location.setLongitude(dataPage.getFirstString(asList(pageName, "longitude")));

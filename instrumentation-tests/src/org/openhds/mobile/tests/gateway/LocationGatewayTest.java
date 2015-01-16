@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.core.Location;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 
 
@@ -21,7 +21,7 @@ public class LocationGatewayTest extends GatewayTest<Location> {
         location.setName(name);
         location.setLongitude("1234.5678");
         location.setLatitude("9876.5432");
-        location.setHierarchyExtId("HIERARCHY");
+        location.setHierarchyUuid("HIERARCHY");
 
         return location;
     }

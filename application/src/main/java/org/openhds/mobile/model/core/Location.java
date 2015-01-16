@@ -1,4 +1,4 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.core;
 
 import java.io.Serializable;
 
@@ -12,7 +12,8 @@ public class Location implements Serializable {
 	private String name;
 	private String latitude;
 	private String longitude;
-	private String hierarchyExtId;
+	private String hierarchyUuid;
+    private String hierarchyExtId;
     private String communityName;
     private String communityCode;
     private String localityName;
@@ -141,13 +142,21 @@ public class Location implements Serializable {
 		this.longitude = longitude;
 	}
 
-	public String getHierarchyExtId() {
-		return hierarchyExtId;
+	public String getHierarchyUuid() {
+		return hierarchyUuid;
 	}
 
-	public void setHierarchyExtId(String hierarchyExtId) {
-		this.hierarchyExtId = hierarchyExtId;
+	public void setHierarchyUuid(String hierarchyUuid) {
+		this.hierarchyUuid = hierarchyUuid;
 	}
+
+    public String getHierarchyExtId() {
+        return hierarchyExtId;
+    }
+
+    public void setHierarchyExtId(String hierarchyExtId) {
+        this.hierarchyExtId = hierarchyExtId;
+    }
 
     public String getCommunityName() {
         return communityName;

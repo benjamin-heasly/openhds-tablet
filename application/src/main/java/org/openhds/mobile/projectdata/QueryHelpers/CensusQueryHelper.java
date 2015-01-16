@@ -74,33 +74,6 @@ public class CensusQueryHelper implements QueryHelper {
         return new ArrayList<DataWrapper>();
     }
 
-    //TODO: stop accepting extId and replace all with uuid when uuid is fully implemented.
-    public DataWrapper getIfExists(ContentResolver contentResolver, String state, String extId, String uuid) {
-
-        if (state.equals(ProjectActivityBuilder.BiokoHierarchy.REGION_STATE)
-                || state.equals(ProjectActivityBuilder.BiokoHierarchy.PROVINCE_STATE)
-                || state.equals(ProjectActivityBuilder.BiokoHierarchy.DISTRICT_STATE)
-                || state.equals(ProjectActivityBuilder.BiokoHierarchy.SUB_DISTRICT_STATE)
-                || state.equals(ProjectActivityBuilder.BiokoHierarchy.LOCALITY_STATE)
-                || state.equals(ProjectActivityBuilder.BiokoHierarchy.MAP_AREA_STATE)
-                || state.equals(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE)) {
-
-            LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
-            return locationHierarchyGateway.getFirstQueryResult(
-                    contentResolver, locationHierarchyGateway.findById(extId), state);
-
-        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)) {
-            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
-            return locationGateway.getFirstQueryResult(contentResolver, locationGateway.findById(uuid), state);
-
-        } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE)) {
-            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-            return individualGateway.getFirstQueryResult(contentResolver, individualGateway.findById(uuid), state);
-        }
-
-        return null;
-    }
-
     public List<DataWrapper> getChildren(ContentResolver contentResolver, DataWrapper qr, String childState) {
         String state = qr.getCategory();
 
@@ -113,17 +86,17 @@ public class CensusQueryHelper implements QueryHelper {
 
             LocationHierarchyGateway locationHierarchyGateway = GatewayRegistry.getLocationHierarchyGateway();
             return locationHierarchyGateway.getQueryResultList(contentResolver,
-                    locationHierarchyGateway.findByParent(qr.getExtId()), childState);
+                    locationHierarchyGateway.findByParent(qr.getUuid()), childState);
 
         } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             return locationGateway.getQueryResultList(contentResolver,
-                    locationGateway.findByHierarchyDescendingBuildingNumber(qr.getExtId()), childState);
+                    locationGateway.findByHierarchyDescendingBuildingNumber(qr.getUuid()), childState);
 
         } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             return individualGateway.getQueryResultList(contentResolver,
-                    individualGateway.findByResidency(qr.getExtId()), childState);
+                    individualGateway.findByResidency(qr.getUuid()), childState);
         }
 
         return new ArrayList<DataWrapper>();

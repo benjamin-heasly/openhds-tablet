@@ -5,8 +5,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Membership;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.core.Membership;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
@@ -31,11 +31,11 @@ import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUM
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE;
-import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID;
+import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS;
 import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY;
-import static org.openhds.mobile.model.Individual.getAgeWithUnits;
-import static org.openhds.mobile.model.Individual.getFullName;
+import static org.openhds.mobile.model.core.Individual.getAgeWithUnits;
+import static org.openhds.mobile.model.core.Individual.getFullName;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
@@ -53,7 +53,7 @@ public class IndividualGateway extends Gateway<Individual> {
 
     public Query findByResidency(String residencyId) {
         return new Query(
-                tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, residencyId, COLUMN_INDIVIDUAL_EXTID);
+                tableUri, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID, residencyId, COLUMN_INDIVIDUAL_UUID);
     }
 
     public Query findByExtIdPrefixDescending(String extIdPrefix) {
@@ -76,7 +76,7 @@ public class IndividualGateway extends Gateway<Individual> {
             individual.setGender(extractString(cursor, COLUMN_INDIVIDUAL_GENDER));
             individual.setMother(extractString(cursor, COLUMN_INDIVIDUAL_MOTHER));
             individual.setFather(extractString(cursor, COLUMN_INDIVIDUAL_FATHER));
-            individual.setCurrentResidence(extractString(cursor, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID));
+            individual.setCurrentResidenceUuid(extractString(cursor, COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID));
             individual.setEndType(extractString(cursor, COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE));
             individual.setOtherId(extractString(cursor, COLUMN_INDIVIDUAL_OTHER_ID));
             individual.setOtherNames(extractString(cursor, COLUMN_INDIVIDUAL_OTHER_NAMES));
@@ -106,7 +106,7 @@ public class IndividualGateway extends Gateway<Individual> {
             contentValues.put(COLUMN_INDIVIDUAL_GENDER, individual.getGender());
             contentValues.put(COLUMN_INDIVIDUAL_MOTHER, individual.getMother());
             contentValues.put(COLUMN_INDIVIDUAL_FATHER, individual.getFather());
-            contentValues.put(COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID, individual.getCurrentResidence());
+            contentValues.put(COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID, individual.getCurrentResidenceUuid());
             contentValues.put(COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE, individual.getEndType());
             contentValues.put(COLUMN_INDIVIDUAL_OTHER_ID, individual.getOtherId());
             contentValues.put(COLUMN_INDIVIDUAL_OTHER_NAMES, individual.getOtherNames());
@@ -143,11 +143,12 @@ public class IndividualGateway extends Gateway<Individual> {
             dataWrapper.getStringsPayload().put(R.string.individual_age_label, getAgeWithUnits(individual));
             dataWrapper.getStringsPayload().put(R.string.individual_language_preference_label, individual.getLanguagePreference());
 
+
             // for Bioko
             // add household membership details to payload
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
             Membership membership = membershipGateway.getFirst(contentResolver,
-                    membershipGateway.findBySocialGroupAndIndividual(individual.getCurrentResidence(), individual.getExtId()));
+                    membershipGateway.findBySocialGroupAndIndividual(individual.getCurrentResidenceUuid(), individual.getUuid()));
             if (null != membership) {
                 int relationshipId =  ProjectResources.Relationship.getRelationshipStringId(membership.getRelationshipToHead());
                 dataWrapper.getStringIdsPayload().put(R.string.individual_relationship_to_head_label, relationshipId);

@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.Membership;
+import org.openhds.mobile.model.core.Membership;
 import org.openhds.mobile.repository.gateway.MembershipGateway;
 
 
@@ -17,8 +17,8 @@ public class MembershipGatewayTest extends GatewayTest<Membership> {
     protected Membership makeTestEntity(String id, String name) {
         Membership membership = new Membership();
 
-        membership.setIndividualExtId(id);
-        membership.setSocialGroupExtId("SOCIALGROUP");
+        membership.setIndividualUuid(id);
+        membership.setSocialGroupUuid("SOCIALGROUP");
         membership.setRelationshipToHead("RELATIONSHIPTOHEAD");
 
         return membership;

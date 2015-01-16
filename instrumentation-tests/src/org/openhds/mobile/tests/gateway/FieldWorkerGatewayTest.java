@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.FieldWorker;
+import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.repository.gateway.FieldWorkerGateway;
 
 

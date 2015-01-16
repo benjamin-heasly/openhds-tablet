@@ -1,4 +1,4 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.form;
 
 import java.io.File;
 import java.io.Serializable;

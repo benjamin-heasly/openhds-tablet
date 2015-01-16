@@ -1,6 +1,6 @@
 package org.openhds.mobile.task.parsing.entities;
 
-import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.task.parsing.DataPage;
 
 import static java.util.Arrays.asList;
@@ -24,7 +24,7 @@ public class IndividualParser extends EntityParser<Individual> {
         individual.setGender(dataPage.getFirstString(asList(pageName, "gender")));
         individual.setMother(dataPage.getFirstString(asList(pageName, "mother", "extId")));
         individual.setFather(dataPage.getFirstString(asList(pageName, "father", "extId")));
-        individual.setCurrentResidence(dataPage.getFirstString(asList(pageName, "residencies", "residency", "location", "extId")));
+        individual.setCurrentResidenceUuid(dataPage.getFirstString(asList(pageName, "residencies", "residency", "location", "uuid")));
         individual.setEndType(dataPage.getFirstString(asList(pageName, "residencies", "residency", "endType")));
         individual.setOtherId(dataPage.getFirstString(asList(pageName, "dip")));
         individual.setOtherNames(dataPage.getFirstString(asList(pageName, "middleName")));

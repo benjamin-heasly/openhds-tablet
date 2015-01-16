@@ -75,9 +75,9 @@ public class SearchUtils {
         plugin.getColumnsAndLabels().put(
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, R.string.social_group_name);
         plugin.getColumnsAndLabels().put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID, R.string.social_group_ext_id);
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID, R.string.social_group_ext_id);
         plugin.getColumnsAndLabels().put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_EXTID, R.string.social_group_head_ext_id);
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID, R.string.social_group_head_ext_id);
 
         return plugin;
     }

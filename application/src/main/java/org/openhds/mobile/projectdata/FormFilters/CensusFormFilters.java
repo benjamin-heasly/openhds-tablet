@@ -1,7 +1,7 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.core.Location;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.repository.GatewayRegistry;
@@ -20,12 +20,12 @@ public class CensusFormFilters {
 			NavigateActivity navigateActivity,
 			Map<String, DataWrapper> hierarchyPath) {
 
-		String socialGroupExtId = hierarchyPath.get(
+		String locationUuid = hierarchyPath.get(
 				ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)
-				.getExtId();
+				.getUuid();
 
         SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
-        return socialGroupGateway.exists(navigateActivity.getContentResolver(), socialGroupExtId);
+        return null != socialGroupGateway.getFirst(navigateActivity.getContentResolver(),socialGroupGateway.findByLocationUuid(locationUuid));
 	}
 
     public static class AddLocation implements FormFilter {

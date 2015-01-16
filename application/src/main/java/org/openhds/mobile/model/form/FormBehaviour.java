@@ -1,4 +1,4 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.form;
 
 import org.openhds.mobile.projectdata.FormFilters.FormFilter;
 import org.openhds.mobile.projectdata.FormPayloadBuilders.FormPayloadBuilder;

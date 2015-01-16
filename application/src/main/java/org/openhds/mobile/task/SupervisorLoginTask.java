@@ -1,7 +1,7 @@
 package org.openhds.mobile.task;
 
 import org.openhds.mobile.provider.DatabaseAdapter;
-import org.openhds.mobile.model.Supervisor;
+import org.openhds.mobile.model.core.Supervisor;
 import android.os.AsyncTask;
 
 /**

@@ -2,8 +2,8 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder.UpdateActivityModule;
 import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.utilities.IdHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,15 +30,25 @@ public class UpdateFormPayloadBuilders {
                     Calendar.getInstance().getTime()).toString();
             String locationExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid= navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
             String visitExtId = visitDate + "_" + locationExtId;
 
+
             formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
-            formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,
-                    locationExtId);
+            formPayload.put(ProjectFormFields.Visits.LOCATION_UUID,
+                    locationUuid);
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
+            formPayload.put(ProjectFormFields.Visits.VISIT_UUID, IdHelper.generateEntityUuid());
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
+
         }
     }
 
+
+    //TODO: Individuals are never put into the Payload???
+    //TODO: Missing = individualExtId, individualUuid, entityExtId, entityUuid
     public static class RegisterInMigration implements FormPayloadBuilder {
 
         @Override
@@ -47,10 +57,13 @@ public class UpdateFormPayloadBuilders {
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, false);
 
-            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
 
             String locationExtId = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
             formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
 
             formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_INTERNAL);
 
@@ -73,13 +86,21 @@ public class UpdateFormPayloadBuilders {
 
             String individualExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
-
+            String individualUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getUuid();
 
             formPayload.put(ProjectFormFields.OutMigrations.OUT_MIGRATION_DATE, outMigrationDate);
-            formPayload.put(ProjectFormFields.OutMigrations.OUT_MIGRATION_INDIVIDUAL_EXTID,
-                    individualExtId);
 
-            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
+
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, individualExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, individualUuid);
+
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
+
+
         }
     }
 
@@ -92,7 +113,7 @@ public class UpdateFormPayloadBuilders {
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, true);
 
-            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
 
         }
     }
@@ -109,7 +130,8 @@ public class UpdateFormPayloadBuilders {
             String observationDate = new SimpleDateFormat("yyyy-MM-dd").format(
                     Calendar.getInstance().getTime()).toString();
 
-            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getVisitExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
             formPayload.put(ProjectFormFields.PregnancyObservation.PREGNANCY_OBSERVATION_RECORDED_DATE, observationDate);
 
         }

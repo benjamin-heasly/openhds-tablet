@@ -2,8 +2,8 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.core.Location;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.GatewayRegistry;
@@ -34,6 +34,10 @@ public class BiokoFormPayloadBuilders {
             String locationUuid = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
             formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
+
 
             //pre-fill a netCode in YY-CCC form
             String netCode = generateNetCode(navigateActivity, locationUuid);
@@ -42,7 +46,7 @@ public class BiokoFormPayloadBuilders {
             //pre-fill the householdSize for this particular household
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             ContentResolver contentResolver = navigateActivity.getContentResolver();
-            List<Individual> individuals = individualGateway.getList(contentResolver, individualGateway.findByResidency(locationExtId));
+            List<Individual> individuals = individualGateway.getList(contentResolver, individualGateway.findByResidency(locationUuid));
             String householdSize = Integer.toString(individuals.size());
             formPayload.put(ProjectFormFields.BedNet.HOUSEHOLD_SIZE, householdSize);
         }

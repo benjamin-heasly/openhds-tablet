@@ -1,6 +1,6 @@
 package org.openhds.mobile.projectdata.FormAdapters;
 
-import org.openhds.mobile.model.Individual;
+import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 
 import java.util.HashMap;
@@ -29,8 +29,8 @@ public class IndividualFormAdapter {
                 ProjectFormFields.Individuals.getFieldNameFromColumn(COLUMN_INDIVIDUAL_MOTHER)));
         individual.setFather(formInstanceData.get(
                 ProjectFormFields.Individuals.getFieldNameFromColumn(COLUMN_INDIVIDUAL_FATHER)));
-        individual.setCurrentResidence(formInstanceData.get(
-                ProjectFormFields.Individuals.getFieldNameFromColumn(COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_EXTID)));
+        individual.setCurrentResidenceUuid(formInstanceData.get(
+                ProjectFormFields.Individuals.getFieldNameFromColumn(COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID)));
         individual.setEndType(formInstanceData.get(
                 ProjectFormFields.Individuals.getFieldNameFromColumn(COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE)));
         individual.setOtherId(formInstanceData.get(
