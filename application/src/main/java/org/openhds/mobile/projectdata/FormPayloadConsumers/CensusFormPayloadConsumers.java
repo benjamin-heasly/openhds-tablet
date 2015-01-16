@@ -147,7 +147,7 @@ public class CensusFormPayloadConsumers {
 
 
             Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
-                    individualGateway.findByExtIdPrefixDescending(socialGroup.getGroupHeadUuid()));
+                    individualGateway.findById(socialGroup.getGroupHeadUuid()));
 
             // INSERT or UPDATE RELATIONSHIP
             RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
@@ -264,6 +264,8 @@ public class CensusFormPayloadConsumers {
         if(null != pregnant && pregnant.equals("Yes")) {
             Map<String, String> hints = new HashMap<>();
             hints.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            hints.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, formPayload.get(ProjectFormFields.General.ENTITY_UUID));
+            hints.put(ProjectFormFields.Locations.LOCATION_EXTID, formPayload.get(ProjectFormFields.General.HOUSEHOLD_STATE_FIELD_NAME));
             return new ConsumerResults(false, ProjectActivityBuilder.CensusActivityModule.visitPregObFormBehaviour, hints);
         }
 
@@ -283,6 +285,10 @@ public class CensusFormPayloadConsumers {
             visitGateway.insertOrUpdate(contentResolver, visit);
 
             navigateActivity.startVisit(visit);
+
+
+            navigateActivity.getPreviousConsumerResults().getFollowUpFormHints().put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
+            navigateActivity.getPreviousConsumerResults().getFollowUpFormHints().put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
 
             return new ConsumerResults(false, ProjectActivityBuilder.CensusActivityModule.pregObFormBehaviour, navigateActivity.getPreviousConsumerResults().getFollowUpFormHints());
         }
