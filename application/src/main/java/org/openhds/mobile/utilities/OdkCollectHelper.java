@@ -7,7 +7,7 @@ import java.util.List;
 
 import android.content.ContentValues;
 import org.openhds.mobile.provider.InstanceProviderAPI;
-import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.model.form.FormInstance;
 
 import android.content.ContentResolver;
 import android.database.Cursor;

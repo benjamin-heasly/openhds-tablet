@@ -1,4 +1,4 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.utilities;
 
 import java.util.HashMap;
 import java.util.HashSet;

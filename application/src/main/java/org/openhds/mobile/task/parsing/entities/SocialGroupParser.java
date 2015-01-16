@@ -1,7 +1,6 @@
 package org.openhds.mobile.task.parsing.entities;
 
-import org.openhds.mobile.model.FieldWorker;
-import org.openhds.mobile.model.SocialGroup;
+import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.task.parsing.DataPage;
 
 import static java.util.Arrays.asList;
@@ -17,8 +16,9 @@ public class SocialGroupParser extends EntityParser<SocialGroup> {
     protected SocialGroup toEntity(DataPage dataPage) {
         SocialGroup socialGroup = new SocialGroup();
 
-        socialGroup.setExtId(dataPage.getFirstString(asList(pageName, "extId")));
-        socialGroup.setGroupHead(dataPage.getFirstString(asList(pageName, "groupHead", "extId")));
+        socialGroup.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
+        socialGroup.setGroupHeadUuid(dataPage.getFirstString(asList(pageName, "groupHead", "uuid")));
+        socialGroup.setLocationUuid(dataPage.getFirstString(asList(pageName, "location", "uuid")));
         socialGroup.setGroupName(dataPage.getFirstString(asList(pageName, "groupName")));
 
         return socialGroup;

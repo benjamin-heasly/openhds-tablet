@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.FormBehaviour;
+import org.openhds.mobile.model.form.FormBehaviour;
 
 import java.util.List;
 

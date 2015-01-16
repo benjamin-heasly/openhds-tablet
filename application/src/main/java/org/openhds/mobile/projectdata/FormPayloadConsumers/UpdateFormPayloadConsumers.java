@@ -2,8 +2,8 @@ package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.Individual;
-import org.openhds.mobile.model.Visit;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.projectdata.FormAdapters.VisitFormAdapter;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
@@ -68,10 +68,10 @@ public class UpdateFormPayloadConsumers {
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
             // update the individual's residency end type
-            String individualExtId = formPayload.get(ProjectFormFields.OutMigrations.OUT_MIGRATION_INDIVIDUAL_EXTID);
+            String individualUuid = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID);
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             Individual individual = individualGateway.getFirst(navigateActivity.getContentResolver(),
-                    individualGateway.findById(individualExtId));
+                    individualGateway.findById(individualUuid));
             if (null == individual) {
                 return new ConsumerResults(false, null, null);
             }
@@ -87,6 +87,7 @@ public class UpdateFormPayloadConsumers {
         }
     }
 
+    //TODO: Individuals are never in the payload??
     public static class RegisterInMigration implements FormPayloadConsumer {
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
@@ -101,7 +102,7 @@ public class UpdateFormPayloadConsumers {
                 return new ConsumerResults(false, null, null);
             }
 
-            individual.setCurrentResidence(locationExtId);
+            individual.setCurrentResidenceUuid(locationExtId);
             individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
             individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
             return new ConsumerResults(false, null, null);

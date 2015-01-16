@@ -1,27 +1,21 @@
-package org.openhds.mobile.model;
+package org.openhds.mobile.model.core;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 public class Individual implements Serializable {
 
 	private static final long serialVersionUID = 4865035836250357347L;
 
     private String uuid;
-
 	private String extId;
 	private String firstName;
-	private String middleName;// not used.
+	private String middleName;
 	private String lastName;
-
 	private String gender;
 	private String dob;
 	private String mother;
 	private String father;
-
-	private String currentResidence;// don't rely on this, will be switching to
-									// using residence table
-
+	private String currentResidence;
 	private String endType;
 	private String otherId;
 	private String otherNames;
@@ -140,11 +134,11 @@ public class Individual implements Serializable {
 		this.father = father;
 	}
 
-	public String getCurrentResidence() {
+	public String getCurrentResidenceUuid() {
 		return currentResidence;
 	}
 
-	public void setCurrentResidence(String currentResidence) {
+	public void setCurrentResidenceUuid(String currentResidence) {
 		this.currentResidence = currentResidence;
 	}
 

@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.Visit;
+import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.repository.gateway.VisitGateway;
 
 
@@ -17,10 +17,10 @@ public class VisitGatewayTest extends GatewayTest<Visit> {
     protected Visit makeTestEntity(String id, String name) {
         Visit visit = new Visit();
 
-        visit.setVisitExtId(id);
+        visit.setExtId(id);
         visit.setVisitDate("2000-01-01 00:00:00");
-        visit.setLocationExtId("LOCATION");
-        visit.setFieldWorkerExtId("FIELD_WORKER");
+        visit.setLocationUuid("LOCATION");
+        visit.setFieldWorkerUuid("FIELD_WORKER");
 
         return visit;
     }

@@ -1,6 +1,6 @@
 package org.openhds.mobile.projectdata.FormAdapters;
 
-import org.openhds.mobile.model.Location;
+import org.openhds.mobile.model.core.Location;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 
 import java.util.Map;
@@ -19,8 +19,10 @@ public class LocationFormAdapter {
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_EXTID)));
         location.setName(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_NAME)));
+        location.setHierarchyUuid(formInstanceData.get(
+                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HIERARCHY_UUID)));
         location.setHierarchyExtId(formInstanceData.get(
-                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HIERARCHY)));
+                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HIERARCHY_EXTID)));
         location.setCommunityName(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_COMMUNITY_NAME)));
         location.setCommunityCode(formInstanceData.get(ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_COMMUNITY_CODE)));

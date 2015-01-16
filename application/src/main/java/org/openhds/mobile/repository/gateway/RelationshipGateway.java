@@ -4,15 +4,12 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.model.Relationship;
+import org.openhds.mobile.model.core.Relationship;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
-import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A;
-import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B;
-import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE;
-import static org.openhds.mobile.OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE;
+import static org.openhds.mobile.OpenHDS.Relationships.*;
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 import static org.openhds.mobile.repository.RepositoryUtils.insert;
@@ -22,13 +19,12 @@ import static org.openhds.mobile.repository.RepositoryUtils.update;
 /**
  * Convert Relationship to and from database.  Relationship-specific queries.
  *
- * Uses the extId of individualA as the id for the Relationship.
  *
  */
 public class RelationshipGateway extends Gateway<Relationship> {
 
     public RelationshipGateway() {
-        super(OpenHDS.Relationships.CONTENT_ID_URI_BASE, COLUMN_RELATIONSHIP_INDIVIDUAL_A, new RelationshipConverter());
+        super(OpenHDS.Relationships.CONTENT_ID_URI_BASE, COLUMN_RELATIONSHIP_UUID, new RelationshipConverter());
     }
 
     // true if relationship was inserted, false if updated
@@ -37,8 +33,8 @@ public class RelationshipGateway extends Gateway<Relationship> {
     public boolean insertOrUpdate(ContentResolver contentResolver, Relationship relationship) {
         ContentValues contentValues = converter.toContentValues(relationship);
 
-        String individualAId = relationship.getIndividualA();
-        String individualBId = relationship.getIndividualB();
+        String individualAId = relationship.getIndividualAUuid();
+        String individualBId = relationship.getIndividualBUuid();
         Relationship existingRelationship = getFirst(contentResolver,
                 findByBothIndividuals(individualAId, individualBId));
 
@@ -65,8 +61,9 @@ public class RelationshipGateway extends Gateway<Relationship> {
         public Relationship fromCursor(Cursor cursor) {
             Relationship relationship = new Relationship();
 
-            relationship.setIndividualA(extractString(cursor, COLUMN_RELATIONSHIP_INDIVIDUAL_A));
-            relationship.setIndividualB(extractString(cursor, COLUMN_RELATIONSHIP_INDIVIDUAL_B));
+            relationship.setUuid(extractString(cursor, COLUMN_RELATIONSHIP_UUID));
+            relationship.setIndividualAUuid(extractString(cursor, COLUMN_RELATIONSHIP_INDIVIDUAL_A));
+            relationship.setIndividualBUuid(extractString(cursor, COLUMN_RELATIONSHIP_INDIVIDUAL_B));
             relationship.setStartDate(extractString(cursor, COLUMN_RELATIONSHIP_STARTDATE));
             relationship.setType(extractString(cursor, COLUMN_RELATIONSHIP_TYPE));
 
@@ -77,8 +74,9 @@ public class RelationshipGateway extends Gateway<Relationship> {
         public ContentValues toContentValues(Relationship relationship) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(COLUMN_RELATIONSHIP_INDIVIDUAL_A, relationship.getIndividualA());
-            contentValues.put(COLUMN_RELATIONSHIP_INDIVIDUAL_B, relationship.getIndividualB());
+            contentValues.put(COLUMN_RELATIONSHIP_UUID, relationship.getUuid());
+            contentValues.put(COLUMN_RELATIONSHIP_INDIVIDUAL_A, relationship.getIndividualAUuid());
+            contentValues.put(COLUMN_RELATIONSHIP_INDIVIDUAL_B, relationship.getIndividualBUuid());
             contentValues.put(COLUMN_RELATIONSHIP_STARTDATE, relationship.getStartDate());
             contentValues.put(COLUMN_RELATIONSHIP_TYPE, relationship.getType());
 
@@ -87,13 +85,12 @@ public class RelationshipGateway extends Gateway<Relationship> {
 
         @Override
         public String getId(Relationship relationship) {
-            return relationship.getIndividualA();
+            return relationship.getUuid();
         }
 
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Relationship relationship, String state) {
             DataWrapper dataWrapper = new DataWrapper();
-            dataWrapper.setExtId(relationship.getIndividualA());
             dataWrapper.setName(relationship.getType());
             dataWrapper.setCategory(state);
             return dataWrapper;

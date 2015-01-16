@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.FormInstance;
+import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
 

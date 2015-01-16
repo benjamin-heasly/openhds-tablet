@@ -1,6 +1,6 @@
 package org.openhds.mobile.tests.gateway;
 
-import org.openhds.mobile.model.LocationHierarchy;
+import org.openhds.mobile.model.core.LocationHierarchy;
 import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
 
 
@@ -20,7 +20,7 @@ public class LocationHierarchyGatewayTest extends GatewayTest<LocationHierarchy>
         locationHierarchy.setExtId(id);
         locationHierarchy.setName(name);
         locationHierarchy.setLevel("HIERARCHY");
-        locationHierarchy.setParent("PARENT");
+        locationHierarchy.setParentUuid("PARENT");
 
         return locationHierarchy;
     }

@@ -9,8 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
-import org.openhds.mobile.model.FormSubmissionRecord;
-import org.openhds.mobile.model.Supervisor;
+import org.openhds.mobile.model.form.FormSubmissionRecord;
+import org.openhds.mobile.model.core.Supervisor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
