@@ -2,7 +2,12 @@ package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.core.*;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.core.Location;
+import org.openhds.mobile.model.core.LocationHierarchy;
+import org.openhds.mobile.model.core.Membership;
+import org.openhds.mobile.model.core.Relationship;
+import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
 import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
@@ -12,7 +17,13 @@ import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.*;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
+import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.MembershipGateway;
+import org.openhds.mobile.repository.gateway.RelationshipGateway;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
+import org.openhds.mobile.repository.gateway.VisitGateway;
 import org.openhds.mobile.utilities.IdHelper;
 
 import java.util.HashMap;
@@ -80,16 +91,13 @@ public class CensusFormPayloadConsumers {
 
             }
 
-
-
             insertOrUpdateLocation(formPayload, navigateActivity);
 
-                return new ConsumerResults(true, null, null);
+            return new ConsumerResults(true, null, null);
         }
 
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
-            // TODO Auto-generated method stub
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID));
         }
     }
@@ -179,16 +187,15 @@ public class CensusFormPayloadConsumers {
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload,
                                                   NavigateActivity navigateActivity) {
 
-            postFillFormPayload(formPayload);
-
             Map<String, DataWrapper> hierarchyPath = navigateActivity
                     .getHierarchyPath();
             DataWrapper selectedLocation = hierarchyPath
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE);
 
+            // head of the household is always "self" to the head of household
+            String relationshipType = "1";
+
             // Pull out useful strings from the formPayload
-            String relationshipType = formPayload
-                    .get(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD);
             String membershipStatus = formPayload
                     .get(ProjectFormFields.Individuals.MEMBER_STATUS);
             String startDate = formPayload
@@ -226,14 +233,13 @@ public class CensusFormPayloadConsumers {
             if(null !=  (pregnantResults = checkIfPregnant(formPayload))){
                 return pregnantResults;
             }
-            return new ConsumerResults(false, null, null);
+            return new ConsumerResults(true, null, null);
         }
 
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
-            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
-                    "1");
-
+            // head of the household is always "self" to the head of household
+            formPayload.put(ProjectFormFields.Individuals.MEMBER_STATUS, "1");
         }
 
     }

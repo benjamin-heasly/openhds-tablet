@@ -576,8 +576,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                         FormPayloadConsumer consumer = formBehaviour.getFormPayloadConsumer();
                         if (null != consumer) {
 
-                            previousConsumerResults = consumer.consumeFormPayload(formHelper.getFormInstanceData(), this);
+                            previousConsumerResults = consumer.consumeFormPayload(formHelper.fetchFormInstanceData(), this);
                             if (previousConsumerResults.needsPostfill()) {
+                                consumer.postFillFormPayload(formHelper.getFormFieldData());
                                 formHelper.updateExistingFormInstance();
                             }
                             if (null != previousConsumerResults.getFollowUpFormBehaviour()){

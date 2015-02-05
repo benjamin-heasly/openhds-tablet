@@ -19,8 +19,8 @@ import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.model.form.FormInstance;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ModuleUiHelper;
+import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
@@ -28,7 +28,6 @@ import java.io.File;
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
-import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class PortalActivity extends Activity implements OnClickListener {
@@ -94,13 +93,7 @@ public class PortalActivity extends Activity implements OnClickListener {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
-
-
-
         }
-
-
     }
 
     @Override
