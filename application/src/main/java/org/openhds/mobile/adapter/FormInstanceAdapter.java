@@ -13,6 +13,7 @@ import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
+import org.openhds.mobile.utilities.LayoutUtils;
 
 import java.io.File;
 import java.util.Map;
@@ -32,41 +33,13 @@ public class FormInstanceAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        // get the data we want to display
-        FormInstance instance = (FormInstance) formInstances[position];
-        int formTypeLocalizedId= ProjectResources.FormType.getFormTypeStringId(instance.getFormName());
-        String formTypeName = super.getContext().getResources().getString(formTypeLocalizedId);
-
-        File formFile = new File(instance.getFilePath());
-        EncryptionHelper.decryptFile(formFile, super.getContext());
-        Map<String, String> instanceData = FormHelper.fetchFormInstanceData(instance.getFilePath());
-        EncryptionHelper.encryptFile(formFile,super.getContext());
-
-        String entityId = safeGetMapField(instanceData, ProjectFormFields.General.ENTITY_EXTID);
-        String fieldWorker = safeGetMapField(instanceData, ProjectFormFields.General.FIELD_WORKER_EXTID);
-        String date = safeGetMapField(instanceData, ProjectFormFields.General.COLLECTION_DATE_TIME);
-
-        // stuff values into a view widget
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.form_instance_list_item_orange, null);
         }
 
-        TextView formTypeView = (TextView) convertView.findViewById(R.id.form_instance_list_type);
-        formTypeView.setText(formTypeName);
-
-        TextView formIdView = (TextView) convertView.findViewById(R.id.form_instance_list_id);
-        formIdView.setText(entityId);
-
-        TextView fieldWorkerView = (TextView) convertView.findViewById(R.id.form_instance_list_fieldworker);
-        fieldWorkerView.setText(fieldWorker);
-
-        TextView formDateView = (TextView) convertView.findViewById(R.id.form_instance_list_date);
-        formDateView.setText(date);
-
+        FormInstance instance = (FormInstance) formInstances[position];
+        LayoutUtils.configureFormListItem(super.getContext(), convertView, instance);
         return convertView;
     }
 
-    private static String safeGetMapField(Map<String, String> map, String key) {
-        return null == map || !map.containsKey(key) ? "" : map.get(key);
-    }
 }

@@ -12,7 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.openhds.mobile.R;
+import org.openhds.mobile.model.form.FormHelper;
+import org.openhds.mobile.model.form.FormInstance;
+import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.projectdata.ProjectResources;
 
+import java.io.File;
 import java.util.Map;
 
 public class LayoutUtils {
@@ -201,6 +206,39 @@ public class LayoutUtils {
         editText.setHint(hintId);
         editText.setTag(tag);
         editText.setText(null);
-        return;
     }
+
+    // Set up a form list item based on a given form instance.
+    public static void configureFormListItem(Context context, View view, FormInstance formInstance) {
+        // get the data we want to display
+        int formTypeLocalizedId= ProjectResources.FormType.getFormTypeStringId(formInstance.getFormName());
+        String formTypeName = context.getResources().getString(formTypeLocalizedId);
+
+        File formFile = new File(formInstance.getFilePath());
+        EncryptionHelper.decryptFile(formFile, context);
+        Map<String, String> instanceData = FormHelper.fetchFormInstanceData(formInstance.getFilePath());
+        EncryptionHelper.encryptFile(formFile, context);
+
+        String entityId = safeGetMapField(instanceData, ProjectFormFields.General.ENTITY_EXTID);
+        String fieldWorker = safeGetMapField(instanceData, ProjectFormFields.General.FIELD_WORKER_EXTID);
+        String date = safeGetMapField(instanceData, ProjectFormFields.General.COLLECTION_DATE_TIME);
+
+        // stuff values into the view widget
+        TextView formTypeView = (TextView) view.findViewById(R.id.form_instance_list_type);
+        formTypeView.setText(formTypeName);
+
+        TextView formIdView = (TextView) view.findViewById(R.id.form_instance_list_id);
+        formIdView.setText(entityId);
+
+        TextView fieldWorkerView = (TextView) view.findViewById(R.id.form_instance_list_fieldworker);
+        fieldWorkerView.setText(fieldWorker);
+
+        TextView formDateView = (TextView) view.findViewById(R.id.form_instance_list_date);
+        formDateView.setText(date);
+    }
+
+    private static String safeGetMapField(Map<String, String> map, String key) {
+        return null == map || !map.containsKey(key) ? "" : map.get(key);
+    }
+
 }

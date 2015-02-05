@@ -96,7 +96,7 @@ public class ChecklistFragment extends Fragment {
     private ChecklistAdapter setupDeleteAdapter() {
 
         List<FormInstance> formInstances = OdkCollectHelper.getAllUnsentFormInstances(getActivity().getContentResolver());
-        ChecklistAdapter adapter = new ChecklistAdapter(getActivity(), R.id.form_instance_list_item_checkbox_red, formInstances);
+        ChecklistAdapter adapter = new ChecklistAdapter(getActivity(), R.id.form_instance_check_item_orange, formInstances);
         return adapter;
 
     }
@@ -153,7 +153,7 @@ public class ChecklistFragment extends Fragment {
             EncryptionHelper.encryptFile(instanceFile, getActivity());
         }
 
-        ChecklistAdapter adapter = new ChecklistAdapter(getActivity(), R.id.form_instance_list_item_checkbox_orange, needApproval);
+        ChecklistAdapter adapter = new ChecklistAdapter(getActivity(), R.id.form_instance_check_item_orange, needApproval);
         return adapter;
 
     }
