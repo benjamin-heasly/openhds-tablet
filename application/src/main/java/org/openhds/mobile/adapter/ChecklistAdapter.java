@@ -59,6 +59,7 @@ public class ChecklistAdapter extends ArrayAdapter {
 
         // add callback when the form instance info is pressed
         ViewGroup itemArea = (ViewGroup) convertView.findViewById(R.id.form_instance_item_area);
+        itemArea.setTag(instance);
         itemArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
