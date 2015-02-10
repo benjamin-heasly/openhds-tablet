@@ -13,7 +13,6 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.provider.FormsProviderAPI;
@@ -24,7 +23,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
@@ -62,8 +66,7 @@ public class FormHelper {
     }
 
     public Intent buildEditFormInstanceIntent() {
-        Intent intent = new Intent(Intent.ACTION_EDIT, contentUri);
-        return intent;
+        return new Intent(Intent.ACTION_EDIT, contentUri);
     }
 
     // Pull out to ODKCollectHelper
@@ -76,8 +79,8 @@ public class FormHelper {
                 new String[]{InstanceProviderAPI.STATUS_COMPLETE}, null);
 
         if (cursor.moveToNext()) {
-            finalizedFormFilePath = cursor.getString(cursor.getColumnIndex(
-                    InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+            finalizedFormFilePath =
+                    cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
             cursor.close();
             return true;
         } else {
@@ -88,7 +91,7 @@ public class FormHelper {
     }
 
     public static String getFormTagValue(String tag, String formFilePath) {
-        Map<String, String> formData = FormHelper.getFormInstanceData(formFilePath);
+        Map<String, String> formData = FormHelper.fetchFormInstanceData(formFilePath);
         if (null == formData) {
             return null;
         } else {
@@ -98,15 +101,11 @@ public class FormHelper {
 
     public static boolean isFormReviewed(String formFilePath) {
         String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, formFilePath);
-        if (needsReview == null) {
-            return false;
-        }
-        boolean value = needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NO_REVIEW_NEEDED);
-        return value;
+        return needsReview != null && needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NO_REVIEW_NEEDED);
     }
 
     public static boolean setFormTagValue(String tag, String value, String formFilePath) {
-        Map<String, String> formFieldMap = FormHelper.getFormInstanceData(formFilePath);
+        Map<String, String> formFieldMap = FormHelper.fetchFormInstanceData(formFilePath);
         formFieldMap.put(tag, value);
         return FormHelper.updateExistingFormInstance(formFieldMap, formFilePath);
     }
@@ -125,7 +124,6 @@ public class FormHelper {
             newForm.setRootElement(root);
 
             for (String elementName : formFieldMap.keySet()) {
-
                 Element child = new Element(elementName);
                 child.setText(formFieldMap.get(elementName));
                 newForm.getRootElement().addContent(child);
@@ -144,17 +142,15 @@ public class FormHelper {
         }
     }
 
-    //    TODO: Convert FormHelper to a static class
-//    Static implementation of getFormInstanceData()
-    public static Map<String, String> getFormInstanceData(String formFilePath) {
+    public static Map<String, String> fetchFormInstanceData(String formFilePath) {
         Map<String, String> formFields = new HashMap<>();
         if (null == formFilePath) {
             return null;
         }
+
         SAXBuilder builder = new SAXBuilder();
         try {
-            Document finalizedDoc = builder.build(new File(
-                    formFilePath));
+            Document finalizedDoc = builder.build(new File(formFilePath));
             Element root = finalizedDoc.getRootElement();
             Iterator<Element> itr = root.getDescendants(new ElementFilter());
 
@@ -170,31 +166,8 @@ public class FormHelper {
         return formFields;
     }
 
-    public Map<String, String> getFormInstanceData() {
-
-        formFieldData.clear();
-
-        if (null == finalizedFormFilePath) {
-            return null;
-        }
-
-        SAXBuilder builder = new SAXBuilder();
-        try {
-
-            Document finalizedDoc = builder.build(new File(
-                    finalizedFormFilePath));
-            Element root = finalizedDoc.getRootElement();
-            Iterator<Element> itr = root.getDescendants(new ElementFilter());
-
-            while (itr.hasNext()) {
-                Element child = itr.next();
-                formFieldData.put(child.getName(), child.getText());
-            }
-
-        } catch (Exception e) {
-            return null;
-        }
-
+    public Map<String, String> fetchFormInstanceData() {
+        formFieldData = fetchFormInstanceData(finalizedFormFilePath);
         return formFieldData;
     }
 
@@ -213,7 +186,6 @@ public class FormHelper {
             newForm.setRootElement(root);
 
             for (String elementName : formFieldData.keySet()) {
-
                 Element child = new Element(elementName);
                 child.setText(formFieldData.get(elementName));
                 newForm.getRootElement().addContent(child);
@@ -342,7 +314,6 @@ public class FormHelper {
         }
 
         destinationPath += File.separator + externalFileName;
-        File targetFile = new File(destinationPath);
-        return targetFile;
+        return new File(destinationPath);
     }
 }

@@ -49,7 +49,6 @@ public class OpenHDSProvider extends ContentProvider {
 
     private static final int INDIVIDUALS = 1;
     private static final int INDIVIDUAL_ID = 2;
-    private static final int INDIVIDUAL_SG = 19;
     private static final int LOCATIONS = 3;
     private static final int LOCATION_ID = 4;
     private static final int HIERARCHYITEMS = 5;
@@ -61,8 +60,6 @@ public class OpenHDSProvider extends ContentProvider {
     private static final int FIELDWORKERS = 13;
     private static final int FIELDWORKER_ID = 14;
     private static final int SOCIALGROUPS = 15;
-    private static final int SOCIALGROUPS_BY_LOCATION = 20;
-    private static final int SOCIALGROUPS_BY_INDIVIDUAL = 21;
     private static final int SOCIALGROUP_ID = 16;
     private static final int MEMBERSHIPS = 17;
     private static final int MEMBERSHIPS_ID = 18;
@@ -72,8 +69,6 @@ public class OpenHDSProvider extends ContentProvider {
     static {
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "individuals", INDIVIDUALS);
-        sUriMatcher
-                .addURI(OpenHDS.AUTHORITY, "individuals/sg/*", INDIVIDUAL_SG);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "individuals/#", INDIVIDUAL_ID);
 
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "locations", LOCATIONS);
@@ -89,10 +84,6 @@ public class OpenHDSProvider extends ContentProvider {
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "fieldworkers", FIELDWORKERS);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "fieldworkers/#", FIELDWORKER_ID);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups", SOCIALGROUPS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups/location/*",
-                SOCIALGROUPS_BY_LOCATION);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups/individual/*",
-                SOCIALGROUPS_BY_INDIVIDUAL);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups/#", SOCIALGROUP_ID);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "memberships", MEMBERSHIPS);
         sUriMatcher.addURI(OpenHDS.AUTHORITY, "memberships/#", MEMBERSHIPS_ID);
@@ -426,13 +417,6 @@ public class OpenHDSProvider extends ContentProvider {
                         + uri.getPathSegments().get(
                         OpenHDS.Individuals.NOTE_ID_PATH_POSITION));
                 break;
-            case INDIVIDUAL_SG:
-                qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join "
-                        + OpenHDS.Memberships.TABLE_NAME + " x on s."
-                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + " = x."
-                        + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID);
-                qb.setProjectionMap(socialgroupsJoinProjectionMap);
-                break;
             case LOCATIONS:
                 qb.setTables(OpenHDS.Locations.TABLE_NAME);
                 qb.setProjectionMap(locationsProjectionMap);
@@ -497,27 +481,6 @@ public class OpenHDSProvider extends ContentProvider {
             case SOCIALGROUPS:
                 qb.setTables(OpenHDS.SocialGroups.TABLE_NAME);
                 qb.setProjectionMap(socialgroupsProjectionMap);
-                break;
-            case SOCIALGROUPS_BY_LOCATION:
-                qb.setTables(OpenHDS.SocialGroups.TABLE_NAME);
-                qb.setProjectionMap(socialgroupsProjectionMap);
-                selectionArgs = addSocialGroupUuid(
-                        qb,
-                        uri.getPathSegments().get(
-                                OpenHDS.SocialGroups.LOCATION_PATH_POSITION));
-                break;
-            case SOCIALGROUPS_BY_INDIVIDUAL:
-                qb.setTables(OpenHDS.SocialGroups.TABLE_NAME + " s inner join "
-                        + OpenHDS.Memberships.TABLE_NAME + " x on s."
-                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + " = x."
-                        + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID);
-                qb.setProjectionMap(socialgroupsJoinProjectionMap);
-                qb.appendWhere("x."
-                        + OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID
-                        + " = '"
-                        + uri.getPathSegments().get(
-                        OpenHDS.SocialGroups.LOCATION_PATH_POSITION) + "'");
-                sortOrder = "s." + OpenHDS.SocialGroups._ID;
                 break;
             case SOCIALGROUP_ID:
                 qb.setTables(OpenHDS.SocialGroups.TABLE_NAME);
@@ -612,8 +575,6 @@ public class OpenHDSProvider extends ContentProvider {
                 return OpenHDS.Individuals.CONTENT_TYPE;
             case INDIVIDUAL_ID:
                 return OpenHDS.Individuals.CONTENT_ITEM_TYPE;
-            case INDIVIDUAL_SG:
-                return OpenHDS.SocialGroups.CONTENT_TYPE;
             case LOCATIONS:
                 return OpenHDS.Locations.CONTENT_TYPE;
             case LOCATION_ID:
@@ -963,12 +924,17 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY
                     + " TEXT,"
                     + OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID
-                    + " TEXT);"
-                    + " CREATE INDEX IDX_INDIVIDUAL_BY_RESIDENCE ON "
-                    + OpenHDS.Individuals.TABLE_NAME
-                    + "("
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID
-                    + ")");
+                    + " TEXT);");
+
+            db.execSQL("CREATE INDEX INDIVIDUAL_UUID_INDEX ON " + OpenHDS.Individuals.TABLE_NAME +
+                    "("+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX INDIVIDUAL_EXTID_INDEX ON " + OpenHDS.Individuals.TABLE_NAME +
+                    "("+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + ") ; ");
+
+            db.execSQL("CREATE INDEX INDIVIDUAL_RESIDENCY_INDEX ON " + OpenHDS.Individuals.TABLE_NAME +
+                    "("+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID + ") ; ");
+
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " ("
                     + OpenHDS.Locations._ID + " INTEGER,"
@@ -1000,9 +966,17 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_STATUS
                     + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_NAME
-                    + " TEXT NOT NULL);"
-                    + " CREATE INDEX IDX_LOCATION_BY_HIERARCHY ON "
-                    + OpenHDS.Locations.TABLE_NAME + "(" + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID + ")");
+                    + " TEXT NOT NULL);");
+
+            db.execSQL("CREATE INDEX LOCATION_EXTID_INDEX ON " + OpenHDS.Locations.TABLE_NAME +
+                    "("+ OpenHDS.Locations.COLUMN_LOCATION_EXTID + ") ; ");
+
+            db.execSQL("CREATE INDEX LOCATION_HIERARCHY_UUID_INDEX ON " + OpenHDS.Locations.TABLE_NAME +
+                    "("+ OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX LOCATION_UUID_INDEX ON " + OpenHDS.Locations.TABLE_NAME +
+                    "("+ OpenHDS.Locations.COLUMN_LOCATION_UUID + ") ; ");
+
 
             db.execSQL("CREATE TABLE " + OpenHDS.HierarchyItems.TABLE_NAME
                     + " (" + OpenHDS.HierarchyItems._ID
@@ -1018,6 +992,15 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT
                     + " TEXT NOT NULL);");
 
+            db.execSQL("CREATE INDEX LOCATIONHIERARCHY_PARENT_INDEX ON " + OpenHDS.HierarchyItems.TABLE_NAME +
+                    "("+ OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT + ") ; ");
+
+            db.execSQL("CREATE INDEX LOCATIONHIERARCHY_UUID_INDEX ON " + OpenHDS.HierarchyItems.TABLE_NAME +
+                    "("+ OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX LOCATIONHIERARCHY_EXTID_INDEX ON " + OpenHDS.HierarchyItems.TABLE_NAME +
+                    "("+ OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID + ") ; ");
+
             db.execSQL("CREATE TABLE " + OpenHDS.Visits.TABLE_NAME + " ("
                     + OpenHDS.Visits._ID + " INTEGER,"
                     + OpenHDS.Visits.COLUMN_VISIT_UUID
@@ -1028,6 +1011,15 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT NOT NULL,"
                     + OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID
                     + " TEXT NOT NULL);");
+
+            db.execSQL("CREATE INDEX VISIT_UUID_INDEX ON " + OpenHDS.Visits.TABLE_NAME +
+                    "("+ OpenHDS.Visits.COLUMN_VISIT_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX VISIT_EXTID_INDEX ON " + OpenHDS.Visits.TABLE_NAME +
+                    "("+ OpenHDS.Visits.COLUMN_VISIT_EXTID + ") ; ");
+
+            db.execSQL("CREATE INDEX VISIT_LOCATION_INDEX ON " + OpenHDS.Visits.TABLE_NAME +
+                    "("+ OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID + ") ; ");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Relationships.TABLE_NAME
                     + " (" + OpenHDS.Relationships._ID
@@ -1042,6 +1034,16 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT NOT NULL,"
                     + OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE
                     + " TEXT NOT NULL);");
+
+            db.execSQL("CREATE INDEX RELATIONSHIP_INDIVIDUAL_A_INDEX ON " + OpenHDS.Relationships.TABLE_NAME +
+                    "("+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A + ") ; ");
+
+            db.execSQL("CREATE INDEX RELATIONSHIP_INDIVIDUAL_B_INDEX ON " + OpenHDS.Relationships.TABLE_NAME +
+                    "("+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B + ") ; ");
+
+            db.execSQL("CREATE INDEX RELATIONSHIP_UUID_INDEX ON " + OpenHDS.Relationships.TABLE_NAME +
+                    "("+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID + ") ; ");
+
 
             db.execSQL("CREATE TABLE " + OpenHDS.FieldWorkers.TABLE_NAME + " ("
                     + OpenHDS.FieldWorkers._ID + " INTEGER,"
@@ -1058,6 +1060,18 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD
                     + " TEXT NOT NULL);");
 
+            db.execSQL("CREATE INDEX FIELDWORKERS_EXTID_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
+                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID + ") ; ");
+
+            db.execSQL("CREATE INDEX FIELDWORKERS_UUID_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
+                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX FIELDWORKERS_ID_PREFIX_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
+                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX + ") ; ");
+
+            db.execSQL("CREATE INDEX FIELDWORKERS_PASSWORD_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
+                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD + ") ; ");
+
             db.execSQL("CREATE TABLE "
                     + OpenHDS.SocialGroups.TABLE_NAME
                     + " ("
@@ -1072,6 +1086,17 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME
                     + " TEXT NOT NULL);");
 
+            db.execSQL("CREATE INDEX SOCIALGROUP_HEAD_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
+                    "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX SOCIALGROUP_LOCATION_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
+                    "("+ OpenHDS.SocialGroups.COLUMN_LOCATION_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX SOCIALGROUP_UUID_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
+                    "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + ") ; ");
+
+
+
             db.execSQL("CREATE TABLE "
                     + OpenHDS.Memberships.TABLE_NAME
                     + " ("
@@ -1085,6 +1110,15 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT NOT NULL,"
                     + OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD
                     + " TEXT NOT NULL);");
+
+            db.execSQL("CREATE INDEX MEMBERSHIP_INDIVIDUAL_INDEX ON " + OpenHDS.Memberships.TABLE_NAME +
+                    "("+ OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX MEMBERSHIP_SOCIALGROUP_INDEX ON " + OpenHDS.Memberships.TABLE_NAME +
+                    "("+ OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID + ") ; ");
+
+            db.execSQL("CREATE INDEX MEMBERSHIP_UUID_INDEX ON " + OpenHDS.Memberships.TABLE_NAME +
+                    "("+ OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID + ") ; ");
         }
 
         @Override

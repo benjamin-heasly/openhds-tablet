@@ -7,11 +7,13 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.form.FormInstance;
-import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.utilities.EncryptionHelper;
+import org.openhds.mobile.utilities.LayoutUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,38 +46,23 @@ public class ChecklistAdapter extends ArrayAdapter {
         return newCheckList;
     }
 
-    private static class ViewHolder {
-        CheckBox checkBox;
-        TextView formType;
-        TextView fileName;
-    }
-
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        final ViewHolder holder;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.form_instance_check_item_orange, null);
+        }
 
-        convertView = inflater.inflate(R.layout.form_instance_with_checkbox_orange, null);
-        holder = new ViewHolder();
-        holder.formType = (TextView) convertView.findViewById(R.id.form_instance_list_type);
-        holder.fileName = (TextView) convertView.findViewById(R.id.form_instance_list_filename);
-        holder.fileName.setTag(formInstanceList.get(position));
-        holder.checkBox = (CheckBox) convertView.findViewById(R.id.form_instance_check_box);
-        holder.checkBox.setChecked(checkList.get(position));
-
+        // set up the basics to display the form instance info
         FormInstance instance = formInstanceList.get(position);
-        String formType = instance.getFormName();
-        int resourceId = ProjectResources.FormType.getFormTypeStringId(formType);
-        holder.formType.setText(getContext().getResources().getString(resourceId));
+        LayoutUtils.configureFormListItem(super.getContext(), convertView, instance);
 
-        String verboseFileName= instance.getFileName();
-        //trim the file extension
-        holder.fileName.setText(verboseFileName.substring(0, verboseFileName.length() - 4));
-
-        holder.fileName.setOnClickListener(new View.OnClickListener() {
+        // add callback when the form instance info is pressed
+        ViewGroup itemArea = (ViewGroup) convertView.findViewById(R.id.form_instance_item_area);
+        itemArea.setTag(instance);
+        itemArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 FormInstance selected = (FormInstance) v.getTag();
                 Uri uri = Uri.parse(selected.getUriString());
 
@@ -88,17 +75,18 @@ public class ChecklistAdapter extends ArrayAdapter {
             }
         });
 
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // add callback when the checkbox is checked
+        CheckBox checkBoxView = (CheckBox) convertView.findViewById(R.id.form_instance_check_box);
+        checkBoxView.setChecked(checkList.get(position));
+        checkBoxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 checkList.set(position, isChecked);
-
             }
         });
 
-        convertView.setTag(holder);
         return convertView;
+
     }
 
     public List<FormInstance> getCheckedForms() {
