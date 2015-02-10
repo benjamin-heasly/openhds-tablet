@@ -3,6 +3,7 @@
     <location>
         <collectedBy>
             <extId>FWIMPORT</extId>
+            <uuid>FWIMPORT</uuid>
         </collectedBy>
         <accuracy/>
         <altitude/>
@@ -11,11 +12,13 @@
         <communityCode>code</communityCode>
         <districtName>Malabo</districtName>
         <extId>M1027S20E01P1</extId>
+        <uuid>M1027S20E01P1</uuid>
         <floorNumber>1</floorNumber>
         <latitude/>
         <localityName>7 Batoicopo</localityName>
         <locationHierarchy>
             <extId>M1027S020</extId>
+            <uuid>M1027S020</uuid>
         </locationHierarchy>
         <locationName>M1027S20E01P1</locationName>
         <locationType>Household</locationType>
@@ -29,6 +32,7 @@
     <location>
         <collectedBy>
             <extId>FWIMPORT</extId>
+            <uuid>FWIMPORT</uuid>
         </collectedBy>
         <accuracy/>
         <altitude/>
@@ -37,11 +41,13 @@
         <communityCode>code</communityCode>
         <districtName>Malabo</districtName>
         <extId>M1027S20E02P1</extId>
+        <uuid>M1027S20E02P1</uuid>
         <floorNumber>1</floorNumber>
         <latitude/>
         <localityName>7 Batoicopo</localityName>
         <locationHierarchy>
             <extId>M1027S020</extId>
+            <uuid>M1027S020</uuid>
         </locationHierarchy>
         <locationName>M1027S20E02P1</locationName>
         <locationType>Household</locationType>

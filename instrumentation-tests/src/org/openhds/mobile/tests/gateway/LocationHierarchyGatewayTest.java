@@ -17,6 +17,7 @@ public class LocationHierarchyGatewayTest extends GatewayTest<LocationHierarchy>
     protected LocationHierarchy makeTestEntity(String id, String name) {
         LocationHierarchy locationHierarchy = new LocationHierarchy();
 
+        locationHierarchy.setUuid(id);
         locationHierarchy.setExtId(id);
         locationHierarchy.setName(name);
         locationHierarchy.setLevel("HIERARCHY");

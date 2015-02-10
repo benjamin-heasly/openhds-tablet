@@ -61,8 +61,11 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, SocialGroup socialGroup, String state) {
             DataWrapper dataWrapper = new DataWrapper();
+
+            dataWrapper.setUuid(socialGroup.getUuid());
             dataWrapper.setName(socialGroup.getGroupName());
             dataWrapper.setCategory(state);
+
             return dataWrapper;
         }
     }

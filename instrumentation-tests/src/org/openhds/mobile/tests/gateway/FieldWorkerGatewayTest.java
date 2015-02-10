@@ -17,6 +17,7 @@ public class FieldWorkerGatewayTest extends GatewayTest<FieldWorker> {
     protected FieldWorker makeTestEntity(String id, String name) {
         FieldWorker fieldWorker = new FieldWorker();
 
+        fieldWorker.setUuid(id);
         fieldWorker.setExtId(id);
         fieldWorker.setIdPrefix("00");
         fieldWorker.setFirstName(name);

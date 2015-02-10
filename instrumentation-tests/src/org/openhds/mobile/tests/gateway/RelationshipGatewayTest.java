@@ -17,6 +17,7 @@ public class RelationshipGatewayTest extends GatewayTest<Relationship> {
     protected Relationship makeTestEntity(String id, String name) {
         Relationship relationship = new Relationship();
 
+        relationship.setUuid(id);
         relationship.setIndividualAUuid(id);
         relationship.setIndividualBUuid("INDIVIDUALB");
         relationship.setStartDate("2000-01-01 00:00:00");

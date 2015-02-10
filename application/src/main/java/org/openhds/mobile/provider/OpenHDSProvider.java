@@ -44,7 +44,6 @@ public class OpenHDSProvider extends ContentProvider {
     private static HashMap<String, String> relationshipsProjectionMap;
     private static HashMap<String, String> fieldworkersProjectionMap;
     private static HashMap<String, String> socialgroupsProjectionMap;
-    private static HashMap<String, String> socialgroupsJoinProjectionMap;
     private static HashMap<String, String> membershipsProjectionMap;
 
     private static final int INDIVIDUALS = 1;
@@ -308,26 +307,6 @@ public class OpenHDSProvider extends ContentProvider {
         socialgroupsProjectionMap.put(
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME,
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME);
-
-        // A duplicate of the default social group projection map but is used in
-        // join query. The join query requires the
-        // columns be explicit with the table alias
-        socialgroupsJoinProjectionMap = new HashMap<String, String>();
-        socialgroupsJoinProjectionMap.put(OpenHDS.SocialGroups._ID, "s."
-                + OpenHDS.SocialGroups._ID);
-        socialgroupsJoinProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID, "s."
-                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID);
-        socialgroupsJoinProjectionMap
-                .put(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID,
-                        "s."
-                                + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID);
-        socialgroupsJoinProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME, "s."
-                        + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME);
-        socialgroupsJoinProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID, "x."
-                        + OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID);
 
         membershipsProjectionMap = new HashMap<String, String>();
         membershipsProjectionMap.put(OpenHDS.Memberships._ID,
@@ -668,7 +647,7 @@ public class OpenHDSProvider extends ContentProvider {
             return noteUri;
         }
 
-        throw new SQLException("Failed to insert row into " + uri);
+        throw new SQLException("Failed to insert row into " + uri + " for content " + values);
     }
 
     @Override

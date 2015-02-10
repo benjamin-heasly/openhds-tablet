@@ -137,6 +137,7 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
     protected Individual makeTestEntity(String id, String name) {
         Individual individual = new Individual();
 
+        individual.setUuid(id);
         individual.setExtId(id);
         individual.setFirstName(name);
         individual.setLastName(name);

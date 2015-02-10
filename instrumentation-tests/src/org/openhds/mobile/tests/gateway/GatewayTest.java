@@ -87,7 +87,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
         DataWrapper savedDataWrapper = gateway.getFirstQueryResult(contentResolver, gateway.findById(id), "test");
         assertNotNull(savedDataWrapper);
-        assertEquals(id, savedDataWrapper.getExtId());
+        assertEquals(id, savedDataWrapper.getUuid());
 
         wasInserted = gateway.insertOrUpdate(contentResolver, entity);
         assertEquals(false, wasInserted);
@@ -139,7 +139,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
         List<DataWrapper> allDataWrappers = gateway.getQueryResultList(contentResolver, gateway.findAll(), "test");
         assertEquals(2, allDataWrappers.size());
-        assertNotSame(allDataWrappers.get(0).getExtId(), allDataWrappers.get(1).getExtId());
+        assertNotSame(allDataWrappers.get(0).getUuid(), allDataWrappers.get(1).getUuid());
     }
 
     public void testFindAllAsIterator() {
@@ -165,8 +165,8 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         // expect both query results to come out, ordered by id
         allQueryResultsIterator = gateway.getQueryResultIterator(contentResolver, gateway.findAll(), "test");
         assertTrue(allQueryResultsIterator.hasNext());
-        assertEquals("TEST1", allQueryResultsIterator.next().getExtId());
-        assertEquals("TEST2", allQueryResultsIterator.next().getExtId());
+        assertEquals("TEST1", allQueryResultsIterator.next().getUuid());
+        assertEquals("TEST2", allQueryResultsIterator.next().getUuid());
         assertFalse(allQueryResultsIterator.hasNext());
     }
 

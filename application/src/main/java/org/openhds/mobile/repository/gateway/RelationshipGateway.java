@@ -91,8 +91,11 @@ public class RelationshipGateway extends Gateway<Relationship> {
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Relationship relationship, String state) {
             DataWrapper dataWrapper = new DataWrapper();
+
+            dataWrapper.setUuid(relationship.getUuid());
             dataWrapper.setName(relationship.getType());
             dataWrapper.setCategory(state);
+
             return dataWrapper;
         }
     }

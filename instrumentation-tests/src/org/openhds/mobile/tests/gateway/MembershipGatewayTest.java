@@ -17,6 +17,7 @@ public class MembershipGatewayTest extends GatewayTest<Membership> {
     protected Membership makeTestEntity(String id, String name) {
         Membership membership = new Membership();
 
+        membership.setUuid(id);
         membership.setIndividualUuid(id);
         membership.setSocialGroupUuid("SOCIALGROUP");
         membership.setRelationshipToHead("RELATIONSHIPTOHEAD");

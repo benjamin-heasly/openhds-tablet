@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <memberships>
     <membership>
+        <uuid>Mambershap1</uuid>
         <collectedBy>
             <extId>FWGG1</extId>
+            <uuid>FWGG1</uuid>
         </collectedBy>
         <endType>NA</endType>
         <individual>
@@ -11,17 +13,20 @@
             <residencies/>
             <dip>0</dip>
             <extId>1000000B</extId>
+            <uuid>1000000B</uuid>
         </individual>
         <socialGroup>
-            <extId>M2152S018E20P1</extId>
+            <uuid>M2152S018E20P1</uuid>
         </socialGroup>
         <startDate>2014-10-06 00:00:00</startDate>
         <startType>IndividualForm</startType>
         <bIsToA>1</bIsToA>
     </membership>
     <membership>
+        <uuid>Mambershap2</uuid>
         <collectedBy>
             <extId>FWGG1</extId>
+            <uuid>FWGG1</uuid>
         </collectedBy>
         <endType>NA</endType>
         <individual>
@@ -30,9 +35,10 @@
             <residencies/>
             <dip>0</dip>
             <extId>1000000B</extId>
+            <uuid>1000000B</uuid>
         </individual>
         <socialGroup>
-            <extId>M335S17E18P1</extId>
+            <uuid>M335S17E18P1</uuid>
         </socialGroup>
         <startDate>2014-10-06 00:00:00</startDate>
         <startType>IndividualForm</startType>

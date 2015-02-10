@@ -2,6 +2,7 @@
 <locationHierarchies>
     <hierarchy>
         <extId>BI</extId>
+        <uuid>BI</uuid>
         <level>
             <keyIdentifier>0</keyIdentifier>
             <name>Region</name>
@@ -9,10 +10,12 @@
         <name>Bioko</name>
         <parent>
             <extId>HIERARCHY_ROOT</extId>
+            <uuid>HIERARCHY_ROOT</uuid>
         </parent>
     </hierarchy>
     <hierarchy>
         <extId>Bioko Norte</extId>
+        <uuid>Bioko Norte</uuid>
         <level>
             <keyIdentifier>0</keyIdentifier>
             <name>Province</name>
@@ -20,6 +23,7 @@
         <name>Bioko Norte</name>
         <parent>
             <extId>BI</extId>
+            <uuid>BI</uuid>
         </parent>
     </hierarchy>
 </locationHierarchies>

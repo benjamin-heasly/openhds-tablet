@@ -18,6 +18,7 @@ public class SocialGroupGatewayTest extends GatewayTest<SocialGroup> {
         SocialGroup socialGroup = new SocialGroup();
 
         socialGroup.setUuid(id);
+        socialGroup.setLocationUuid("LOCATION");
         socialGroup.setGroupName(name);
         socialGroup.setGroupHeadUuid("HEAD");
 
