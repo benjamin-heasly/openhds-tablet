@@ -923,8 +923,7 @@ public class OpenHDSProvider extends ContentProvider {
                     + " TEXT NOT NULL PRIMARY KEY,"
                     + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID
                     + " TEXT NOT NULL,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID
-                    + " TEXT NOT NULL,"
+                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE + " TEXT,"
                     + OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME

@@ -113,8 +113,6 @@ public class ProjectResources {
             Location.put(STATUS_NEVER_AVAILABLE, R.string.db_val_location_status_never_available);
             Location.put(STATUS_REJECTED_INTERVENTION, R.string.db_val_location_status_rejected_intervention);
             Location.put(STATUS_UNINHABITED, R.string.db_val_location_status_uninhabited);
-
-
         }
 
         public static int getLocationStringId(String key) {
