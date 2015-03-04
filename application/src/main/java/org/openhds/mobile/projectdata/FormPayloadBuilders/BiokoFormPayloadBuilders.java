@@ -26,7 +26,6 @@ public class BiokoFormPayloadBuilders {
 
             //rename the current datetime to be the bednet's distribution datetime
             String distributionDateTime = formPayload.get(ProjectFormFields.General.COLLECTION_DATE_TIME);
-            formPayload.remove(ProjectFormFields.General.COLLECTION_DATE_TIME);
             formPayload.put(ProjectFormFields.General.DISTRIBUTION_DATE_TIME, distributionDateTime);
 
             String locationExtId = navigateActivity.getHierarchyPath()
@@ -37,7 +36,6 @@ public class BiokoFormPayloadBuilders {
             formPayload.put(ProjectFormFields.BedNet.LOCATION_UUID, locationUuid);
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
             formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
-
 
             //pre-fill a netCode in YY-CCC form
             String netCode = generateNetCode(navigateActivity, locationUuid);
