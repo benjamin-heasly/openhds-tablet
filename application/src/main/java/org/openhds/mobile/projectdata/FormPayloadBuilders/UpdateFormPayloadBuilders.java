@@ -1,8 +1,13 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
+import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.repository.DataWrapper;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.utilities.IdHelper;
 
 import java.text.SimpleDateFormat;
@@ -130,8 +135,12 @@ public class UpdateFormPayloadBuilders {
             String observationDate = new SimpleDateFormat("yyyy-MM-dd").format(
                     Calendar.getInstance().getTime()).toString();
 
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
             formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
+
             formPayload.put(ProjectFormFields.PregnancyObservation.PREGNANCY_OBSERVATION_RECORDED_DATE, observationDate);
 
         }
