@@ -82,10 +82,9 @@ public class CensusFormPayloadBuilders {
     private static void addNewIndividualPayload(
             Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
-        FieldWorker fieldWorker = (FieldWorker) navigateActivity.getIntent()
-                .getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
+        DataWrapper locationDataWrapper = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE);
 
-        String individualExtId = IdHelper.generateIndividualExtId(navigateActivity.getContentResolver(), fieldWorker);
+        String individualExtId = IdHelper.generateIndividualExtId(navigateActivity.getContentResolver(), locationDataWrapper);
 
         formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
                 individualExtId);
@@ -96,8 +95,6 @@ public class CensusFormPayloadBuilders {
                 individualExtId);
         formPayload.put(ProjectFormFields.General.ENTITY_UUID,
                 IdHelper.generateEntityUuid());
-
-
 
     }
 
