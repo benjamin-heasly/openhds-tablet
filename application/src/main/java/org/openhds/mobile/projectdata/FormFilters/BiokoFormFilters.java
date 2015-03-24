@@ -18,7 +18,7 @@ public class BiokoFormFilters {
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
-            if( null == location.getHasRecievedBedNets() || !location.getHasRecievedBedNets().equals("true") ){
+            if( null == location.getHasReceivedBedNets() || !location.getHasReceivedBedNets().equals("true") ){
                 return true;
             }
             return false;

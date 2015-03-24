@@ -6,7 +6,6 @@ public class Location implements Serializable {
 
 	private static final long serialVersionUID = 230186771721044764L;
 
-
     private String uuid;
 	private String extId;
 	private String name;
@@ -25,9 +24,9 @@ public class Location implements Serializable {
     private String provinceName;
     private String subDistrictName;
     private String districtName;
-    private String hasRecievedBedNets;
+    private String hasReceivedBedNets;
     private String description;
-    private String status;
+    private String evaluationStatus;
 
     public String getUuid() {
         return uuid;
@@ -38,12 +37,12 @@ public class Location implements Serializable {
     }
 
 
-    public String getStatus() {
-        return status;
+    public String getEvaluationStatus() {
+        return evaluationStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setEvaluationStatus(String evaluationStatus) {
+        this.evaluationStatus = evaluationStatus;
     }
 
     public String getDescription() {
@@ -54,12 +53,12 @@ public class Location implements Serializable {
         this.description = description;
     }
 
-    public String getHasRecievedBedNets() {
-        return hasRecievedBedNets;
+    public String getHasReceivedBedNets() {
+        return hasReceivedBedNets;
     }
 
-    public void setHasRecievedBedNets(String hasRecievedBedNets) {
-        this.hasRecievedBedNets = hasRecievedBedNets;
+    public void setHasReceivedBedNets(String hasReceivedBedNets) {
+        this.hasReceivedBedNets = hasReceivedBedNets;
     }
 
     public int getBuildingNumber() {

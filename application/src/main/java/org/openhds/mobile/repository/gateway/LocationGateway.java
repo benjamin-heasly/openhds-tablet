@@ -27,7 +27,7 @@ import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_NAME;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_STATUS;
+import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EVALUATION_STATUS;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_UUID;
 import static org.openhds.mobile.repository.RepositoryUtils.extractInt;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
@@ -70,9 +70,9 @@ public class LocationGateway extends Gateway<Location> {
             location.setCommunityCode(extractString(cursor, COLUMN_LOCATION_COMMUNITY_CODE));
             location.setBuildingNumber(extractInt(cursor, COLUMN_LOCATION_BUILDING_NUMBER));
             location.setFloorNumber(extractInt(cursor, COLUMN_LOCATION_FLOOR_NUMBER));
-            location.setHasRecievedBedNets(extractString(cursor, COLUMN_LOCATION_HAS_RECIEVED_BEDNETS));
+            location.setHasReceivedBedNets(extractString(cursor, COLUMN_LOCATION_HAS_RECIEVED_BEDNETS));
             location.setDescription(extractString(cursor, COLUMN_LOCATION_DESCRIPTION));
-            location.setStatus(extractString(cursor, COLUMN_LOCATION_STATUS));
+            location.setEvaluationStatus(extractString(cursor, COLUMN_LOCATION_EVALUATION_STATUS));
             location.setLongitude(extractString(cursor, COLUMN_LOCATION_LONGITUDE));
             location.setLatitude(extractString(cursor, COLUMN_LOCATION_LATITUDE));
 
@@ -98,9 +98,9 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_COMMUNITY_CODE, location.getCommunityCode());
             contentValues.put(COLUMN_LOCATION_BUILDING_NUMBER, location.getBuildingNumber());
             contentValues.put(COLUMN_LOCATION_FLOOR_NUMBER, location.getFloorNumber());
-            contentValues.put(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS, location.getHasRecievedBedNets());
+            contentValues.put(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS, location.getHasReceivedBedNets());
             contentValues.put(COLUMN_LOCATION_DESCRIPTION, location.getDescription());
-            contentValues.put(COLUMN_LOCATION_STATUS, location.getStatus());
+            contentValues.put(COLUMN_LOCATION_EVALUATION_STATUS, location.getEvaluationStatus());
             contentValues.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
             contentValues.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
 
@@ -121,12 +121,12 @@ public class LocationGateway extends Gateway<Location> {
             dataWrapper.setName(location.getName());
             dataWrapper.getStringsPayload().put(R.string.location_description_label, location.getDescription());
 
-            if(null != location.getHasRecievedBedNets()) {
-                dataWrapper.getStringIdsPayload().put(R.string.location_has_recieved_bednets_label, ProjectResources.General.getGeneralStringId(location.getHasRecievedBedNets()));
+            if(null != location.getHasReceivedBedNets()) {
+                dataWrapper.getStringIdsPayload().put(R.string.location_has_recieved_bednets_label, ProjectResources.General.getGeneralStringId(location.getHasReceivedBedNets()));
             }
 
-            if(null != location.getStatus()) {
-                String[] statusValues = location.getStatus().split(" ");
+            if(null != location.getEvaluationStatus()) {
+                String[] statusValues = location.getEvaluationStatus().split(" ");
                 for (String value : statusValues) {
                     Integer payloadKey = ProjectResources.Location.getLocationStringId(value);
                     if (0 == payloadKey) {

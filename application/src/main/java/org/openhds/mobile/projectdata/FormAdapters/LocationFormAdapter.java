@@ -44,12 +44,12 @@ public class LocationFormAdapter {
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_SUB_DISTRICT_NAME)));
         location.setDistrictName(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_DISTRICT_NAME)));
-        location.setHasRecievedBedNets(formInstanceData.get(
+        location.setHasReceivedBedNets(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS)));
         location.setDescription(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_DESCRIPTION)));
-        location.setStatus(formInstanceData.get(
-                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_STATUS)));
+        location.setEvaluationStatus(formInstanceData.get(
+                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_EVALUATION_STATUS)));
         location.setLongitude(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_LONGITUDE)));
         location.setLatitude(formInstanceData.get(
