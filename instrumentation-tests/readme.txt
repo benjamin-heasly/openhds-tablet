@@ -49,7 +49,7 @@ http://maven.apache.org/guides/mini/guide-multiple-modules.html
 
 Here is an example Maven command for a full test run with uninstall and reinstall of both apks:
 cd openhds-tablet
-mvn -Dandroid.sdk.path="/home/optiplex-710-b/adt-bundle-linux-x86_64-20140321/sdk" -Dandroid.device=usb clean install
+mvn -Dandroid.sdk.path="/home/motech/android-sdk-linux" -Dandroid.device=usb clean install
 
 Running this from the command line makes it hard to attach the debugger.  But after you run this command once, you can
 then debug the app or tests like you would normally, from Eclipse or IntelliJ.  Debug and make changes, and re-run the
