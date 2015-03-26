@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="4" android:versionName="binary-burst" package="org.openhds.mobile">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="8" android:versionName="executable-exoplanet" package="org.openhds.mobile">
 
     <uses-sdk android:minSdkVersion="11"/>
 
