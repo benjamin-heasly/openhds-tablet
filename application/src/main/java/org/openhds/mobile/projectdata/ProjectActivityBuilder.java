@@ -475,7 +475,7 @@ public class ProjectActivityBuilder {
                     new UpdateFormPayloadConsumers.StartAVisit()));
 
             ArrayList<FormSearchPluginModule> searches = new ArrayList<>();
-            searches.add(SearchUtils.getIndividualPlugin(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            searches.add(SearchUtils.getIndividualPlugin(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, R.string.search_individual_label));
             individualFormList.add(new FormBehaviour("In_migration",
                     R.string.in_migration,
                     new UpdateFormFilters.RegisterInMigration(),
@@ -500,6 +500,15 @@ public class ProjectActivityBuilder {
                     new UpdateFormFilters.RecordPregnancyObservation(),
                     new UpdateFormPayloadBuilders.RecordPregnancyObservation(),
                     null));
+
+            ArrayList<FormSearchPluginModule> daddySearch = new ArrayList<>();
+            daddySearch.add(SearchUtils.getIndividualPlugin(ProjectFormFields.PregnancyOutcome.FATHER_UUID, R.string.search_father_label));
+            bottomFormList.add(new FormBehaviour("Pregnancy_outcome",
+                    R.string.record_pregnancy_outcome,
+                    new UpdateFormFilters.RecordPregnancyOutcome(),
+                    new UpdateFormPayloadBuilders.RecordPregnancyOutcome(),
+                    null,
+                    daddySearch));
 
             formsForStates.put(biokoHierarchy.REGION_STATE, regionFormList);
             formsForStates.put(biokoHierarchy.PROVINCE_STATE, provinceFormList);

@@ -103,6 +103,25 @@ public class UpdateFormFilters {
         }
     }
 
+    public static class RecordPregnancyOutcome implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+
+            Individual selectedIndividual = getCurrentSelectedIndividual(navigateActivity);
+
+            boolean isDeceased = UpdateFormFilters.isIndividualDeceased(selectedIndividual);
+            boolean isFemale = UpdateFormFilters.isIndividualFemale(selectedIndividual);
+            boolean isOutMigrated = UpdateFormFilters.isIndividualOutMigrated(selectedIndividual);
+
+            if (null != navigateActivity.getCurrentVisit() && isFemale && !isDeceased && !isOutMigrated) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
     private static Individual getCurrentSelectedIndividual(NavigateActivity navigateActivity) {
 
         Map<String, DataWrapper> hierarchyPath = navigateActivity.getHierarchyPath();

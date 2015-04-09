@@ -146,7 +146,7 @@ public class FormSearchActivity extends Activity {
     private class DataSelectionHandler implements DataSelectionFragment.SelectionHandler {
         @Override
         public void handleSelectedData(DataWrapper dataWrapper) {
-            currentFormSearchPluginModule.setFieldValue(dataWrapper.getExtId());
+            currentFormSearchPluginModule.setFieldValue(dataWrapper.getUuid());
             searchPluginListAdapter.notifyDataSetChanged();
         }
     }

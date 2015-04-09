@@ -107,7 +107,7 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
     private void searchDatabase() {
         ArrayList<FormSearchPluginModule> searchPluginModules = new ArrayList<>();
         searchPluginModules.add(SearchUtils.getFieldWorkerPlugin("fieldWorker"));
-        searchPluginModules.add(SearchUtils.getIndividualPlugin("individual"));
+        searchPluginModules.add(SearchUtils.getIndividualPlugin("individual", R.string.search_individual_label));
         searchPluginModules.add(SearchUtils.getLocationPlugin("location"));
         searchPluginModules.add(SearchUtils.getSocialGroupPlugin("socialGroup"));
 

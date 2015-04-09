@@ -104,6 +104,7 @@
     <string name="search_done_label">Completado</string>
     <string name="search_database_description">Buscar en la Base de Datos</string>
     <string name="search_individual_label">Buscar un Individuo</string>
+    <string name="search_father_label">Buscar Padre</string>
     <string name="search_field_worker_label">Buscar un Encuestador</string>
     <string name="search_results_label">Resultados</string>
     <string name="search_in_progress_label">Buscando&#8230;</string>
@@ -206,6 +207,7 @@
     <string name="register_death">Registrar fallecimiento</string>
     <string name="in_migration">Registra Inmigración al Hogar</string>
     <string name="record_pregnancy_observation">Registrar observación de embarazo en el hogar</string>
+    <string name="record_pregnancy_outcome">Registrar el resultado del embarazo</string>
 
     <!-- NavigateModuleInfo Strings -->
     <string name="census_portal_label">Iniciar Censo</string>

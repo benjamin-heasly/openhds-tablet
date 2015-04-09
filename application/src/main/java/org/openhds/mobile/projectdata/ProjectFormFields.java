@@ -300,6 +300,12 @@ public class ProjectFormFields {
         public static final String PREGNANCY_OBSERVATION_RECORDED_DATE = "recordedDate";
     }
 
+    public static final class PregnancyOutcome{
+        public static final String SOCIALGROUP_UUID = "socialgroupUuid";
+        public static final String MOTHER_UUID = "motherUuid";
+        public static final String FATHER_UUID = "fatherUuid";
+    }
+
     public static final class BedNet {
         public static final String BED_NET_CODE = "netCode";
         public static final String HOUSEHOLD_SIZE = "householdSize";

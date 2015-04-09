@@ -28,9 +28,9 @@ public class SearchUtils {
     }
 
     // Search for an individual based name and phone number.
-    public static FormSearchPluginModule getIndividualPlugin(String fieldName) {
+    public static FormSearchPluginModule getIndividualPlugin(String fieldName, int searchLabel) {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
-                GatewayRegistry.getIndividualGateway(), R.string.search_individual_label, fieldName);
+                GatewayRegistry.getIndividualGateway(), searchLabel, fieldName);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME, R.string.individual_first_name_label);
         plugin.getColumnsAndLabels().put(

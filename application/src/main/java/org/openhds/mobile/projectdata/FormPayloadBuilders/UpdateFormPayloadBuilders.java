@@ -3,11 +3,13 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 import org.openhds.mobile.utilities.IdHelper;
 
 import java.text.SimpleDateFormat;
@@ -135,13 +137,49 @@ public class UpdateFormPayloadBuilders {
             String observationDate = new SimpleDateFormat("yyyy-MM-dd").format(
                     Calendar.getInstance().getTime()).toString();
 
-            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
-            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            String individualExtId = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
+            String individualUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getUuid();
+
+            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
+            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, individualUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, individualExtId);
 
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
             formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
 
             formPayload.put(ProjectFormFields.PregnancyObservation.PREGNANCY_OBSERVATION_RECORDED_DATE, observationDate);
+
+        }
+    }
+
+    public static class RecordPregnancyOutcome implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
+            SocialGroup socialGroup = socialGroupGateway.getFirst(navigateActivity.getContentResolver(),
+                    socialGroupGateway.findByLocationUuid(navigateActivity.getHierarchyPath()
+                            .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid()));
+
+            String motherExtId = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
+            String motherUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getUuid();
+
+            formPayload.put(ProjectFormFields.PregnancyOutcome.MOTHER_UUID, motherUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, motherUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, motherExtId);
+            formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
+            formPayload.put(ProjectFormFields.PregnancyOutcome.SOCIALGROUP_UUID, socialGroup.getUuid());
 
         }
     }

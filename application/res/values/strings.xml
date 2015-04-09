@@ -166,6 +166,7 @@
     <string name="search_in_progress_label">Searching&#8230;</string>
     <string name="search_results_label">Results</string>
     <string name="search_individual_label">Find an Individual</string>
+    <string name="search_father_label">Find Father</string>
     <string name="search_location_label">Find a Location</string>
     <string name="search_social_group_label">Find a Household</string>
     <string name="search_field_worker_label">Find a Field Worker</string>
@@ -279,6 +280,7 @@
     <string name="supervisor_approve_selected"> Approve Selected </string>
     <string name="sub_district_label">SubDistrict</string>
     <string name="record_pregnancy_observation">Record a Pregnancy Observation</string>
+    <string name="record_pregnancy_outcome">Record a Pregnancy Outcome</string>
     <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
     <string name="census_activity_title">Census Activity</string>
     <string name="bioko_activity_title">Bed Net Activity</string>
