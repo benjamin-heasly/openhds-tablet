@@ -183,4 +183,51 @@ public class UpdateFormPayloadBuilders {
 
         }
     }
+
+    public static class AddIndividualFromInMigration implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            DataWrapper locationDataWrapper = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE);
+
+            String individualExtId = IdHelper.generateIndividualExtId(navigateActivity.getContentResolver(), locationDataWrapper);
+
+            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
+                    individualExtId);
+
+            formPayload.put(ProjectFormFields.Individuals.HOUSEHOLD_UUID, navigateActivity.getCurrentSelection().getUuid());
+
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID,
+                    individualExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID,
+                    IdHelper.generateEntityUuid());
+
+            ContentResolver resolver = navigateActivity.getContentResolver();
+
+            SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
+            SocialGroup socialGroup = socialGroupGateway.getFirst(resolver,
+                    socialGroupGateway.findByLocationUuid(navigateActivity.getCurrentSelection().getUuid()));
+
+
+            // we need to add the socialgroup, membership, and relationship UUID for when they're created in
+            // the consumers. We add them now so they are a part of the form when it is passed up.
+            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_UUID, IdHelper.generateEntityUuid());
+            formPayload.put(ProjectFormFields.Individuals.MEMBERSHIP_UUID, IdHelper.generateEntityUuid());
+
+            if(null == socialGroup){
+                formPayload.put(ProjectFormFields.Individuals.SOCIALGROUP_UUID, IdHelper.generateEntityUuid());
+            } else {
+                formPayload.put(ProjectFormFields.Individuals.SOCIALGROUP_UUID, socialGroup.getUuid());
+            }
+
+
+        }
+
+    }
 }
