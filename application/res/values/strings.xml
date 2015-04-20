@@ -271,6 +271,8 @@
     <string name="form_type_bed_net">Bed Net</string>
     <string name="form_type_death">Death</string>
     <string name="form_type_location_evaluation">Location Evaluation</string>
+    <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
+    <string name="form_type_pregnancy_outcome">Pregnancy Outcome</string>
     <string name="form_instance_list_header">Recent Forms</string>
     <string name="field_worker_home_menu_text">Field Worker Home</string>
     <string name="logout_menu_text">Logout</string>
@@ -282,7 +284,6 @@
     <string name="sub_district_label">SubDistrict</string>
     <string name="record_pregnancy_observation">Record a Pregnancy Observation</string>
     <string name="record_pregnancy_outcome">Record a Pregnancy Outcome</string>
-    <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
     <string name="census_activity_title">Census Activity</string>
     <string name="bioko_activity_title">Bed Net Activity</string>
     <string name="update_activity_title">Update Activity</string>

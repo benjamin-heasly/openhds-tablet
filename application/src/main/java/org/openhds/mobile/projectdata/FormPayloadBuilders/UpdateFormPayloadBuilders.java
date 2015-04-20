@@ -54,7 +54,7 @@ public class UpdateFormPayloadBuilders {
     }
 
 
-    // Individual information must be post-filled in the consumer because it's attained
+    // Individual information must be post-filled in the consumer because it's obtained
     // through a search plugin
     public static class RegisterInternalInMigration implements FormPayloadBuilder {
 
@@ -71,7 +71,6 @@ public class UpdateFormPayloadBuilders {
             String locationUuid = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
             formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
             formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
-
 
             formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_INTERNAL);
 
@@ -97,10 +96,10 @@ public class UpdateFormPayloadBuilders {
             formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
             formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
 
+            formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_EXTERNAL);
+
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
             formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
-
-            formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_EXTERNAL);
 
             String migrationDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString();
             formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_DATE, migrationDate);

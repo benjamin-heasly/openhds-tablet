@@ -192,6 +192,7 @@ public class ProjectResources {
         private static final String FORM_TYPE_BED_NET = "bed_net";
         private static final String FORM_TYPE_DEATH = "death";
         private static final String FORM_TYPE_PREGNANCY_OBSERVATION = "pregnancy_observation";
+        private static final String FORM_TYPE_PREGNANCY_OUTCOME = "pregnancy_outcome";
         private static final String FORM_TYPE_LOCATION_EVALUATION = "location_evaluation";
 
         static {
@@ -203,6 +204,7 @@ public class ProjectResources {
             FormType.put(FORM_TYPE_BED_NET, R.string.form_type_bed_net);
             FormType.put(FORM_TYPE_DEATH, R.string.form_type_death);
             FormType.put(FORM_TYPE_PREGNANCY_OBSERVATION, R.string.form_type_pregnancy_observation);
+            FormType.put(FORM_TYPE_PREGNANCY_OUTCOME, R.string.form_type_pregnancy_outcome);
             FormType.put(FORM_TYPE_LOCATION_EVALUATION, R.string.form_type_location_evaluation);
         }
 

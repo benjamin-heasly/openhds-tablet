@@ -476,12 +476,12 @@ public class ProjectActivityBuilder {
 
             // Register an Internal Inmigration, requires a search to do
             ArrayList<FormSearchPluginModule> searches = new ArrayList<>();
-            searches.add(SearchUtils.getIndividualPlugin(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, R.string.search_individual_label));
+            searches.add(SearchUtils.getIndividualPlugin(ProjectFormFields.Individuals.INDIVIDUAL_UUID, R.string.search_individual_label));
             individualFormList.add(new FormBehaviour("In_migration",
                     R.string.internal_in_migration,
                     new UpdateFormFilters.RegisterInMigration(),
                     new UpdateFormPayloadBuilders.RegisterInternalInMigration(),
-                    new UpdateFormPayloadConsumers.RegisterInternalInMigration(),
+                    new UpdateFormPayloadConsumers.RegisterInMigration(),
                     searches));
 
 
@@ -490,7 +490,7 @@ public class ProjectActivityBuilder {
                     R.string.external_in_migration,
                     new UpdateFormFilters.RegisterInMigration(),
                     new UpdateFormPayloadBuilders.RegisterExternalInMigration(),
-                    new UpdateFormPayloadConsumers.RegisterExternalInMigration());
+                    new UpdateFormPayloadConsumers.RegisterInMigration());
 
 
             // Register an Individual for External InMigration (chained with in_migration form)
