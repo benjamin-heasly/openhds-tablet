@@ -252,6 +252,7 @@ public class ProjectFormFields {
         public static final String VISIT_UUID = "visitUuid";
         public static final String VISIT_DATE = "visitDate";
         public static final String LOCATION_UUID = "locationUuid";
+        public static final String LOCATION_EXTID = "locationExtId";
         public static final String FIELDWORKER_UUID = "fieldWorkerUuid";
 
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();

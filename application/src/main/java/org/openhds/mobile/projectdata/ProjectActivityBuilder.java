@@ -346,11 +346,7 @@ public class ProjectActivityBuilder {
                     new CensusFormPayloadBuilders.AddMemberOfHousehold(),
                     new CensusFormPayloadConsumers.AddMemberOfHousehold()));
 
-            bottomFormList.add(new FormBehaviour("Individual",
-                    R.string.edit_individual_label,
-                    new CensusFormFilters.EditIndividual(),
-                    new CensusFormPayloadBuilders.EditIndividual(),
-                    new CensusFormPayloadConsumers.EditIndividual()));
+
 
             formsForStates.put(biokoHierarchy.REGION_STATE, regionFormList);
             formsForStates.put(biokoHierarchy.PROVINCE_STATE, provinceFormList);
@@ -455,7 +451,7 @@ public class ProjectActivityBuilder {
         }
 
 
-        public static FormBehaviour internalInMigrationFormBehaviour;
+        public static FormBehaviour externalInMigrationFormBehaviour;
 
         static {
 
@@ -484,19 +480,18 @@ public class ProjectActivityBuilder {
             individualFormList.add(new FormBehaviour("In_migration",
                     R.string.internal_in_migration,
                     new UpdateFormFilters.RegisterInMigration(),
-                    new UpdateFormPayloadBuilders.RegisterInMigration(),
-                    new UpdateFormPayloadConsumers.RegisterInMigration(),
+                    new UpdateFormPayloadBuilders.RegisterInternalInMigration(),
+                    new UpdateFormPayloadConsumers.RegisterInternalInMigration(),
                     searches));
 
 
             // Register an External InMigration form (chained after individual form)
-                    internalInMigrationFormBehaviour = new FormBehaviour("In_migration",
+                    externalInMigrationFormBehaviour = new FormBehaviour("In_migration",
                     R.string.external_in_migration,
                     new UpdateFormFilters.RegisterInMigration(),
-                    new UpdateFormPayloadBuilders.RegisterInMigration(),
-                    new UpdateFormPayloadConsumers.RegisterInMigration());
+                    new UpdateFormPayloadBuilders.RegisterExternalInMigration(),
+                    new UpdateFormPayloadConsumers.RegisterExternalInMigration());
 
-            individualFormList.add(internalInMigrationFormBehaviour);
 
             // Register an Individual for External InMigration (chained with in_migration form)
             individualFormList.add(new FormBehaviour("Individual",

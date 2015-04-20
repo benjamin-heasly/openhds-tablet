@@ -100,7 +100,7 @@ public class UpdateFormPayloadConsumers {
     }
 
     //TODO: Individuals are never in the payload??
-    public static class RegisterInMigration implements FormPayloadConsumer {
+    public static class RegisterInternalInMigration implements FormPayloadConsumer {
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
             // update the individual's residency
@@ -122,6 +122,39 @@ public class UpdateFormPayloadConsumers {
 
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
+
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
+
+        }
+    }
+
+
+    public static class RegisterExternalInMigration implements FormPayloadConsumer {
+        @Override
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+            // update the individual's residency
+            String locationExtId = formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID);
+            String individualExtId = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
+
+            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
+            Individual individual = individualGateway.getFirst(navigateActivity.getContentResolver(),
+                    individualGateway.findById(individualExtId));
+            if (null == individual) {
+                return new ConsumerResults(false, null, null);
+            }
+
+            individual.setCurrentResidenceUuid(locationExtId);
+            individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
+            individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
+            return new ConsumerResults(false, null, null);
+        }
+
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
 
         }
     }
@@ -187,13 +220,12 @@ public class UpdateFormPayloadConsumers {
             hints.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
             hints.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, formPayload.get(ProjectFormFields.General.ENTITY_UUID));
             hints.put(ProjectFormFields.Locations.LOCATION_EXTID, formPayload.get(ProjectFormFields.General.HOUSEHOLD_STATE_FIELD_NAME));
-            return new ConsumerResults(false, ProjectActivityBuilder.UpdateActivityModule.internalInMigrationFormBehaviour , hints);
+            return new ConsumerResults(false, ProjectActivityBuilder.UpdateActivityModule.externalInMigrationFormBehaviour, hints);
         }
 
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
-            // head of the household is always "self" to the head of household
-            formPayload.put(ProjectFormFields.Individuals.MEMBER_STATUS, "1");
+
         }
 
     }
