@@ -1,14 +1,12 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
+
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.DataWrapper;
-import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 import org.openhds.mobile.utilities.IdHelper;
 
@@ -173,13 +171,19 @@ public class UpdateFormPayloadBuilders {
             String observationDate = new SimpleDateFormat("yyyy-MM-dd").format(
                     Calendar.getInstance().getTime()).toString();
 
-            String individualExtId = navigateActivity.getHierarchyPath()
-                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
-            String individualUuid = navigateActivity.getHierarchyPath()
-                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getUuid();
-
-            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
-            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+            String individualExtId;
+            String individualUuid;
+            DataWrapper dataWrapper = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE);
+            if (null == dataWrapper) {
+                individualExtId = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
+                individualUuid = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID);
+            } else {
+                individualExtId = dataWrapper.getExtId();
+                individualUuid = dataWrapper.getUuid();
+                formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
+                formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+            }
 
             formPayload.put(ProjectFormFields.General.ENTITY_UUID, individualUuid);
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, individualExtId);
