@@ -301,13 +301,13 @@ public class ProjectActivityBuilder {
                     R.string.start_a_visit,
                     new UpdateFormFilters.StartAVisit(),
                     new UpdateFormPayloadBuilders.StartAVisit(),
-                    new CensusFormPayloadConsumers.StartAVisitForPregnancyObservation());
+                    new CensusFormPayloadConsumers.ChainedVisitForPregnancyObservation());
 
             pregObFormBehaviour = new FormBehaviour("Pregnancy_observation",
                     R.string.record_pregnancy_observation,
                     new UpdateFormFilters.RecordPregnancyObservation(),
                     new UpdateFormPayloadBuilders.RecordPregnancyObservation(),
-                    new CensusFormPayloadConsumers.PregnancyObservation());
+                    new CensusFormPayloadConsumers.ChainedPregnancyObservation());
 
             addLocationFormBehaviour = new FormBehaviour("Location",
                     R.string.create_location,
@@ -346,11 +346,7 @@ public class ProjectActivityBuilder {
                     new CensusFormPayloadBuilders.AddMemberOfHousehold(),
                     new CensusFormPayloadConsumers.AddMemberOfHousehold()));
 
-            bottomFormList.add(new FormBehaviour("Individual",
-                    R.string.edit_individual_label,
-                    new CensusFormFilters.EditIndividual(),
-                    new CensusFormPayloadBuilders.EditIndividual(),
-                    new CensusFormPayloadConsumers.EditIndividual()));
+
 
             formsForStates.put(biokoHierarchy.REGION_STATE, regionFormList);
             formsForStates.put(biokoHierarchy.PROVINCE_STATE, provinceFormList);
@@ -455,6 +451,8 @@ public class ProjectActivityBuilder {
         }
 
 
+        public static FormBehaviour externalInMigrationFormBehaviour;
+
         static {
 
             ArrayList<FormBehaviour> regionFormList = new ArrayList<FormBehaviour>();
@@ -468,39 +466,62 @@ public class ProjectActivityBuilder {
             ArrayList<FormBehaviour> individualFormList = new ArrayList<FormBehaviour>();
             ArrayList<FormBehaviour> bottomFormList = new ArrayList<FormBehaviour>();
 
+
+            // Start a Visit FormBehaviour
             individualFormList.add(new FormBehaviour("Visit",
                     R.string.start_a_visit,
                     new UpdateFormFilters.StartAVisit(),
                     new UpdateFormPayloadBuilders.StartAVisit(),
                     new UpdateFormPayloadConsumers.StartAVisit()));
 
+            // Register an Internal Inmigration, requires a search to do
             ArrayList<FormSearchPluginModule> searches = new ArrayList<>();
             searches.add(SearchUtils.getIndividualPlugin(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, R.string.search_individual_label));
             individualFormList.add(new FormBehaviour("In_migration",
-                    R.string.in_migration,
+                    R.string.internal_in_migration,
                     new UpdateFormFilters.RegisterInMigration(),
-                    new UpdateFormPayloadBuilders.RegisterInMigration(),
-                    new UpdateFormPayloadConsumers.RegisterInMigration(),
+                    new UpdateFormPayloadBuilders.RegisterInternalInMigration(),
+                    new UpdateFormPayloadConsumers.RegisterInternalInMigration(),
                     searches));
 
+
+            // Register an External InMigration form (chained after individual form)
+                    externalInMigrationFormBehaviour = new FormBehaviour("In_migration",
+                    R.string.external_in_migration,
+                    new UpdateFormFilters.RegisterInMigration(),
+                    new UpdateFormPayloadBuilders.RegisterExternalInMigration(),
+                    new UpdateFormPayloadConsumers.RegisterExternalInMigration());
+
+
+            // Register an Individual for External InMigration (chained with in_migration form)
+            individualFormList.add(new FormBehaviour("Individual",
+                    R.string.external_in_migration,
+                    new UpdateFormFilters.RegisterInMigration(),
+                    new UpdateFormPayloadBuilders.AddIndividualFromInMigration(),
+                    new UpdateFormPayloadConsumers.AddIndividualFromInMigration()));
+
+            // Register an OutMigration FormBehaviour
             bottomFormList.add(new FormBehaviour("Out_migration",
                     R.string.out_migration,
                     new UpdateFormFilters.RegisterOutMigration(),
                     new UpdateFormPayloadBuilders.RegisterOutMigration(),
                     new UpdateFormPayloadConsumers.RegisterOutMigration()));
 
+            // Register a Death FormBehaviour
             bottomFormList.add(new FormBehaviour("Death",
                     R.string.register_death,
                     new UpdateFormFilters.RegisterDeath(),
                     new UpdateFormPayloadBuilders.RegisterDeath(),
                     new UpdateFormPayloadConsumers.RegisterDeath()));
 
+            // Register a Pregnancy Observation FormBehaviour
             bottomFormList.add(new FormBehaviour("Pregnancy_observation",
                     R.string.record_pregnancy_observation,
                     new UpdateFormFilters.RecordPregnancyObservation(),
                     new UpdateFormPayloadBuilders.RecordPregnancyObservation(),
                     null));
 
+            // Register a Pregnancy OutCome FormBehaviour
             ArrayList<FormSearchPluginModule> daddySearch = new ArrayList<>();
             daddySearch.add(SearchUtils.getIndividualPlugin(ProjectFormFields.PregnancyOutcome.FATHER_UUID, R.string.search_father_label));
             bottomFormList.add(new FormBehaviour("Pregnancy_outcome",

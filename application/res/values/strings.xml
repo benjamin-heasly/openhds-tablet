@@ -243,7 +243,8 @@
     <string name="finish_visit">Finish Visit</string>
     <string name="out_migration">Register Out-Migration</string>
     <string name="register_death">Register a Death</string>
-    <string name="in_migration">Register In-Migration</string>
+    <string name="internal_in_migration">Register Internal In-Migration</string>
+    <string name="external_in_migration">Register External In-Migration</string>
 
     <!-- NavigateModuleInfo Strings -->
     <string name="census_portal_label">Start Census Activity</string>

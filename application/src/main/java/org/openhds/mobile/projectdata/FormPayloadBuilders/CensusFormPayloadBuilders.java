@@ -148,7 +148,6 @@ public class CensusFormPayloadBuilders {
             PayloadTools.flagForReview(formPayload, false);
             addNewIndividualPayload(formPayload, navigateActivity);
 
-
             ContentResolver resolver = navigateActivity.getContentResolver();
 
             SocialGroupGateway socialGroupGateway = new SocialGroupGateway();

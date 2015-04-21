@@ -1,14 +1,12 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
+
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.repository.DataWrapper;
-import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 import org.openhds.mobile.utilities.IdHelper;
 
@@ -45,6 +43,8 @@ public class UpdateFormPayloadBuilders {
             formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
             formPayload.put(ProjectFormFields.Visits.LOCATION_UUID,
                     locationUuid);
+            formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,
+                    locationExtId);
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
             formPayload.put(ProjectFormFields.Visits.VISIT_UUID, IdHelper.generateEntityUuid());
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
@@ -54,9 +54,9 @@ public class UpdateFormPayloadBuilders {
     }
 
 
-    //TODO: Individuals are never put into the Payload???
-    //TODO: Missing = individualExtId, individualUuid, entityExtId, entityUuid
-    public static class RegisterInMigration implements FormPayloadBuilder {
+    // Individual information must be post-filled in the consumer because it's attained
+    // through a search plugin
+    public static class RegisterInternalInMigration implements FormPayloadBuilder {
 
         @Override
         public void buildFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
@@ -72,7 +72,35 @@ public class UpdateFormPayloadBuilders {
             formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
             formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
 
+
             formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_INTERNAL);
+
+            String migrationDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString();
+            formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_DATE, migrationDate);
+        }
+    }
+
+    // Individual information is chained in
+    public static class RegisterExternalInMigration implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
+
+            String locationExtId = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
+            formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
+
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
+
+            formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_TYPE, ProjectFormFields.InMigrations.IN_MIGRATION_EXTERNAL);
 
             String migrationDate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString();
             formPayload.put(ProjectFormFields.InMigrations.IN_MIGRATION_DATE, migrationDate);
@@ -98,6 +126,9 @@ public class UpdateFormPayloadBuilders {
 
             formPayload.put(ProjectFormFields.OutMigrations.OUT_MIGRATION_DATE, outMigrationDate);
 
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
+
             formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
             formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
 
@@ -120,6 +151,9 @@ public class UpdateFormPayloadBuilders {
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, true);
 
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
+
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
 
         }
@@ -137,13 +171,19 @@ public class UpdateFormPayloadBuilders {
             String observationDate = new SimpleDateFormat("yyyy-MM-dd").format(
                     Calendar.getInstance().getTime()).toString();
 
-            String individualExtId = navigateActivity.getHierarchyPath()
-                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
-            String individualUuid = navigateActivity.getHierarchyPath()
-                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getUuid();
-
-            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
-            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+            String individualExtId;
+            String individualUuid;
+            DataWrapper dataWrapper = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE);
+            if (null == dataWrapper) {
+                individualExtId = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
+                individualUuid = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID);
+            } else {
+                individualExtId = dataWrapper.getExtId();
+                individualUuid = dataWrapper.getUuid();
+                formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
+                formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+            }
 
             formPayload.put(ProjectFormFields.General.ENTITY_UUID, individualUuid);
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, individualExtId);
@@ -182,5 +222,52 @@ public class UpdateFormPayloadBuilders {
             formPayload.put(ProjectFormFields.PregnancyOutcome.SOCIALGROUP_UUID, socialGroup.getUuid());
 
         }
+    }
+
+    public static class AddIndividualFromInMigration implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload,
+                                     NavigateActivity navigateActivity) {
+
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            DataWrapper locationDataWrapper = navigateActivity.getHierarchyPath().get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE);
+
+            String individualExtId = IdHelper.generateIndividualExtId(navigateActivity.getContentResolver(), locationDataWrapper);
+
+            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID,
+                    individualExtId);
+
+            formPayload.put(ProjectFormFields.Individuals.HOUSEHOLD_UUID, navigateActivity.getCurrentSelection().getUuid());
+
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID,
+                    individualExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID,
+                    IdHelper.generateEntityUuid());
+
+            ContentResolver resolver = navigateActivity.getContentResolver();
+
+            SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
+            SocialGroup socialGroup = socialGroupGateway.getFirst(resolver,
+                    socialGroupGateway.findByLocationUuid(navigateActivity.getCurrentSelection().getUuid()));
+
+
+            // we need to add the socialgroup, membership, and relationship UUID for when they're created in
+            // the consumers. We add them now so they are a part of the form when it is passed up.
+            formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_UUID, IdHelper.generateEntityUuid());
+            formPayload.put(ProjectFormFields.Individuals.MEMBERSHIP_UUID, IdHelper.generateEntityUuid());
+
+            if(null == socialGroup){
+                formPayload.put(ProjectFormFields.Individuals.SOCIALGROUP_UUID, IdHelper.generateEntityUuid());
+            } else {
+                formPayload.put(ProjectFormFields.Individuals.SOCIALGROUP_UUID, socialGroup.getUuid());
+            }
+
+
+        }
+
     }
 }

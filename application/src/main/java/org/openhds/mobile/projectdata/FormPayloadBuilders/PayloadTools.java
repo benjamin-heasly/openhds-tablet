@@ -32,8 +32,7 @@ public class PayloadTools {
         // Add all the extIds from the HierarchyPath
         for (String state : stateSequence) {
             if (null != hierarchyPath.get(state)) {
-                String fieldName = ProjectFormFields.General
-                        .getExtIdFieldNameFromState(state);
+                String fieldName = ProjectFormFields.General.getExtIdFieldNameFromState(state);
                 formPayload.put(fieldName, hierarchyPath.get(state).getExtId());
             }
         }

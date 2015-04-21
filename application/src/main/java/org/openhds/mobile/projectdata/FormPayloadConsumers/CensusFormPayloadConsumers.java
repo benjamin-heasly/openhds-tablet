@@ -279,7 +279,7 @@ public class CensusFormPayloadConsumers {
     }
 
     // Used for Form Launch Sequences
-    public static class StartAVisitForPregnancyObservation implements FormPayloadConsumer {
+    public static class ChainedVisitForPregnancyObservation implements FormPayloadConsumer {
 
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
@@ -306,7 +306,7 @@ public class CensusFormPayloadConsumers {
         }
     }
 
-    public static class PregnancyObservation implements FormPayloadConsumer {
+    public static class ChainedPregnancyObservation implements FormPayloadConsumer {
 
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
