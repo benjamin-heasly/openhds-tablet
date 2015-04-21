@@ -34,16 +34,16 @@ public class ChecklistAdapter extends ArrayAdapter {
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.formInstanceList = formInstances;
-        this.checkList = initializeCheckBoxes();
+        initializeCheckBoxes(this.formInstanceList);
 
     }
 
-    private ArrayList<Boolean> initializeCheckBoxes() {
+    private void initializeCheckBoxes(List<FormInstance> instances) {
         ArrayList<Boolean> newCheckList = new ArrayList<>();
-        for (int i = 0; i < formInstanceList.size(); i++) {
+        for (int i = 0; i < instances.size(); i++) {
             newCheckList.add(false);
         }
-        return newCheckList;
+        this.checkList = newCheckList;
     }
 
     @Override
@@ -77,13 +77,14 @@ public class ChecklistAdapter extends ArrayAdapter {
 
         // add callback when the checkbox is checked
         CheckBox checkBoxView = (CheckBox) convertView.findViewById(R.id.form_instance_check_box);
-        checkBoxView.setChecked(checkList.get(position));
         checkBoxView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 checkList.set(position, isChecked);
             }
         });
+        checkBoxView.setChecked(checkList.get(position));
+
 
         return convertView;
 
@@ -109,7 +110,7 @@ public class ChecklistAdapter extends ArrayAdapter {
 
     public void resetFormInstanceList(List<FormInstance> formInstanceList) {
         this.formInstanceList = formInstanceList;
-        checkList = initializeCheckBoxes();
+        initializeCheckBoxes(this.formInstanceList);
         notifyDataSetChanged();
     }
 
