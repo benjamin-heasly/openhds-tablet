@@ -1,6 +1,7 @@
 package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
+
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.model.core.Location;
@@ -99,63 +100,34 @@ public class UpdateFormPayloadConsumers {
         }
     }
 
-    //TODO: Individuals are never in the payload??
-    public static class RegisterInternalInMigration implements FormPayloadConsumer {
+    public static class RegisterInMigration implements FormPayloadConsumer {
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
-            // update the individual's residency
-            String locationExtId = formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID);
-            String individualExtId = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
-
+            // find the migrating individual
+            String individualUuid = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID);
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-            Individual individual = individualGateway.getFirst(navigateActivity.getContentResolver(),
-                    individualGateway.findById(individualExtId));
+            Individual individual = individualGateway.getFirst(
+                    navigateActivity.getContentResolver(),
+                    individualGateway.findById(individualUuid));
             if (null == individual) {
-                return new ConsumerResults(false, null, null);
+                return new ConsumerResults(true, null, null);
             }
 
-            individual.setCurrentResidenceUuid(locationExtId);
+            // update the individual's residency
+            String locationUuid = formPayload.get(ProjectFormFields.Locations.LOCATION_UUID);
+            individual.setCurrentResidenceUuid(locationUuid);
             individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
             individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
-            return new ConsumerResults(false, null, null);
+
+            // post-fill individual extId into the form for display in UI
+            formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individual.getExtId());
+            return new ConsumerResults(true, null, null);
         }
 
         @Override
         public void postFillFormPayload(Map<String, String> formPayload) {
-
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
             formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
-
-        }
-    }
-
-
-    public static class RegisterExternalInMigration implements FormPayloadConsumer {
-        @Override
-        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
-            // update the individual's residency
-            String locationExtId = formPayload.get(ProjectFormFields.Locations.LOCATION_EXTID);
-            String individualExtId = formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID);
-
-            IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
-            Individual individual = individualGateway.getFirst(navigateActivity.getContentResolver(),
-                    individualGateway.findById(individualExtId));
-            if (null == individual) {
-                return new ConsumerResults(false, null, null);
-            }
-
-            individual.setCurrentResidenceUuid(locationExtId);
-            individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
-            individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
-            return new ConsumerResults(false, null, null);
-        }
-
-        @Override
-        public void postFillFormPayload(Map<String, String> formPayload) {
-
-            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
-            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
-
         }
     }
 
@@ -181,13 +153,11 @@ public class UpdateFormPayloadConsumers {
                     .get(ProjectFormFields.General.COLLECTION_DATE_TIME);
 
 
-
             // insert or update individual
             Individual individual = IndividualFormAdapter.fromForm(formPayload);
             individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             individualGateway.insertOrUpdate(contentResolver, individual);
-
 
 
             // Update the name of the location

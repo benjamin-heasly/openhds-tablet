@@ -233,6 +233,7 @@
     <string name="form_type_bed_net">Tela Mosquitera</string>
     <string name="form_type_death">Muerte</string>
     <string name="form_type_pregnancy_observation">Observación Embarazo</string>
+    <string name="form_type_pregnancy_outcome">Resultado del Embarazo</string>
 
 
     <string name="field_worker_home_menu_text">Encuestador Inicio</string>

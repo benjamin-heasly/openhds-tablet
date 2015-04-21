@@ -21,12 +21,10 @@ public class PayloadTools {
         }
     }
 
-    public static void addMinimalFormPayload(Map<String, String> formPayload,
-                                             NavigateActivity navigateActivity) {
+    public static void addMinimalFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
         List<String> stateSequence = navigateActivity.getStateSequence();
-        Map<String, DataWrapper> hierarchyPath = navigateActivity
-                .getHierarchyPath();
+        Map<String, DataWrapper> hierarchyPath = navigateActivity.getHierarchyPath();
 
         //TODO: Add all the hierarchy Uuids as well?
         // Add all the extIds from the HierarchyPath

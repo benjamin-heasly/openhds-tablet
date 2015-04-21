@@ -9,8 +9,13 @@ import android.preference.PreferenceFragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+
 import org.openhds.mobile.R;
-import org.openhds.mobile.fragment.*;
+import org.openhds.mobile.fragment.ChecklistFragment;
+import org.openhds.mobile.fragment.DeleteWarningDialogFragment;
+import org.openhds.mobile.fragment.DeleteWarningDialogListener;
+import org.openhds.mobile.fragment.LoginPreferenceFragment;
+import org.openhds.mobile.fragment.SyncDatabaseFragment;
 import org.openhds.mobile.model.form.FormHelper;
 import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
@@ -22,7 +27,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openhds.mobile.utilities.ConfigUtils.getPreferenceString;
 import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
