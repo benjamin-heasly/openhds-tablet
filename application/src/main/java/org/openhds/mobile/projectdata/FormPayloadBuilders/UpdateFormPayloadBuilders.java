@@ -41,10 +41,8 @@ public class UpdateFormPayloadBuilders {
 
 
             formPayload.put(ProjectFormFields.Visits.VISIT_DATE, visitDate);
-            formPayload.put(ProjectFormFields.Visits.LOCATION_UUID,
-                    locationUuid);
-            formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID,
-                    locationExtId);
+            formPayload.put(ProjectFormFields.Visits.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.Visits.LOCATION_EXTID, locationExtId);
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, visitExtId);
             formPayload.put(ProjectFormFields.Visits.VISIT_UUID, IdHelper.generateEntityUuid());
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
@@ -150,11 +148,20 @@ public class UpdateFormPayloadBuilders {
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, true);
 
-            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_EXTID));
-            formPayload.put(ProjectFormFields.General.ENTITY_UUID, formPayload.get(ProjectFormFields.Individuals.INDIVIDUAL_UUID));
+            String individualExtId;
+            String individualUuid;
+            DataWrapper dataWrapper = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE);
+            if (null != dataWrapper) {
+                individualExtId = dataWrapper.getExtId();
+                individualUuid = dataWrapper.getUuid();
+                formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_UUID, individualUuid);
+                formPayload.put(ProjectFormFields.Individuals.INDIVIDUAL_EXTID, individualExtId);
+                formPayload.put(ProjectFormFields.General.ENTITY_UUID, individualUuid);
+                formPayload.put(ProjectFormFields.General.ENTITY_EXTID, individualExtId);
+            }
 
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
-
         }
     }
 

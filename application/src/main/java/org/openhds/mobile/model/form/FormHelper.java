@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -116,31 +117,51 @@ public class FormHelper {
             SAXBuilder builder = new SAXBuilder();
 
             Document oldForm = builder.build(new File(formFilePath));
-            Document newForm = new Document();
 
             Element root = oldForm.getRootElement();
-            root.detach();
-            root.removeContent();
-            newForm.setRootElement(root);
 
-            for (String elementName : formFieldMap.keySet()) {
-                Element child = new Element(elementName);
-                child.setText(formFieldMap.get(elementName));
-                newForm.getRootElement().addContent(child);
+            Iterator<Element> itr = root.getDescendants(new ElementFilter());
+
+            Map<Element,String> updatez = new HashMap<>();
+
+
+            while (itr.hasNext()) {
+
+                Element child = itr.next();
+
+                String childName = child.getName();
+
+                if(formFieldMap.containsKey(childName)){
+                    updatez.put(child, formFieldMap.get(childName));
+                }
+
+            }
+
+            for(Map.Entry<Element,String> entry : updatez.entrySet()){
+
+                entry.getKey().setText(entry.getValue());
+
             }
 
             FileOutputStream fos = new FileOutputStream(formFilePath);
             XMLOutputter xmlOutput = new XMLOutputter();
             xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(newForm, fos);
+            xmlOutput.output(oldForm, fos);
             fos.close();
 
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
+
+    // this method assumes/relies on finalizedFormFilePath is NOT null.
+    public boolean updateExistingFormInstance() {
+        return updateExistingFormInstance(formFieldData,finalizedFormFilePath);
+    }
+
 
     public static Map<String, String> fetchFormInstanceData(String formFilePath) {
         Map<String, String> formFields = new HashMap<>();
@@ -156,10 +177,14 @@ public class FormHelper {
 
             while (itr.hasNext()) {
                 Element child = itr.next();
-                formFields.put(child.getName(), child.getText());
+                List<Element> childsChildren = child.getChildren();
+                if(null == childsChildren || childsChildren.isEmpty()){
+                    formFields.put(child.getName(), child.getText());
+                }
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -171,38 +196,6 @@ public class FormHelper {
         return formFieldData;
     }
 
-    // this method assumes/relies on finalizedFormFilePath is NOT null.
-    public boolean updateExistingFormInstance() {
-
-        try {
-            SAXBuilder builder = new SAXBuilder();
-
-            Document oldForm = builder.build(new File(finalizedFormFilePath));
-            Document newForm = new Document();
-
-            Element root = oldForm.getRootElement();
-            root.detach();
-            root.removeContent();
-            newForm.setRootElement(root);
-
-            for (String elementName : formFieldData.keySet()) {
-                Element child = new Element(elementName);
-                child.setText(formFieldData.get(elementName));
-                newForm.getRootElement().addContent(child);
-            }
-
-            FileOutputStream fos = new FileOutputStream(finalizedFormFilePath);
-            XMLOutputter xmlOutput = new XMLOutputter();
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(newForm, fos);
-            fos.close();
-
-            return true;
-
-        } catch (Exception e) {
-            return false;
-        }
-    }
 
     public FormInstance newFormInstance() throws JDOMException, IOException {
         this.finalizedFormFilePath = null;
