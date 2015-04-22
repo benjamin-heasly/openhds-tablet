@@ -162,6 +162,7 @@ public class UpdateFormPayloadBuilders {
             }
 
             formPayload.put(ProjectFormFields.Visits.VISIT_EXTID, navigateActivity.getCurrentVisit().getExtId());
+            formPayload.put(ProjectFormFields.Visits.VISIT_UUID, navigateActivity.getCurrentVisit().getUuid());
         }
     }
 
