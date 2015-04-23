@@ -213,8 +213,10 @@ public class Individual implements Serializable {
 	}
 
 	public static String getAgeWithUnits(Individual individual) {
-		String ageWithUnits = individual.age + " " + "(" + individual.ageUnits
-				+ ")";
+
+        String ageString = (null == individual.age || individual.age.equals("null")) ? "n/a" : individual.age;
+        String unitsString = (null == individual.ageUnits || individual.ageUnits.equals("null")) ? "n/a" : individual.ageUnits;
+		String ageWithUnits = ageString + " " + "(" + unitsString + ")";
 		return ageWithUnits;
 	}
 }

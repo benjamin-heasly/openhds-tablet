@@ -63,6 +63,7 @@ public class ProjectResources {
         public static final String NATIONALITY_ASIAN = "Asian";
         public static final String NATIONALITY_OTHER_NON_AFRICAN_COUNTRY = "Other Non-African Country";
         public static final String NATIONALITY_OTHER = "Other";
+        public static final String NOT_APPLICABLE = "notApplicable";
 
         private static final String STATUS_PERMANENT = "Permanent";
         private static final String STATUS_VISITOR = "Visitor";
@@ -84,14 +85,18 @@ public class ProjectResources {
             Individual.put(NATIONALITY_ASIAN, R.string.db_val_nationality_asian);
             Individual.put(NATIONALITY_OTHER_NON_AFRICAN_COUNTRY, R.string.db_val_nationality_other_non_african_country);
             Individual.put(NATIONALITY_OTHER, R.string.db_val_nationality_other);
+            Individual.put(NOT_APPLICABLE, R.string.db_val_age_not_applicable);
 
         }
 
         public static int getIndividualStringId(String key) {
+            if (null == key) {
+                return Individual.get(NOT_APPLICABLE);
+            }
             if (Individual.containsKey(key)) {
                 return Individual.get(key);
             } else {
-                return 0;
+                return Individual.get(NOT_APPLICABLE);
             }
         }
     }

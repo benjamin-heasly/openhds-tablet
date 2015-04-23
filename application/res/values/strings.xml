@@ -293,5 +293,6 @@
     <string name="delete_warning_dialog_cancel_label">Cancel</string>
     <string name="delete_dialog_warning_title">Warning</string>
     <string name="uuid">UUID</string>
+    <string name="db_val_age_not_applicable">n/a</string>
 
 </resources>

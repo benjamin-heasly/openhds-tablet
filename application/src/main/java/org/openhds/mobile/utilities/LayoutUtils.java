@@ -181,7 +181,7 @@ public class LayoutUtils {
         valueTextView.setText(valueText);
 
         Context context = layout.getContext();
-        if (null == valueText || valueText.isEmpty()) {
+        if (null == valueText || valueText.isEmpty() || valueText.equals("null")) {
             labelTextView.setTextColor(context.getResources().getColor(missingColorId));
             delimiterTextView.setTextColor(context.getResources().getColor(missingColorId));
             valueTextView.setTextColor(context.getResources().getColor(missingColorId));

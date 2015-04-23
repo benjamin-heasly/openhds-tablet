@@ -260,5 +260,6 @@
     <string name="approve_recent_forms_label">Aprobar Impresos</string>
     <string name="approve_recent_forms_description">Aprobar los impresos desde la última sincronización</string>
     <string name="uuid">UUID</string>
+    <string name="db_val_age_not_applicable">n/a</string>
 
 </resources>
