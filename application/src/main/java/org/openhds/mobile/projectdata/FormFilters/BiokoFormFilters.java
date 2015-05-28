@@ -28,4 +28,12 @@ public class BiokoFormFilters {
 
     }
 
+    public static class SprayHousehold implements FormFilter {
+
+        @Override
+        public boolean amIValid(NavigateActivity navigateActivity) {
+            return true;
+        }
+    }
+
 }
