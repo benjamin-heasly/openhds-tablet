@@ -35,4 +35,17 @@ public class BiokoFormPayloadConsumers {
 
     }
 
+    public static class SprayHousehold implements FormPayloadConsumer {
+
+        @Override
+        public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+            return new ConsumerResults(false, null, null);
+        }
+
+        @Override
+        public void postFillFormPayload(Map<String, String> formPayload) {
+            // TODO Auto-generated method stub
+        }
+    }
+
 }
