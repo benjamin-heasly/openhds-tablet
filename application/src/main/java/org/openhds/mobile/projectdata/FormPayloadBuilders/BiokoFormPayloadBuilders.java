@@ -64,4 +64,15 @@ public class BiokoFormPayloadBuilders {
 
     }
 
+    public static class SprayHousehold implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+        }
+    }
+
 }
