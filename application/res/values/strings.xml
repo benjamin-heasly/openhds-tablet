@@ -258,6 +258,7 @@
 
     <!-- Bednet Strings -->
     <string name="distribute_bednets">Distribute Bednets</string>
+    <string name="spray_household">Spray Household</string>
     <string name="bioko_portal_label">Start Bednet Activity</string>
     <string name="bioko_portal_description">Record the distribution of bednets</string>
 
