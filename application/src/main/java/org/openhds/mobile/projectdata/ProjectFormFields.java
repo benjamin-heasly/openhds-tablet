@@ -314,4 +314,9 @@ public class ProjectFormFields {
         public static final String LOCATION_UUID = "locationUuid";
     }
 
+    public static final class SprayHousehold {
+        public static final String SUPERVISOR_EXT_ID = "supervisorExtId";
+
+    }
+
 }

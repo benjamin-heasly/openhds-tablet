@@ -2,6 +2,7 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.model.core.Location;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
@@ -71,6 +72,20 @@ public class BiokoFormPayloadBuilders {
 
             PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
             PayloadTools.flagForReview(formPayload, false);
+
+            FieldWorker fieldWorker = navigateActivity.getCurrentFieldWorker();
+            formPayload.put(ProjectFormFields.SprayHousehold.SUPERVISOR_EXT_ID, fieldWorker.getExtId());
+
+
+            String locationExtId = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
+
 
         }
     }
