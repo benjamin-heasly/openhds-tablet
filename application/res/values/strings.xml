@@ -274,6 +274,7 @@
     <string name="form_type_location_evaluation">Location Evaluation</string>
     <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
     <string name="form_type_pregnancy_outcome">Pregnancy Outcome</string>
+    <string name="form_type_household_spraying">Spraying</string>
     <string name="form_instance_list_header">Recent Forms</string>
     <string name="field_worker_home_menu_text">Field Worker Home</string>
     <string name="logout_menu_text">Logout</string>
