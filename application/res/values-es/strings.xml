@@ -219,8 +219,8 @@
 
     <!-- Bednet Strings -->
     <string name="distribute_bednets">Distribuir Telas Mosquiteras</string>
-    <string name="bioko_portal_label">Iniciar Distribución de Telas Mosquiteras</string>
-    <string name="bioko_portal_description">Registrar la distribución de telas mosquiteras</string>
+    <string name="bioko_portal_label">Iniciar Rociamiento o Distribución de Telas Mosquiteras</string>
+    <string name="bioko_portal_description">Registrar la rociamiento de locaciónes o la distribución de telas mosquiteras</string>
 
     <!-- Form Types -->
     <string name="form_type_other">Otro</string>
@@ -236,6 +236,7 @@
     <string name="form_type_pregnancy_outcome">Resultado del Embarazo</string>
     <string name="form_type_household_spraying">Rociamiento</string>
 
+    <string name="spray_household">Registrar Rociamiento</string>
 
     <string name="field_worker_home_menu_text">Encuestador Inicio</string>
     <string name="logout_menu_text">Terminar Sesión</string>
@@ -248,7 +249,7 @@
     <string name="supervisor_approve_selected">Aprobar Seleccionado</string>
     <string name="sub_district_label">SubDistrito</string>
     <string name="census_activity_title">Actividad de Censo</string>
-    <string name="bioko_activity_title">Actividad de Telas</string>
+    <string name="bioko_activity_title">Actividad de Rociamiento y Telas</string>
     <string name="update_activity_title">Actividad Actualización</string>
     <string name="launching_odk_collect">Iniciando ODKCollect...</string>
     <string name="delete_button_label">Eliminar</string>

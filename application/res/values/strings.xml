@@ -258,9 +258,9 @@
 
     <!-- Bednet Strings -->
     <string name="distribute_bednets">Distribute Bednets</string>
-    <string name="spray_household">Spray Household</string>
-    <string name="bioko_portal_label">Start Bednet Activity</string>
-    <string name="bioko_portal_description">Record the distribution of bednets</string>
+    <string name="spray_household">Record Household Spraying</string>
+    <string name="bioko_portal_label">Start Spraying and Bed Net Activity</string>
+    <string name="bioko_portal_description">Record household IRS spraying and bed net distributions</string>
 
     <!-- Form Types -->
     <string name="form_type_other">Other</string>
