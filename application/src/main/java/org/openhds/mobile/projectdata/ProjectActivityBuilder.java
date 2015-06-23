@@ -192,6 +192,12 @@ public class ProjectActivityBuilder {
                     new BiokoFormPayloadBuilders.SprayHousehold(),
                     new BiokoFormPayloadConsumers.SprayHousehold()));
 
+            individualFormList.add(new FormBehaviour("super_ojo",
+                    R.string.super_ojo,
+                    new BiokoFormFilters.SuperOjo(),
+                    new BiokoFormPayloadBuilders.SuperOjo(),
+                    new BiokoFormPayloadConsumers.SuperOjo()));
+
             formsForStates.put(biokoHierarchy.REGION_STATE, regionFormList);
             formsForStates.put(biokoHierarchy.PROVINCE_STATE, provinceFormList);
             formsForStates.put(biokoHierarchy.DISTRICT_STATE, districtFormList);

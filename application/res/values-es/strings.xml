@@ -235,6 +235,7 @@
     <string name="form_type_pregnancy_observation">Observación Embarazo</string>
     <string name="form_type_pregnancy_outcome">Resultado del Embarazo</string>
     <string name="form_type_household_spraying">Rociamiento</string>
+    <string name="form_type_super_ojo">Super Ojo</string>
 
     <string name="spray_household">Registrar Rociamiento</string>
 
@@ -263,5 +264,6 @@
     <string name="approve_recent_forms_description">Aprobar los impresos desde la última sincronización</string>
     <string name="uuid">UUID</string>
     <string name="db_val_age_not_applicable">n/a</string>
+    <string name="super_ojo">Super Ojo</string>
 
 </resources>
