@@ -11,6 +11,7 @@ import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,8 @@ public class BiokoFormPayloadBuilders {
 
             FieldWorker fieldWorker = navigateActivity.getCurrentFieldWorker();
             formPayload.put(ProjectFormFields.SprayHousehold.SUPERVISOR_EXT_ID, fieldWorker.getExtId());
+            formPayload.put(ProjectFormFields.SprayHousehold.SURVEY_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).toString());
 
 
             String locationExtId = navigateActivity.getHierarchyPath()
@@ -100,13 +103,16 @@ public class BiokoFormPayloadBuilders {
 
             FieldWorker fieldWorker = navigateActivity.getCurrentFieldWorker();
             formPayload.put(ProjectFormFields.SprayHousehold.SUPERVISOR_EXT_ID, fieldWorker.getExtId());
+            formPayload.put(ProjectFormFields.SuperOjo.OJO_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).toString());
+
 
             String locationExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
             String locationUuid = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
-            formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
-            formPayload.put(ProjectFormFields.BedNet.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
             formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
             formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
 
