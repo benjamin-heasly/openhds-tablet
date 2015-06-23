@@ -258,8 +258,9 @@
 
     <!-- Bednet Strings -->
     <string name="distribute_bednets">Distribute Bednets</string>
-    <string name="bioko_portal_label">Start Bednet Activity</string>
-    <string name="bioko_portal_description">Record the distribution of bednets</string>
+    <string name="spray_household">Record Household Spraying</string>
+    <string name="bioko_portal_label">Start Spraying and Bed Net Activity</string>
+    <string name="bioko_portal_description">Record household IRS spraying and bed net distributions</string>
 
     <!-- Form Types -->
     <string name="form_type_other">Other</string>
@@ -273,6 +274,8 @@
     <string name="form_type_location_evaluation">Location Evaluation</string>
     <string name="form_type_pregnancy_observation">Pregnancy Observation</string>
     <string name="form_type_pregnancy_outcome">Pregnancy Outcome</string>
+    <string name="form_type_household_spraying">Spraying</string>
+    <string name="form_type_super_ojo">Super Ojo</string>
     <string name="form_instance_list_header">Recent Forms</string>
     <string name="field_worker_home_menu_text">Field Worker Home</string>
     <string name="logout_menu_text">Logout</string>
@@ -294,5 +297,6 @@
     <string name="delete_dialog_warning_title">Warning</string>
     <string name="uuid">UUID</string>
     <string name="db_val_age_not_applicable">n/a</string>
+    <string name="super_ojo">Super Ojo</string>
 
 </resources>

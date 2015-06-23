@@ -314,4 +314,16 @@ public class ProjectFormFields {
         public static final String LOCATION_UUID = "locationUuid";
     }
 
+    public static final class SprayHousehold {
+        public static final String SUPERVISOR_EXT_ID = "supervisorExtId";
+        public static final String SURVEY_DATE = "surveyDate";
+
+    }
+
+    public static final class SuperOjo {
+        public static final String OJO_DATE = "ojo_date";
+
+
+    }
+
 }

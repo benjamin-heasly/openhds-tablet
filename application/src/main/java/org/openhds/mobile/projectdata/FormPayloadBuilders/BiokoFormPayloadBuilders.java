@@ -2,6 +2,7 @@ package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
 import org.openhds.mobile.activity.NavigateActivity;
+import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.model.core.Location;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
@@ -10,6 +11,7 @@ import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +64,60 @@ public class BiokoFormPayloadBuilders {
             return yearPrefix + "-" + communityCode;
         }
 
+    }
+
+    public static class SprayHousehold implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            FieldWorker fieldWorker = navigateActivity.getCurrentFieldWorker();
+            formPayload.put(ProjectFormFields.SprayHousehold.SUPERVISOR_EXT_ID, fieldWorker.getExtId());
+            formPayload.put(ProjectFormFields.SprayHousehold.SURVEY_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).toString());
+
+
+            String locationExtId = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.BedNet.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
+
+
+        }
+    }
+
+    public static class SuperOjo implements FormPayloadBuilder {
+
+        @Override
+        public void buildFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            PayloadTools.addMinimalFormPayload(formPayload, navigateActivity);
+            PayloadTools.flagForReview(formPayload, false);
+
+            FieldWorker fieldWorker = navigateActivity.getCurrentFieldWorker();
+            formPayload.put(ProjectFormFields.SprayHousehold.SUPERVISOR_EXT_ID, fieldWorker.getExtId());
+            formPayload.put(ProjectFormFields.SuperOjo.OJO_DATE,
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()).toString());
+
+
+            String locationExtId = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId();
+            String locationUuid = navigateActivity.getHierarchyPath()
+                    .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid();
+            formPayload.put(ProjectFormFields.Locations.LOCATION_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.Locations.LOCATION_UUID, locationUuid);
+            formPayload.put(ProjectFormFields.General.ENTITY_EXTID, locationExtId);
+            formPayload.put(ProjectFormFields.General.ENTITY_UUID, locationUuid);
+
+
+        }
     }
 
 }
