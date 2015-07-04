@@ -12,7 +12,16 @@
 
     <modules>
         <module>application</module>
-        <module>instrumentation-tests</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>integration</id>
+            <modules>
+                <module>application</module>
+                <module>instrumentation-tests</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
