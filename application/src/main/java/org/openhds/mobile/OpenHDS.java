@@ -99,8 +99,8 @@ public class OpenHDS {
         public static final String COLUMN_LOCATION_DESCRIPTION = "description";
         public static final String COLUMN_LOCATION_EVALUATION_STATUS = "evaluationStatus";
 
-
         public static final String COLUMN_LOCATION_HAS_RECIEVED_BEDNETS= "hasRecievedBedNets";
+		public static final String COLUMN_LOCATION_HAS_RECORDED_SPRAYING = "hasRecordedSpraying";
     }
 
 	public static final class HierarchyItems implements BaseColumns {

@@ -32,7 +32,16 @@ public class BiokoFormFilters {
 
         @Override
         public boolean amIValid(NavigateActivity navigateActivity) {
-            return true;
+
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+
+            Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
+                    locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
+
+            if (null == location.getHasRecordedSpraying() || !location.getHasRecordedSpraying().equals("true")) {
+                return true;
+            }
+            return false;
         }
     }
 

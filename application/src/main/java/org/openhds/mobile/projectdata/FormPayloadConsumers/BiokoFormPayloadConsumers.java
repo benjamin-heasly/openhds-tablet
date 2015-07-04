@@ -39,6 +39,16 @@ public class BiokoFormPayloadConsumers {
 
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
+
+            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
+
+            Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
+                    locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
+
+            location.setHasRecordedSpraying("true");
+
+            locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
+
             return new ConsumerResults(false, null, null);
         }
 

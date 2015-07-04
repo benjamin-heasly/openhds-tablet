@@ -230,6 +230,7 @@
     <string name="location_status_label">Status</string>
     <string name="location_coordinates_label">Latitude/Longitude</string>
     <string name="location_has_recieved_bednets_label">Has Recieved Bed Nets</string>
+    <string name="location_has_recorded_spraying_label">Has been sprayed</string>
 
 
     <!-- Social Group Labels -->

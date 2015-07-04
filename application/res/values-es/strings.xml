@@ -193,6 +193,7 @@
     <string name="location_status_label">Status</string>
     <string name="location_coordinates_label">Latitude/Longitude</string>
     <string name="location_has_recieved_bednets_label">Ha Recibido Telas Mosquiteras</string>
+    <string name="location_has_recorded_spraying_label">Ha sido rociado</string>
 
     <!-- Social Group Labels -->
     <string name="social_group_name">Nombre del Hogar</string>
