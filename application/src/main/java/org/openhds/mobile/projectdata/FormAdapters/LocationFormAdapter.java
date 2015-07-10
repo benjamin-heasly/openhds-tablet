@@ -46,8 +46,8 @@ public class LocationFormAdapter {
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_DISTRICT_NAME)));
         location.setHasReceivedBedNets(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS)));
-        location.setHasRecordedSpraying(formInstanceData.get(
-                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HAS_RECORDED_SPRAYING)));
+        location.setSprayingEvaluation(formInstanceData.get(
+                ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_SPRAYING_EVALUATION)));
         location.setDescription(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_DESCRIPTION)));
         location.setLocationEvaluationStatus(formInstanceData.get(

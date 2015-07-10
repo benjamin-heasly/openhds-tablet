@@ -19,7 +19,7 @@ import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_EXTID;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HAS_RECIEVED_BEDNETS;
-import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HAS_RECORDED_SPRAYING;
+import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_SPRAYING_EVALUATION;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID;
 import static org.openhds.mobile.OpenHDS.Locations.COLUMN_LOCATION_LATITUDE;
@@ -72,7 +72,7 @@ public class LocationGateway extends Gateway<Location> {
             location.setBuildingNumber(extractInt(cursor, COLUMN_LOCATION_BUILDING_NUMBER));
             location.setFloorNumber(extractInt(cursor, COLUMN_LOCATION_FLOOR_NUMBER));
             location.setHasReceivedBedNets(extractString(cursor, COLUMN_LOCATION_HAS_RECIEVED_BEDNETS));
-            location.setHasRecordedSpraying(extractString(cursor, COLUMN_LOCATION_HAS_RECORDED_SPRAYING));
+            location.setSprayingEvaluation(extractString(cursor, COLUMN_LOCATION_SPRAYING_EVALUATION));
             location.setDescription(extractString(cursor, COLUMN_LOCATION_DESCRIPTION));
             location.setLocationEvaluationStatus(extractString(cursor, COLUMN_LOCATION_EVALUATION_STATUS));
             location.setLongitude(extractString(cursor, COLUMN_LOCATION_LONGITUDE));
@@ -101,7 +101,7 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_BUILDING_NUMBER, location.getBuildingNumber());
             contentValues.put(COLUMN_LOCATION_FLOOR_NUMBER, location.getFloorNumber());
             contentValues.put(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS, location.getHasReceivedBedNets());
-            contentValues.put(COLUMN_LOCATION_HAS_RECORDED_SPRAYING, location.getHasRecordedSpraying());
+            contentValues.put(COLUMN_LOCATION_SPRAYING_EVALUATION, location.getSprayingEvaluation());
             contentValues.put(COLUMN_LOCATION_DESCRIPTION, location.getDescription());
             contentValues.put(COLUMN_LOCATION_EVALUATION_STATUS, location.getLocationEvaluationStatus());
             contentValues.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
@@ -128,8 +128,8 @@ public class LocationGateway extends Gateway<Location> {
                 dataWrapper.getStringIdsPayload().put(R.string.location_has_recieved_bednets_label, ProjectResources.General.getGeneralStringId(location.getHasReceivedBedNets()));
             }
 
-            if (null != location.getHasRecordedSpraying()) {
-                dataWrapper.getStringIdsPayload().put(R.string.location_has_recorded_spraying_label, ProjectResources.General.getGeneralStringId(location.getHasRecordedSpraying()));
+            if (null != location.getSprayingEvaluation()) {
+                dataWrapper.getStringsPayload().put(R.string.location_spraying_status_label, location.getSprayingEvaluation());
             }
 
             if(null != location.getLocationEvaluationStatus()) {

@@ -38,7 +38,7 @@ public class BiokoFormFilters {
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
-            if (null == location.getHasRecordedSpraying() || !location.getHasRecordedSpraying().equals("true")) {
+            if (location.getSprayingEvaluation() == null) {
                 return true;
             }
             return false;

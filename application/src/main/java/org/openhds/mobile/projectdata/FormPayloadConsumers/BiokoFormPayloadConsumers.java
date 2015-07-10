@@ -37,6 +37,8 @@ public class BiokoFormPayloadConsumers {
 
     public static class SprayHousehold implements FormPayloadConsumer {
 
+        public static final String SPRAY_EVAL_KEY = "evaluation";
+
         @Override
         public ConsumerResults consumeFormPayload(Map<String, String> formPayload, NavigateActivity navigateActivity) {
 
@@ -45,7 +47,9 @@ public class BiokoFormPayloadConsumers {
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
-            location.setHasRecordedSpraying("true");
+            if (formPayload.containsKey(SPRAY_EVAL_KEY)) {
+                location.setSprayingEvaluation(formPayload.get(SPRAY_EVAL_KEY));
+            }
 
             locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
 

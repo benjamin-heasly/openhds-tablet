@@ -27,7 +27,7 @@ public class Location implements Serializable {
     private String hasReceivedBedNets;
     private String description;
     private String locationEvaluationStatus;
-    private String recordedSpraying;
+    private String sprayingEvaluation;
 
     public String getUuid() {
         return uuid;
@@ -62,12 +62,12 @@ public class Location implements Serializable {
         this.hasReceivedBedNets = hasReceivedBedNets;
     }
 
-    public void setHasRecordedSpraying(String recordedSpraying) {
-        this.recordedSpraying = recordedSpraying;
+    public void setSprayingEvaluation(String sprayingEvaluation) {
+        this.sprayingEvaluation = sprayingEvaluation;
     }
 
-    public String getHasRecordedSpraying() {
-        return recordedSpraying;
+    public String getSprayingEvaluation() {
+        return sprayingEvaluation;
     }
 
     public int getBuildingNumber() {
