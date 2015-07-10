@@ -50,7 +50,7 @@ public class LocationFormAdapter {
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_HAS_RECORDED_SPRAYING)));
         location.setDescription(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_DESCRIPTION)));
-        location.setEvaluationStatus(formInstanceData.get(
+        location.setLocationEvaluationStatus(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_EVALUATION_STATUS)));
         location.setLongitude(formInstanceData.get(
                 ProjectFormFields.Locations.getFieldNameFromColumn(COLUMN_LOCATION_LONGITUDE)));

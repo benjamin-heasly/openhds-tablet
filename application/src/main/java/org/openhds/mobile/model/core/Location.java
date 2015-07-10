@@ -26,7 +26,7 @@ public class Location implements Serializable {
     private String districtName;
     private String hasReceivedBedNets;
     private String description;
-    private String evaluationStatus;
+    private String locationEvaluationStatus;
     private String recordedSpraying;
 
     public String getUuid() {
@@ -38,12 +38,12 @@ public class Location implements Serializable {
     }
 
 
-    public String getEvaluationStatus() {
-        return evaluationStatus;
+    public String getLocationEvaluationStatus() {
+        return locationEvaluationStatus;
     }
 
-    public void setEvaluationStatus(String evaluationStatus) {
-        this.evaluationStatus = evaluationStatus;
+    public void setLocationEvaluationStatus(String locationEvaluationStatus) {
+        this.locationEvaluationStatus = locationEvaluationStatus;
     }
 
     public String getDescription() {

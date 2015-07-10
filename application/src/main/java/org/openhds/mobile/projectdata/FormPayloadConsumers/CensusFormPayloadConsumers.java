@@ -112,7 +112,7 @@ public class CensusFormPayloadConsumers {
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
-            location.setEvaluationStatus(formPayload.get(ProjectFormFields.Locations.EVALUATION));
+            location.setLocationEvaluationStatus(formPayload.get(ProjectFormFields.Locations.EVALUATION));
 
             locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
 

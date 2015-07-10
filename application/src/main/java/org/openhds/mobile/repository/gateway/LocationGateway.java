@@ -74,7 +74,7 @@ public class LocationGateway extends Gateway<Location> {
             location.setHasReceivedBedNets(extractString(cursor, COLUMN_LOCATION_HAS_RECIEVED_BEDNETS));
             location.setHasRecordedSpraying(extractString(cursor, COLUMN_LOCATION_HAS_RECORDED_SPRAYING));
             location.setDescription(extractString(cursor, COLUMN_LOCATION_DESCRIPTION));
-            location.setEvaluationStatus(extractString(cursor, COLUMN_LOCATION_EVALUATION_STATUS));
+            location.setLocationEvaluationStatus(extractString(cursor, COLUMN_LOCATION_EVALUATION_STATUS));
             location.setLongitude(extractString(cursor, COLUMN_LOCATION_LONGITUDE));
             location.setLatitude(extractString(cursor, COLUMN_LOCATION_LATITUDE));
 
@@ -103,7 +103,7 @@ public class LocationGateway extends Gateway<Location> {
             contentValues.put(COLUMN_LOCATION_HAS_RECIEVED_BEDNETS, location.getHasReceivedBedNets());
             contentValues.put(COLUMN_LOCATION_HAS_RECORDED_SPRAYING, location.getHasRecordedSpraying());
             contentValues.put(COLUMN_LOCATION_DESCRIPTION, location.getDescription());
-            contentValues.put(COLUMN_LOCATION_EVALUATION_STATUS, location.getEvaluationStatus());
+            contentValues.put(COLUMN_LOCATION_EVALUATION_STATUS, location.getLocationEvaluationStatus());
             contentValues.put(COLUMN_LOCATION_LONGITUDE, location.getLongitude());
             contentValues.put(COLUMN_LOCATION_LATITUDE, location.getLatitude());
 
@@ -132,8 +132,8 @@ public class LocationGateway extends Gateway<Location> {
                 dataWrapper.getStringIdsPayload().put(R.string.location_has_recorded_spraying_label, ProjectResources.General.getGeneralStringId(location.getHasRecordedSpraying()));
             }
 
-            if(null != location.getEvaluationStatus()) {
-                String[] statusValues = location.getEvaluationStatus().split(" ");
+            if(null != location.getLocationEvaluationStatus()) {
+                String[] statusValues = location.getLocationEvaluationStatus().split(" ");
                 for (String value : statusValues) {
                     Integer payloadKey = ProjectResources.Location.getLocationStringId(value);
                     if (0 == payloadKey) {
