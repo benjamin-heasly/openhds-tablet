@@ -18,12 +18,10 @@ public class BiokoFormFilters {
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
-            if( null == location.getHasReceivedBedNets() || !location.getHasReceivedBedNets().equals("true") ){
+            if (!"true".equals(location.getHasReceivedBedNets())) {
                 return true;
             }
             return false;
-
-
         }
 
     }
