@@ -342,7 +342,7 @@ public class SyncDatabaseFragment extends Fragment {
         String openHdsBaseUrl = getPreferenceString(getActivity(), R.string.openhds_server_url_key, "");
         String path = getResourceString(getActivity(), allResourcePaths.get(entityId));
         String url = openHdsBaseUrl + path;
-        return new HttpTaskRequest(entityId, url, userName, password);
+        return new HttpTaskRequest(entityId, url, "application/xml", userName, password);
     }
 
     // Respond to "sync all" button.

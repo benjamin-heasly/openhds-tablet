@@ -16,10 +16,12 @@ public class HttpTaskRequest {
     private final String url;
     private final String userName;
     private final String password;
+    private final String accept;
 
-    public HttpTaskRequest(int titleId, String url, String userName, String password) {
+    public HttpTaskRequest(int titleId, String url, String accept, String userName, String password) {
         this.titleId = titleId;
         this.url = url;
+        this.accept = accept;
         this.userName = userName;
         this.password = password;
     }
@@ -30,6 +32,10 @@ public class HttpTaskRequest {
 
     public String getUrl() {
         return url;
+    }
+
+    public String getAccept() {
+        return accept;
     }
 
     public String getUserName() {

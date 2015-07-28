@@ -60,6 +60,9 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
         try {
             URL url = new URL(httpTaskRequest.getUrl());
             urlConnection = (HttpURLConnection) url.openConnection();
+            if (httpTaskRequest.getAccept() != null) {
+                urlConnection.setRequestProperty("Accept", httpTaskRequest.getAccept());
+            }
             urlConnection.setRequestProperty("Authorization", basicAuthHeader);
             responseStream = urlConnection.getInputStream();
             statusCode = urlConnection.getResponseCode();
