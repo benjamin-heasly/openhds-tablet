@@ -103,7 +103,7 @@
 
     <!-- Server URLs and Paths -->
     <string name="default_openhds_server_url">https://arcane-lake-8447.herokuapp.com/</string>
-    <string name="supervisor_login_url">/api/rest/rounds</string>
+    <string name="supervisor_login_url"></string>
     <string name="sync_field_workers_path">/api/rest/fieldworkers</string>
     <string name="sync_individuals_path">/api/rest/individuals/cached</string>
     <string name="sync_location_hierarchies_path">/api/rest/locationhierarchies</string>

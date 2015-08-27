@@ -10,12 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import org.apache.http.HttpStatus;
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.OpeningActivity;
 import org.openhds.mobile.activity.SupervisorMainActivity;
-import org.openhds.mobile.provider.DatabaseAdapter;
 import org.openhds.mobile.model.core.Supervisor;
+import org.openhds.mobile.provider.DatabaseAdapter;
 import org.openhds.mobile.task.SupervisorLoginTask;
 import org.openhds.mobile.task.http.HttpTask;
 import org.openhds.mobile.task.http.HttpTaskRequest;
@@ -72,7 +73,7 @@ public class SupervisorLoginFragment extends Fragment implements
 
     private void authenticateSupervisor() {
         HttpTaskRequest httpTaskRequest = new HttpTaskRequest(
-                R.string.login_btn, getUrl(), null, getUsernameFromEditText(), getPasswordFromEditText());
+                R.string.login_btn, getUrl(), "application/json", getUsernameFromEditText(), getPasswordFromEditText());
 
         HttpTask httpTask = new HttpTask(new AuthenticateListener());
         httpTask.execute(httpTaskRequest);
