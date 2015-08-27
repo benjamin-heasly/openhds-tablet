@@ -2,22 +2,12 @@ package org.openhds.mobile.task.http;
 
 import android.os.AsyncTask;
 import android.util.Base64;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.AuthenticationException;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.IOException;
+import org.apache.http.HttpStatus;
+
 import java.io.InputStream;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Carry out an HttpTaskRequest.
@@ -67,7 +57,7 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
             responseStream = urlConnection.getInputStream();
             statusCode = urlConnection.getResponseCode();
         } catch (Exception e) {
-            return new HttpTaskResponse(false, MESSAGE_BAD_URL, 0, null);
+            return new HttpTaskResponse(false, e.getClass().getSimpleName() + ": " + e.getMessage(), 0, null);
         }
 
         if (HttpStatus.SC_OK == statusCode) {
@@ -93,6 +83,6 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
 
     // A handler type to receive response status code and response body input stream.
     public interface HttpTaskResponseHandler {
-        public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse);
+        void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse);
     }
 }
