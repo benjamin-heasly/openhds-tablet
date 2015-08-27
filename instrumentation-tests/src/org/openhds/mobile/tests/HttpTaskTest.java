@@ -25,7 +25,7 @@ public class HttpTaskTest  extends AndroidTestCase {
     private static final String TEST_GET_PARAM =  "sauce";
     private static final String TEST_GET_VALUE =  "ketchupymustard";
 
-    private static final String BAD_GET_URL =  "http://vedtrg.com/veiurgerg/serghuisrg/earg";
+    private static final String BAD_GET_URL =  "aefa://vedtrg.aerge/veiurgerg/serghuisrg/earg";
 
     private static final long TASK_TIMEOUT = 10;
 
