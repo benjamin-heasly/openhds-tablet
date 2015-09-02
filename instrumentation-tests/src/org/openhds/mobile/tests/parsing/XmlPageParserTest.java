@@ -11,8 +11,8 @@ import static java.util.Arrays.asList;
 public class XmlPageParserTest extends AndroidTestCase {
 
     private void validateTestPage(DataPage dataPage) {
-        assertEquals("rootElement", dataPage.getRootElementName());
-        assertEquals("pageElement", dataPage.getPageElementName());
+        assertEquals("rootElement", dataPage.getRootName());
+        assertEquals("pageElement", dataPage.getPageName());
 
         assertEquals("page text", dataPage.getFirstString(asList("pageElement")));
 

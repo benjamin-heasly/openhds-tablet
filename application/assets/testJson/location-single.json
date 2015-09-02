@@ -1,0 +1,53 @@
+{
+  "uuid": "bc1d89ef-f12c-4378-b50e-55970f4a8e3c",
+  "insertBy": {
+    "uuid": "UNKNOWN"
+  },
+  "insertDate": 1441125425.397,
+  "lastModifiedBy": {
+    "uuid": "UNKNOWN"
+  },
+  "lastModifiedDate": 1441125425.397,
+  "collectedBy": {
+    "uuid": "UNKNOWN"
+  },
+  "collectionDateTime": 1441125425.397,
+  "extId": "location-4",
+  "name": "location-4",
+  "type": "RURAL",
+  "locationHierarchy": {
+    "uuid": "146572f2-f429-4838-9ec7-40edef74982e"
+  },
+  "description": "sample location",
+  "_links": {
+    "residencies": [
+      {
+        "href": "https:\/\/arcane-lake-8447.herokuapp.com\/residencies\/3cfcd1c1-8ecb-4ef8-b0df-7931bf49fea2"
+      },
+      {
+        "href": "https:\/\/arcane-lake-8447.herokuapp.com\/residencies\/dae6087d-ed3e-4e67-a40d-f9e6a94ebd03"
+      }
+    ],
+    "locationhierarchy": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/locationHierarchies\/146572f2-f429-4838-9ec7-40edef74982e"
+    },
+    "collectedby": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/fieldWorkers\/UNKNOWN"
+    },
+    "insertby": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/users\/UNKNOWN"
+    },
+    "lastmodifiedby": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/users\/UNKNOWN"
+    },
+    "self": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/locations\/bc1d89ef-f12c-4378-b50e-55970f4a8e3c"
+    },
+    "collection": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/locations"
+    },
+    "section": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/locations\/external\/location-4"
+    }
+  }
+}

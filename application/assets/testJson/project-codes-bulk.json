@@ -1,0 +1,316 @@
+[
+  {
+    "uuid": "4a976118-70af-4c21-97c0-7f71b2e6ecf5",
+    "codeName": "male",
+    "codeGroup": "gender",
+    "codeValue": "MALE",
+    "description": "male gender"
+  },
+  {
+    "uuid": "da6d0e9b-8766-4bdb-b2c0-a7614488c38b",
+    "codeName": "female",
+    "codeGroup": "gender",
+    "codeValue": "FEMALE",
+    "description": "female gender"
+  },
+  {
+    "uuid": "8385c672-d3f6-4127-bdfd-97dc90b26006",
+    "codeName": "family",
+    "codeGroup": "socialGroupType",
+    "codeValue": "FAMILY",
+    "description": "a family"
+  },
+  {
+    "uuid": "aa208d3f-d675-4960-9d27-7d849002ae3e",
+    "codeName": "cohort",
+    "codeGroup": "socialGroupType",
+    "codeValue": "COHORT",
+    "description": "a non-family group"
+  },
+  {
+    "uuid": "f508a261-3785-417b-9cfd-24fdeaf91586",
+    "codeName": "exact",
+    "codeGroup": "dateOfBirthType",
+    "codeValue": "EXACT",
+    "description": "date of birth known exactly"
+  },
+  {
+    "uuid": "79d32ffc-a411-4c95-bc14-140a3a978e97",
+    "codeName": "approximate",
+    "codeGroup": "dateOfBirthType",
+    "codeValue": "APPROXIMATE",
+    "description": "date of birth known only approximately"
+  },
+  {
+    "uuid": "9a7b2df8-337c-4740-b7bb-bb4516eae427",
+    "codeName": "rural",
+    "codeGroup": "locationType",
+    "codeValue": "RURAL",
+    "description": "a rural location"
+  },
+  {
+    "uuid": "438ae4be-2bfc-4eec-a98a-53373a43bf67",
+    "codeName": "urban",
+    "codeGroup": "locationType",
+    "codeValue": "URBAN",
+    "description": "an urban location"
+  },
+  {
+    "uuid": "d158550b-3ab0-4665-964b-d45bdcff11b5",
+    "codeName": "[true]",
+    "codeGroup": "yesNo",
+    "codeValue": "YES",
+    "description": "affirmative response"
+  },
+  {
+    "uuid": "647a7c93-8cb7-4bd3-8e9d-28fee438656e",
+    "codeName": "[false]",
+    "codeGroup": "yesNo",
+    "codeValue": "NO",
+    "description": "negative response"
+  },
+  {
+    "uuid": "67db6b7d-57d6-4a98-809d-dd0c074a7c94",
+    "codeName": "neverMarried",
+    "codeGroup": "maritalStatus",
+    "codeValue": "NEVER_MARRIED",
+    "description": "couple were never married"
+  },
+  {
+    "uuid": "5c90fb77-ccbb-42fd-866d-3bfdceb4f730",
+    "codeName": "married",
+    "codeGroup": "maritalStatus",
+    "codeValue": "MARRIED",
+    "description": "couple is currently married"
+  },
+  {
+    "uuid": "698f5b06-74f4-406b-9a5d-e63802bb0810",
+    "codeName": "separatedOrDivorced",
+    "codeGroup": "maritalStatus",
+    "codeValue": "SEPARATED_OR_DIVORCED",
+    "description": "couple is divorced or separated"
+  },
+  {
+    "uuid": "091947e9-62f1-4022-94a1-2ac71a47e7f2",
+    "codeName": "widowed",
+    "codeGroup": "maritalStatus",
+    "codeValue": "WIDOWED",
+    "description": "spouse was widowed"
+  },
+  {
+    "uuid": "e3c64eb0-3516-4329-9fc5-b0db6354d316",
+    "codeName": "livingTogether",
+    "codeGroup": "maritalStatus",
+    "codeValue": "LIVING_TOGETHER",
+    "description": "couple is not married by is living together"
+  },
+  {
+    "uuid": "7aa02ca9-71dc-4b53-bd6b-6dcf803e509d",
+    "codeName": "head",
+    "codeGroup": "membershipType",
+    "codeValue": "HEAD",
+    "description": "head of a social group"
+  },
+  {
+    "uuid": "20d256fd-3d53-4043-8792-3072233cfeb2",
+    "codeName": "spouse",
+    "codeGroup": "membershipType",
+    "codeValue": "SPOUSE",
+    "description": "married to group head"
+  },
+  {
+    "uuid": "140cd152-61f9-4b1d-9da3-fcab9044238f",
+    "codeName": "sonOrDaughter",
+    "codeGroup": "membershipType",
+    "codeValue": "SON_OR_DAUGHTER",
+    "description": "child of group head"
+  },
+  {
+    "uuid": "f53c5587-a21f-47d8-bddd-89a615abeb2a",
+    "codeName": "brotherOrSister",
+    "codeGroup": "membershipType",
+    "codeValue": "BROTHER_OR_SISTER",
+    "description": "sibling of group head"
+  },
+  {
+    "uuid": "e6bc0896-c324-4e59-b2ce-18f3d0ab13bd",
+    "codeName": "parent",
+    "codeGroup": "membershipType",
+    "codeValue": "PARENT",
+    "description": "parent of group head"
+  },
+  {
+    "uuid": "04cc621b-722f-4bdf-a9af-970bd279a538",
+    "codeName": "grandchild",
+    "codeGroup": "membershipType",
+    "codeValue": "GRANDCHILD",
+    "description": "grandchild of group head"
+  },
+  {
+    "uuid": "bda26d73-29a2-49cb-b5f8-13061d5d4b07",
+    "codeName": "notRelated",
+    "codeGroup": "membershipType",
+    "codeValue": "NOT_RELATED",
+    "description": "not related to group head"
+  },
+  {
+    "uuid": "8496cde3-407e-4b74-b114-32ff61ca1573",
+    "codeName": "otherRelative",
+    "codeGroup": "membershipType",
+    "codeValue": "OTHER_RELATIVE",
+    "description": "other relative of group head"
+  },
+  {
+    "uuid": "2ae549d8-c538-416a-b5c4-6691ad91b9e5",
+    "codeName": "unknownMembership",
+    "codeGroup": "membershipType",
+    "codeValue": "UNKNOWN",
+    "description": "unknown relationship to group head"
+  },
+  {
+    "uuid": "9121f5ef-096f-41b8-95fb-1496a9b72768",
+    "codeName": "self",
+    "codeGroup": "relationshipType",
+    "codeValue": "SELF",
+    "description": "individual's relationship to self"
+  },
+  {
+    "uuid": "c4ae3635-3a15-48f2-bc44-6c3f451935cb",
+    "codeName": "unknownRelationship",
+    "codeGroup": "relationshipType",
+    "codeValue": "UNKNOWN",
+    "description": "unknown relationship to individual"
+  },
+  {
+    "uuid": "8c666466-0632-44af-8d09-5e2efcf70a10",
+    "codeName": "closed",
+    "codeGroup": "dataStatus",
+    "codeValue": "CLOSED",
+    "description": "closed data"
+  },
+  {
+    "uuid": "7ba4a065-8f1b-4c6e-a0cc-76590f20f638",
+    "codeName": "warning",
+    "codeGroup": "dataStatus",
+    "codeValue": "WARNING",
+    "description": "data has a warning"
+  },
+  {
+    "uuid": "3f64cb02-1340-46d4-ab7e-6bfeb06b7b1d",
+    "codeName": "error",
+    "codeGroup": "dataStatus",
+    "codeValue": "ERROR",
+    "description": "data has a fatal error"
+  },
+  {
+    "uuid": "2b43fc0b-977c-4de2-bedc-d119bd1bf7fc",
+    "codeName": "void",
+    "codeGroup": "dataStatus",
+    "codeValue": "VOID",
+    "description": "data were voided \/ soft-deleted"
+  },
+  {
+    "uuid": "ae57c561-7a36-44d0-9c72-6e4967db7106",
+    "codeName": "valid",
+    "codeGroup": "dataStatus",
+    "codeValue": "VALID",
+    "description": "valid data"
+  },
+  {
+    "uuid": "ee681c45-980c-42f4-92cd-17cd3043516d",
+    "codeName": "pending",
+    "codeGroup": "dataStatus",
+    "codeValue": "PENDING",
+    "description": "data is pending or incomplete"
+  },
+  {
+    "uuid": "82fb8ae2-8e41-4f6f-b48b-5e9b0371ae3b",
+    "codeName": "minAgeOfMarriage",
+    "codeGroup": "ageConstraints",
+    "codeValue": "12",
+    "description": "minimum age to be married"
+  },
+  {
+    "uuid": "bda0e232-9bce-4248-8b50-912aaf3fbab5",
+    "codeName": "minAgeOfGroupHead",
+    "codeGroup": "ageConstraints",
+    "codeValue": "14",
+    "description": "minimum age to be head of a social group"
+  },
+  {
+    "uuid": "3056c655-dcad-4954-880b-9a83e80235a3",
+    "codeName": "minAgeOfParenthood",
+    "codeGroup": "ageConstraints",
+    "codeValue": "12",
+    "description": "minimum age to be a parent"
+  },
+  {
+    "uuid": "9dae0bf9-2d85-43ea-82fd-fdac54779274",
+    "codeName": "minAgeOfPregnancy",
+    "codeGroup": "ageConstraints",
+    "codeValue": "12",
+    "description": "minimum age to be pregnant"
+  },
+  {
+    "uuid": "e01561ed-27a4-4651-be91-c3a278ed9f10",
+    "codeName": "liveBirth",
+    "codeGroup": "pregnancyResultType",
+    "codeValue": "LIVE_BIRTH",
+    "description": "live birth -- a new individual"
+  },
+  {
+    "uuid": "58aeb29d-686f-4a18-bfdd-b0dc25efd8d2",
+    "codeName": "stillBirth",
+    "codeGroup": "pregnancyResultType",
+    "codeValue": "STILL_BIRTH",
+    "description": "still birth"
+  },
+  {
+    "uuid": "4d69f49b-2c03-45b0-adcd-e82249348625",
+    "codeName": "miscarriage",
+    "codeGroup": "pregnancyResultType",
+    "codeValue": "MISCARRIAGE",
+    "description": "spontaneous miscarriage"
+  },
+  {
+    "uuid": "7fefc9e1-6284-4087-9d39-b9a980e3fc12",
+    "codeName": "abortion",
+    "codeGroup": "pregnancyResultType",
+    "codeValue": "ABORTION",
+    "description": "abortion"
+  },
+  {
+    "uuid": "e1caeef9-d0fc-4d43-bf3a-49881ba1ac8e",
+    "codeName": "birthMigration",
+    "codeGroup": "migrationType",
+    "codeValue": "BIRTH_MIGRATION",
+    "description": "born into a residency"
+  },
+  {
+    "uuid": "e83740fe-b25c-4165-b489-1221d6559a74",
+    "codeName": "internalMigration",
+    "codeGroup": "migrationType",
+    "codeValue": "INTERNAL_MIGRATION",
+    "description": "migrated between locations in the study area"
+  },
+  {
+    "uuid": "03398eb7-876f-49fa-b1e8-a25e72857a5f",
+    "codeName": "externalMigration",
+    "codeGroup": "migrationType",
+    "codeValue": "EXTERNAL_MIGRATION",
+    "description": "migrated from a location outside the study area"
+  },
+  {
+    "uuid": "977671a8-7ca6-4946-b4ed-273c0d89993a",
+    "codeName": "deathMigration",
+    "codeGroup": "migrationType",
+    "codeValue": "DEATH_MIGRATION",
+    "description": "died while living at a residency"
+  },
+  {
+    "uuid": "UNKNOWN",
+    "codeName": "UNKNOWN",
+    "codeGroup": "UNKNOWN_STATUS",
+    "codeValue": "UNKNOWN_STATUS"
+  }
+]

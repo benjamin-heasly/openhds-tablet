@@ -26,12 +26,12 @@ import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 import static org.openhds.mobile.utilities.UrlUtils.buildServerUrl;
 
-public class SupervisorLoginFragment extends Fragment implements
-        OnClickListener {
+public class SupervisorLoginFragment extends Fragment implements OnClickListener {
 
     private EditText usernameEditText;
     private EditText passwordEditText;
-    private Button loginButton;
+    private String username;
+    private String password;
     private DatabaseAdapter databaseAdapter;
 
     @Override
@@ -42,47 +42,43 @@ public class SupervisorLoginFragment extends Fragment implements
 
         usernameEditText = (EditText) v.findViewById(R.id.usernameEditText);
         passwordEditText = (EditText) v.findViewById(R.id.passwordEditText);
-        loginButton = (Button) v.findViewById(R.id.loginButton);
+        Button loginButton = (Button) v.findViewById(R.id.loginButton);
         loginButton.setOnClickListener(this);
+
         databaseAdapter = new DatabaseAdapter(getActivity());
 
         return v;
     }
 
+    @Override
     public void onClick(View view) {
+        // copy credentials to use until next login attempt
+        username = usernameEditText.getText().toString();
+        password = passwordEditText.getText().toString();
+
         authenticateSupervisor();
     }
 
-    private String getUsernameFromEditText() {
-        String username = usernameEditText.getText().toString();
-        return username;
-    }
-
-    private String getPasswordFromEditText() {
-        String password = passwordEditText.getText().toString();
-        return password;
-    }
-
-    private String getUrl() {
-        // supervisor_login_url needs to be a secured resource on the sever
-        // for example openhds/api/rest/socialgroups
+    private String getLoginUrl() {
         String path = getResourceString(getActivity(), R.string.supervisor_login_url);
-
         return buildServerUrl(getActivity(), path);
     }
 
     private void authenticateSupervisor() {
         HttpTaskRequest httpTaskRequest = new HttpTaskRequest(
-                R.string.login_btn, getUrl(), "application/json", getUsernameFromEditText(), getPasswordFromEditText());
+                R.string.login_btn,
+                getLoginUrl(),
+                "application/xml",
+                username,
+                password);
 
         HttpTask httpTask = new HttpTask(new AuthenticateListener());
         httpTask.execute(httpTaskRequest);
     }
 
-    private void onConnectedAndAuthenticated() {
+    private void onConnectedAndAuthenticated(HttpTaskResponse httpTaskResponse) {
         // valid credentials were cached in tablet database by AuthenticateTask
-        // delete any stale credentials from local then add authenticated
-        // credentials to match server
+        // delete any stale credentials from local then add authenticated credentials
         deleteSupervisor();
         addSupervisor();
         launchSupervisorMainActivity();
@@ -97,29 +93,31 @@ public class SupervisorLoginFragment extends Fragment implements
 
     private void deleteSupervisor() {
         Supervisor user = new Supervisor();
-        user.setName(getUsernameFromEditText());
+        user.setName(password);
         databaseAdapter.deleteSupervisor(user);
     }
 
     private void addSupervisor() {
         Supervisor user = new Supervisor();
-        user.setName(getUsernameFromEditText());
-        user.setPassword(getPasswordFromEditText());
+        user.setName(username);
+        user.setPassword(password);
         databaseAdapter.addSupervisor(user);
     }
 
     private void onNotConnected() {
         // attempt to log in using cached credentials in tablet database
         SupervisorLoginTask loginTask = new SupervisorLoginTask(
-                databaseAdapter, getUsernameFromEditText(),
-                getPasswordFromEditText(), new LoginListener());
+                databaseAdapter,
+                username,
+                password,
+                new LoginListener());
         loginTask.execute();
     }
 
     private void launchSupervisorMainActivity() {
         Intent intent = new Intent(getActivity(), SupervisorMainActivity.class);
-        intent.putExtra(OpeningActivity.USERNAME_KEY, getUsernameFromEditText());
-        intent.putExtra(OpeningActivity.PASSWORD_KEY, getPasswordFromEditText());
+        intent.putExtra(OpeningActivity.USERNAME_KEY, username);
+        intent.putExtra(OpeningActivity.PASSWORD_KEY, password);
         startActivity(intent);
     }
 
@@ -127,12 +125,13 @@ public class SupervisorLoginFragment extends Fragment implements
         @Override
         public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse) {
             if (httpTaskResponse.isSuccess()) {
-                onConnectedAndAuthenticated();
+                onConnectedAndAuthenticated(httpTaskResponse);
                 return;
             }
 
             if (HttpStatus.SC_FORBIDDEN == httpTaskResponse.getHttpStatus()) {
                 onConnectedButNotAuthenticated();
+                return;
             }
 
             onNotConnected();

@@ -1,0 +1,68 @@
+{
+  "content": "Welcome to OpenHDS.  The Current time UTC is 2015-09-02T00:31:16.883Z",
+  "_links": {
+    "self": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/"
+    },
+    "individuals": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/individuals"
+    },
+    "inMigrations": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/inMigrations"
+    },
+    "fieldWorkers": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/fieldWorkers"
+    },
+    "residencies": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/residencies"
+    },
+    "locationHierarchyLevels": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/locationHierarchyLevels"
+    },
+    "deaths": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/deaths"
+    },
+    "errorLogs": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/errorLogs"
+    },
+    "pregnancyOutcomes": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/pregnancyOutcomes"
+    },
+    "memberships": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/memberships"
+    },
+    "visits": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/visits"
+    },
+    "users": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/users"
+    },
+    "projectCodes": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/projectCodes"
+    },
+    "locations": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/locations"
+    },
+    "events": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/events"
+    },
+    "relationships": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/relationships"
+    },
+    "locationHierarchies": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/locationHierarchies"
+    },
+    "pregnancyObservations": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/pregnancyObservations"
+    },
+    "socialGroups": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/socialGroups"
+    },
+    "pregnancyResults": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/pregnancyResults"
+    },
+    "outMigrations": {
+      "href": "https:\/\/arcane-lake-8447.herokuapp.com\/outMigrations"
+    }
+  }
+}

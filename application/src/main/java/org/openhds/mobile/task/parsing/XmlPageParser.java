@@ -14,12 +14,10 @@ import java.util.List;
  * Parse a potentially long XML data stream as smaller pages.
  *
  * Breaks an XML input stream into "pages" based on elements that are one
- * level deep in the XML document.  This allows the parser to read long
- * data streams without putting the whole stream into memory, but still
- * process each "page" with in a convenient, in-memory representation.
+ * level deep in the XML document.
  *
- * For example, the following document has a <locations> element at the
- * root, and three <location> elements that are one level deep.  So it
+ * For example, the following document has a <locations> element at the root,
+ * and three <location> elements that are one level deep.  So it
  * would be broken into 3 pages:
  *
  * <locations>
@@ -34,41 +32,14 @@ import java.util.List;
  *     </location>
  * </locations>
  *
- * See DataPage for details about pages.
- *
- * After reading a full page, the parser sends the page to a handler for
- * further processing.  The handler can use the root element name and
- * page element name to decide how to process the data.
- *
- * The handler is free to throw Exceptions, and the parser will send the
- * Exception plus debugging data to a separate error handler for logging
- * etc.  This allows the parser to keep reading the stream.
- *
  * This parser considers only XML elements and ignores attributes and
  * namespaces.  It also ignores elements that don't have any text inside.
  *
  * BSH
  */
-public class XmlPageParser {
-    private PageHandler pageHandler;
-    private PageErrorHandler pageErrorHandler;
+public class XmlPageParser extends AbstractPageParser {
 
-    public PageHandler getPageHandler() {
-        return pageHandler;
-    }
-
-    public void setPageHandler(PageHandler pageHandler) {
-        this.pageHandler = pageHandler;
-    }
-
-    public PageErrorHandler getPageErrorHandler() {
-        return pageErrorHandler;
-    }
-
-    public void setPageErrorHandler(PageErrorHandler pageErrorHandler) {
-        this.pageErrorHandler = pageErrorHandler;
-    }
-
+    @Override
     public int parsePages(InputStream inputStream) throws XmlPullParserException, IOException {
         int nPages = 0;
 
@@ -136,27 +107,5 @@ public class XmlPageParser {
         }
 
         return nPages;
-    }
-
-    private boolean sendPageToHandler(DataPage dataPage) {
-        boolean shouldContinue = true;
-        if (null != pageHandler) {
-            try {
-                shouldContinue = pageHandler.handlePage(dataPage);
-            } catch (Exception e) {
-                if (null != pageErrorHandler) {
-                    shouldContinue = pageErrorHandler.handlePageError(dataPage, e);
-                }
-            }
-        }
-        return shouldContinue;
-    }
-
-    public interface PageHandler {
-        public boolean handlePage(DataPage dataPage);
-    }
-
-    public interface PageErrorHandler {
-        public boolean handlePageError(DataPage dataPage, Exception e);
     }
 }
