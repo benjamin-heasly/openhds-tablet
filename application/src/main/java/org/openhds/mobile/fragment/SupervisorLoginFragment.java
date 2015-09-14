@@ -21,6 +21,7 @@ import org.openhds.mobile.task.SupervisorLoginTask;
 import org.openhds.mobile.task.http.HttpTask;
 import org.openhds.mobile.task.http.HttpTaskRequest;
 import org.openhds.mobile.task.http.HttpTaskResponse;
+import org.openhds.mobile.task.parsing.entities.ParseLinksTask;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
@@ -68,7 +69,7 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
         HttpTaskRequest httpTaskRequest = new HttpTaskRequest(
                 R.string.login_btn,
                 getLoginUrl(),
-                "application/xml",
+                "application/hal+json",
                 username,
                 password);
 
@@ -81,6 +82,10 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
         // delete any stale credentials from local then add authenticated credentials
         deleteSupervisor();
         addSupervisor();
+
+        // record resource links obtained from login
+        new ParseLinksTask().execute(httpTaskResponse.getInputStream());
+
         launchSupervisorMainActivity();
     }
 
