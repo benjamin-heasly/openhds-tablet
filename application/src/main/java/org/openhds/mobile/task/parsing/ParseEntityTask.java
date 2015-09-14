@@ -1,6 +1,5 @@
 package org.openhds.mobile.task.parsing;
 
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -31,6 +30,13 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
 
     public void setProgressListener(ProgressListener progressListener) {
         this.progressListener = progressListener;
+    }
+
+    public void unhookUnputStream() {
+        if (null == parseEntityTaskRequest) {
+            return;
+        }
+        parseEntityTaskRequest.setInputStream(null);
     }
 
     @Override
@@ -75,9 +81,9 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
     }
 
     public interface ProgressListener {
-        public void onProgressReport(int progress);
-        public void onError(DataPage dataPage, Exception e);
-        public void onComplete(int progress);
+        void onProgressReport(int progress);
+        void onError(DataPage dataPage, Exception e);
+        void onComplete(int progress);
     }
 
     private void persistBatch() {

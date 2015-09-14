@@ -15,6 +15,8 @@ import org.apache.http.HttpStatus;
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.OpeningActivity;
 import org.openhds.mobile.activity.SupervisorMainActivity;
+import org.openhds.mobile.links.Link;
+import org.openhds.mobile.links.ResourceLinkRegistry;
 import org.openhds.mobile.model.core.Supervisor;
 import org.openhds.mobile.provider.DatabaseAdapter;
 import org.openhds.mobile.task.SupervisorLoginTask;
@@ -22,6 +24,8 @@ import org.openhds.mobile.task.http.HttpTask;
 import org.openhds.mobile.task.http.HttpTaskRequest;
 import org.openhds.mobile.task.http.HttpTaskResponse;
 import org.openhds.mobile.task.parsing.entities.ParseLinksTask;
+
+import java.util.Map;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
@@ -84,9 +88,8 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
         addSupervisor();
 
         // record resource links obtained from login
-        new ParseLinksTask().execute(httpTaskResponse.getInputStream());
+        new ParseLinksTask(new ParseLinkListener()).execute(httpTaskResponse.getInputStream());
 
-        launchSupervisorMainActivity();
     }
 
     private void onConnectedButNotAuthenticated() {
@@ -150,6 +153,14 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
 
         public void onBadAuthentication() {
             showLongToast(getActivity(), R.string.supervisor_bad_credentials);
+        }
+    }
+
+    private class ParseLinkListener implements ParseLinksTask.LinkHandler {
+        @Override
+        public void handleLinks(Map<String, Link> links) {
+            ResourceLinkRegistry.addLinks(links);
+            launchSupervisorMainActivity();
         }
     }
 }
