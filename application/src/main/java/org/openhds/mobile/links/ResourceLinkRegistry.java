@@ -33,35 +33,35 @@ public class ResourceLinkRegistry {
         interpretations = new HashMap<>();
 
         addRelInterpretation("fieldWorkers",
-                R.string.sync_database_label_field_workers,
+                R.string.label_field_workers,
                 new FieldWorkerParser(),
                 GatewayRegistry.getFieldWorkerGateway());
         addRelInterpretation("individuals",
-                R.string.sync_database_label_individuals,
+                R.string.label_individuals,
                 new IndividualParser(),
                 GatewayRegistry.getIndividualGateway());
         addRelInterpretation("locations",
-                R.string.sync_database_label_locations,
+                R.string.label_locations,
                 new LocationParser(),
                 GatewayRegistry.getLocationGateway());
         addRelInterpretation("locationHierarchies",
-                R.string.sync_database_label_location_hierarchies,
+                R.string.label_location_hierarchies,
                 new LocationHierarchyParser(),
                 GatewayRegistry.getLocationHierarchyGateway());
         addRelInterpretation("memberships",
-                R.string.sync_database_label_memberships,
+                R.string.label_memberships,
                 new MembershipParser(),
                 GatewayRegistry.getMembershipGateway());
         addRelInterpretation("relationships",
-                R.string.sync_database_label_relationships,
+                R.string.label_relationships,
                 new RelationshipParser(),
                 GatewayRegistry.getRelationshipGateway());
         addRelInterpretation("socialGroups",
-                R.string.sync_database_label_social_groups,
+                R.string.label_social_groups,
                 new SocialGroupParser(),
                 GatewayRegistry.getSocialGroupGateway());
         addRelInterpretation("visits",
-                R.string.sync_database_label_visits,
+                R.string.label_visits,
                 new VisitParser(),
                 GatewayRegistry.getVisitGateway());
     }
