@@ -1,6 +1,6 @@
 package org.openhds.mobile.fragment;
 
-import android.app.*;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.SupervisorMainActivity;
 import org.openhds.mobile.adapter.ChecklistAdapter;
@@ -142,15 +143,17 @@ public class ChecklistFragment extends Fragment {
         List<FormInstance> formInstances = OdkCollectHelper.getAllUnsentFormInstances(getActivity().getContentResolver());
         List<FormInstance> needApproval = new ArrayList<>();
 
-        for (FormInstance instance : formInstances ) {
-            File instanceFile = new File(instance.getFilePath());
-            EncryptionHelper.decryptFile(instanceFile, getActivity());
-            String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, instance.getFilePath());
+        if (null != formInstances) {
+            for (FormInstance instance : formInstances) {
+                File instanceFile = new File(instance.getFilePath());
+                EncryptionHelper.decryptFile(instanceFile, getActivity());
+                String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, instance.getFilePath());
 
-            if (ProjectResources.General.FORM_NEEDS_REVIEW.equalsIgnoreCase(needsReview)) {
-                needApproval.add(instance);
+                if (ProjectResources.General.FORM_NEEDS_REVIEW.equalsIgnoreCase(needsReview)) {
+                    needApproval.add(instance);
+                }
+                EncryptionHelper.encryptFile(instanceFile, getActivity());
             }
-            EncryptionHelper.encryptFile(instanceFile, getActivity());
         }
 
         ChecklistAdapter adapter = new ChecklistAdapter(getActivity(), R.id.form_instance_check_item_orange, needApproval);
