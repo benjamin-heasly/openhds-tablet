@@ -10,16 +10,14 @@ import static java.util.Arrays.asList;
  */
 public class SocialGroupParser extends EntityParser<SocialGroup> {
 
-    private static final String pageName = "socialgroup";
-
     @Override
     protected SocialGroup toEntity(DataPage dataPage) {
         SocialGroup socialGroup = new SocialGroup();
 
-        socialGroup.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
-        socialGroup.setGroupHeadUuid(dataPage.getFirstString(asList(pageName, "groupHead", "uuid")));
-        socialGroup.setLocationUuid(dataPage.getFirstString(asList(pageName, "location", "uuid")));
-        socialGroup.setGroupName(dataPage.getFirstString(asList(pageName, "groupName")));
+        socialGroup.setUuid(dataPage.getFirstString(asList("uuid")));
+        socialGroup.setGroupHeadUuid(dataPage.getFirstString(asList("groupHead", "uuid")));
+        socialGroup.setExtId(dataPage.getFirstString(asList("extId")));
+        socialGroup.setGroupName(dataPage.getFirstString(asList("groupName")));
 
         return socialGroup;
     }

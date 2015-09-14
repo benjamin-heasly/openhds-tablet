@@ -151,7 +151,7 @@ public class CensusFormPayloadConsumers {
 
             // get head of household by household id
             SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver,
-                    socialGroupGateway.findByLocationUuid(selectedLocation.getUuid()));
+                    socialGroupGateway.findByExtId(selectedLocation.getExtId()));
 
 
             Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
@@ -216,7 +216,7 @@ public class CensusFormPayloadConsumers {
 
             // create social group
             SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
-            SocialGroup socialGroup = new SocialGroup(selectedLocation.getUuid(), selectedLocation.getExtId(), individual, formPayload.get(ProjectFormFields.Individuals.SOCIALGROUP_UUID));
+            SocialGroup socialGroup = new SocialGroup(selectedLocation.getName(), individual, formPayload.get(ProjectFormFields.Individuals.SOCIALGROUP_UUID), selectedLocation.getExtId());
             socialGroupGateway.insertOrUpdate(contentResolver, socialGroup);
 
             // create membership

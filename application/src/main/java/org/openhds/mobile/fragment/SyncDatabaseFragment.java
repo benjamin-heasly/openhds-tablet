@@ -193,11 +193,13 @@ public class SyncDatabaseFragment extends Fragment {
                 allErrorCounts.put(currentEntity, errorCount);
             }
             updateTableRow(currentEntity, IGNORE, errorCount, R.string.sync_database_button_sync);
+        }
+        currentEntity = null;
 
+        if (null != parseEntityTask) {
             // unhook the parse entity task request from the http input stream
             parseEntityTask.unhookUnputStream();
         }
-        currentEntity = null;
 
         if (null != httpTask) {
             httpTask.cancel(true);
@@ -271,7 +273,7 @@ public class SyncDatabaseFragment extends Fragment {
         String password = (String) getActivity().getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
 
         Link link = ResourceLinkRegistry.getLink(interpretation.getRel());
-        return new HttpTaskRequest(interpretation.getLabel(), link.getUrl(), "application/json", userName, password);
+        return new HttpTaskRequest(interpretation.getLabel(), link.getUrl()+"/bulk", "application/json", userName, password);
     }
 
     // Respond to "sync all" button.

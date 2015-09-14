@@ -152,7 +152,7 @@ public class CensusFormPayloadBuilders {
 
             SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
             SocialGroup socialGroup = socialGroupGateway.getFirst(resolver,
-                    socialGroupGateway.findByLocationUuid(navigateActivity.getCurrentSelection().getUuid()));
+                    socialGroupGateway.findByExtId(navigateActivity.getCurrentSelection().getExtId()));
 
             IndividualGateway individualGateway = new IndividualGateway();
             //HoH is found by searching by extId, since we're currently dependent on the groupHead property of socialgroup

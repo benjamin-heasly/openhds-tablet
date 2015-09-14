@@ -20,12 +20,12 @@ public class CensusFormFilters {
 			NavigateActivity navigateActivity,
 			Map<String, DataWrapper> hierarchyPath) {
 
-		String locationUuid = hierarchyPath.get(
+		String locationExtId = hierarchyPath.get(
 				ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)
 				.getUuid();
 
         SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
-        return null != socialGroupGateway.getFirst(navigateActivity.getContentResolver(),socialGroupGateway.findByLocationUuid(locationUuid));
+        return null != socialGroupGateway.getFirst(navigateActivity.getContentResolver(),socialGroupGateway.findByExtId(locationExtId));
 	}
 
     public static class AddLocation implements FormFilter {

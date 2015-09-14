@@ -214,8 +214,8 @@ public class UpdateFormPayloadBuilders {
 
             SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
             SocialGroup socialGroup = socialGroupGateway.getFirst(navigateActivity.getContentResolver(),
-                    socialGroupGateway.findByLocationUuid(navigateActivity.getHierarchyPath()
-                            .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getUuid()));
+                    socialGroupGateway.findByExtId(navigateActivity.getHierarchyPath()
+                            .get(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE).getExtId()));
 
             String motherExtId = navigateActivity.getHierarchyPath()
                     .get(ProjectActivityBuilder.BiokoHierarchy.INDIVIDUAL_STATE).getExtId();
@@ -259,7 +259,7 @@ public class UpdateFormPayloadBuilders {
 
             SocialGroupGateway socialGroupGateway = new SocialGroupGateway();
             SocialGroup socialGroup = socialGroupGateway.getFirst(resolver,
-                    socialGroupGateway.findByLocationUuid(navigateActivity.getCurrentSelection().getUuid()));
+                    socialGroupGateway.findByExtId(navigateActivity.getCurrentSelection().getExtId()));
 
 
             // we need to add the socialgroup, membership, and relationship UUID for when they're created in

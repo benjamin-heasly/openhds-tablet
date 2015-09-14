@@ -231,7 +231,7 @@ public class OpenHDS {
 
         public static final String COLUMN_SOCIAL_GROUP_UUID = "uuid";
 
-        public static final String COLUMN_LOCATION_UUID = "location_uuid";
+        public static final String COLUMN_SOCIAL_GROUP_EXTID = "extId";
 
 		public static final String COLUMN_SOCIAL_GROUP_NAME = "groupName";
 		public static final String COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID = "groupHead_uuid";

@@ -22,9 +22,8 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
         super(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, COLUMN_SOCIAL_GROUP_UUID, new SocialGroupConverter());
     }
 
-    public Query findByLocationUuid(String locationUuid) {
-        return new Query(
-                tableUri, COLUMN_LOCATION_UUID, locationUuid, COLUMN_SOCIAL_GROUP_UUID);
+    public Query findByExtId(String extId) {
+        return new Query(tableUri, COLUMN_SOCIAL_GROUP_EXTID, extId, COLUMN_SOCIAL_GROUP_UUID);
     }
 
     private static class SocialGroupConverter implements Converter<SocialGroup> {
@@ -34,7 +33,7 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
             SocialGroup socialGroup = new SocialGroup();
 
             socialGroup.setUuid(extractString(cursor, COLUMN_SOCIAL_GROUP_UUID));
-            socialGroup.setLocationUuid(extractString(cursor, COLUMN_LOCATION_UUID));
+            socialGroup.setExtId(extractString(cursor, COLUMN_SOCIAL_GROUP_EXTID));
             socialGroup.setGroupHeadUuid(extractString(cursor, COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID));
             socialGroup.setGroupName(extractString(cursor, COLUMN_SOCIAL_GROUP_NAME));
 
@@ -46,7 +45,7 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
             ContentValues contentValues = new ContentValues();
 
             contentValues.put(COLUMN_SOCIAL_GROUP_UUID, socialGroup.getUuid());
-            contentValues.put(COLUMN_LOCATION_UUID, socialGroup.getLocationUuid());
+            contentValues.put(COLUMN_SOCIAL_GROUP_EXTID, socialGroup.getExtId());
             contentValues.put(COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID, socialGroup.getGroupHeadUuid());
             contentValues.put(COLUMN_SOCIAL_GROUP_NAME, socialGroup.getGroupName());
 

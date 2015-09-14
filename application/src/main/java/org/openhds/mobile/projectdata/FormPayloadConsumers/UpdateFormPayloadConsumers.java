@@ -171,7 +171,7 @@ public class UpdateFormPayloadConsumers {
 
             // create social group
             SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
-            SocialGroup socialGroup = new SocialGroup(selectedLocation.getUuid(), selectedLocation.getExtId(), individual, formPayload.get(ProjectFormFields.Individuals.SOCIALGROUP_UUID));
+            SocialGroup socialGroup = new SocialGroup(selectedLocation.getName(), individual, formPayload.get(ProjectFormFields.Individuals.SOCIALGROUP_UUID), selectedLocation.getExtId());
             socialGroupGateway.insertOrUpdate(contentResolver, socialGroup);
 
             // create membership

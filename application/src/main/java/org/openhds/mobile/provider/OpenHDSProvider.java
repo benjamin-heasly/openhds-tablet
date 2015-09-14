@@ -302,8 +302,8 @@ public class OpenHDSProvider extends ContentProvider {
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID,
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID);
         socialgroupsProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_LOCATION_UUID,
-                OpenHDS.SocialGroups.COLUMN_LOCATION_UUID);
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID,
+                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID);
         socialgroupsProjectionMap.put(
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID,
                 OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID);
@@ -1059,20 +1059,20 @@ public class OpenHDSProvider extends ContentProvider {
                     + " ("
                     + OpenHDS.SocialGroups._ID
                     + " INTEGER,"
-                    + OpenHDS.SocialGroups.COLUMN_LOCATION_UUID
+                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID
                     + " TEXT NOT NULL,"
                     + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID
                     + " TEXT NOT NULL PRIMARY KEY,"
                     + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID
-                    + " TEXT NOT NULL,"
+                    + " TEXT,"
                     + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME
                     + " TEXT NOT NULL);");
 
             db.execSQL("CREATE INDEX SOCIALGROUP_HEAD_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
                     "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID + ") ; ");
 
-            db.execSQL("CREATE INDEX SOCIALGROUP_LOCATION_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
-                    "("+ OpenHDS.SocialGroups.COLUMN_LOCATION_UUID + ") ; ");
+            db.execSQL("CREATE INDEX SOCIALGROUP_EXTID_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
+                    "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + ") ; ");
 
             db.execSQL("CREATE INDEX SOCIALGROUP_UUID_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
                     "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + ") ; ");

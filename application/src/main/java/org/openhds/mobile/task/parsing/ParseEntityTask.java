@@ -24,6 +24,9 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
 
     private int entityCount;
 
+    private DataPage errorPage;
+    private Exception lastError;
+
     public ParseEntityTask(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
     }
@@ -49,13 +52,13 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
         parseEntityTaskRequest = parseEntityTaskRequests[0];
 
         // set up a page parser
-        XmlPageParser xmlPageParser = new XmlPageParser();
-        xmlPageParser.setPageHandler(new EntityPageHandler());
-        xmlPageParser.setPageErrorHandler(new EntityErrorHandler());
+        AbstractPageParser pageParser = new JsonPageParser();
+        pageParser.setPageHandler(new EntityPageHandler());
+        pageParser.setPageErrorHandler(new EntityErrorHandler());
 
         // pass input stream to page parser
         try {
-            xmlPageParser.parsePages(parseEntityTaskRequest.getInputStream());
+            pageParser.parsePages(parseEntityTaskRequest.getInputStream());
         } catch (Exception e) {
             Log.e(getClass().getName(), e.getMessage(), e);
             return -1;
@@ -75,6 +78,13 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
 
     @Override
     protected void onPostExecute (Integer result) {
+        if (null != lastError) {
+            progressListener.onError(errorPage, lastError);
+            lastError = null;
+            errorPage = null;
+            return;
+        }
+
         if (null != progressListener) {
             progressListener.onComplete(entityCount);
         }
@@ -92,7 +102,7 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
         entities.clear();
     }
 
-    private class EntityPageHandler implements XmlPageParser.PageHandler {
+    private class EntityPageHandler implements AbstractPageParser.PageHandler {
         @Override
         public boolean handlePage(DataPage dataPage) {
             // parse the new page into an entity
@@ -110,10 +120,13 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
         }
     }
 
-    private class EntityErrorHandler implements XmlPageParser.PageErrorHandler {
+    private class EntityErrorHandler implements AbstractPageParser.PageErrorHandler {
         @Override
         public boolean handlePageError(DataPage dataPage, Exception e) {
-            progressListener.onError(dataPage, e);
+            // report the error on the UI thread
+            errorPage = dataPage;
+            lastError = e;
+            publishProgress(entityCount);
 
             // stop parsing if the user cancelled the task
             return !isCancelled();
