@@ -44,6 +44,17 @@ public class Link {
         return url;
     }
 
+    public String buildUrlWithParameters(String... params) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(url);
+        char delimiter = '?';
+        for (int i = 0; i < params.length; i++) {
+            builder.append(delimiter).append(params[i]);
+            delimiter = 0 == i % 2 ? '=' : '&';
+        }
+        return builder.toString();
+    }
+
     public String getRel() {
         return rel;
     }

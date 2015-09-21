@@ -11,9 +11,9 @@ import java.net.URL;
 
 /**
  * Carry out an HttpTaskRequest.
- *
+ * <p/>
  * Make an HTTP GET request with credentials, return response status and body.
- *
+ * <p/>
  * BSH
  */
 public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse> {
@@ -41,8 +41,8 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
         }
         final HttpTaskRequest httpTaskRequest = httpTaskRequests[0];
 
-        String rawCredentials = httpTaskRequest.getUserName()+":"+httpTaskRequest.getPassword();
-        String basicAuthHeader = "Basic "+ Base64.encodeToString(rawCredentials.getBytes(), Base64.DEFAULT);
+        String rawCredentials = httpTaskRequest.getUserName() + ":" + httpTaskRequest.getPassword();
+        String basicAuthHeader = "Basic " + Base64.encodeToString(rawCredentials.getBytes(), Base64.DEFAULT);
 
         HttpURLConnection urlConnection;
         InputStream responseStream;
@@ -53,6 +53,7 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, Void, HttpTaskResponse>
             if (httpTaskRequest.getAccept() != null) {
                 urlConnection.setRequestProperty("Accept", httpTaskRequest.getAccept());
             }
+
             urlConnection.setRequestProperty("Authorization", basicAuthHeader);
             responseStream = urlConnection.getInputStream();
             statusCode = urlConnection.getResponseCode();
