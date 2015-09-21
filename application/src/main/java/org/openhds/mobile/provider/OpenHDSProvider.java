@@ -642,7 +642,7 @@ public class OpenHDSProvider extends ContentProvider {
 
         SQLiteDatabase db = mOpenHelper.getWritableDatabase(passwordHelper.getPassword());
 
-        long rowId = db.insert(table, null, values);
+        long rowId = db.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
         if (rowId > 0) {
             Uri noteUri = ContentUris.withAppendedId(contentUriBase, rowId);
