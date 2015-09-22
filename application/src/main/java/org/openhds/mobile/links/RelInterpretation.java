@@ -4,11 +4,11 @@ import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.task.parsing.entities.EntityParser;
 
 /**
- * Tablet-side interpretation of a HATEOAS "rel" from the OpenHDS server.
+ * Tablet-side interpretation of a HATEOAS "resourceRel" from the OpenHDS server.
  */
 public class RelInterpretation<T> {
 
-    private final String rel;
+    private final String resourceRel;
 
     private final Integer label;
 
@@ -16,15 +16,17 @@ public class RelInterpretation<T> {
 
     private final Gateway<T> gateway;
 
-    public RelInterpretation(String rel, Integer label, EntityParser<T> parser, Gateway<T> gateway) {
-        this.rel = rel;
+    private String syncRel = "bydatebulk";
+
+    public RelInterpretation(String resourceRel, Integer label, EntityParser<T> parser, Gateway<T> gateway) {
+        this.resourceRel = resourceRel;
         this.label = label;
         this.parser = parser;
         this.gateway = gateway;
     }
 
-    public String getRel() {
-        return rel;
+    public String getResourceRel() {
+        return resourceRel;
     }
 
     public Integer getLabel() {
@@ -37,5 +39,13 @@ public class RelInterpretation<T> {
 
     public Gateway<T> getGateway() {
         return gateway;
+    }
+
+    public String getSyncRel() {
+        return syncRel;
+    }
+
+    public void setSyncRel(String syncRel) {
+        this.syncRel = syncRel;
     }
 }

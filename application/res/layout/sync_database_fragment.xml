@@ -1,80 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
-            android:id="@+id/sync_description"
-            android:text="@string/sync_database_description"
-            android:padding="5dip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:id="@+id/sync_description"
+        android:text="@string/sync_database_description"
+        android:padding="5dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/sync_all_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/sync_database_button_sync_all"
+        android:background="@drawable/gray_button_selector"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
     <TableLayout
-            android:id="@+id/sync_summary_table"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="1"
-            android:shrinkColumns="1">
+        android:id="@+id/sync_summary_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:shrinkColumns="1">
 
         <TableRow
-                android:id="@+id/sync_summary_header">
+            android:id="@+id/sync_summary_header">
             <TextView
-                    android:id="@+id/entity_column_header"
-                    android:text="@string/sync_database_column_entity"
-                    android:layout_column="1"
-                    android:padding="5dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/entity_column_header"
+                android:text="@string/sync_database_column_entity"
+                android:layout_column="1"
+                android:padding="5dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                    android:id="@+id/records_column_header"
-                    android:text="@string/sync_database_column_records"
-                    android:layout_column="2"
-                    android:padding="5dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/records_column_header"
+                android:text="@string/sync_database_column_records"
+                android:layout_column="2"
+                android:padding="5dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                    android:id="@+id/errors_column_header"
-                    android:text="@string/sync_database_column_errors"
-                    android:layout_column="3"
-                    android:padding="5dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/errors_column_header"
+                android:text="@string/sync_database_column_errors"
+                android:layout_column="3"
+                android:padding="5dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                    android:id="@+id/action_column_header"
-                    android:text="@string/sync_database_column_action"
-                    android:layout_column="4"
-                    android:padding="5dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:id="@+id/action_column_header"
+                android:text="@string/sync_database_column_action"
+                android:layout_column="4"
+                android:padding="5dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
         </TableRow>
 
     </TableLayout>
 
-    <Button
-            android:id="@+id/sync_all_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/sync_database_button_sync_all"
-            android:background="@drawable/gray_button_selector"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <ListView
-            android:id="@+id/sync_error_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="15dp" >
+        android:id="@+id/sync_error_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="15dp" >
     </ListView>
 
 </LinearLayout>

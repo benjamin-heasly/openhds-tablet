@@ -184,6 +184,7 @@
     <string name="sync_database_button_sync_all">Sync All</string>
     <string name="sync_database_button_cancel_all">Cancel All</string>
     <string name="sync_database_unknown_value">-</string>
+    <string name="sync_database_connected">connected</string>
     <string name="label_field_workers">Field Workers</string>
     <string name="label_individuals">Individuals</string>
     <string name="label_locations">Locations</string>
@@ -192,6 +193,9 @@
     <string name="label_relationships">Relationships</string>
     <string name="label_social_groups">Social Groups</string>
     <string name="label_visits">Visits</string>
+    <string name="label_users">Users</string>
+    <string name="label_location_hierarchy_levels">LocationHierarchyLevels</string>
+    <string name="label_residencies">Residencies</string>
 
     <!-- Individual Labels -->
     <string name="individual_first_name_label">First Name</string>

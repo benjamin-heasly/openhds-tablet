@@ -6,11 +6,14 @@ import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.task.parsing.entities.EntityParser;
 import org.openhds.mobile.task.parsing.entities.FieldWorkerParser;
 import org.openhds.mobile.task.parsing.entities.IndividualParser;
+import org.openhds.mobile.task.parsing.entities.LocationHierarchyLevelParser;
 import org.openhds.mobile.task.parsing.entities.LocationHierarchyParser;
 import org.openhds.mobile.task.parsing.entities.LocationParser;
 import org.openhds.mobile.task.parsing.entities.MembershipParser;
 import org.openhds.mobile.task.parsing.entities.RelationshipParser;
+import org.openhds.mobile.task.parsing.entities.ResidencyParser;
 import org.openhds.mobile.task.parsing.entities.SocialGroupParser;
+import org.openhds.mobile.task.parsing.entities.UserParser;
 import org.openhds.mobile.task.parsing.entities.VisitParser;
 
 import java.util.ArrayList;
@@ -44,6 +47,10 @@ public class ResourceLinkRegistry {
                 R.string.label_locations,
                 new LocationParser(),
                 GatewayRegistry.getLocationGateway());
+        addRelInterpretation("locationHierarchyLevels",
+                R.string.label_location_hierarchy_levels,
+                new LocationHierarchyLevelParser(),
+                GatewayRegistry.getLocationHierarchyLevelGateway());
         addRelInterpretation("locationHierarchies",
                 R.string.label_location_hierarchies,
                 new LocationHierarchyParser(),
@@ -56,10 +63,19 @@ public class ResourceLinkRegistry {
                 R.string.label_relationships,
                 new RelationshipParser(),
                 GatewayRegistry.getRelationshipGateway());
+        addRelInterpretation("residencies",
+                R.string.label_residencies,
+                new ResidencyParser(),
+                GatewayRegistry.getResidencyGateway());
         addRelInterpretation("socialGroups",
                 R.string.label_social_groups,
                 new SocialGroupParser(),
                 GatewayRegistry.getSocialGroupGateway());
+        addRelInterpretation("users",
+                R.string.label_users,
+                new UserParser(),
+                GatewayRegistry.getUsesrGateway());
+        interpretations.get("users").setSyncRel("bulk");
         addRelInterpretation("visits",
                 R.string.label_visits,
                 new VisitParser(),

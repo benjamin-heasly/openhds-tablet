@@ -36,8 +36,6 @@ public class SyncDatabaseHelper {
 
     private final ContentResolver contentResolver;
 
-    public String resourceRel = "bydatebulk";
-
     public String linkMediaType = "application/hal+json";
 
     public String dataMediaType = "application/json";
@@ -72,14 +70,6 @@ public class SyncDatabaseHelper {
         void onParseDataComplete(RelInterpretation<?> relInterpretation, int progress);
 
         void onError(RelInterpretation<?> relInterpretation, String message, int errorCount);
-    }
-
-    public String getResourceRel() {
-        return resourceRel;
-    }
-
-    public void setResourceRel(String resourceRel) {
-        this.resourceRel = resourceRel;
     }
 
     public String getLinkMediaType() {
@@ -130,7 +120,7 @@ public class SyncDatabaseHelper {
     public void start() {
         cancel();
 
-        Link link = ResourceLinkRegistry.getLink(relInterpretation.getRel());
+        Link link = ResourceLinkRegistry.getLink(relInterpretation.getResourceRel());
         HttpTaskRequest getLinkRequest = new HttpTaskRequest(relInterpretation.getLabel(),
                 link.getUrl(),
                 linkMediaType,
@@ -163,14 +153,16 @@ public class SyncDatabaseHelper {
     private class ParseLinksHandler implements ParseLinksTask.LinkHandler {
         @Override
         public void handleLinks(Map<String, Link> links) {
-            if (null != links && links.containsKey(resourceRel)) {
+            String syncRel = relInterpretation.getSyncRel();
+
+            if (null != links && links.containsKey(syncRel)) {
                 listener.onParsedLinks(relInterpretation);
-                getData(links.get(resourceRel));
+                getData(links.get(syncRel));
                 return;
             }
 
             errorCount++;
-            listener.onError(relInterpretation, "No such rel from server: " + resourceRel, errorCount);
+            listener.onError(relInterpretation, "No such rel from server: " + syncRel, errorCount);
         }
     }
 

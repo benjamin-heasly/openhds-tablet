@@ -102,6 +102,10 @@ public class SyncDatabaseFragment extends Fragment {
         showLongToast(getActivity(), message);
     }
 
+    private void progressMessage(int entityId, int progressMessageId) {
+        progressMessage(entityId, getResourceString(getActivity(), progressMessageId));
+    }
+
     // Update column values and button status.
     private void updateTableRow(RelInterpretation<?> interpretation, int records, int errors, int actionId) {
         View view = getView();
@@ -154,6 +158,8 @@ public class SyncDatabaseFragment extends Fragment {
 
         SyncDatabaseHelper currentHelper = queuedSyncHelpers.poll();
         currentHelper.cancel();
+
+        startNextSync();
     }
 
     private void removeSync(RelInterpretation<?> interpretation) {
@@ -240,7 +246,7 @@ public class SyncDatabaseFragment extends Fragment {
                 // button should change from "cancel" to "sync"
                 removeCurrentSync();
                 resetTableRow(interpretation);
-                progressMessage(interpretation.getLabel(), getResourceString(getActivity(), R.string.sync_database_canceled));
+                progressMessage(interpretation.getLabel(), R.string.sync_database_canceled);
 
             } else if (null != getQueuedSync(interpretation)) {
                 // button should change "waiting" to "sync"
@@ -257,17 +263,15 @@ public class SyncDatabaseFragment extends Fragment {
     private class SyncListener implements SyncDatabaseHelper.SyncDatabaseListener {
         @Override
         public void onGotLinks(RelInterpretation<?> relInterpretation) {
-            progressMessage(relInterpretation.getLabel(), "got links");
+            progressMessage(relInterpretation.getLabel(), R.string.sync_database_connected);
         }
 
         @Override
         public void onParsedLinks(RelInterpretation<?> relInterpretation) {
-            progressMessage(relInterpretation.getLabel(), "parsed links");
         }
 
         @Override
         public void onGotData(RelInterpretation<?> relInterpretation) {
-            progressMessage(relInterpretation.getLabel(), "got data");
         }
 
         @Override
@@ -284,7 +288,7 @@ public class SyncDatabaseFragment extends Fragment {
 
         @Override
         public void onError(RelInterpretation<?> relInterpretation, String message, int errorCount) {
-            updateTableRow(relInterpretation, IGNORE, errorCount, IGNORE);
+            updateTableRow(relInterpretation, IGNORE, errorCount, R.string.sync_database_button_sync);
             errorMessage(relInterpretation.getLabel(), message);
             removeCurrentSync();
         }
