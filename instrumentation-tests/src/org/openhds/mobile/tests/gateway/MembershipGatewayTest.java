@@ -20,7 +20,6 @@ public class MembershipGatewayTest extends GatewayTest<Membership> {
         membership.setUuid(id);
         membership.setIndividualUuid(id);
         membership.setSocialGroupUuid("SOCIALGROUP");
-        membership.setRelationshipToHead("RELATIONSHIPTOHEAD");
 
         return membership;
     }

@@ -1,9 +1,15 @@
 package org.openhds.mobile.provider;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
 
 import net.sqlcipher.SQLException;
 import net.sqlcipher.database.SQLiteDatabase;
@@ -12,327 +18,92 @@ import net.sqlcipher.database.SQLiteQueryBuilder;
 
 import org.openhds.mobile.OpenHDS;
 
-import android.content.ContentProvider;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.BaseColumns;
-import android.text.TextUtils;
-import android.util.Log;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
- * ContentProvider for OpenHDS <br />
- * This class is based on the NotPadProvider sample in the Android SDK
+ * ContentProvider for OpenHDS
  */
 public class OpenHDSProvider extends ContentProvider {
     public static final String DATABASE_NAME = "openhds.db";
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 100;
 
     private static final String TAG = "OpenHDSProvider";
     private static final String DATABASE_PASSWORD_KEY = "database-password";
     private static final String DATABASE_SHARED_PREF = "openhds-provider";
 
-    private static HashMap<String, String> individualsProjectionMap;
-    private static HashMap<String, String> locationsProjectionMap;
-    private static HashMap<String, String> hierarchyitemsProjectionMap;
-    private static HashMap<String, String> visitsProjectionMap;
-    private static HashMap<String, String> relationshipsProjectionMap;
-    private static HashMap<String, String> fieldworkersProjectionMap;
-    private static HashMap<String, String> socialgroupsProjectionMap;
-    private static HashMap<String, String> membershipsProjectionMap;
+    private static final int INDIVIDUALS = 10;
+    private static final int LOCATIONS = 20;
+    private static final int LOCATION_HIERARCHIES = 30;
+    private static final int LOCATION_HIERARCHY_LEVELS = 40;
+    private static final int VISITS = 50;
+    private static final int RELATIONSHIPS = 60;
+    private static final int USERS = 70;
+    private static final int FIELD_WORKERS = 80;
+    private static final int SOCIAL_GROUPS = 90;
+    private static final int MEMBERSHIPS = 100;
+    private static final int RESIDENCIES = 110;
 
-    private static final int INDIVIDUALS = 1;
-    private static final int INDIVIDUAL_ID = 2;
-    private static final int LOCATIONS = 3;
-    private static final int LOCATION_ID = 4;
-    private static final int HIERARCHYITEMS = 5;
-    private static final int HIERARCHYITEM_ID = 6;
-    private static final int VISITS = 9;
-    private static final int VISIT_ID = 10;
-    private static final int RELATIONSHIPS = 11;
-    private static final int RELATIONSHIP_ID = 12;
-    private static final int FIELDWORKERS = 13;
-    private static final int FIELDWORKER_ID = 14;
-    private static final int SOCIALGROUPS = 15;
-    private static final int SOCIALGROUP_ID = 16;
-    private static final int MEMBERSHIPS = 17;
-    private static final int MEMBERSHIPS_ID = 18;
-
-    private static final UriMatcher sUriMatcher;
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final Map<Integer, String> codeToTableName = new HashMap<>();
+    private static final Map<Integer, String> codeToContentType = new HashMap<>();
+    private static final Map<Integer, Uri> codeToUriBase = new HashMap<>();
 
     static {
-        sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "individuals", INDIVIDUALS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "individuals/#", INDIVIDUAL_ID);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.Individuals.TABLE_NAME, INDIVIDUALS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.Locations.TABLE_NAME, LOCATIONS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.LocationHierarchies.TABLE_NAME, LOCATION_HIERARCHIES);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.LocationHierarchyLevels.TABLE_NAME, LOCATION_HIERARCHY_LEVELS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.Visits.TABLE_NAME, VISITS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.Relationships.TABLE_NAME, RELATIONSHIPS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.Users.TABLE_NAME, USERS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.FieldWorkers.TABLE_NAME, FIELD_WORKERS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.SocialGroups.TABLE_NAME, SOCIAL_GROUPS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.Memberships.TABLE_NAME, MEMBERSHIPS);
+        sUriMatcher.addURI(OpenHDS.AUTHORITY, OpenHDS.Residencies.TABLE_NAME, RESIDENCIES);
 
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "locations", LOCATIONS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "locations/#", LOCATION_ID);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "hierarchyitems", HIERARCHYITEMS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "hierarchyitems/#",
-                HIERARCHYITEM_ID);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "visits", VISITS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "visits/#", VISIT_ID);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "relationships", RELATIONSHIPS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "relationships/#",
-                RELATIONSHIP_ID);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "fieldworkers", FIELDWORKERS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "fieldworkers/#", FIELDWORKER_ID);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups", SOCIALGROUPS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "socialgroups/#", SOCIALGROUP_ID);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "memberships", MEMBERSHIPS);
-        sUriMatcher.addURI(OpenHDS.AUTHORITY, "memberships/#", MEMBERSHIPS_ID);
+        codeToTableName.put(INDIVIDUALS, OpenHDS.Individuals.TABLE_NAME);
+        codeToTableName.put(LOCATIONS, OpenHDS.Locations.TABLE_NAME);
+        codeToTableName.put(LOCATION_HIERARCHIES, OpenHDS.LocationHierarchies.TABLE_NAME);
+        codeToTableName.put(LOCATION_HIERARCHY_LEVELS, OpenHDS.LocationHierarchyLevels.TABLE_NAME);
+        codeToTableName.put(VISITS, OpenHDS.Visits.TABLE_NAME);
+        codeToTableName.put(RELATIONSHIPS, OpenHDS.Relationships.TABLE_NAME);
+        codeToTableName.put(USERS, OpenHDS.Users.TABLE_NAME);
+        codeToTableName.put(FIELD_WORKERS, OpenHDS.FieldWorkers.TABLE_NAME);
+        codeToTableName.put(SOCIAL_GROUPS, OpenHDS.SocialGroups.TABLE_NAME);
+        codeToTableName.put(MEMBERSHIPS, OpenHDS.Memberships.TABLE_NAME);
+        codeToTableName.put(RESIDENCIES, OpenHDS.Residencies.TABLE_NAME);
 
-        individualsProjectionMap = new HashMap<String, String>();
-        // general individual columns
-        individualsProjectionMap.put(OpenHDS.Individuals._ID,
-                OpenHDS.Individuals._ID);
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID);
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FULL_NAME,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME
-                        + " || ' ' || "
-                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME
-                        + " as "
-                        + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FULL_NAME);
+        codeToContentType.put(INDIVIDUALS, OpenHDS.Individuals.CONTENT_TYPE);
+        codeToContentType.put(LOCATIONS, OpenHDS.Locations.CONTENT_TYPE);
+        codeToContentType.put(LOCATION_HIERARCHIES, OpenHDS.LocationHierarchies.CONTENT_TYPE);
+        codeToContentType.put(LOCATION_HIERARCHY_LEVELS, OpenHDS.LocationHierarchyLevels.CONTENT_TYPE);
+        codeToContentType.put(VISITS, OpenHDS.Visits.CONTENT_TYPE);
+        codeToContentType.put(RELATIONSHIPS, OpenHDS.Relationships.CONTENT_TYPE);
+        codeToContentType.put(USERS, OpenHDS.Users.CONTENT_TYPE);
+        codeToContentType.put(FIELD_WORKERS, OpenHDS.FieldWorkers.CONTENT_TYPE);
+        codeToContentType.put(SOCIAL_GROUPS, OpenHDS.SocialGroups.CONTENT_TYPE);
+        codeToContentType.put(RESIDENCIES, OpenHDS.Residencies.CONTENT_TYPE);
 
-        // extensions for bioko project
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES);
-        individualsProjectionMap.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME);
-        individualsProjectionMap
-                .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER,
-                        OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY);
-        individualsProjectionMap.put(
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID,
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID);
-
-        locationsProjectionMap = new HashMap<String, String>();
-        locationsProjectionMap
-                .put(OpenHDS.Locations._ID, OpenHDS.Locations._ID);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID,
-                OpenHDS.Locations.COLUMN_LOCATION_EXTID);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_UUID,
-                OpenHDS.Locations.COLUMN_LOCATION_UUID);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID,
-                OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID,
-                OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE,
-                OpenHDS.Locations.COLUMN_LOCATION_LATITUDE);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE,
-                OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME);
-        locationsProjectionMap.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE, OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER,
-                OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER,
-                OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME,
-                OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_HAS_RECIEVED_BEDNETS,
-                OpenHDS.Locations.COLUMN_LOCATION_HAS_RECIEVED_BEDNETS);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_SPRAYING_EVALUATION,
-                OpenHDS.Locations.COLUMN_LOCATION_SPRAYING_EVALUATION);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION,
-                OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION);
-        locationsProjectionMap.put(
-                OpenHDS.Locations.COLUMN_LOCATION_EVALUATION_STATUS,
-                OpenHDS.Locations.COLUMN_LOCATION_EVALUATION_STATUS);
-
-        hierarchyitemsProjectionMap = new HashMap<String, String>();
-        hierarchyitemsProjectionMap.put(OpenHDS.HierarchyItems._ID,
-                OpenHDS.HierarchyItems._ID);
-        hierarchyitemsProjectionMap.put(
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID,
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID);
-        hierarchyitemsProjectionMap.put(
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID,
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID);
-        hierarchyitemsProjectionMap.put(
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL,
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL);
-        hierarchyitemsProjectionMap.put(
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME,
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME);
-        hierarchyitemsProjectionMap.put(
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT,
-                OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT);
-
-        visitsProjectionMap = new HashMap<String, String>();
-        visitsProjectionMap.put(OpenHDS.Visits._ID, OpenHDS.Visits._ID);
-        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_DATE,
-                OpenHDS.Visits.COLUMN_VISIT_DATE);
-        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_EXTID,
-                OpenHDS.Visits.COLUMN_VISIT_EXTID);
-        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_UUID,
-                OpenHDS.Visits.COLUMN_VISIT_UUID);
-        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID,
-                OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID);
-        visitsProjectionMap.put(OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID,
-                OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID);
-
-        relationshipsProjectionMap = new HashMap<String, String>();
-        relationshipsProjectionMap.put(OpenHDS.Relationships._ID,
-                OpenHDS.Relationships._ID);
-        relationshipsProjectionMap.put(
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID,
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID);
-        relationshipsProjectionMap.put(
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A,
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A);
-        relationshipsProjectionMap.put(
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B,
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B);
-        relationshipsProjectionMap.put(
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE,
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE);
-        relationshipsProjectionMap.put(
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE,
-                OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE);
-
-        fieldworkersProjectionMap = new HashMap<String, String>();
-        fieldworkersProjectionMap.put(OpenHDS.FieldWorkers._ID,
-                OpenHDS.FieldWorkers._ID);
-        fieldworkersProjectionMap.put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID,
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID);
-        fieldworkersProjectionMap.put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID,
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID);
-        fieldworkersProjectionMap.put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX,
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX);
-        fieldworkersProjectionMap.put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME,
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME);
-        fieldworkersProjectionMap.put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME,
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME);
-        fieldworkersProjectionMap.put(
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD,
-                OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD);
-
-        socialgroupsProjectionMap = new HashMap<String, String>();
-        socialgroupsProjectionMap.put(OpenHDS.SocialGroups._ID,
-                OpenHDS.SocialGroups._ID);
-        socialgroupsProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID,
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID);
-        socialgroupsProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID,
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID);
-        socialgroupsProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID,
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID);
-        socialgroupsProjectionMap.put(
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME,
-                OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME);
-
-        membershipsProjectionMap = new HashMap<String, String>();
-        membershipsProjectionMap.put(OpenHDS.Memberships._ID,
-                OpenHDS.Memberships._ID);
-        membershipsProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID,
-                OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID);
-        membershipsProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID,
-                OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID);
-        membershipsProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID,
-                OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID);
-        membershipsProjectionMap.put(
-                OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD,
-                OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD);
+        codeToUriBase.put(INDIVIDUALS, OpenHDS.Individuals.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(LOCATIONS, OpenHDS.Locations.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(LOCATION_HIERARCHIES, OpenHDS.LocationHierarchies.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(LOCATION_HIERARCHY_LEVELS, OpenHDS.LocationHierarchyLevels.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(VISITS, OpenHDS.Visits.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(RELATIONSHIPS, OpenHDS.Relationships.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(USERS, OpenHDS.Users.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(FIELD_WORKERS, OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(SOCIAL_GROUPS, OpenHDS.SocialGroups.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(MEMBERSHIPS, OpenHDS.Memberships.CONTENT_ID_URI_BASE);
+        codeToUriBase.put(RESIDENCIES, OpenHDS.Residencies.CONTENT_ID_URI_BASE);
     }
 
-    private DatabaseHelper mOpenHelper;
+    private DatabaseHelper databaseHelper;
     private PasswordHelper passwordHelper;
 
     public DatabaseHelper getDatabaseHelper() {
-        return mOpenHelper;
+        return databaseHelper;
     }
 
     public void setPasswordHelper(PasswordHelper passwordHelper) {
@@ -340,7 +111,6 @@ public class OpenHDSProvider extends ContentProvider {
     }
 
     /**
-     *
      * Initializes the provider by creating a new DatabaseHelper. onCreate() is
      * called automatically when Android creates the provider in response to a
      * resolver request from a client.
@@ -354,7 +124,7 @@ public class OpenHDSProvider extends ContentProvider {
         // Creates a new database helper object.
         // Note: database itself isn't opened until something tries to access it,
         // and it's only created if it doesn't already exist.
-        mOpenHelper = new DatabaseHelper(getContext());
+        databaseHelper = new DatabaseHelper(getContext());
 
         try {
             SQLiteDatabase.loadLibs(getContext());
@@ -368,7 +138,8 @@ public class OpenHDSProvider extends ContentProvider {
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         int inserted = -1;
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase(passwordHelper.getPassword());
+
+        SQLiteDatabase db = databaseHelper.getWritableDatabase(passwordHelper.getPassword());
         db.beginTransaction();
         try {
             inserted = super.bulkInsert(uri, values);
@@ -381,273 +152,65 @@ public class OpenHDSProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        switch (sUriMatcher.match(uri)) {
-            case INDIVIDUALS:
-                qb.setTables(OpenHDS.Individuals.TABLE_NAME);
-                qb.setProjectionMap(individualsProjectionMap);
-                break;
-            case INDIVIDUAL_ID:
-                qb.setTables(OpenHDS.Individuals.TABLE_NAME);
-                qb.setProjectionMap(individualsProjectionMap);
-                qb.appendWhere(OpenHDS.Individuals._ID
-                        + "="
-                        + uri.getPathSegments().get(
-                        OpenHDS.Individuals.NOTE_ID_PATH_POSITION));
-                break;
-            case LOCATIONS:
-                qb.setTables(OpenHDS.Locations.TABLE_NAME);
-                qb.setProjectionMap(locationsProjectionMap);
-                break;
-            case LOCATION_ID:
-                qb.setTables(OpenHDS.Locations.TABLE_NAME);
-                qb.setProjectionMap(locationsProjectionMap);
-                qb.appendWhere(OpenHDS.Locations._ID
-                        + "="
-                        + uri.getPathSegments().get(
-                        OpenHDS.Locations.NOTE_ID_PATH_POSITION));
-                break;
-            case HIERARCHYITEMS:
-                qb.setTables(OpenHDS.HierarchyItems.TABLE_NAME);
-                qb.setProjectionMap(hierarchyitemsProjectionMap);
-                break;
-            case HIERARCHYITEM_ID:
-                qb.setTables(OpenHDS.HierarchyItems.TABLE_NAME);
-                qb.setProjectionMap(hierarchyitemsProjectionMap);
-                qb.appendWhere(OpenHDS.HierarchyItems._ID
-                        + "="
-                        + uri.getPathSegments().get(
-                        OpenHDS.HierarchyItems.NOTE_ID_PATH_POSITION));
-
-                break;
-            case VISITS:
-                qb.setTables(OpenHDS.Visits.TABLE_NAME);
-                qb.setProjectionMap(visitsProjectionMap);
-                break;
-            case VISIT_ID:
-                qb.setTables(OpenHDS.Visits.TABLE_NAME);
-                qb.setProjectionMap(visitsProjectionMap);
-                qb.appendWhere(OpenHDS.Visits._ID
-                        + "="
-                        + uri.getPathSegments()
-                        .get(OpenHDS.Visits.ID_PATH_POSITION));
-                break;
-            case RELATIONSHIPS:
-                qb.setTables(OpenHDS.Relationships.TABLE_NAME);
-                qb.setProjectionMap(relationshipsProjectionMap);
-                break;
-            case RELATIONSHIP_ID:
-                qb.setTables(OpenHDS.Relationships.TABLE_NAME);
-                qb.setProjectionMap(relationshipsProjectionMap);
-                qb.appendWhere(OpenHDS.Relationships._ID
-                        + "="
-                        + uri.getPathSegments().get(
-                        OpenHDS.Relationships.ID_PATH_POSITION));
-                break;
-            case FIELDWORKERS:
-                qb.setTables(OpenHDS.FieldWorkers.TABLE_NAME);
-                qb.setProjectionMap(fieldworkersProjectionMap);
-                break;
-            case FIELDWORKER_ID:
-                qb.setTables(OpenHDS.FieldWorkers.TABLE_NAME);
-                qb.setProjectionMap(fieldworkersProjectionMap);
-                qb.appendWhere(OpenHDS.FieldWorkers._ID
-                        + "="
-                        + uri.getPathSegments().get(
-                        OpenHDS.FieldWorkers.ID_PATH_POSITION));
-                break;
-            case SOCIALGROUPS:
-                qb.setTables(OpenHDS.SocialGroups.TABLE_NAME);
-                qb.setProjectionMap(socialgroupsProjectionMap);
-                break;
-            case SOCIALGROUP_ID:
-                qb.setTables(OpenHDS.SocialGroups.TABLE_NAME);
-                qb.setProjectionMap(socialgroupsProjectionMap);
-                qb.appendWhere(OpenHDS.SocialGroups._ID
-                        + "="
-                        + uri.getPathSegments().get(
-                        OpenHDS.SocialGroups.ID_PATH_POSITION));
-                break;
-            case MEMBERSHIPS:
-                qb.setTables(OpenHDS.Memberships.TABLE_NAME);
-                qb.setProjectionMap(membershipsProjectionMap);
-                break;
-            case MEMBERSHIPS_ID:
-                qb.setTables(OpenHDS.Memberships.TABLE_NAME);
-                qb.setProjectionMap(membershipsProjectionMap);
-                qb.appendWhere(OpenHDS.Memberships._ID
-                        + "="
-                        + uri.getPathSegments().get(
-                        OpenHDS.Memberships.ID_PATH_POSITION));
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+        int code = sUriMatcher.match(uri);
+        if (!codeToTableName.containsKey(code)) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        qb.setTables(codeToTableName.get(code));
 
-        String orderBy;
+        final String orderBy;
         if (TextUtils.isEmpty(sortOrder)) {
             orderBy = OpenHDS.DEFAULT_SORT_ORDER;
         } else {
             orderBy = sortOrder;
         }
 
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase(passwordHelper.getPassword());
-
-        Cursor c = qb.query(db, // The database to query
-                projection, // The columns to return from the query
-                selection, // The columns for the where clause
-                selectionArgs, // The values for the where clause
-                null, // don't group the rows
-                null, // don't filter by row groups
-                orderBy // The sort order
-        );
-
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-        return c;
-    }
-
-    private String[] addSocialGroupUuid(SQLiteQueryBuilder qb, String string) {
-        SQLiteDatabase db = mOpenHelper.getReadableDatabase(passwordHelper.getPassword());
-        // get all individuals at location
-        Cursor c = db.query(OpenHDS.Individuals.TABLE_NAME,
-                new String[] { OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID },
-                OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID
-                        + " = ?", new String[] { string }, null, null, null);
-
-        // iterate over all individuals and collect their memberships
-        // this results in a subset of households at the location
-        Set<String> socialGroupUuids = new HashSet<String>();
-        while (c.moveToNext()) {
-            Cursor c2 = db
-                    .query(OpenHDS.Memberships.TABLE_NAME,
-                            new String[] { OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID },
-                            OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID
-                                    + " = ?", new String[] { c.getString(0) },
-                            null, null, null);
-            while (c2.moveToNext()) {
-                socialGroupUuids.add(c2.getString(0));
-            }
-            c2.close();
-        }
-        c.close();
-
-        // generate the SQL IN clause with the subset of social group ids
-        StringBuilder placeholders = new StringBuilder();
-        if (socialGroupUuids.size() > 0) {
-            placeholders.append("?");
-        }
-
-        for (int i = 1; i < socialGroupUuids.size(); i++) {
-            placeholders.append(",?");
-        }
-
-        qb.appendWhere(OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + " IN ("
-                + placeholders.toString() + ")");
-        return socialGroupUuids.toArray(new String[] {});
+        SQLiteDatabase db = databaseHelper.getReadableDatabase(passwordHelper.getPassword());
+        Cursor cursor = qb.query(db, projection, selection, selectionArgs, null, null, orderBy);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Override
     public String getType(Uri uri) {
-        switch (sUriMatcher.match(uri)) {
-            case INDIVIDUALS:
-                return OpenHDS.Individuals.CONTENT_TYPE;
-            case INDIVIDUAL_ID:
-                return OpenHDS.Individuals.CONTENT_ITEM_TYPE;
-            case LOCATIONS:
-                return OpenHDS.Locations.CONTENT_TYPE;
-            case LOCATION_ID:
-                return OpenHDS.Locations.CONTENT_ITEM_TYPE;
-            case HIERARCHYITEMS:
-                return OpenHDS.HierarchyItems.CONTENT_TYPE;
-            case HIERARCHYITEM_ID:
-                return OpenHDS.HierarchyItems.CONTENT_ITEM_TYPE;
-            case VISITS:
-                return OpenHDS.Visits.CONTENT_TYPE;
-            case VISIT_ID:
-                return OpenHDS.Visits.CONTENT_ITEM_TYPE;
-            case RELATIONSHIPS:
-                return OpenHDS.Relationships.CONTENT_TYPE;
-            case RELATIONSHIP_ID:
-                return OpenHDS.Relationships.CONTENT_ITEM_TYPE;
-            case FIELDWORKERS:
-                return OpenHDS.FieldWorkers.CONTENT_TYPE;
-            case FIELDWORKER_ID:
-                return OpenHDS.FieldWorkers.CONTENT_ITEM_TYPE;
-            case SOCIALGROUPS:
-                return OpenHDS.SocialGroups.CONTENT_TYPE;
-            case SOCIALGROUP_ID:
-                return OpenHDS.SocialGroups.CONTENT_ITEM_TYPE;
-            case MEMBERSHIPS:
-                return OpenHDS.Memberships.CONTENT_TYPE;
-            case MEMBERSHIPS_ID:
-                return OpenHDS.Memberships.CONTENT_ITEM_TYPE;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+        int code = sUriMatcher.match(uri);
+        if (!codeToContentType.containsKey(code)) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        return (codeToContentType.get(code));
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues initialValues) {
-        String table;
-        Uri contentUriBase;
-
-        switch (sUriMatcher.match(uri)) {
-            case INDIVIDUALS:
-                table = OpenHDS.Individuals.TABLE_NAME;
-                contentUriBase = OpenHDS.Individuals.CONTENT_ID_URI_BASE;
-                break;
-            case LOCATIONS:
-                table = OpenHDS.Locations.TABLE_NAME;
-                contentUriBase = OpenHDS.Locations.CONTENT_ID_URI_BASE;
-                break;
-            case HIERARCHYITEMS:
-                table = OpenHDS.HierarchyItems.TABLE_NAME;
-                contentUriBase = OpenHDS.HierarchyItems.CONTENT_ID_URI_BASE;
-                break;
-            case VISITS:
-                table = OpenHDS.Visits.TABLE_NAME;
-                contentUriBase = OpenHDS.Visits.CONTENT_ID_URI_BASE;
-                break;
-            case RELATIONSHIPS:
-                table = OpenHDS.Relationships.TABLE_NAME;
-                contentUriBase = OpenHDS.Relationships.CONTENT_ID_URI_BASE;
-                break;
-            case FIELDWORKERS:
-                table = OpenHDS.FieldWorkers.TABLE_NAME;
-                contentUriBase = OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE;
-                break;
-            case SOCIALGROUPS:
-                table = OpenHDS.SocialGroups.TABLE_NAME;
-                contentUriBase = OpenHDS.SocialGroups.CONTENT_ID_URI_BASE;
-                break;
-            case MEMBERSHIPS:
-                table = OpenHDS.Memberships.TABLE_NAME;
-                contentUriBase = OpenHDS.Memberships.CONTENT_ID_URI_BASE;
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+        int code = sUriMatcher.match(uri);
+        if (!codeToTableName.containsKey(code)) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        String table = codeToTableName.get(code);
+
+        if (!codeToUriBase.containsKey(code)) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+        Uri contentUriBase = codeToUriBase.get(code);
 
         ContentValues values;
-
         if (initialValues != null) {
             values = new ContentValues(initialValues);
         } else {
             values = new ContentValues();
         }
 
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase(passwordHelper.getPassword());
+        SQLiteDatabase db = databaseHelper.getWritableDatabase(passwordHelper.getPassword());
 
         long rowId = db.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
         if (rowId > 0) {
-            Uri noteUri = ContentUris.withAppendedId(contentUriBase, rowId);
-            getContext().getContentResolver().notifyChange(noteUri, null);
-            return noteUri;
+            getContext().getContentResolver().notifyChange(contentUriBase, null);
+            return contentUriBase;
         }
 
         throw new SQLException("Failed to insert row into " + uri + " for content " + values);
@@ -655,198 +218,29 @@ public class OpenHDSProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase(passwordHelper.getPassword());
-        String finalWhere;
-
-        int count;
-
-        switch (sUriMatcher.match(uri)) {
-            case INDIVIDUALS:
-                count = db.delete(OpenHDS.Individuals.TABLE_NAME, where, whereArgs);
-                break;
-            case INDIVIDUAL_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Individuals.NOTE_ID_PATH_POSITION, where);
-                count = db.delete(OpenHDS.Individuals.TABLE_NAME, finalWhere,
-                        whereArgs);
-                break;
-            case LOCATIONS:
-                count = db.delete(OpenHDS.Locations.TABLE_NAME, where, whereArgs);
-                break;
-            case LOCATION_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Locations.NOTE_ID_PATH_POSITION, where);
-                count = db.delete(OpenHDS.Locations.TABLE_NAME, finalWhere,
-                        whereArgs);
-                break;
-            case HIERARCHYITEMS:
-                count = db.delete(OpenHDS.HierarchyItems.TABLE_NAME, where,
-                        whereArgs);
-                break;
-            case HIERARCHYITEM_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.HierarchyItems.NOTE_ID_PATH_POSITION, where);
-                count = db.delete(OpenHDS.HierarchyItems.TABLE_NAME, finalWhere,
-                        whereArgs);
-                break;
-            case VISITS:
-                count = db.delete(OpenHDS.Visits.TABLE_NAME, where, whereArgs);
-                break;
-            case VISIT_ID:
-                finalWhere = buildFinalWhere(uri, OpenHDS.Visits.ID_PATH_POSITION,
-                        where);
-                count = db.delete(OpenHDS.Visits.TABLE_NAME, finalWhere, whereArgs);
-                break;
-            case RELATIONSHIPS:
-                count = db.delete(OpenHDS.Relationships.TABLE_NAME, where,
-                        whereArgs);
-                break;
-            case RELATIONSHIP_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Relationships.ID_PATH_POSITION, where);
-                count = db.delete(OpenHDS.Relationships.TABLE_NAME, finalWhere,
-                        whereArgs);
-                break;
-            case FIELDWORKERS:
-                count = db
-                        .delete(OpenHDS.FieldWorkers.TABLE_NAME, where, whereArgs);
-                break;
-            case FIELDWORKER_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.FieldWorkers.ID_PATH_POSITION, where);
-                count = db.delete(OpenHDS.FieldWorkers.TABLE_NAME, finalWhere,
-                        whereArgs);
-                break;
-            case SOCIALGROUPS:
-                count = db
-                        .delete(OpenHDS.SocialGroups.TABLE_NAME, where, whereArgs);
-                break;
-            case SOCIALGROUP_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.SocialGroups.ID_PATH_POSITION, where);
-                count = db.delete(OpenHDS.SocialGroups.TABLE_NAME, finalWhere,
-                        whereArgs);
-                break;
-            case MEMBERSHIPS:
-                count = db.delete(OpenHDS.Memberships.TABLE_NAME, where, whereArgs);
-                break;
-            case MEMBERSHIPS_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Memberships.ID_PATH_POSITION, where);
-                count = db.delete(OpenHDS.Memberships.TABLE_NAME, finalWhere,
-                        whereArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+        int code = sUriMatcher.match(uri);
+        if (!codeToTableName.containsKey(code)) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        String table = codeToTableName.get(code);
 
+        SQLiteDatabase db = databaseHelper.getWritableDatabase(passwordHelper.getPassword());
+        int count = db.delete(table, where, whereArgs);
         getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
     }
 
-    private String buildFinalWhere(Uri uri, int pathPosition, String where) {
-        String finalWhere;
-        finalWhere = BaseColumns._ID + " = "
-                + uri.getPathSegments().get(pathPosition);
-
-        if (where != null) {
-            finalWhere = finalWhere + " AND " + where;
-        }
-        return finalWhere;
-    }
-
     @Override
-    public int update(Uri uri, ContentValues values, String where,
-                      String[] whereArgs) {
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase(passwordHelper.getPassword());
-        int count;
-        String finalWhere;
-
-        switch (sUriMatcher.match(uri)) {
-            case INDIVIDUALS:
-                count = db.update(OpenHDS.Individuals.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case INDIVIDUAL_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Individuals.NOTE_ID_PATH_POSITION, where);
-                count = db.update(OpenHDS.Individuals.TABLE_NAME, values,
-                        finalWhere, whereArgs);
-                break;
-            case LOCATIONS:
-                count = db.update(OpenHDS.Locations.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case LOCATION_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Locations.NOTE_ID_PATH_POSITION, where);
-                count = db.update(OpenHDS.Locations.TABLE_NAME, values, finalWhere,
-                        whereArgs);
-                break;
-            case HIERARCHYITEMS:
-                count = db.update(OpenHDS.HierarchyItems.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case HIERARCHYITEM_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.HierarchyItems.NOTE_ID_PATH_POSITION, where);
-                count = db.update(OpenHDS.HierarchyItems.TABLE_NAME, values,
-                        finalWhere, whereArgs);
-                break;
-            case VISITS:
-                count = db.update(OpenHDS.Visits.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case VISIT_ID:
-                finalWhere = buildFinalWhere(uri, OpenHDS.Visits.ID_PATH_POSITION,
-                        where);
-                count = db.update(OpenHDS.Visits.TABLE_NAME, values, finalWhere,
-                        whereArgs);
-                break;
-            case RELATIONSHIPS:
-                count = db.update(OpenHDS.Relationships.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case RELATIONSHIP_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Relationships.ID_PATH_POSITION, where);
-                count = db.update(OpenHDS.Relationships.TABLE_NAME, values,
-                        finalWhere, whereArgs);
-                break;
-            case FIELDWORKERS:
-                count = db.update(OpenHDS.FieldWorkers.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case FIELDWORKER_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.FieldWorkers.ID_PATH_POSITION, where);
-                count = db.update(OpenHDS.FieldWorkers.TABLE_NAME, values,
-                        finalWhere, whereArgs);
-                break;
-            case SOCIALGROUPS:
-                count = db.update(OpenHDS.SocialGroups.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case SOCIALGROUP_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.SocialGroups.ID_PATH_POSITION, where);
-                count = db.update(OpenHDS.SocialGroups.TABLE_NAME, values,
-                        finalWhere, whereArgs);
-                break;
-            case MEMBERSHIPS:
-                count = db.update(OpenHDS.Memberships.TABLE_NAME, values, where,
-                        whereArgs);
-                break;
-            case MEMBERSHIPS_ID:
-                finalWhere = buildFinalWhere(uri,
-                        OpenHDS.Memberships.ID_PATH_POSITION, where);
-                count = db.update(OpenHDS.Memberships.TABLE_NAME, values,
-                        finalWhere, whereArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
+    public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
+        int code = sUriMatcher.match(uri);
+        if (!codeToTableName.containsKey(code)) {
+            throw new IllegalArgumentException("Unknown URI " + uri);
         }
+        String table = codeToTableName.get(code);
+
+        SQLiteDatabase db = databaseHelper.getWritableDatabase(passwordHelper.getPassword());
+        int count = db.update(table, values, where, whereArgs);
         getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
@@ -860,265 +254,142 @@ public class OpenHDSProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE "
-                    + OpenHDS.Individuals.TABLE_NAME
-                    + " ("
-                    + OpenHDS.Individuals._ID
-                    + " INTEGER,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID
-                    + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_END_TYPE
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY
-                    + " TEXT,"
-                    + OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID
-                    + " TEXT);");
-
-            db.execSQL("CREATE INDEX INDIVIDUAL_UUID_INDEX ON " + OpenHDS.Individuals.TABLE_NAME +
-                    "("+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID + ") ; ");
-
-            db.execSQL("CREATE INDEX INDIVIDUAL_EXTID_INDEX ON " + OpenHDS.Individuals.TABLE_NAME +
-                    "("+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID + ") ; ");
-
-            db.execSQL("CREATE INDEX INDIVIDUAL_RESIDENCY_INDEX ON " + OpenHDS.Individuals.TABLE_NAME +
-                    "("+ OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID + ") ; ");
-
+            db.execSQL("CREATE TABLE " + OpenHDS.Individuals.TABLE_NAME + " ("
+                    + OpenHDS.Individuals._ID + " INTEGER,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.EXT_ID + " TEXT,"
+                    + OpenHDS.Individuals.FIRST_NAME + " TEXT,"
+                    + OpenHDS.Individuals.MIDDLE_NAME + " TEXT,"
+                    + OpenHDS.Individuals.LAST_NAME + " TEXT,"
+                    + OpenHDS.Individuals.DOB + " TEXT,"
+                    + OpenHDS.Individuals.GENDER + " TEXT,"
+                    + OpenHDS.Individuals.FATHER + " TEXT,"
+                    + OpenHDS.Individuals.MOTHER + " TEXT);");
+            db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.UUID));
+            db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.EXT_ID));
+            db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.FIRST_NAME));
+            db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.LAST_NAME));
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " ("
                     + OpenHDS.Locations._ID + " INTEGER,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_EXTID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_UUID
-                    + " TEXT NOT NULL PRIMARY KEY,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_LATITUDE + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME
-                    + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE
-                    + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME
-                    + " TEXT,"
-                    + OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME
-                    + " INT," + OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER
-                    + " INT," + OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_HAS_RECIEVED_BEDNETS
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_SPRAYING_EVALUATION
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_EVALUATION_STATUS
-                    + " TEXT," + OpenHDS.Locations.COLUMN_LOCATION_NAME
-                    + " TEXT NOT NULL);");
+                    + OpenHDS.Locations.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Locations.EXT_ID + " TEXT NOT NULL,"
+                    + OpenHDS.Locations.NAME + " TEXT NOT NULL,"
+                    + OpenHDS.Locations.LATITUDE + " TEXT,"
+                    + OpenHDS.Locations.LONGITUDE + " TEXT,"
+                    + OpenHDS.Locations.LOCATION_HIERARCHY_UUID + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.LOCATION_HIERARCHY_UUID));
+            db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.EXT_ID));
+            db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.NAME));
 
-            db.execSQL("CREATE INDEX LOCATION_EXTID_INDEX ON " + OpenHDS.Locations.TABLE_NAME +
-                    "("+ OpenHDS.Locations.COLUMN_LOCATION_EXTID + ") ; ");
+            db.execSQL("CREATE TABLE " + OpenHDS.LocationHierarchies.TABLE_NAME + " ("
+                    + OpenHDS.LocationHierarchies._ID + " INTEGER,"
+                    + OpenHDS.LocationHierarchies.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.LocationHierarchies.EXT_ID + " TEXT NOT NULL,"
+                    + OpenHDS.LocationHierarchies.LOCATION_HIERARCHY_LEVEL_UUID + " TEXT NOT NULL,"
+                    + OpenHDS.LocationHierarchies.NAME + " TEXT NOT NULL,"
+                    + OpenHDS.LocationHierarchies.PARENT_UUID + " TEXT);");
+            db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.UUID));
+            db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.PARENT_UUID));
+            db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.LOCATION_HIERARCHY_LEVEL_UUID));
 
-            db.execSQL("CREATE INDEX LOCATION_HIERARCHY_UUID_INDEX ON " + OpenHDS.Locations.TABLE_NAME +
-                    "("+ OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID + ") ; ");
-
-            db.execSQL("CREATE INDEX LOCATION_UUID_INDEX ON " + OpenHDS.Locations.TABLE_NAME +
-                    "("+ OpenHDS.Locations.COLUMN_LOCATION_UUID + ") ; ");
-
-
-            db.execSQL("CREATE TABLE " + OpenHDS.HierarchyItems.TABLE_NAME
-                    + " (" + OpenHDS.HierarchyItems._ID
-                    + " INTEGER,"
-                    + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID
-                    + " TEXT NOT NULL PRIMARY KEY,"
-                    + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_LEVEL
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_NAME
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT
-                    + " TEXT NOT NULL);");
-
-            db.execSQL("CREATE INDEX LOCATIONHIERARCHY_PARENT_INDEX ON " + OpenHDS.HierarchyItems.TABLE_NAME +
-                    "("+ OpenHDS.HierarchyItems.COLUMN_HIERARCHY_PARENT + ") ; ");
-
-            db.execSQL("CREATE INDEX LOCATIONHIERARCHY_UUID_INDEX ON " + OpenHDS.HierarchyItems.TABLE_NAME +
-                    "("+ OpenHDS.HierarchyItems.COLUMN_HIERARCHY_UUID + ") ; ");
-
-            db.execSQL("CREATE INDEX LOCATIONHIERARCHY_EXTID_INDEX ON " + OpenHDS.HierarchyItems.TABLE_NAME +
-                    "("+ OpenHDS.HierarchyItems.COLUMN_HIERARCHY_EXTID + ") ; ");
+            db.execSQL("CREATE TABLE " + OpenHDS.LocationHierarchyLevels.TABLE_NAME + " ("
+                    + OpenHDS.LocationHierarchyLevels._ID + " INTEGER,"
+                    + OpenHDS.LocationHierarchyLevels.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.LocationHierarchyLevels.NAME + " TEXT NOT NULL,"
+                    + OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER + " INTEGER);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Visits.TABLE_NAME + " ("
                     + OpenHDS.Visits._ID + " INTEGER,"
-                    + OpenHDS.Visits.COLUMN_VISIT_UUID
-                    + " TEXT NOT NULL PRIMARY KEY,"
-                    + OpenHDS.Visits.COLUMN_VISIT_DATE + " TEXT NOT NULL,"
-                    + OpenHDS.Visits.COLUMN_VISIT_EXTID + " TEXT NOT NULL,"
-                    + OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID
-                    + " TEXT NOT NULL);");
+                    + OpenHDS.Visits.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Visits.EXT_ID + " TEXT NOT NULL,"
+                    + OpenHDS.Visits.DATE + " TEXT NOT NULL,"
+                    + OpenHDS.Visits.FIELD_WORKER_UUID + " TEXT NOT NULL,"
+                    + OpenHDS.Visits.LOCATION_UUID + " TEXT);");
+            db.execSQL(indexStatement(OpenHDS.Visits.TABLE_NAME, OpenHDS.Visits.UUID));
+            db.execSQL(indexStatement(OpenHDS.Visits.TABLE_NAME, OpenHDS.Visits.LOCATION_UUID));
 
-            db.execSQL("CREATE INDEX VISIT_UUID_INDEX ON " + OpenHDS.Visits.TABLE_NAME +
-                    "("+ OpenHDS.Visits.COLUMN_VISIT_UUID + ") ; ");
+            db.execSQL("CREATE TABLE " + OpenHDS.Relationships.TABLE_NAME + " ("
+                    + OpenHDS.Relationships._ID + " INTEGER,"
+                    + OpenHDS.Relationships.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Relationships.INDIVIDUAL_A_UUID + " TEXT NOT NULL,"
+                    + OpenHDS.Relationships.INDIVIDUAL_B_UUID + " TEXT NOT NULL,"
+                    + OpenHDS.Relationships.TYPE + " TEXT NOT NULL,"
+                    + OpenHDS.Relationships.START_DATE + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.UUID));
+            db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.INDIVIDUAL_A_UUID));
+            db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.INDIVIDUAL_B_UUID));
 
-            db.execSQL("CREATE INDEX VISIT_EXTID_INDEX ON " + OpenHDS.Visits.TABLE_NAME +
-                    "("+ OpenHDS.Visits.COLUMN_VISIT_EXTID + ") ; ");
-
-            db.execSQL("CREATE INDEX VISIT_LOCATION_INDEX ON " + OpenHDS.Visits.TABLE_NAME +
-                    "("+ OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID + ") ; ");
-
-            db.execSQL("CREATE TABLE " + OpenHDS.Relationships.TABLE_NAME
-                    + " (" + OpenHDS.Relationships._ID
-                    + " INTEGER,"
-                    + OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID
-                    + " TEXT NOT NULL PRIMARY KEY,"
-                    + OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Relationships.COLUMN_RELATIONSHIP_TYPE
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Relationships.COLUMN_RELATIONSHIP_STARTDATE
-                    + " TEXT NOT NULL);");
-
-            db.execSQL("CREATE INDEX RELATIONSHIP_INDIVIDUAL_A_INDEX ON " + OpenHDS.Relationships.TABLE_NAME +
-                    "("+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_A + ") ; ");
-
-            db.execSQL("CREATE INDEX RELATIONSHIP_INDIVIDUAL_B_INDEX ON " + OpenHDS.Relationships.TABLE_NAME +
-                    "("+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_INDIVIDUAL_B + ") ; ");
-
-            db.execSQL("CREATE INDEX RELATIONSHIP_UUID_INDEX ON " + OpenHDS.Relationships.TABLE_NAME +
-                    "("+ OpenHDS.Relationships.COLUMN_RELATIONSHIP_UUID + ") ; ");
-
+            db.execSQL("CREATE TABLE " + OpenHDS.Users.TABLE_NAME + " ("
+                    + OpenHDS.Users._ID + " INTEGER,"
+                    + OpenHDS.Users.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Users.USERNAME + " TEXT NOT NULL,"
+                    + OpenHDS.Users.FIRST_NAME + " TEXT,"
+                    + OpenHDS.Users.LAST_NAME + " TEXT,"
+                    + OpenHDS.Users.PASSWORD_HASH + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.Users.TABLE_NAME, OpenHDS.Users.UUID));
+            db.execSQL(indexStatement(OpenHDS.Users.TABLE_NAME, OpenHDS.Users.USERNAME));
 
             db.execSQL("CREATE TABLE " + OpenHDS.FieldWorkers.TABLE_NAME + " ("
                     + OpenHDS.FieldWorkers._ID + " INTEGER,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID
-                    + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_FIRST_NAME
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_LAST_NAME
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD
-                    + " TEXT NOT NULL);");
+                    + OpenHDS.FieldWorkers.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.FieldWorkers.FIELD_WORKER_ID + " TEXT NOT NULL,"
+                    + OpenHDS.FieldWorkers.FIRST_NAME + " TEXT,"
+                    + OpenHDS.FieldWorkers.LAST_NAME + " TEXT,"
+                    + OpenHDS.FieldWorkers.PASSWORD_HASH + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.UUID));
+            db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.FIRST_NAME));
+            db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.LAST_NAME));
+            db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.FIELD_WORKER_ID));
 
-            db.execSQL("CREATE INDEX FIELDWORKERS_EXTID_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
-                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_EXTID + ") ; ");
+            db.execSQL("CREATE TABLE " + OpenHDS.SocialGroups.TABLE_NAME + " ("
+                    + OpenHDS.SocialGroups._ID + " INTEGER,"
+                    + OpenHDS.SocialGroups.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.SocialGroups.EXT_ID + " TEXT NOT NULL,"
+                    + OpenHDS.SocialGroups.GROUP_NAME + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.SocialGroups.TABLE_NAME, OpenHDS.SocialGroups.UUID));
 
-            db.execSQL("CREATE INDEX FIELDWORKERS_UUID_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
-                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_UUID + ") ; ");
+            db.execSQL("CREATE TABLE " + OpenHDS.Memberships.TABLE_NAME + " ("
+                    + OpenHDS.Memberships._ID + " INTEGER,"
+                    + OpenHDS.Memberships.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Memberships.INDIVIDUAL_UUID + " TEXT NOT NULL,"
+                    + OpenHDS.Memberships.SOCIAL_GROUP_UUID + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.UUID));
+            db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.INDIVIDUAL_UUID));
+            db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.SOCIAL_GROUP_UUID));
 
-            db.execSQL("CREATE INDEX FIELDWORKERS_ID_PREFIX_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
-                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_ID_PREFIX + ") ; ");
+            db.execSQL("CREATE TABLE " + OpenHDS.Residencies.TABLE_NAME + " ("
+                    + OpenHDS.Residencies._ID + " INTEGER,"
+                    + OpenHDS.Residencies.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Residencies.INDIVIDUAL_UUID + " TEXT NOT NULL,"
+                    + OpenHDS.Residencies.END_TYPE + " TEXT,"
+                    + OpenHDS.Residencies.LOCATION_UUID + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.UUID));
+            db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.INDIVIDUAL_UUID));
+            db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.LOCATION_UUID));
+        }
 
-            db.execSQL("CREATE INDEX FIELDWORKERS_PASSWORD_INDEX ON " + OpenHDS.FieldWorkers.TABLE_NAME +
-                    "("+ OpenHDS.FieldWorkers.COLUMN_FIELD_WORKER_PASSWORD + ") ; ");
+        private static String indexStatement(String tableName, String columnName) {
+            return "CREATE INDEX " + tableName + "_" + columnName
+                    + " ON " + tableName + "(" + columnName + ") ; ";
 
-            db.execSQL("CREATE TABLE "
-                    + OpenHDS.SocialGroups.TABLE_NAME
-                    + " ("
-                    + OpenHDS.SocialGroups._ID
-                    + " INTEGER,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID
-                    + " TEXT NOT NULL PRIMARY KEY,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID
-                    + " TEXT,"
-                    + OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_NAME
-                    + " TEXT NOT NULL);");
-
-            db.execSQL("CREATE INDEX SOCIALGROUP_HEAD_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
-                    "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_HEAD_INDIVIDUAL_UUID + ") ; ");
-
-            db.execSQL("CREATE INDEX SOCIALGROUP_EXTID_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
-                    "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_EXTID + ") ; ");
-
-            db.execSQL("CREATE INDEX SOCIALGROUP_UUID_INDEX ON " + OpenHDS.SocialGroups.TABLE_NAME +
-                    "("+ OpenHDS.SocialGroups.COLUMN_SOCIAL_GROUP_UUID + ") ; ");
-
-
-
-            db.execSQL("CREATE TABLE "
-                    + OpenHDS.Memberships.TABLE_NAME
-                    + " ("
-                    + OpenHDS.Memberships._ID
-                    + " INTEGER,"
-                    + OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID
-                    + " TEXT NOT NULL PRIMARY KEY,"
-                    + OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID
-                    + " TEXT NOT NULL,"
-                    + OpenHDS.Memberships.COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD
-                    + " TEXT NOT NULL);");
-
-            db.execSQL("CREATE INDEX MEMBERSHIP_INDIVIDUAL_INDEX ON " + OpenHDS.Memberships.TABLE_NAME +
-                    "("+ OpenHDS.Memberships.COLUMN_INDIVIDUAL_UUID + ") ; ");
-
-            db.execSQL("CREATE INDEX MEMBERSHIP_SOCIALGROUP_INDEX ON " + OpenHDS.Memberships.TABLE_NAME +
-                    "("+ OpenHDS.Memberships.COLUMN_SOCIAL_GROUP_UUID + ") ; ");
-
-            db.execSQL("CREATE INDEX MEMBERSHIP_UUID_INDEX ON " + OpenHDS.Memberships.TABLE_NAME +
-                    "("+ OpenHDS.Memberships.COLUMN_MEMBERSHIP_UUID + ") ; ");
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Memberships.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS "
-                    + OpenHDS.SocialGroups.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS "
-                    + OpenHDS.FieldWorkers.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS "
-                    + OpenHDS.Relationships.TABLE_NAME);
+            Log.w(TAG, "Upgrading database from " + oldVersion + " to " + newVersion
+                    + ", which will destroy all old data.");
             db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Individuals.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Visits.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS "
-                    + OpenHDS.HierarchyItems.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Locations.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.LocationHierarchies.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.LocationHierarchyLevels.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Visits.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Relationships.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Users.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.FieldWorkers.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.SocialGroups.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Memberships.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + OpenHDS.Residencies.TABLE_NAME);
             onCreate(db);
         }
     }

@@ -16,11 +16,11 @@ public class RelationshipParser extends EntityParser<Relationship> {
     protected Relationship toEntity(DataPage dataPage) {
         Relationship relationship = new Relationship();
 
-        relationship.setIndividualAUuid(dataPage.getFirstString(asList(pageName, "individualA", "uuid")));
-        relationship.setIndividualBUuid(dataPage.getFirstString(asList(pageName, "individualB", "uuid")));
-        relationship.setStartDate(dataPage.getFirstString(asList(pageName, "startDate")));
-        relationship.setType(dataPage.getFirstString(asList(pageName, "aIsToB")));
-        relationship.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
+        relationship.setIndividualA(dataPage.getFirstString(asList("individualA", "uuid")));
+        relationship.setIndividualB(dataPage.getFirstString(asList("individualB", "uuid")));
+        relationship.setStartDate(dataPage.getFirstString(asList("startDate")));
+        relationship.setType(dataPage.getFirstString(asList("relationshipType")));
+        relationship.setUuid(dataPage.getFirstString(asList("uuid")));
 
         return relationship;
     }

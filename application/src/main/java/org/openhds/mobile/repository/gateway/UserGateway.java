@@ -1,0 +1,74 @@
+package org.openhds.mobile.repository.gateway;
+
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
+
+import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.model.core.User;
+import org.openhds.mobile.repository.Converter;
+import org.openhds.mobile.repository.DataWrapper;
+import org.openhds.mobile.repository.Query;
+
+import static org.openhds.mobile.repository.RepositoryUtils.extractString;
+
+
+/**
+ * Convert User to and from database.  User-specific queries.
+ */
+public class UserGateway extends Gateway<User> {
+
+    public UserGateway() {
+        super(OpenHDS.Users.CONTENT_ID_URI_BASE, OpenHDS.Users.UUID, new UserConverter());
+    }
+
+    public Query findByUsername(String username) {
+        return new Query(tableUri, OpenHDS.Users.USERNAME, username, OpenHDS.Users.USERNAME);
+    }
+
+    private static class UserConverter implements Converter<User> {
+
+        @Override
+        public User fromCursor(Cursor cursor) {
+            User user = new User();
+
+            user.setUuid(extractString(cursor, OpenHDS.Users.UUID));
+            user.setUsername(extractString(cursor, OpenHDS.Users.USERNAME));
+            user.setFirstName(extractString(cursor, OpenHDS.Users.FIRST_NAME));
+            user.setLastName(extractString(cursor, OpenHDS.Users.LAST_NAME));
+            user.setPasswordHash(extractString(cursor, OpenHDS.Users.PASSWORD_HASH));
+
+            return user;
+        }
+
+        @Override
+        public ContentValues toContentValues(User user) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(OpenHDS.Users.UUID, user.getUuid());
+            contentValues.put(OpenHDS.Users.USERNAME, user.getUsername());
+            contentValues.put(OpenHDS.Users.PASSWORD_HASH, user.getPasswordHash());
+            contentValues.put(OpenHDS.Users.LAST_NAME, user.getLastName());
+            contentValues.put(OpenHDS.Users.FIRST_NAME, user.getFirstName());
+
+            return contentValues;
+        }
+
+        @Override
+        public String getId(User user) {
+            return user.getUuid();
+        }
+
+        @Override
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, User user, String state) {
+            DataWrapper dataWrapper = new DataWrapper();
+
+            dataWrapper.setUuid(user.getUuid());
+            dataWrapper.setExtId(user.getUsername());
+            dataWrapper.setName(user.getFirstName());
+            dataWrapper.setCategory(state);
+
+            return dataWrapper;
+        }
+    }
+}

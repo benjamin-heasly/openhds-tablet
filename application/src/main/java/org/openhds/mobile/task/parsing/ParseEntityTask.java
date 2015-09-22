@@ -18,7 +18,9 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
 
     private static final int BATCH_SIZE = 100;
 
-    private ContentResolver contentResolver;
+    private final ContentResolver contentResolver;
+    private final AbstractPageParser pageParser;
+
     private ParseEntityTaskRequest parseEntityTaskRequest;
     private ProgressListener progressListener;
 
@@ -27,8 +29,12 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
     private DataPage errorPage;
     private Exception lastError;
 
-    public ParseEntityTask(ContentResolver contentResolver) {
+    public ParseEntityTask(ContentResolver contentResolver, AbstractPageParser pageParser) {
         this.contentResolver = contentResolver;
+        this.pageParser = pageParser;
+
+        this.pageParser.setPageHandler(new EntityPageHandler());
+        this.pageParser.setPageErrorHandler(new EntityErrorHandler());
     }
 
     public void setProgressListener(ProgressListener progressListener) {
@@ -50,11 +56,6 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
     @Override
     protected Integer doInBackground(ParseEntityTaskRequest... parseEntityTaskRequests) {
         parseEntityTaskRequest = parseEntityTaskRequests[0];
-
-        // set up a page parser
-        AbstractPageParser pageParser = new JsonPageParser();
-        pageParser.setPageHandler(new EntityPageHandler());
-        pageParser.setPageErrorHandler(new EntityErrorHandler());
 
         // pass input stream to page parser
         try {

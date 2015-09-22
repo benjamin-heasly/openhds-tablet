@@ -5,11 +5,11 @@ import org.openhds.mobile.projectdata.ProjectFormFields;
 
 import java.util.Map;
 
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_EXTID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_UUID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_DATE;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID;
+import static org.openhds.mobile.OpenHDS.Visits.EXT_ID;
+import static org.openhds.mobile.OpenHDS.Visits.UUID;
+import static org.openhds.mobile.OpenHDS.Visits.DATE;
+import static org.openhds.mobile.OpenHDS.Visits.FIELD_WORKER_UUID;
+import static org.openhds.mobile.OpenHDS.Visits.LOCATION_UUID;
 
 public class VisitFormAdapter {
 
@@ -17,15 +17,15 @@ public class VisitFormAdapter {
         Visit visit = new Visit();
 
         visit.setUuid(formInstanceData.get(
-                ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_UUID)));
+                ProjectFormFields.Visits.getFieldNameFromColumn(UUID)));
         visit.setExtId(formInstanceData.get(
-                ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_EXTID)));
+                ProjectFormFields.Visits.getFieldNameFromColumn(EXT_ID)));
         visit.setVisitDate(formInstanceData.get(
-                ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_DATE)));
+                ProjectFormFields.Visits.getFieldNameFromColumn(DATE)));
         visit.setFieldWorkerUuid(formInstanceData.get(
-                ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_FIELDWORKER_UUID)));
+                ProjectFormFields.Visits.getFieldNameFromColumn(FIELD_WORKER_UUID)));
         visit.setLocationUuid(formInstanceData.get(
-                ProjectFormFields.Visits.getFieldNameFromColumn(COLUMN_VISIT_LOCATION_UUID)));
+                ProjectFormFields.Visits.getFieldNameFromColumn(LOCATION_UUID)));
 
         return visit;
     }

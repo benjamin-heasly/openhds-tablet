@@ -1,6 +1,7 @@
 package org.openhds.mobile.projectdata.QueryHelpers;
 
 import android.content.ContentResolver;
+
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
@@ -91,12 +92,12 @@ public class CensusQueryHelper implements QueryHelper {
         } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             return locationGateway.getQueryResultList(contentResolver,
-                    locationGateway.findByHierarchyDescendingBuildingNumber(qr.getUuid()), childState);
+                    locationGateway.findByHierarchy(qr.getUuid()), childState);
 
         } else if (state.equals(ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             return individualGateway.getQueryResultList(contentResolver,
-                    individualGateway.findByResidency(qr.getUuid()), childState);
+                    individualGateway.findAll(), childState);
         }
 
         return new ArrayList<DataWrapper>();

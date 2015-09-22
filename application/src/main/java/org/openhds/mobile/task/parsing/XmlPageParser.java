@@ -72,7 +72,7 @@ public class XmlPageParser extends AbstractPageParser {
                     nPages++;
                     pageElementName = pullParser.getName();
                     elementPath = new ArrayList<>();
-                    elementPath.add(pageElementName);
+                    //elementPath.add(pageElementName);
                     dataPage = new DataPage(rootElementName, pageElementName, pullParser.getPositionDescription());
 
                 } else if (2 < depth) {

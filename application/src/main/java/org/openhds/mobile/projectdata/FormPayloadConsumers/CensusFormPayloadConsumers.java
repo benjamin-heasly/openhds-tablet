@@ -1,6 +1,7 @@
 package org.openhds.mobile.projectdata.FormPayloadConsumers;
 
 import android.content.ContentResolver;
+
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.model.core.Location;
@@ -47,7 +48,6 @@ public class CensusFormPayloadConsumers {
             Map<String, String> formPayLoad, NavigateActivity navigateActivity) {
 
         Individual individual = IndividualFormAdapter.fromForm(formPayLoad);
-        individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
 
         IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
         ContentResolver contentResolver = navigateActivity.getContentResolver();
@@ -81,7 +81,6 @@ public class CensusFormPayloadConsumers {
                 sector.setParentUuid(mapArea.getUuid());
                 sector.setExtId(sectorExtId);
                 sector.setName(sectorName);
-                sector.setLevel(ProjectActivityBuilder.BiokoHierarchy.SECTOR_STATE);
                 locationHierarchyGateway.insertOrUpdate(contentResolver,sector);
 
                 formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NEEDS_REVIEW);
@@ -111,8 +110,6 @@ public class CensusFormPayloadConsumers {
 
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
-
-            location.setLocationEvaluationStatus(formPayload.get(ProjectFormFields.Locations.EVALUATION));
 
             locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
 
@@ -152,15 +149,6 @@ public class CensusFormPayloadConsumers {
             // get head of household by household id
             SocialGroup socialGroup = socialGroupGateway.getFirst(contentResolver,
                     socialGroupGateway.findByExtId(selectedLocation.getExtId()));
-
-
-            Individual currentHeadOfHousehold = individualGateway.getFirst(contentResolver,
-                    individualGateway.findById(socialGroup.getGroupHeadUuid()));
-
-            // INSERT or UPDATE RELATIONSHIP
-            RelationshipGateway relationshipGateway = GatewayRegistry.getRelationshipGateway();
-            Relationship relationship = new Relationship(individual, currentHeadOfHousehold, relationshipType, startDate, formPayload.get(ProjectFormFields.Individuals.RELATIONSHIP_UUID));
-            relationshipGateway.insertOrUpdate(contentResolver, relationship);
 
             // INSERT or UPDATE MEMBERSHIP
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();

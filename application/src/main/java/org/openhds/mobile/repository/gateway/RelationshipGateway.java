@@ -3,13 +3,18 @@ package org.openhds.mobile.repository.gateway;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.core.Relationship;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
-import static org.openhds.mobile.OpenHDS.Relationships.*;
+import static org.openhds.mobile.OpenHDS.Relationships.INDIVIDUAL_A_UUID;
+import static org.openhds.mobile.OpenHDS.Relationships.INDIVIDUAL_B_UUID;
+import static org.openhds.mobile.OpenHDS.Relationships.START_DATE;
+import static org.openhds.mobile.OpenHDS.Relationships.TYPE;
+import static org.openhds.mobile.OpenHDS.Relationships.UUID;
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 import static org.openhds.mobile.repository.RepositoryUtils.insert;
@@ -24,7 +29,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.update;
 public class RelationshipGateway extends Gateway<Relationship> {
 
     public RelationshipGateway() {
-        super(OpenHDS.Relationships.CONTENT_ID_URI_BASE, COLUMN_RELATIONSHIP_UUID, new RelationshipConverter());
+        super(OpenHDS.Relationships.CONTENT_ID_URI_BASE, UUID, new RelationshipConverter());
     }
 
     // true if relationship was inserted, false if updated
@@ -33,15 +38,14 @@ public class RelationshipGateway extends Gateway<Relationship> {
     public boolean insertOrUpdate(ContentResolver contentResolver, Relationship relationship) {
         ContentValues contentValues = converter.toContentValues(relationship);
 
-        String individualAId = relationship.getIndividualAUuid();
-        String individualBId = relationship.getIndividualBUuid();
-        Relationship existingRelationship = getFirst(contentResolver,
-                findByBothIndividuals(individualAId, individualBId));
+        String individualAId = relationship.getIndividualA();
+        String individualBId = relationship.getIndividualB();
+        Relationship existingRelationship = getFirst(contentResolver, findByBothIndividuals(individualAId, individualBId));
 
         if (null == existingRelationship) {
             return null != insert(contentResolver, tableUri, contentValues);
         } else {
-            final String[] columnNames = {COLUMN_RELATIONSHIP_INDIVIDUAL_A, COLUMN_RELATIONSHIP_INDIVIDUAL_B};
+            final String[] columnNames = {INDIVIDUAL_A_UUID, INDIVIDUAL_B_UUID};
             final String[] columnValues = {individualAId, individualBId};
             update(contentResolver, tableUri, contentValues, columnNames, columnValues);
             return false;
@@ -49,11 +53,10 @@ public class RelationshipGateway extends Gateway<Relationship> {
     }
 
     public Query findByBothIndividuals(String individualAId, String individualBId) {
-        final String[] columnNames = {COLUMN_RELATIONSHIP_INDIVIDUAL_A, COLUMN_RELATIONSHIP_INDIVIDUAL_B};
+        final String[] columnNames = {INDIVIDUAL_A_UUID, INDIVIDUAL_B_UUID};
         final String[] columnValues = {individualAId, individualBId};
-        return new Query(tableUri, columnNames, columnValues, COLUMN_RELATIONSHIP_INDIVIDUAL_A, EQUALS);
+        return new Query(tableUri, columnNames, columnValues, INDIVIDUAL_A_UUID, EQUALS);
     }
-
 
     private static class RelationshipConverter implements Converter<Relationship> {
 
@@ -61,11 +64,11 @@ public class RelationshipGateway extends Gateway<Relationship> {
         public Relationship fromCursor(Cursor cursor) {
             Relationship relationship = new Relationship();
 
-            relationship.setUuid(extractString(cursor, COLUMN_RELATIONSHIP_UUID));
-            relationship.setIndividualAUuid(extractString(cursor, COLUMN_RELATIONSHIP_INDIVIDUAL_A));
-            relationship.setIndividualBUuid(extractString(cursor, COLUMN_RELATIONSHIP_INDIVIDUAL_B));
-            relationship.setStartDate(extractString(cursor, COLUMN_RELATIONSHIP_STARTDATE));
-            relationship.setType(extractString(cursor, COLUMN_RELATIONSHIP_TYPE));
+            relationship.setUuid(extractString(cursor, UUID));
+            relationship.setIndividualA(extractString(cursor, INDIVIDUAL_A_UUID));
+            relationship.setIndividualB(extractString(cursor, INDIVIDUAL_B_UUID));
+            relationship.setStartDate(extractString(cursor, START_DATE));
+            relationship.setType(extractString(cursor, TYPE));
 
             return relationship;
         }
@@ -74,11 +77,11 @@ public class RelationshipGateway extends Gateway<Relationship> {
         public ContentValues toContentValues(Relationship relationship) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(COLUMN_RELATIONSHIP_UUID, relationship.getUuid());
-            contentValues.put(COLUMN_RELATIONSHIP_INDIVIDUAL_A, relationship.getIndividualAUuid());
-            contentValues.put(COLUMN_RELATIONSHIP_INDIVIDUAL_B, relationship.getIndividualBUuid());
-            contentValues.put(COLUMN_RELATIONSHIP_STARTDATE, relationship.getStartDate());
-            contentValues.put(COLUMN_RELATIONSHIP_TYPE, relationship.getType());
+            contentValues.put(UUID, relationship.getUuid());
+            contentValues.put(INDIVIDUAL_A_UUID, relationship.getIndividualA());
+            contentValues.put(INDIVIDUAL_B_UUID, relationship.getIndividualB());
+            contentValues.put(START_DATE, relationship.getStartDate());
+            contentValues.put(TYPE, relationship.getType());
 
             return contentValues;
         }

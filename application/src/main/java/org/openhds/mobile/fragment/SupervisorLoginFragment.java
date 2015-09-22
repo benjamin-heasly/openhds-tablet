@@ -17,15 +17,16 @@ import org.openhds.mobile.activity.OpeningActivity;
 import org.openhds.mobile.activity.SupervisorMainActivity;
 import org.openhds.mobile.links.Link;
 import org.openhds.mobile.links.ResourceLinkRegistry;
-import org.openhds.mobile.model.core.Supervisor;
-import org.openhds.mobile.provider.DatabaseAdapter;
-import org.openhds.mobile.task.SupervisorLoginTask;
+import org.openhds.mobile.model.core.User;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.UserGateway;
 import org.openhds.mobile.task.http.HttpTask;
 import org.openhds.mobile.task.http.HttpTaskRequest;
 import org.openhds.mobile.task.http.HttpTaskResponse;
 import org.openhds.mobile.task.parsing.entities.ParseLinksTask;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
@@ -37,7 +38,6 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
     private EditText passwordEditText;
     private String username;
     private String password;
-    private DatabaseAdapter databaseAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,8 +49,6 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
         passwordEditText = (EditText) v.findViewById(R.id.passwordEditText);
         Button loginButton = (Button) v.findViewById(R.id.loginButton);
         loginButton.setOnClickListener(this);
-
-        databaseAdapter = new DatabaseAdapter(getActivity());
 
         return v;
     }
@@ -100,26 +98,32 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
     }
 
     private void deleteSupervisor() {
-        Supervisor user = new Supervisor();
-        user.setName(password);
-        databaseAdapter.deleteSupervisor(user);
+        UserGateway userGateway = GatewayRegistry.getUsesrGateway();
+        User user = userGateway.getFirst(getActivity().getContentResolver(), userGateway.findByUsername(username));
+
+        if (null != user) {
+            userGateway.deleteById(getActivity().getContentResolver(), user.getUuid());
+        }
     }
 
     private void addSupervisor() {
-        Supervisor user = new Supervisor();
-        user.setName(username);
-        user.setPassword(password);
-        databaseAdapter.addSupervisor(user);
+        User user = new User();
+        user.setUsername(username);
+        user.setPasswordHash(password);
+        user.setUuid(UUID.randomUUID().toString());
+        UserGateway userGateway = GatewayRegistry.getUsesrGateway();
+        userGateway.insertOrUpdate(getActivity().getContentResolver(), user);
     }
 
     private void onNotConnected() {
-        // attempt to log in using cached credentials in tablet database
-        SupervisorLoginTask loginTask = new SupervisorLoginTask(
-                databaseAdapter,
-                username,
-                password,
-                new LoginListener());
-        loginTask.execute();
+        UserGateway userGateway = GatewayRegistry.getUsesrGateway();
+        User user = userGateway.getFirst(getActivity().getContentResolver(),userGateway.findByUsername(username));
+
+        if (!password.equals(user.getPasswordHash())) {
+            showLongToast(getActivity(), R.string.supervisor_bad_credentials);
+            return;
+        }
+        launchSupervisorMainActivity();
     }
 
     private void launchSupervisorMainActivity() {
@@ -143,16 +147,6 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
             }
 
             onNotConnected();
-        }
-    }
-
-    private class LoginListener implements SupervisorLoginTask.Listener {
-        public void onAuthenticated() {
-            launchSupervisorMainActivity();
-        }
-
-        public void onBadAuthentication() {
-            showLongToast(getActivity(), R.string.supervisor_bad_credentials);
         }
     }
 

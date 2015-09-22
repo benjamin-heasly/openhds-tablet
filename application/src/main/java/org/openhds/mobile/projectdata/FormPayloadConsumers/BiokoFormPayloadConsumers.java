@@ -20,8 +20,6 @@ public class BiokoFormPayloadConsumers {
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
 
-            location.setHasReceivedBedNets("true");
-
             locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
 
             return new ConsumerResults(false, null, null);
@@ -46,10 +44,6 @@ public class BiokoFormPayloadConsumers {
 
             Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
                     locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
-
-            if (formPayload.containsKey(SPRAY_EVAL_KEY)) {
-                location.setSprayingEvaluation(formPayload.get(SPRAY_EVAL_KEY));
-            }
 
             locationGateway.insertOrUpdate(navigateActivity.getContentResolver(), location);
 

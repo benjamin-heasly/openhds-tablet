@@ -1,6 +1,7 @@
 package org.openhds.mobile.tests.parsing;
 
 import android.test.AndroidTestCase;
+
 import org.openhds.mobile.task.parsing.DataPage;
 import org.openhds.mobile.task.parsing.XmlPageParser;
 
@@ -14,19 +15,17 @@ public class XmlPageParserTest extends AndroidTestCase {
         assertEquals("rootElement", dataPage.getRootName());
         assertEquals("pageElement", dataPage.getPageName());
 
-        assertEquals("page text", dataPage.getFirstString(asList("pageElement")));
+        assertEquals("simple text", dataPage.getFirstString(asList("simple")));
 
-        assertEquals("simple text", dataPage.getFirstString(asList("pageElement", "simple")));
-
-        String spanningText = dataPage.getFirstString(asList("pageElement", "spanning"));
+        String spanningText = dataPage.getFirstString(asList("spanning"));
         assertTrue(spanningText.startsWith("line spanning"));
         assertTrue(spanningText.endsWith("text"));
 
-        assertEquals(1, dataPage.getFirstInt(asList("pageElement", "repeated")));
-        assertEquals(2, dataPage.getIntOccurrence(asList("pageElement", "repeated"), 1));
-        assertEquals(3, dataPage.getIntOccurrence(asList("pageElement", "repeated"), 2));
+        assertEquals(1, dataPage.getFirstInt(asList("repeated")));
+        assertEquals(2, dataPage.getIntOccurrence(asList("repeated"), 1));
+        assertEquals(3, dataPage.getIntOccurrence(asList("repeated"), 2));
 
-        assertEquals("inner text", dataPage.getFirstString(asList("pageElement", "outer", "inner", "simple")));
+        assertEquals("inner text", dataPage.getFirstString(asList("outer", "inner", "simple")));
     }
 
     public void testHappyParse() throws Exception {

@@ -6,13 +6,11 @@ public class LocationHierarchy implements Serializable {
 
     private static final long serialVersionUID = -6370062790248563906L;
 
+    private String uuid;
     private String extId;
     private String name;
     private String parentUuid;
-    private String level;
-    private String uuid;
-
-
+    private String levelUuid;
 
     public String getUuid() {
         return uuid;
@@ -46,12 +44,11 @@ public class LocationHierarchy implements Serializable {
         this.parentUuid = parentUuid;
     }
 
-    public String getLevel() {
-        return level;
+    public String getLevelUuid() {
+        return levelUuid;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setLevelUuid(String levelUuid) {
+        this.levelUuid = levelUuid;
     }
-
 }

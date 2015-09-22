@@ -10,6 +10,7 @@ import org.openhds.mobile.task.http.HttpTask;
 import org.openhds.mobile.task.http.HttpTaskRequest;
 import org.openhds.mobile.task.http.HttpTaskResponse;
 import org.openhds.mobile.task.parsing.DataPage;
+import org.openhds.mobile.task.parsing.JsonPageParser;
 import org.openhds.mobile.task.parsing.ParseEntityTask;
 import org.openhds.mobile.task.parsing.ParseEntityTaskRequest;
 import org.openhds.mobile.task.parsing.entities.ParseLinksTask;
@@ -207,7 +208,7 @@ public class SyncDatabaseHelper {
                 interpretation.getParser(),
                 interpretation.getGateway());
 
-        parseEntityTask = new ParseEntityTask(contentResolver);
+        parseEntityTask = new ParseEntityTask(contentResolver, new JsonPageParser());
         parseEntityTask.setProgressListener(new ParseProgressListener());
         parseEntityTask.execute(parseRequest);
     }

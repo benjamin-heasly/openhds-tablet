@@ -16,25 +16,12 @@ public class LocationParser extends EntityParser<Location> {
     protected Location toEntity(DataPage dataPage) {
         Location location = new Location();
 
-        location.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
-        location.setExtId(dataPage.getFirstString(asList(pageName, "extId")));
-        location.setHierarchyUuid(dataPage.getFirstString(asList(pageName, "locationHierarchy", "uuid")));
-        location.setHierarchyExtId(dataPage.getFirstString(asList(pageName, "locationHierarchy", "extId")));
-        location.setLatitude(dataPage.getFirstString(asList(pageName, "latitude")));
-        location.setLongitude(dataPage.getFirstString(asList(pageName, "longitude")));
-        location.setName(dataPage.getFirstString(asList(pageName, "locationName")));
-        location.setSectorName(dataPage.getFirstString(asList(pageName, "sectorName")));
-        location.setMapAreaName(dataPage.getFirstString(asList(pageName, "mapAreaName")));
-        location.setLocalityName(dataPage.getFirstString(asList(pageName, "localityName")));
-        location.setCommunityName(dataPage.getFirstString(asList(pageName, "communityName")));
-        location.setCommunityCode(dataPage.getFirstString(asList(pageName, "communityCode")));
-        location.setBuildingNumber(dataPage.getFirstInt(asList(pageName, "buildingNumber")));
-        location.setFloorNumber(dataPage.getFirstInt(asList(pageName, "floorNumber")));
-        location.setDescription(dataPage.getFirstString(asList(pageName, "description")));
-        location.setLocationEvaluationStatus(dataPage.getFirstString(asList(pageName, "evaluationStatus")));
-        location.setLongitude(dataPage.getFirstString(asList(pageName, "longitude")));
-        location.setLatitude(dataPage.getFirstString(asList(pageName, "latitude")));
-
+        location.setUuid(dataPage.getFirstString(asList("uuid")));
+        location.setExtId(dataPage.getFirstString(asList("extId")));
+        location.setHierarchyUuid(dataPage.getFirstString(asList("locationHierarchy", "uuid")));
+        location.setLatitude(dataPage.getFirstString(asList("latitude")));
+        location.setLongitude(dataPage.getFirstString(asList("longitude")));
+        location.setName(dataPage.getFirstString(asList("name")));
 
         return location;
     }

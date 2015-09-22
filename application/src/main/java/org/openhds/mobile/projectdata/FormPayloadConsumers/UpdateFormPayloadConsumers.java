@@ -13,7 +13,6 @@ import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
 import org.openhds.mobile.projectdata.FormAdapters.VisitFormAdapter;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
@@ -63,8 +62,6 @@ public class UpdateFormPayloadConsumers {
             Individual deceasedIndividual = individualGateway.getFirst(contentResolver,
                     individualGateway.findByExtIdPrefixDescending(individualExtId));
 
-            deceasedIndividual.setEndType(ProjectResources.Individual.END_TYPE_DEATH);
-
             individualGateway.insertOrUpdate(contentResolver, deceasedIndividual);
 
             return new ConsumerResults(false, null, null);
@@ -88,7 +85,6 @@ public class UpdateFormPayloadConsumers {
                 return new ConsumerResults(false, null, null);
             }
 
-            individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_OMG);
             individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
             return new ConsumerResults(false, null, null);
         }
@@ -114,8 +110,6 @@ public class UpdateFormPayloadConsumers {
 
             // update the individual's residency
             String locationUuid = formPayload.get(ProjectFormFields.Locations.LOCATION_UUID);
-            individual.setCurrentResidenceUuid(locationUuid);
-            individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
             individualGateway.insertOrUpdate(navigateActivity.getContentResolver(), individual);
 
             // post-fill individual extId into the form for display in UI
@@ -154,7 +148,6 @@ public class UpdateFormPayloadConsumers {
 
             // insert or update individual
             Individual individual = IndividualFormAdapter.fromForm(formPayload);
-            individual.setEndType(ProjectResources.Individual.RESIDENCY_END_TYPE_NA);
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             individualGateway.insertOrUpdate(contentResolver, individual);
 

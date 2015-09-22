@@ -16,10 +16,9 @@ public class MembershipParser extends EntityParser<Membership> {
     protected Membership toEntity(DataPage dataPage) {
         Membership membership = new Membership();
 
-        membership.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
-        membership.setIndividualUuid(dataPage.getFirstString(asList(pageName, "individual", "uuid")));
-        membership.setRelationshipToHead(dataPage.getFirstString(asList(pageName, "bIsToA")));
-        membership.setSocialGroupUuid(dataPage.getFirstString(asList(pageName, "socialGroup", "uuid")));
+        membership.setUuid(dataPage.getFirstString(asList("uuid")));
+        membership.setIndividualUuid(dataPage.getFirstString(asList("individual", "uuid")));
+        membership.setSocialGroupUuid(dataPage.getFirstString(asList("socialGroup", "uuid")));
 
         return membership;
     }

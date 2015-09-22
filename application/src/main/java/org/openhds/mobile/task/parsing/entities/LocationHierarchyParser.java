@@ -16,11 +16,11 @@ public class LocationHierarchyParser extends EntityParser<LocationHierarchy> {
     protected LocationHierarchy toEntity(DataPage dataPage) {
         LocationHierarchy locationHierarchy = new LocationHierarchy();
 
-        locationHierarchy.setUuid(dataPage.getFirstString(asList(pageName, "uuid")));
-        locationHierarchy.setExtId(dataPage.getFirstString(asList(pageName, "extId")));
-        locationHierarchy.setLevel(dataPage.getFirstString(asList(pageName, "level", "name")));
-        locationHierarchy.setName(dataPage.getFirstString(asList(pageName, "name")));
-        locationHierarchy.setParentUuid(dataPage.getFirstString(asList(pageName, "parent", "uuid")));
+        locationHierarchy.setUuid(dataPage.getFirstString(asList("uuid")));
+        locationHierarchy.setExtId(dataPage.getFirstString(asList("extId")));
+        locationHierarchy.setLevelUuid(dataPage.getFirstString(asList("level", "uuid")));
+        locationHierarchy.setName(dataPage.getFirstString(asList("name")));
+        locationHierarchy.setParentUuid(dataPage.getFirstString(asList("parent", "uuid")));
 
         return locationHierarchy;
     }

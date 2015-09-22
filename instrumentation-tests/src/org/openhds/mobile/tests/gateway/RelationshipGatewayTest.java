@@ -18,8 +18,8 @@ public class RelationshipGatewayTest extends GatewayTest<Relationship> {
         Relationship relationship = new Relationship();
 
         relationship.setUuid(id);
-        relationship.setIndividualAUuid(id);
-        relationship.setIndividualBUuid("INDIVIDUALB");
+        relationship.setIndividualA(id);
+        relationship.setIndividualB("INDIVIDUALB");
         relationship.setStartDate("2000-01-01 00:00:00");
         relationship.setType("TYPE");
 

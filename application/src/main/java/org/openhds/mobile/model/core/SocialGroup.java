@@ -7,7 +7,6 @@ public class SocialGroup implements Serializable {
     private static final long serialVersionUID = 571090333555561853L;
 
     private String groupName;
-    private String groupHeadUuid;
     private String uuid;
     private String extId;
 
@@ -15,17 +14,8 @@ public class SocialGroup implements Serializable {
 
     public SocialGroup(String name, Individual head, String uuid, String extId) {
         this.groupName = name;
-        this.groupHeadUuid = head.getUuid();
         this.uuid = uuid;
         this.extId = extId;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public String getGroupName() {
@@ -36,12 +26,12 @@ public class SocialGroup implements Serializable {
         this.groupName = groupName;
     }
 
-    public String getGroupHeadUuid() {
-        return groupHeadUuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setGroupHeadUuid(String groupHeadUUid) {
-        this.groupHeadUuid = groupHeadUUid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getExtId() {

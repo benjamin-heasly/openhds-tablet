@@ -6,8 +6,8 @@ import org.openhds.mobile.repository.gateway.IndividualGateway;
 
 import java.util.List;
 
-import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME;
-import static org.openhds.mobile.OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME;
+import static org.openhds.mobile.OpenHDS.Individuals.FIRST_NAME;
+import static org.openhds.mobile.OpenHDS.Individuals.LAST_NAME;
 
 public class IndividualGatewayTest extends GatewayTest<Individual> {
 
@@ -46,37 +46,11 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         assertEquals("TRIAL3", byPrefix.get(0).getExtId());
     }
 
-    // find individuals with the same residency
-    public void testFindByResidency() {
-        Query query = individualGateway.findByResidency("FINDME");
-        List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
-        assertEquals(0, shouldBeEmpty.size());
-
-        Individual individual1 = makeTestEntity("TEST1", "test 1");
-        Individual individual2 = makeTestEntity("TEST2", "test 2");
-        Individual individual3 = makeTestEntity("TEST3", "test 3");
-
-        individual1.setCurrentResidenceUuid("FINDME");
-        individual2.setCurrentResidenceUuid("FINDME");
-
-        individualGateway.insertOrUpdate(contentResolver, individual1);
-        individualGateway.insertOrUpdate(contentResolver, individual2);
-        individualGateway.insertOrUpdate(contentResolver, individual3);
-
-        query = individualGateway.findByResidency("DOESNOTEXIST");
-        shouldBeEmpty = individualGateway.getList(contentResolver, query);
-        assertEquals(0, shouldBeEmpty.size());
-
-        query = individualGateway.findByResidency("FINDME");
-        List<Individual> byResidency = individualGateway.getList(contentResolver, query);
-        assertEquals(2, byResidency.size());
-    }
-
     // find individuals by some individual-specific criteria: first and last name
     public void testFindByCriteriaEqual() {
-        final String[] columnNames = {COLUMN_INDIVIDUAL_FIRST_NAME, COLUMN_INDIVIDUAL_LAST_NAME};
+        final String[] columnNames = {FIRST_NAME, LAST_NAME};
         final String[] columnValues = {"Sam", "Smith"};
-        Query query = individualGateway.findByCriteriaEqual(columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+        Query query = individualGateway.findByCriteriaEqual(columnNames, columnValues, FIRST_NAME);
 
         List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
@@ -106,9 +80,9 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
     // find individuals by pattern matching some individual-specific criteria: first and last name
     public void testFindByCriteriaLike() {
         // expect _a_ to match Sam and Sal.  Expect S% to match Smith
-        final String[] columnNames = {COLUMN_INDIVIDUAL_FIRST_NAME, COLUMN_INDIVIDUAL_LAST_NAME};
+        final String[] columnNames = {FIRST_NAME, LAST_NAME};
         final String[] columnValues = {"_a_", "S%"};
-        Query query = individualGateway.findByCriteriaLike(columnNames, columnValues, COLUMN_INDIVIDUAL_FIRST_NAME);
+        Query query = individualGateway.findByCriteriaLike(columnNames, columnValues, FIRST_NAME);
 
         List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
@@ -145,18 +119,6 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         individual.setGender("M");
         individual.setMother("MOTHER");
         individual.setFather("FATHER");
-        individual.setCurrentResidenceUuid("LOCATION");
-        individual.setEndType("N/A");
-        individual.setOtherId("OTHER");
-        individual.setOtherNames(name);
-        individual.setAge("50");
-        individual.setAgeUnits("YEARS");
-        individual.setPhoneNumber("1234567890");
-        individual.setOtherPhoneNumber("0987654321");
-        individual.setPointOfContactName("CONTACT");
-        individual.setMemberStatus("PERMANENT");
-        individual.setPointOfContactPhoneNumber("111111111");
-        individual.setLanguagePreference("ENGLISH");
 
         return individual;
     }

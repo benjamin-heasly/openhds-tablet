@@ -1,18 +1,24 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import android.content.ContentResolver;
+
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.core.*;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.core.LocationHierarchy;
+import org.openhds.mobile.model.core.Membership;
+import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.projectdata.FormAdapters.IndividualFormAdapter;
-import org.openhds.mobile.repository.DataWrapper;
-import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.*;
+import org.openhds.mobile.repository.gateway.IndividualGateway;
+import org.openhds.mobile.repository.gateway.LocationGateway;
+import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.MembershipGateway;
+import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 import org.openhds.mobile.utilities.IdHelper;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
@@ -63,14 +69,6 @@ public class CensusFormPayloadBuilders {
         // name and code of community will default to empty String if this sector has no neighboring location
         String communityName = "";
         String communityCode = "";
-        Iterator<Location> locationIterator = locationGateway.getIterator(contentResolver,
-                locationGateway.findByHierarchyDescendingBuildingNumber(sector.getUuid()));
-        if (locationIterator.hasNext()) {
-            Location location = locationIterator.next();
-            buildingNumber += location.getBuildingNumber();
-            communityName = location.getCommunityName();
-            communityCode = location.getCommunityCode();
-        }
 
         formPayload.put(ProjectFormFields.Locations.BUILDING_NUMBER, String.format(LIKE_WILD_CARD + "02d", buildingNumber));
         formPayload.put(ProjectFormFields.Locations.COMMUNITY_NAME, communityName);
@@ -157,16 +155,6 @@ public class CensusFormPayloadBuilders {
             IndividualGateway individualGateway = new IndividualGateway();
             //HoH is found by searching by extId, since we're currently dependent on the groupHead property of socialgroup
             //Set as the individual's extId
-            Individual headOfHousehold = individualGateway.getFirst(resolver, individualGateway.findById(socialGroup.getGroupHeadUuid()));
-
-            // set's the member's point of contact info to the HoH
-            if(null != headOfHousehold.getPhoneNumber() && !headOfHousehold.getPhoneNumber().isEmpty()) {
-                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, Individual.getFullName(headOfHousehold));
-                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, headOfHousehold.getPhoneNumber());
-            } else {
-                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_NAME, headOfHousehold.getPointOfContactName());
-                formPayload.put(ProjectFormFields.Individuals.POINT_OF_CONTACT_PHONE_NUMBER, headOfHousehold.getPointOfContactPhoneNumber());
-            }
 
             // we need to add the socialgroup, membership, and relationship UUID for when they're created in
             // the consumers. We add them now so they are a part of the form when it is passed up.
@@ -237,10 +225,7 @@ public class CensusFormPayloadBuilders {
             MembershipGateway membershipGateway = GatewayRegistry.getMembershipGateway();
             Membership membership = membershipGateway.getFirst(contentResolver,
                     membershipGateway.findBySocialGroupAndIndividual(householdUuid, individualUuid));
-            if (null != membership) {
-                formPayload.put(ProjectFormFields.Individuals.RELATIONSHIP_TO_HEAD,
-                        membership.getRelationshipToHead());
-            }
+
         }
     }
 }

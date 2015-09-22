@@ -10,15 +10,7 @@ public class Visit implements Serializable {
 	private String locationUuid;
 	private String visitDate;
 	private String fieldWorkerUuid;
-    private String uuid;
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
+	private String uuid;
 
 	public String getExtId() {
 		return extId;
@@ -48,8 +40,15 @@ public class Visit implements Serializable {
 		return fieldWorkerUuid;
 	}
 
-	public void setFieldWorkerUuid(String fieldWorkerExtid) {
-		this.fieldWorkerUuid = fieldWorkerExtid;
+	public void setFieldWorkerUuid(String fieldWorkerUuid) {
+		this.fieldWorkerUuid = fieldWorkerUuid;
 	}
 
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 }

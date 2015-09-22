@@ -5,9 +5,12 @@ import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.LocationHierarchyGateway;
+import org.openhds.mobile.repository.gateway.LocationHierarchyLevelGateway;
 import org.openhds.mobile.repository.gateway.MembershipGateway;
 import org.openhds.mobile.repository.gateway.RelationshipGateway;
+import org.openhds.mobile.repository.gateway.ResidencyGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
+import org.openhds.mobile.repository.gateway.UserGateway;
 import org.openhds.mobile.repository.gateway.VisitGateway;
 
 import java.util.HashMap;
@@ -34,6 +37,14 @@ public class GatewayRegistry {
         return (FieldWorkerGateway) allGateways.get(gatewayName);
     }
 
+    public static UserGateway getUsesrGateway() {
+        final String gatewayName = UserGateway.class.getName();
+        if (!allGateways.containsKey(gatewayName)) {
+            allGateways.put(gatewayName, new UserGateway());
+        }
+        return (UserGateway) allGateways.get(gatewayName);
+    }
+
     public static IndividualGateway getIndividualGateway() {
         final String gatewayName = IndividualGateway.class.getName();
         if (!allGateways.containsKey(gatewayName)) {
@@ -58,12 +69,28 @@ public class GatewayRegistry {
         return (LocationHierarchyGateway) allGateways.get(gatewayName);
     }
 
+    public static LocationHierarchyLevelGateway getLocationHierarchyLevelGateway() {
+        final String gatewayName = LocationHierarchyLevelGateway.class.getName();
+        if (!allGateways.containsKey(gatewayName)) {
+            allGateways.put(gatewayName, new LocationHierarchyLevelGateway());
+        }
+        return (LocationHierarchyLevelGateway) allGateways.get(gatewayName);
+    }
+
     public static MembershipGateway getMembershipGateway() {
         final String gatewayName = MembershipGateway.class.getName();
         if (!allGateways.containsKey(gatewayName)) {
             allGateways.put(gatewayName, new MembershipGateway());
         }
         return (MembershipGateway) allGateways.get(gatewayName);
+    }
+
+    public static ResidencyGateway getResidencyGateway() {
+        final String gatewayName = ResidencyGateway.class.getName();
+        if (!allGateways.containsKey(gatewayName)) {
+            allGateways.put(gatewayName, new ResidencyGateway());
+        }
+        return (ResidencyGateway) allGateways.get(gatewayName);
     }
 
     public static RelationshipGateway getRelationshipGateway() {

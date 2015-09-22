@@ -37,7 +37,7 @@ public class PayloadTools {
 
         // add the FieldWorker's extId
         FieldWorker fieldWorker = navigateActivity.getCurrentFieldWorker();
-        formPayload.put(ProjectFormFields.General.FIELD_WORKER_EXTID, fieldWorker.getExtId());
+        formPayload.put(ProjectFormFields.General.FIELD_WORKER_EXTID, fieldWorker.getFieldWorkerId());
         formPayload.put(ProjectFormFields.General.FIELD_WORKER_UUID, fieldWorker.getUuid());
 
         // add collected DateTime

@@ -18,8 +18,7 @@ public class FieldWorkerGatewayTest extends GatewayTest<FieldWorker> {
         FieldWorker fieldWorker = new FieldWorker();
 
         fieldWorker.setUuid(id);
-        fieldWorker.setExtId(id);
-        fieldWorker.setIdPrefix("00");
+        fieldWorker.setFieldWorkerId(id);
         fieldWorker.setFirstName(name);
         fieldWorker.setLastName("LASTNAME");
         fieldWorker.setPasswordHash("PASSWORD_HASH");

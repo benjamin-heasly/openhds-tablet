@@ -107,27 +107,13 @@ public class ProjectFormFields {
         private static Map<String, String> columnsToFieldNames = new HashMap<String, String>();
 
         static {
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_UUID, HIERERCHY_UUID);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_HIERARCHY_EXTID, HIERERCHY_EXTID);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_EXTID, LOCATION_EXTID);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_NAME, LOCATION_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_NAME, COMMUNITY_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_COMMUNITY_CODE, COMMUNITY_CODE);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_MAP_AREA_NAME, MAP_AREA_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LOCALITY_NAME, LOCALITY_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SECTOR_NAME, SECTOR_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_BUILDING_NUMBER, BUILDING_NUMBER);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_FLOOR_NUMBER, FLOOR_NUMBER);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_REGION_NAME, REGION_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_PROVINCE_NAME, PROVINCE_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_SUB_DISTRICT_NAME, SUB_DISTRICT_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_DISTRICT_NAME, DISTRICT_NAME);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_DESCRIPTION, DESCRIPTION);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_EVALUATION_STATUS, STATUS);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LONGITUDE, LONGITUDE);
-            columnsToFieldNames.put(OpenHDS.Locations.COLUMN_LOCATION_LATITUDE, LATITUDE);
+            columnsToFieldNames.put(OpenHDS.Locations.LOCATION_HIERARCHY_UUID, HIERERCHY_UUID);
+            columnsToFieldNames.put(OpenHDS.Locations.EXT_ID, LOCATION_EXTID);
+            columnsToFieldNames.put(OpenHDS.Locations.NAME, LOCATION_NAME);
+            columnsToFieldNames.put(OpenHDS.Locations.LONGITUDE, LONGITUDE);
+            columnsToFieldNames.put(OpenHDS.Locations.LATITUDE, LATITUDE);
             columnsToFieldNames.put(
-                    OpenHDS.Locations.COLUMN_LOCATION_UUID,
+                    OpenHDS.Locations.UUID,
                     General.ENTITY_UUID);
 
 
@@ -184,56 +170,23 @@ public class ProjectFormFields {
 
         static {
             columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_EXTID,
+                    OpenHDS.Individuals.EXT_ID,
                     INDIVIDUAL_EXTID);
             columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_FIRST_NAME,
+                    OpenHDS.Individuals.FIRST_NAME,
                     FIRST_NAME);
             columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_LAST_NAME, LAST_NAME);
-            columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_NAMES,
-                    OTHER_NAMES);
-            columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_DOB,
+                    OpenHDS.Individuals.LAST_NAME, LAST_NAME);
+            columnsToFieldNames.put(OpenHDS.Individuals.DOB,
                     DATE_OF_BIRTH);
-            columnsToFieldNames.put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE,
-                    AGE);
             columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_AGE_UNITS, AGE_UNITS);
+                    OpenHDS.Individuals.GENDER, GENDER);
             columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_GENDER, GENDER);
+                    OpenHDS.Individuals.MOTHER, MOTHER_EXTID);
             columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_PHONE_NUMBER,
-                    PHONE_NUMBER);
+                    OpenHDS.Individuals.FATHER, FATHER_EXTID);
             columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_PHONE_NUMBER,
-                    OTHER_PHONE_NUMBER);
-            columnsToFieldNames
-                    .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_NAME,
-                            POINT_OF_CONTACT_NAME);
-            columnsToFieldNames
-                    .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_POINT_OF_CONTACT_PHONE_NUMBER,
-                            POINT_OF_CONTACT_PHONE_NUMBER);
-            columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_LANGUAGE_PREFERENCE,
-                    LANGUAGE_PREFERENCE);
-            columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_OTHER_ID, DIP);
-            columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_MOTHER, MOTHER_EXTID);
-            columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_FATHER, FATHER_EXTID);
-            columnsToFieldNames
-                    .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_RESIDENCE_LOCATION_UUID,
-                            HOUSEHOLD_UUID);
-            columnsToFieldNames
-                    .put(OpenHDS.Individuals.COLUMN_INDIVIDUAL_STATUS,
-                            MEMBER_STATUS);
-            columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_NATIONALITY,
-                    NATIONALITY);
-            columnsToFieldNames.put(
-                    OpenHDS.Individuals.COLUMN_INDIVIDUAL_UUID,
+                    OpenHDS.Individuals.UUID,
                     General.ENTITY_UUID);
 
         }
@@ -259,19 +212,19 @@ public class ProjectFormFields {
 
         static {
             columnsToFieldNames.put(
-                    OpenHDS.Visits.COLUMN_VISIT_EXTID,
+                    OpenHDS.Visits.EXT_ID,
                     VISIT_EXTID);
             columnsToFieldNames.put(
-                    OpenHDS.Visits.COLUMN_VISIT_UUID,
+                    OpenHDS.Visits.UUID,
                     VISIT_UUID);
             columnsToFieldNames.put(
-                    OpenHDS.Visits.COLUMN_VISIT_DATE,
+                    OpenHDS.Visits.DATE,
                     VISIT_DATE);
             columnsToFieldNames.put(
-                    OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID,
+                    OpenHDS.Visits.LOCATION_UUID,
                     LOCATION_UUID);
             columnsToFieldNames.put(
-                    OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID,
+                    OpenHDS.Visits.FIELD_WORKER_UUID,
                     FIELDWORKER_UUID);
         }
 

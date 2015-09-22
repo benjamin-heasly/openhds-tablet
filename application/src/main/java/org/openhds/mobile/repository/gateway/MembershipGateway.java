@@ -18,13 +18,11 @@ import static org.openhds.mobile.repository.RepositoryUtils.update;
 /**
  * Convert Membership to and from database.  Membership-specific queries.
  *
- * Uses the extId of the individual as the id for the Membership.
- *
  */
 public class MembershipGateway extends Gateway<Membership> {
 
     public MembershipGateway() {
-        super(OpenHDS.Memberships.CONTENT_ID_URI_BASE, COLUMN_MEMBERSHIP_UUID, new MembershipConverter());
+        super(OpenHDS.Memberships.CONTENT_ID_URI_BASE, UUID, new MembershipConverter());
     }
 
     // true if membership was inserted, false if updated
@@ -42,7 +40,7 @@ public class MembershipGateway extends Gateway<Membership> {
         if (null == existingMembership) {
             return null != insert(contentResolver, tableUri, contentValues);
         } else {
-            final String[] columnNames = {COLUMN_SOCIAL_GROUP_UUID, COLUMN_INDIVIDUAL_UUID};
+            final String[] columnNames = {SOCIAL_GROUP_UUID, INDIVIDUAL_UUID};
             final String[] columnValues = {socialGroupId, individualId};
             update(contentResolver, tableUri, contentValues, columnNames, columnValues);
             return false;
@@ -50,13 +48,13 @@ public class MembershipGateway extends Gateway<Membership> {
     }
 
     public Query findByIndividual(String individualId) {
-        return new Query(tableUri, COLUMN_INDIVIDUAL_UUID, individualId, COLUMN_INDIVIDUAL_UUID);
+        return new Query(tableUri, INDIVIDUAL_UUID, individualId, INDIVIDUAL_UUID);
     }
 
     public Query findBySocialGroupAndIndividual(String socialGroupId, String individualId) {
-        final String[] columnNames = {COLUMN_SOCIAL_GROUP_UUID, COLUMN_INDIVIDUAL_UUID};
+        final String[] columnNames = {SOCIAL_GROUP_UUID, INDIVIDUAL_UUID};
         final String[] columnValues = {socialGroupId, individualId};
-        return new Query(tableUri, columnNames, columnValues, COLUMN_INDIVIDUAL_UUID, EQUALS);
+        return new Query(tableUri, columnNames, columnValues, INDIVIDUAL_UUID, EQUALS);
     }
 
     private static class MembershipConverter implements Converter<Membership> {
@@ -65,10 +63,9 @@ public class MembershipGateway extends Gateway<Membership> {
         public Membership fromCursor(Cursor cursor) {
             Membership membership = new Membership();
 
-            membership.setUuid(extractString(cursor, COLUMN_MEMBERSHIP_UUID));
-            membership.setIndividualUuid(extractString(cursor, COLUMN_INDIVIDUAL_UUID));
-            membership.setSocialGroupUuid(extractString(cursor, COLUMN_SOCIAL_GROUP_UUID));
-            membership.setRelationshipToHead(extractString(cursor, COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD));
+            membership.setUuid(extractString(cursor, UUID));
+            membership.setIndividualUuid(extractString(cursor, INDIVIDUAL_UUID));
+            membership.setSocialGroupUuid(extractString(cursor, SOCIAL_GROUP_UUID));
 
             return membership;
         }
@@ -77,10 +74,9 @@ public class MembershipGateway extends Gateway<Membership> {
         public ContentValues toContentValues(Membership membership) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(COLUMN_MEMBERSHIP_UUID, membership.getUuid());
-            contentValues.put(COLUMN_INDIVIDUAL_UUID, membership.getIndividualUuid());
-            contentValues.put(COLUMN_SOCIAL_GROUP_UUID, membership.getSocialGroupUuid());
-            contentValues.put(COLUMN_MEMBERSHIP_RELATIONSHIP_TO_HEAD, membership.getRelationshipToHead());
+            contentValues.put(UUID, membership.getUuid());
+            contentValues.put(INDIVIDUAL_UUID, membership.getIndividualUuid());
+            contentValues.put(SOCIAL_GROUP_UUID, membership.getSocialGroupUuid());
 
             return contentValues;
         }
@@ -93,7 +89,6 @@ public class MembershipGateway extends Gateway<Membership> {
         @Override
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Membership membership, String state) {
             DataWrapper dataWrapper = new DataWrapper();
-            dataWrapper.setName(membership.getRelationshipToHead());
             dataWrapper.setUuid(membership.getUuid());
             dataWrapper.setCategory(state);
             return dataWrapper;

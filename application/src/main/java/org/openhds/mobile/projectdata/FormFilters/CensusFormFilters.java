@@ -1,11 +1,9 @@
 package org.openhds.mobile.projectdata.FormFilters;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.model.core.Location;
-import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
-import org.openhds.mobile.repository.gateway.LocationGateway;
 import org.openhds.mobile.repository.gateway.SocialGroupGateway;
 
 import java.util.Map;
@@ -24,37 +22,28 @@ public class CensusFormFilters {
 				ProjectActivityBuilder.BiokoHierarchy.HOUSEHOLD_STATE)
 				.getUuid();
 
-        SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
-        return null != socialGroupGateway.getFirst(navigateActivity.getContentResolver(),socialGroupGateway.findByExtId(locationExtId));
+		SocialGroupGateway socialGroupGateway = GatewayRegistry.getSocialGroupGateway();
+		return null != socialGroupGateway.getFirst(navigateActivity.getContentResolver(),socialGroupGateway.findByExtId(locationExtId));
 	}
 
-    public static class AddLocation implements FormFilter {
+	public static class AddLocation implements FormFilter {
 
-        @Override
-        public boolean amIValid(NavigateActivity navigateActivity) {
+		@Override
+		public boolean amIValid(NavigateActivity navigateActivity) {
 
-            return true;
-        }
-    }
+			return true;
+		}
+	}
 
-    public static class EvaluateLocation implements FormFilter {
+	public static class EvaluateLocation implements FormFilter {
 
-        @Override
-        public boolean amIValid(NavigateActivity navigateActivity) {
+		@Override
+		public boolean amIValid(NavigateActivity navigateActivity) {
+			return true;
+		}
+	}
 
-            LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
-
-            Location location = locationGateway.getFirst(navigateActivity.getContentResolver(),
-                    locationGateway.findById(navigateActivity.getCurrentSelection().getUuid()));
-
-            if( null == location.getLocationEvaluationStatus()){
-                return true;
-            }
-            return false;
-        }
-    }
-
-    public static class AddHeadOfHousehold implements FormFilter {
+	public static class AddHeadOfHousehold implements FormFilter {
 
 		@Override
 		public boolean amIValid(NavigateActivity navigateActivity) {

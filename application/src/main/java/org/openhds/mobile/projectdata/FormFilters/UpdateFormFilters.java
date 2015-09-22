@@ -135,7 +135,8 @@ public class UpdateFormFilters {
 
     private static boolean isIndividualDeceased(Individual selectedIndividual) {
 
-        return selectedIndividual.getEndType().equals(ProjectResources.Individual.END_TYPE_DEATH);
+        // TODO check residency end type
+        return false;
 
     }
 
@@ -147,7 +148,8 @@ public class UpdateFormFilters {
 
     private static boolean isIndividualOutMigrated(Individual selectedIndividual) {
 
-        return selectedIndividual.getEndType().equals(ProjectResources.Individual.RESIDENCY_END_TYPE_OMG);
+        // TODO check residency end type
+        return false;
 
     }
 

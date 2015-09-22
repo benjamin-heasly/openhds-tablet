@@ -3,16 +3,17 @@ package org.openhds.mobile.repository.gateway;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_DATE;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_UUID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_EXTID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_FIELDWORKER_UUID;
-import static org.openhds.mobile.OpenHDS.Visits.COLUMN_VISIT_LOCATION_UUID;
+import static org.openhds.mobile.OpenHDS.Visits.DATE;
+import static org.openhds.mobile.OpenHDS.Visits.EXT_ID;
+import static org.openhds.mobile.OpenHDS.Visits.FIELD_WORKER_UUID;
+import static org.openhds.mobile.OpenHDS.Visits.LOCATION_UUID;
+import static org.openhds.mobile.OpenHDS.Visits.UUID;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
 
@@ -22,7 +23,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 public class VisitGateway extends Gateway<Visit> {
 
     public VisitGateway() {
-        super(OpenHDS.Visits.CONTENT_ID_URI_BASE, COLUMN_VISIT_EXTID, new VisitConverter());
+        super(OpenHDS.Visits.CONTENT_ID_URI_BASE, OpenHDS.Visits.UUID, new VisitConverter());
     }
 
     private static class VisitConverter implements Converter<Visit> {
@@ -31,11 +32,11 @@ public class VisitGateway extends Gateway<Visit> {
         public Visit fromCursor(Cursor cursor) {
             Visit visit = new Visit();
 
-            visit.setUuid(extractString(cursor, COLUMN_VISIT_UUID));
-            visit.setExtId(extractString(cursor, COLUMN_VISIT_EXTID));
-            visit.setVisitDate(extractString(cursor, COLUMN_VISIT_DATE));
-            visit.setLocationUuid(extractString(cursor, COLUMN_VISIT_LOCATION_UUID));
-            visit.setFieldWorkerUuid(extractString(cursor, COLUMN_VISIT_FIELDWORKER_UUID));
+            visit.setUuid(extractString(cursor, UUID));
+            visit.setExtId(extractString(cursor, EXT_ID));
+            visit.setVisitDate(extractString(cursor, DATE));
+            visit.setLocationUuid(extractString(cursor, LOCATION_UUID));
+            visit.setFieldWorkerUuid(extractString(cursor, FIELD_WORKER_UUID));
 
             return visit;
         }
@@ -44,11 +45,11 @@ public class VisitGateway extends Gateway<Visit> {
         public ContentValues toContentValues(Visit visit) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(COLUMN_VISIT_EXTID, visit.getExtId());
-            contentValues.put(COLUMN_VISIT_UUID, visit.getUuid());
-            contentValues.put(COLUMN_VISIT_DATE, visit.getVisitDate());
-            contentValues.put(COLUMN_VISIT_LOCATION_UUID, visit.getLocationUuid());
-            contentValues.put(COLUMN_VISIT_FIELDWORKER_UUID, visit.getFieldWorkerUuid());
+            contentValues.put(EXT_ID, visit.getExtId());
+            contentValues.put(UUID, visit.getUuid());
+            contentValues.put(DATE, visit.getVisitDate());
+            contentValues.put(LOCATION_UUID, visit.getLocationUuid());
+            contentValues.put(FIELD_WORKER_UUID, visit.getFieldWorkerUuid());
 
             return contentValues;
         }

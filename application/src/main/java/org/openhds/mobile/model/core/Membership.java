@@ -6,18 +6,15 @@ public class Membership implements Serializable {
 
     private static final long serialVersionUID = 6446118055284774938L;
 
-
+    private String uuid;
     private String individualUuid;
     private String socialGroupUuid;
-    private String relationshipToHead;
-    private String uuid;
 
     public Membership() {}
 
     public Membership(Individual individual, SocialGroup socialGroup, String relationshipToHead, String uuid) {
         this.individualUuid = individual.getUuid();
         this.socialGroupUuid = socialGroup.getUuid();
-        this.relationshipToHead = relationshipToHead;
         this.uuid = uuid;
     }
 
@@ -44,13 +41,4 @@ public class Membership implements Serializable {
     public void setSocialGroupUuid(String socialGroupUuid) {
         this.socialGroupUuid = socialGroupUuid;
     }
-
-    public String getRelationshipToHead() {
-        return relationshipToHead;
-    }
-
-    public void setRelationshipToHead(String relationshipToHead) {
-        this.relationshipToHead = relationshipToHead;
-    }
-
 }

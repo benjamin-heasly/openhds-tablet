@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<users>
+    <User>
+        <uuid>UNKNOWN</uuid>
+        <firstName>UNKNOWN_STATUS</firstName>
+        <username>UNKNOWN_STATUS</username>
+        <passwordHash>UNKNOWN_STATUS</passwordHash>
+    </User>
+    <User>
+        <uuid>DEFAULT_USER</uuid>
+        <firstName>default user</firstName>
+        <lastName>default user</lastName>
+        <description>default user with root role (all privileges)</description>
+        <username>user</username>
+        <passwordHash>$2a$04$d0O8VbXXsdXHiSu7hzwty.3F/rVfY7XLhrSP/.Vg2uJvpD3kRVuja</passwordHash>
+        <roles>
+            <roles>
+                <name>root-role</name>
+                <description>role with every privilege</description>
+                <privileges>
+                    <privileges>
+                        <grant>ROLE_USER</grant>
+                    </privileges>
+                    <privileges>
+                        <grant>ROLE_VIEW_ENTITY</grant>
+                    </privileges>
+                    <privileges>
+                        <grant>ROLE_CREATE_USER</grant>
+                    </privileges>
+                    <privileges>
+                        <grant>ROLE_CREATE_ENTITY</grant>
+                    </privileges>
+                    <privileges>
+                        <grant>ROLE_EDIT_ENTITY</grant>
+                    </privileges>
+                    <privileges>
+                        <grant>ROLE_DELETE_ENTITY</grant>
+                    </privileges>
+                    <privileges>
+                        <grant>ROLE_DELETE_USER</grant>
+                    </privileges>
+                </privileges>
+            </roles>
+        </roles>
+    </User>
+</users>
