@@ -257,6 +257,8 @@ public class OpenHDSProvider extends ContentProvider {
             db.execSQL("CREATE TABLE " + OpenHDS.Individuals.TABLE_NAME + " ("
                     + OpenHDS.Individuals._ID + " INTEGER,"
                     + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Individuals.EXT_ID + " TEXT,"
                     + OpenHDS.Individuals.FIRST_NAME + " TEXT,"
                     + OpenHDS.Individuals.MIDDLE_NAME + " TEXT,"
@@ -272,7 +274,9 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " ("
                     + OpenHDS.Locations._ID + " INTEGER,"
-                    + OpenHDS.Locations.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Locations.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.Locations.NAME + " TEXT NOT NULL,"
                     + OpenHDS.Locations.LATITUDE + " TEXT,"
@@ -284,7 +288,9 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.LocationHierarchies.TABLE_NAME + " ("
                     + OpenHDS.LocationHierarchies._ID + " INTEGER,"
-                    + OpenHDS.LocationHierarchies.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.LocationHierarchies.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.LocationHierarchies.LOCATION_HIERARCHY_LEVEL_UUID + " TEXT NOT NULL,"
                     + OpenHDS.LocationHierarchies.NAME + " TEXT NOT NULL,"
@@ -295,13 +301,17 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.LocationHierarchyLevels.TABLE_NAME + " ("
                     + OpenHDS.LocationHierarchyLevels._ID + " INTEGER,"
-                    + OpenHDS.LocationHierarchyLevels.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.LocationHierarchyLevels.NAME + " TEXT NOT NULL,"
                     + OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER + " INTEGER);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Visits.TABLE_NAME + " ("
                     + OpenHDS.Visits._ID + " INTEGER,"
-                    + OpenHDS.Visits.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Visits.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.Visits.DATE + " TEXT NOT NULL,"
                     + OpenHDS.Visits.FIELD_WORKER_UUID + " TEXT NOT NULL,"
@@ -311,7 +321,9 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.Relationships.TABLE_NAME + " ("
                     + OpenHDS.Relationships._ID + " INTEGER,"
-                    + OpenHDS.Relationships.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Relationships.INDIVIDUAL_A_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Relationships.INDIVIDUAL_B_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Relationships.TYPE + " TEXT NOT NULL,"
@@ -322,7 +334,9 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.Users.TABLE_NAME + " ("
                     + OpenHDS.Users._ID + " INTEGER,"
-                    + OpenHDS.Users.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Users.USERNAME + " TEXT NOT NULL,"
                     + OpenHDS.Users.FIRST_NAME + " TEXT,"
                     + OpenHDS.Users.LAST_NAME + " TEXT,"
@@ -332,7 +346,9 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.FieldWorkers.TABLE_NAME + " ("
                     + OpenHDS.FieldWorkers._ID + " INTEGER,"
-                    + OpenHDS.FieldWorkers.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.FieldWorkers.FIELD_WORKER_ID + " TEXT NOT NULL,"
                     + OpenHDS.FieldWorkers.FIRST_NAME + " TEXT,"
                     + OpenHDS.FieldWorkers.LAST_NAME + " TEXT,"
@@ -344,14 +360,18 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.SocialGroups.TABLE_NAME + " ("
                     + OpenHDS.SocialGroups._ID + " INTEGER,"
-                    + OpenHDS.SocialGroups.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.SocialGroups.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.SocialGroups.GROUP_NAME + " TEXT NOT NULL);");
             db.execSQL(indexStatement(OpenHDS.SocialGroups.TABLE_NAME, OpenHDS.SocialGroups.UUID));
 
             db.execSQL("CREATE TABLE " + OpenHDS.Memberships.TABLE_NAME + " ("
                     + OpenHDS.Memberships._ID + " INTEGER,"
-                    + OpenHDS.Memberships.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Memberships.INDIVIDUAL_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Memberships.SOCIAL_GROUP_UUID + " TEXT NOT NULL);");
             db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.UUID));
@@ -360,7 +380,9 @@ public class OpenHDSProvider extends ContentProvider {
 
             db.execSQL("CREATE TABLE " + OpenHDS.Residencies.TABLE_NAME + " ("
                     + OpenHDS.Residencies._ID + " INTEGER,"
-                    + OpenHDS.Residencies.UUID + " TEXT NOT NULL PRIMARY KEY,"
+                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Residencies.INDIVIDUAL_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Residencies.END_TYPE + " TEXT,"
                     + OpenHDS.Residencies.LOCATION_UUID + " TEXT NOT NULL);");
