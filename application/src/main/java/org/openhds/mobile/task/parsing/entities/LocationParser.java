@@ -22,6 +22,7 @@ public class LocationParser extends EntityParser<Location> {
         location.setLatitude(dataPage.getFirstString(asList("latitude")));
         location.setLongitude(dataPage.getFirstString(asList("longitude")));
         location.setName(dataPage.getFirstString(asList("name")));
+        location.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return location;
     }

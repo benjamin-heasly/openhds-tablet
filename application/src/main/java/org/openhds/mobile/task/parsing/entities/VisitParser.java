@@ -21,6 +21,7 @@ public class VisitParser extends EntityParser<Visit> {
         visit.setLocationUuid(dataPage.getFirstString(asList("visitLocation", "uuid")));
         visit.setVisitDate(dataPage.getFirstString(asList("visitDate")));
         visit.setFieldWorkerUuid(dataPage.getFirstString(asList("collectedBy", "uuid")));
+        visit.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return visit;
     }

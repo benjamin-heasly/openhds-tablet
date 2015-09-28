@@ -10,6 +10,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
 
@@ -37,6 +39,8 @@ public class UserGateway extends Gateway<User> {
             user.setFirstName(extractString(cursor, OpenHDS.Users.FIRST_NAME));
             user.setLastName(extractString(cursor, OpenHDS.Users.LAST_NAME));
             user.setPasswordHash(extractString(cursor, OpenHDS.Users.PASSWORD_HASH));
+            user.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            user.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return user;
         }
@@ -50,6 +54,8 @@ public class UserGateway extends Gateway<User> {
             contentValues.put(OpenHDS.Users.PASSWORD_HASH, user.getPasswordHash());
             contentValues.put(OpenHDS.Users.LAST_NAME, user.getLastName());
             contentValues.put(OpenHDS.Users.FIRST_NAME, user.getFirstName());
+            contentValues.put(LAST_MODIFIED_CLIENT, user.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, user.getLastModifiedServer());
 
             return contentValues;
         }

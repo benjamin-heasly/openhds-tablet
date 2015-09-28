@@ -10,6 +10,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Individuals.DOB;
 import static org.openhds.mobile.OpenHDS.Individuals.EXT_ID;
 import static org.openhds.mobile.OpenHDS.Individuals.FATHER;
@@ -56,6 +58,8 @@ public class IndividualGateway extends Gateway<Individual> {
             individual.setGender(extractString(cursor, GENDER));
             individual.setMother(extractString(cursor, MOTHER));
             individual.setFather(extractString(cursor, FATHER));
+            individual.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            individual.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return individual;
         }
@@ -73,6 +77,8 @@ public class IndividualGateway extends Gateway<Individual> {
             contentValues.put(GENDER, individual.getGender());
             contentValues.put(MOTHER, individual.getMother());
             contentValues.put(FATHER, individual.getFather());
+            contentValues.put(LAST_MODIFIED_CLIENT, individual.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, individual.getLastModifiedServer());
 
             return contentValues;
         }

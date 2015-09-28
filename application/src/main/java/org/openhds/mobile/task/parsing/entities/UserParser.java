@@ -21,6 +21,7 @@ public class UserParser extends EntityParser<User> {
         user.setLastName(dataPage.getFirstString(asList("lastName")));
         user.setUuid(dataPage.getFirstString(asList("uuid")));
         user.setUsername(dataPage.getFirstString(asList("username")));
+        user.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return user;
     }

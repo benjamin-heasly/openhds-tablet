@@ -21,6 +21,7 @@ public class FieldWorkerParser extends EntityParser<FieldWorker> {
         fieldWorker.setFirstName(dataPage.getFirstString(asList("firstName")));
         fieldWorker.setLastName(dataPage.getFirstString(asList("lastName")));
         fieldWorker.setUuid(dataPage.getFirstString(asList("uuid")));
+        fieldWorker.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return fieldWorker;
     }

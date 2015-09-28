@@ -10,6 +10,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Relationships.INDIVIDUAL_A_UUID;
 import static org.openhds.mobile.OpenHDS.Relationships.INDIVIDUAL_B_UUID;
 import static org.openhds.mobile.OpenHDS.Relationships.START_DATE;
@@ -69,6 +71,8 @@ public class RelationshipGateway extends Gateway<Relationship> {
             relationship.setIndividualB(extractString(cursor, INDIVIDUAL_B_UUID));
             relationship.setStartDate(extractString(cursor, START_DATE));
             relationship.setType(extractString(cursor, TYPE));
+            relationship.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            relationship.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return relationship;
         }
@@ -82,6 +86,8 @@ public class RelationshipGateway extends Gateway<Relationship> {
             contentValues.put(INDIVIDUAL_B_UUID, relationship.getIndividualB());
             contentValues.put(START_DATE, relationship.getStartDate());
             contentValues.put(TYPE, relationship.getType());
+            contentValues.put(LAST_MODIFIED_CLIENT, relationship.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, relationship.getLastModifiedServer());
 
             return contentValues;
         }

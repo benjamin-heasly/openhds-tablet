@@ -10,6 +10,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.LocationHierarchies.EXT_ID;
 import static org.openhds.mobile.OpenHDS.LocationHierarchies.LOCATION_HIERARCHY_LEVEL_UUID;
 import static org.openhds.mobile.OpenHDS.LocationHierarchies.NAME;
@@ -50,6 +52,8 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
             locationHierarchy.setName(extractString(cursor, NAME));
             locationHierarchy.setLevelUuid(extractString(cursor, LOCATION_HIERARCHY_LEVEL_UUID));
             locationHierarchy.setParentUuid(extractString(cursor, PARENT_UUID));
+            locationHierarchy.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            locationHierarchy.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return locationHierarchy;
         }
@@ -63,6 +67,8 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
             contentValues.put(NAME, locationHierarchy.getName());
             contentValues.put(LOCATION_HIERARCHY_LEVEL_UUID, locationHierarchy.getLevelUuid());
             contentValues.put(PARENT_UUID, locationHierarchy.getParentUuid());
+            contentValues.put(LAST_MODIFIED_CLIENT, locationHierarchy.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, locationHierarchy.getLastModifiedServer());
 
             return contentValues;
         }

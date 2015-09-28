@@ -19,6 +19,7 @@ public class MembershipParser extends EntityParser<Membership> {
         membership.setUuid(dataPage.getFirstString(asList("uuid")));
         membership.setIndividualUuid(dataPage.getFirstString(asList("individual", "uuid")));
         membership.setSocialGroupUuid(dataPage.getFirstString(asList("socialGroup", "uuid")));
+        membership.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return membership;
     }

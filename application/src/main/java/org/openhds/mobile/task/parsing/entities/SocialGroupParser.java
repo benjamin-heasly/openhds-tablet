@@ -17,6 +17,7 @@ public class SocialGroupParser extends EntityParser<SocialGroup> {
         socialGroup.setUuid(dataPage.getFirstString(asList("uuid")));
         socialGroup.setExtId(dataPage.getFirstString(asList("extId")));
         socialGroup.setGroupName(dataPage.getFirstString(asList("groupName")));
+        socialGroup.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return socialGroup;
     }

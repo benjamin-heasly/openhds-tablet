@@ -9,6 +9,8 @@ import org.openhds.mobile.model.core.LocationHierarchyLevel;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.repository.RepositoryUtils.extractInt;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
@@ -26,22 +28,26 @@ public class LocationHierarchyLevelGateway extends Gateway<LocationHierarchyLeve
 
         @Override
         public LocationHierarchyLevel fromCursor(Cursor cursor) {
-            LocationHierarchyLevel LocationHierarchyLevel = new LocationHierarchyLevel();
+            LocationHierarchyLevel locationHierarchyLevel = new LocationHierarchyLevel();
 
-            LocationHierarchyLevel.setUuid(extractString(cursor, OpenHDS.LocationHierarchyLevels.UUID));
-            LocationHierarchyLevel.setName(extractString(cursor, OpenHDS.LocationHierarchyLevels.NAME));
-            LocationHierarchyLevel.setKeyIdentifier(extractInt(cursor, OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER));
+            locationHierarchyLevel.setUuid(extractString(cursor, OpenHDS.LocationHierarchyLevels.UUID));
+            locationHierarchyLevel.setName(extractString(cursor, OpenHDS.LocationHierarchyLevels.NAME));
+            locationHierarchyLevel.setKeyIdentifier(extractInt(cursor, OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER));
+            locationHierarchyLevel.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            locationHierarchyLevel.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
-            return LocationHierarchyLevel;
+            return locationHierarchyLevel;
         }
 
         @Override
-        public ContentValues toContentValues(LocationHierarchyLevel LocationHierarchyLevel) {
+        public ContentValues toContentValues(LocationHierarchyLevel locationHierarchyLevel) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(OpenHDS.LocationHierarchyLevels.UUID, LocationHierarchyLevel.getUuid());
-            contentValues.put(OpenHDS.LocationHierarchyLevels.NAME, LocationHierarchyLevel.getName());
-            contentValues.put(OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER, LocationHierarchyLevel.getKeyIdentifier());
+            contentValues.put(OpenHDS.LocationHierarchyLevels.UUID, locationHierarchyLevel.getUuid());
+            contentValues.put(OpenHDS.LocationHierarchyLevels.NAME, locationHierarchyLevel.getName());
+            contentValues.put(OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER, locationHierarchyLevel.getKeyIdentifier());
+            contentValues.put(LAST_MODIFIED_CLIENT, locationHierarchyLevel.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, locationHierarchyLevel.getLastModifiedServer());
 
             return contentValues;
         }

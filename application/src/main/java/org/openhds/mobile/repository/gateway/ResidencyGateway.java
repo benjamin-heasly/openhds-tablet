@@ -10,6 +10,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Residencies.END_TYPE;
 import static org.openhds.mobile.OpenHDS.Residencies.INDIVIDUAL_UUID;
 import static org.openhds.mobile.OpenHDS.Residencies.LOCATION_UUID;
@@ -69,6 +71,8 @@ public class ResidencyGateway extends Gateway<Residency> {
             residency.setIndividualUuid(extractString(cursor, INDIVIDUAL_UUID));
             residency.setLocationUuid(extractString(cursor, LOCATION_UUID));
             residency.setEndType(extractString(cursor, END_TYPE));
+            residency.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            residency.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return residency;
         }
@@ -81,6 +85,8 @@ public class ResidencyGateway extends Gateway<Residency> {
             contentValues.put(INDIVIDUAL_UUID, residency.getIndividualUuid());
             contentValues.put(LOCATION_UUID, residency.getLocationUuid());
             contentValues.put(END_TYPE, residency.getEndType());
+            contentValues.put(LAST_MODIFIED_CLIENT, residency.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, residency.getLastModifiedServer());
 
             return contentValues;
         }

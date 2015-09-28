@@ -3,13 +3,18 @@ package org.openhds.mobile.repository.gateway;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.core.Membership;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
-import static org.openhds.mobile.OpenHDS.Memberships.*;
+import static org.openhds.mobile.OpenHDS.Memberships.INDIVIDUAL_UUID;
+import static org.openhds.mobile.OpenHDS.Memberships.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Memberships.LAST_MODIFIED_SERVER;
+import static org.openhds.mobile.OpenHDS.Memberships.SOCIAL_GROUP_UUID;
+import static org.openhds.mobile.OpenHDS.Memberships.UUID;
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 import static org.openhds.mobile.repository.RepositoryUtils.insert;
@@ -31,7 +36,7 @@ public class MembershipGateway extends Gateway<Membership> {
     public boolean insertOrUpdate(ContentResolver contentResolver, Membership membership) {
         ContentValues contentValues = converter.toContentValues(membership);
 
-        
+
         String socialGroupId = membership.getSocialGroupUuid();
         String individualId = membership.getIndividualUuid();
         Membership existingMembership = getFirst(contentResolver,
@@ -66,6 +71,8 @@ public class MembershipGateway extends Gateway<Membership> {
             membership.setUuid(extractString(cursor, UUID));
             membership.setIndividualUuid(extractString(cursor, INDIVIDUAL_UUID));
             membership.setSocialGroupUuid(extractString(cursor, SOCIAL_GROUP_UUID));
+            membership.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            membership.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return membership;
         }
@@ -77,6 +84,8 @@ public class MembershipGateway extends Gateway<Membership> {
             contentValues.put(UUID, membership.getUuid());
             contentValues.put(INDIVIDUAL_UUID, membership.getIndividualUuid());
             contentValues.put(SOCIAL_GROUP_UUID, membership.getSocialGroupUuid());
+            contentValues.put(LAST_MODIFIED_CLIENT, membership.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, membership.getLastModifiedServer());
 
             return contentValues;
         }

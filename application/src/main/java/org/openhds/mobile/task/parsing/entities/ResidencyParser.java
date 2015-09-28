@@ -20,6 +20,7 @@ public class ResidencyParser extends EntityParser<Residency> {
         residency.setIndividualUuid(dataPage.getFirstString(asList("individual", "uuid")));
         residency.setLocationUuid(dataPage.getFirstString(asList("location", "uuid")));
         residency.setEndType(dataPage.getFirstString(asList("endType")));
+        residency.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return residency;
     }

@@ -21,6 +21,7 @@ public class RelationshipParser extends EntityParser<Relationship> {
         relationship.setStartDate(dataPage.getFirstString(asList("startDate")));
         relationship.setType(dataPage.getFirstString(asList("relationshipType")));
         relationship.setUuid(dataPage.getFirstString(asList("uuid")));
+        relationship.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return relationship;
     }

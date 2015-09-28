@@ -9,6 +9,8 @@ public class Membership implements Serializable {
     private String uuid;
     private String individualUuid;
     private String socialGroupUuid;
+    private String lastModifiedServer;
+    private String lastModifiedClient;
 
     public Membership() {}
 
@@ -16,6 +18,22 @@ public class Membership implements Serializable {
         this.individualUuid = individual.getUuid();
         this.socialGroupUuid = socialGroup.getUuid();
         this.uuid = uuid;
+    }
+
+    public String getLastModifiedServer() {
+        return lastModifiedServer;
+    }
+
+    public void setLastModifiedServer(String lastModifiedServer) {
+        this.lastModifiedServer = lastModifiedServer;
+    }
+
+    public String getLastModifiedClient() {
+        return lastModifiedClient;
+    }
+
+    public void setLastModifiedClient(String lastModifiedClient) {
+        this.lastModifiedClient = lastModifiedClient;
     }
 
     public String getUuid() {

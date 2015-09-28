@@ -9,6 +9,24 @@ public class SocialGroup implements Serializable {
     private String groupName;
     private String uuid;
     private String extId;
+    private String lastModifiedServer;
+    private String lastModifiedClient;
+
+    public String getLastModifiedServer() {
+        return lastModifiedServer;
+    }
+
+    public void setLastModifiedServer(String lastModifiedServer) {
+        this.lastModifiedServer = lastModifiedServer;
+    }
+
+    public String getLastModifiedClient() {
+        return lastModifiedClient;
+    }
+
+    public void setLastModifiedClient(String lastModifiedClient) {
+        this.lastModifiedClient = lastModifiedClient;
+    }
 
     public SocialGroup() {}
 

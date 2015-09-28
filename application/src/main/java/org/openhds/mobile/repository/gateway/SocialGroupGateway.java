@@ -10,6 +10,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.SocialGroups.EXT_ID;
 import static org.openhds.mobile.OpenHDS.SocialGroups.GROUP_NAME;
 import static org.openhds.mobile.OpenHDS.SocialGroups.UUID;
@@ -38,6 +40,8 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
             socialGroup.setUuid(extractString(cursor, UUID));
             socialGroup.setExtId(extractString(cursor, EXT_ID));
             socialGroup.setGroupName(extractString(cursor, GROUP_NAME));
+            socialGroup.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            socialGroup.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return socialGroup;
         }
@@ -49,6 +53,8 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
             contentValues.put(UUID, socialGroup.getUuid());
             contentValues.put(EXT_ID, socialGroup.getExtId());
             contentValues.put(GROUP_NAME, socialGroup.getGroupName());
+            contentValues.put(LAST_MODIFIED_CLIENT, socialGroup.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, socialGroup.getLastModifiedServer());
 
             return contentValues;
         }

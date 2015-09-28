@@ -9,6 +9,8 @@ import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Visits.DATE;
 import static org.openhds.mobile.OpenHDS.Visits.EXT_ID;
 import static org.openhds.mobile.OpenHDS.Visits.FIELD_WORKER_UUID;
@@ -37,6 +39,8 @@ public class VisitGateway extends Gateway<Visit> {
             visit.setVisitDate(extractString(cursor, DATE));
             visit.setLocationUuid(extractString(cursor, LOCATION_UUID));
             visit.setFieldWorkerUuid(extractString(cursor, FIELD_WORKER_UUID));
+            visit.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            visit.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return visit;
         }
@@ -50,6 +54,8 @@ public class VisitGateway extends Gateway<Visit> {
             contentValues.put(DATE, visit.getVisitDate());
             contentValues.put(LOCATION_UUID, visit.getLocationUuid());
             contentValues.put(FIELD_WORKER_UUID, visit.getFieldWorkerUuid());
+            contentValues.put(LAST_MODIFIED_CLIENT, visit.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, visit.getLastModifiedServer());
 
             return contentValues;
         }

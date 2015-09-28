@@ -21,6 +21,7 @@ public class LocationHierarchyParser extends EntityParser<LocationHierarchy> {
         locationHierarchy.setLevelUuid(dataPage.getFirstString(asList("level", "uuid")));
         locationHierarchy.setName(dataPage.getFirstString(asList("name")));
         locationHierarchy.setParentUuid(dataPage.getFirstString(asList("parent", "uuid")));
+        locationHierarchy.setLastModifiedServer(dataPage.getFirstString(asList("lastModifiedDate")));
 
         return locationHierarchy;
     }

@@ -10,6 +10,24 @@ public class Residency implements Serializable {
     private String individualUuid;
     private String locationUuid;
     private String endType;
+    private String lastModifiedServer;
+    private String lastModifiedClient;
+
+    public String getLastModifiedServer() {
+        return lastModifiedServer;
+    }
+
+    public void setLastModifiedServer(String lastModifiedServer) {
+        this.lastModifiedServer = lastModifiedServer;
+    }
+
+    public String getLastModifiedClient() {
+        return lastModifiedClient;
+    }
+
+    public void setLastModifiedClient(String lastModifiedClient) {
+        this.lastModifiedClient = lastModifiedClient;
+    }
 
     public String getUuid() {
         return uuid;
