@@ -267,126 +267,137 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Individuals.GENDER + " TEXT,"
                     + OpenHDS.Individuals.FATHER + " TEXT,"
                     + OpenHDS.Individuals.MOTHER + " TEXT);");
-            db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.UUID));
+            db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.EXT_ID));
             db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.FIRST_NAME));
             db.execSQL(indexStatement(OpenHDS.Individuals.TABLE_NAME, OpenHDS.Individuals.LAST_NAME));
 
             db.execSQL("CREATE TABLE " + OpenHDS.Locations.TABLE_NAME + " ("
                     + OpenHDS.Locations._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.Locations.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Locations.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Locations.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Locations.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.Locations.NAME + " TEXT NOT NULL,"
                     + OpenHDS.Locations.LATITUDE + " TEXT,"
                     + OpenHDS.Locations.LONGITUDE + " TEXT,"
                     + OpenHDS.Locations.LOCATION_HIERARCHY_UUID + " TEXT NOT NULL);");
+            db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.LOCATION_HIERARCHY_UUID));
             db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.EXT_ID));
             db.execSQL(indexStatement(OpenHDS.Locations.TABLE_NAME, OpenHDS.Locations.NAME));
 
             db.execSQL("CREATE TABLE " + OpenHDS.LocationHierarchies.TABLE_NAME + " ("
                     + OpenHDS.LocationHierarchies._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.LocationHierarchies.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.LocationHierarchies.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.LocationHierarchies.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.LocationHierarchies.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.LocationHierarchies.LOCATION_HIERARCHY_LEVEL_UUID + " TEXT NOT NULL,"
                     + OpenHDS.LocationHierarchies.NAME + " TEXT NOT NULL,"
                     + OpenHDS.LocationHierarchies.PARENT_UUID + " TEXT);");
-            db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.UUID));
+            db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.PARENT_UUID));
             db.execSQL(indexStatement(OpenHDS.LocationHierarchies.TABLE_NAME, OpenHDS.LocationHierarchies.LOCATION_HIERARCHY_LEVEL_UUID));
 
             db.execSQL("CREATE TABLE " + OpenHDS.LocationHierarchyLevels.TABLE_NAME + " ("
                     + OpenHDS.LocationHierarchyLevels._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.LocationHierarchyLevels.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.LocationHierarchyLevels.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.LocationHierarchyLevels.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.LocationHierarchyLevels.NAME + " TEXT NOT NULL,"
                     + OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER + " INTEGER);");
 
             db.execSQL("CREATE TABLE " + OpenHDS.Visits.TABLE_NAME + " ("
                     + OpenHDS.Visits._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.Visits.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Visits.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Visits.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Visits.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.Visits.DATE + " TEXT NOT NULL,"
                     + OpenHDS.Visits.FIELD_WORKER_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Visits.LOCATION_UUID + " TEXT);");
-            db.execSQL(indexStatement(OpenHDS.Visits.TABLE_NAME, OpenHDS.Visits.UUID));
+            db.execSQL(indexStatement(OpenHDS.Visits.TABLE_NAME, OpenHDS.Visits.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.Visits.TABLE_NAME, OpenHDS.Visits.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.Visits.TABLE_NAME, OpenHDS.Visits.LOCATION_UUID));
 
             db.execSQL("CREATE TABLE " + OpenHDS.Relationships.TABLE_NAME + " ("
                     + OpenHDS.Relationships._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.Relationships.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Relationships.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Relationships.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Relationships.INDIVIDUAL_A_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Relationships.INDIVIDUAL_B_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Relationships.TYPE + " TEXT NOT NULL,"
                     + OpenHDS.Relationships.START_DATE + " TEXT NOT NULL);");
-            db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.UUID));
+            db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.INDIVIDUAL_A_UUID));
             db.execSQL(indexStatement(OpenHDS.Relationships.TABLE_NAME, OpenHDS.Relationships.INDIVIDUAL_B_UUID));
 
             db.execSQL("CREATE TABLE " + OpenHDS.Users.TABLE_NAME + " ("
                     + OpenHDS.Users._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.Users.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Users.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Users.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Users.USERNAME + " TEXT NOT NULL,"
                     + OpenHDS.Users.FIRST_NAME + " TEXT,"
                     + OpenHDS.Users.LAST_NAME + " TEXT,"
                     + OpenHDS.Users.PASSWORD_HASH + " TEXT NOT NULL);");
-            db.execSQL(indexStatement(OpenHDS.Users.TABLE_NAME, OpenHDS.Users.UUID));
+            db.execSQL(indexStatement(OpenHDS.Users.TABLE_NAME, OpenHDS.Users.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.Users.TABLE_NAME, OpenHDS.Users.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.Users.TABLE_NAME, OpenHDS.Users.USERNAME));
 
             db.execSQL("CREATE TABLE " + OpenHDS.FieldWorkers.TABLE_NAME + " ("
                     + OpenHDS.FieldWorkers._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.FieldWorkers.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.FieldWorkers.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.FieldWorkers.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.FieldWorkers.FIELD_WORKER_ID + " TEXT NOT NULL,"
                     + OpenHDS.FieldWorkers.FIRST_NAME + " TEXT,"
                     + OpenHDS.FieldWorkers.LAST_NAME + " TEXT,"
                     + OpenHDS.FieldWorkers.PASSWORD_HASH + " TEXT NOT NULL);");
-            db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.UUID));
+            db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.FIRST_NAME));
             db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.LAST_NAME));
             db.execSQL(indexStatement(OpenHDS.FieldWorkers.TABLE_NAME, OpenHDS.FieldWorkers.FIELD_WORKER_ID));
 
             db.execSQL("CREATE TABLE " + OpenHDS.SocialGroups.TABLE_NAME + " ("
                     + OpenHDS.SocialGroups._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.SocialGroups.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.SocialGroups.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.SocialGroups.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.SocialGroups.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.SocialGroups.GROUP_NAME + " TEXT NOT NULL);");
-            db.execSQL(indexStatement(OpenHDS.SocialGroups.TABLE_NAME, OpenHDS.SocialGroups.UUID));
+            db.execSQL(indexStatement(OpenHDS.SocialGroups.TABLE_NAME, OpenHDS.SocialGroups.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.SocialGroups.TABLE_NAME, OpenHDS.SocialGroups.LAST_MODIFIED_CLIENT));
 
             db.execSQL("CREATE TABLE " + OpenHDS.Memberships.TABLE_NAME + " ("
                     + OpenHDS.Memberships._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.Memberships.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Memberships.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Memberships.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Memberships.INDIVIDUAL_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Memberships.SOCIAL_GROUP_UUID + " TEXT NOT NULL);");
-            db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.UUID));
+            db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.INDIVIDUAL_UUID));
             db.execSQL(indexStatement(OpenHDS.Memberships.TABLE_NAME, OpenHDS.Memberships.SOCIAL_GROUP_UUID));
 
             db.execSQL("CREATE TABLE " + OpenHDS.Residencies.TABLE_NAME + " ("
                     + OpenHDS.Residencies._ID + " INTEGER,"
-                    + OpenHDS.Individuals.UUID + " TEXT PRIMARY KEY NOT NULL,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_SERVER + " TEXT,"
-                    + OpenHDS.Individuals.LAST_MODIFIED_CLIENT + " TEXT,"
+                    + OpenHDS.Residencies.UUID + " TEXT PRIMARY KEY NOT NULL,"
+                    + OpenHDS.Residencies.LAST_MODIFIED_SERVER + " TEXT,"
+                    + OpenHDS.Residencies.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Residencies.INDIVIDUAL_UUID + " TEXT NOT NULL,"
                     + OpenHDS.Residencies.END_TYPE + " TEXT,"
                     + OpenHDS.Residencies.LOCATION_UUID + " TEXT NOT NULL);");
-            db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.UUID));
+            db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.LAST_MODIFIED_SERVER));
+            db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.LAST_MODIFIED_CLIENT));
             db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.INDIVIDUAL_UUID));
             db.execSQL(indexStatement(OpenHDS.Residencies.TABLE_NAME, OpenHDS.Residencies.LOCATION_UUID));
         }
