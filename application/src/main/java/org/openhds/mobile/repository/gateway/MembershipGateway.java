@@ -34,8 +34,7 @@ public class MembershipGateway extends Gateway<Membership> {
     // take care to update at the correct social group AND individual
     @Override
     public boolean insertOrUpdate(ContentResolver contentResolver, Membership membership) {
-        ContentValues contentValues = converter.toContentValues(membership);
-
+        ContentValues contentValues = toContentValues(membership);
 
         String socialGroupId = membership.getSocialGroupUuid();
         String individualId = membership.getIndividualUuid();
@@ -102,5 +101,11 @@ public class MembershipGateway extends Gateway<Membership> {
             dataWrapper.setCategory(state);
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(Membership entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }

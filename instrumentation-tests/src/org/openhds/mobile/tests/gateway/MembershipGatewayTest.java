@@ -14,12 +14,14 @@ public class MembershipGatewayTest extends GatewayTest<Membership> {
     }
 
     @Override
-    protected Membership makeTestEntity(String id, String name) {
+    protected Membership makeTestEntity(String id, String name, String modificationDate) {
         Membership membership = new Membership();
 
         membership.setUuid(id);
         membership.setIndividualUuid(id);
         membership.setSocialGroupUuid("SOCIALGROUP");
+        membership.setLastModifiedServer(modificationDate);
+        membership.setLastModifiedClient(modificationDate);
 
         return membership;
     }

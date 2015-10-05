@@ -14,7 +14,7 @@ public class FieldWorkerGatewayTest extends GatewayTest<FieldWorker> {
     }
 
     @Override
-    protected FieldWorker makeTestEntity(String id, String name) {
+    protected FieldWorker makeTestEntity(String id, String name, String modificationDate) {
         FieldWorker fieldWorker = new FieldWorker();
 
         fieldWorker.setUuid(id);
@@ -22,6 +22,8 @@ public class FieldWorkerGatewayTest extends GatewayTest<FieldWorker> {
         fieldWorker.setFirstName(name);
         fieldWorker.setLastName("LASTNAME");
         fieldWorker.setPasswordHash("PASSWORD_HASH");
+        fieldWorker.setLastModifiedServer(modificationDate);
+        fieldWorker.setLastModifiedClient(modificationDate);
 
         return fieldWorker;
     }

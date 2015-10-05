@@ -35,7 +35,7 @@ public class ResidencyGateway extends Gateway<Residency> {
     // take care to update at the correct location AND individual
     @Override
     public boolean insertOrUpdate(ContentResolver contentResolver, Residency residency) {
-        ContentValues contentValues = converter.toContentValues(residency);
+        ContentValues contentValues = toContentValues(residency);
 
         String locationId = residency.getLocationUuid();
         String individualId = residency.getIndividualUuid();
@@ -103,5 +103,11 @@ public class ResidencyGateway extends Gateway<Residency> {
             dataWrapper.setCategory(state);
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(Residency entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }

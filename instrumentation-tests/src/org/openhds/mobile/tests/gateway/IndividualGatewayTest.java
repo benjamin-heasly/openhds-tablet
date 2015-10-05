@@ -24,9 +24,9 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
-        Individual individual1 = makeTestEntity("TEST1", "test 1");
-        Individual individual2 = makeTestEntity("TEST2", "test 2");
-        Individual individual3 = makeTestEntity("TRIAL3", "test 3");
+        Individual individual1 = makeTestEntity("TEST1", "test 1", "test date");
+        Individual individual2 = makeTestEntity("TEST2", "test 2", "test date");
+        Individual individual3 = makeTestEntity("TRIAL3", "test 3", "test date");
 
         individualGateway.insertOrUpdate(contentResolver, individual1);
         individualGateway.insertOrUpdate(contentResolver, individual2);
@@ -55,9 +55,9 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
-        Individual individual1 = makeTestEntity("TEST1", "test 1");
-        Individual individual2 = makeTestEntity("TEST2", "test 2");
-        Individual individual3 = makeTestEntity("TEST3", "test 3");
+        Individual individual1 = makeTestEntity("TEST1", "test 1", "test date");
+        Individual individual2 = makeTestEntity("TEST2", "test 2", "test date");
+        Individual individual3 = makeTestEntity("TEST3", "test 3", "test date");
 
         individual1.setFirstName("Sam");
         individual2.setFirstName("Sal");
@@ -87,9 +87,9 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         List<Individual> shouldBeEmpty = individualGateway.getList(contentResolver, query);
         assertEquals(0, shouldBeEmpty.size());
 
-        Individual individual1 = makeTestEntity("TEST1", "test 1");
-        Individual individual2 = makeTestEntity("TEST2", "test 2");
-        Individual individual3 = makeTestEntity("TEST3", "test 3");
+        Individual individual1 = makeTestEntity("TEST1", "test 1", "test date");
+        Individual individual2 = makeTestEntity("TEST2", "test 2", "test date");
+        Individual individual3 = makeTestEntity("TEST3", "test 3", "test date");
 
         individual1.setFirstName("Sam");
         individual2.setFirstName("Sal");
@@ -108,7 +108,7 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
     }
 
     @Override
-    protected Individual makeTestEntity(String id, String name) {
+    protected Individual makeTestEntity(String id, String name, String modificationDate) {
         Individual individual = new Individual();
 
         individual.setUuid(id);
@@ -119,6 +119,8 @@ public class IndividualGatewayTest extends GatewayTest<Individual> {
         individual.setGender("M");
         individual.setMother("MOTHER");
         individual.setFather("FATHER");
+        individual.setLastModifiedServer(modificationDate);
+        individual.setLastModifiedClient(modificationDate);
 
         return individual;
     }

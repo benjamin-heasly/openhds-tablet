@@ -83,5 +83,11 @@ public class LocationGateway extends Gateway<Location> {
 
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(Location entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }

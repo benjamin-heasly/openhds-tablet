@@ -14,12 +14,14 @@ public class SocialGroupGatewayTest extends GatewayTest<SocialGroup> {
     }
 
     @Override
-    protected SocialGroup makeTestEntity(String id, String name) {
+    protected SocialGroup makeTestEntity(String id, String name, String modificationDate) {
         SocialGroup socialGroup = new SocialGroup();
 
         socialGroup.setUuid(id);
         socialGroup.setGroupName(name);
         socialGroup.setExtId(name);
+        socialGroup.setLastModifiedServer(modificationDate);
+        socialGroup.setLastModifiedClient(modificationDate);
 
         return socialGroup;
     }

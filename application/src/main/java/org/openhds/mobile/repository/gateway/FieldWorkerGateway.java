@@ -10,6 +10,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.FIELD_WORKER_ID;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.FIRST_NAME;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.LAST_NAME;
@@ -42,6 +44,8 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             fieldWorker.setFirstName(extractString(cursor, FIRST_NAME));
             fieldWorker.setLastName(extractString(cursor, LAST_NAME));
             fieldWorker.setPasswordHash(extractString(cursor, PASSWORD_HASH));
+            fieldWorker.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
+            fieldWorker.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
             return fieldWorker;
         }
@@ -55,6 +59,8 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             contentValues.put(LAST_NAME, fieldWorker.getLastName());
             contentValues.put(PASSWORD_HASH, fieldWorker.getPasswordHash());
             contentValues.put(UUID, fieldWorker.getUuid());
+            contentValues.put(LAST_MODIFIED_CLIENT, fieldWorker.getLastModifiedClient());
+            contentValues.put(LAST_MODIFIED_SERVER, fieldWorker.getLastModifiedServer());
 
             return contentValues;
         }
@@ -72,6 +78,11 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
             dataWrapper.setCategory(state);
             dataWrapper.setUuid(fieldWorker.getUuid());
             return dataWrapper;
+        }
+
+        @Override
+        public String getClientModificationTime(FieldWorker entity) {
+            return entity.getLastModifiedClient();
         }
     }
 }

@@ -14,7 +14,7 @@ public class LocationHierarchyGatewayTest extends GatewayTest<LocationHierarchy>
     }
 
     @Override
-    protected LocationHierarchy makeTestEntity(String id, String name) {
+    protected LocationHierarchy makeTestEntity(String id, String name, String modificationDate) {
         LocationHierarchy locationHierarchy = new LocationHierarchy();
 
         locationHierarchy.setUuid(id);
@@ -22,6 +22,8 @@ public class LocationHierarchyGatewayTest extends GatewayTest<LocationHierarchy>
         locationHierarchy.setName(name);
         locationHierarchy.setLevelUuid("LEVEL");
         locationHierarchy.setParentUuid("PARENT");
+        locationHierarchy.setLastModifiedServer(modificationDate);
+        locationHierarchy.setLastModifiedClient(modificationDate);
 
         return locationHierarchy;
     }

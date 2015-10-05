@@ -76,5 +76,10 @@ public class VisitGateway extends Gateway<Visit> {
 
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(Visit entity) {
+            return entity.getLastModifiedClient();
+        }
     }
 }

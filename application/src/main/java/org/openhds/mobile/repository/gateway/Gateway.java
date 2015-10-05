@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+
+import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
@@ -11,17 +13,24 @@ import org.openhds.mobile.repository.QueryResultsIterator;
 import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
+import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
+import static org.openhds.mobile.repository.RepositoryUtils.ASCENDING;
+import static org.openhds.mobile.repository.RepositoryUtils.DESCENDING;
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
+import static org.openhds.mobile.repository.RepositoryUtils.GREATER_THAN_EQUALS;
+import static org.openhds.mobile.repository.RepositoryUtils.LESS_THAN_EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
-import static org.openhds.mobile.repository.RepositoryUtils.insert;
 import static org.openhds.mobile.repository.RepositoryUtils.bulkInsert;
-import static org.openhds.mobile.repository.RepositoryUtils.update;
-import static org.openhds.mobile.repository.RepositoryUtils.delete;
 import static org.openhds.mobile.repository.RepositoryUtils.countRecords;
-
+import static org.openhds.mobile.repository.RepositoryUtils.delete;
+import static org.openhds.mobile.repository.RepositoryUtils.extractString;
+import static org.openhds.mobile.repository.RepositoryUtils.insert;
+import static org.openhds.mobile.repository.RepositoryUtils.update;
 
 /**
  * Supertype for database table Gateways.  Expose and implement query and CRUD operations,
@@ -44,7 +53,7 @@ public abstract class Gateway<T> {
 
     // true if entity was inserted, false if updated
     public boolean insertOrUpdate(ContentResolver contentResolver, T entity) {
-        ContentValues contentValues = converter.toContentValues(entity);
+        ContentValues contentValues = toContentValues(entity);
         String id = converter.getId(entity);
         if (exists(contentResolver, id)) {
             update(contentResolver, tableUri, contentValues, idColumnName, id);
@@ -153,6 +162,63 @@ public abstract class Gateway<T> {
         return new Query(tableUri, columnNames, columnValues, columnOrderBy, LIKE);
     }
 
+    // find records modified on the server between the given timestamps
+    public Query findByServerModificationTimeBetween(String afterDate, String beforeDate) {
+        return findByColumnValueBetween(LAST_MODIFIED_SERVER, afterDate, beforeDate);
+    }
+
+    // find records modified on the client between the given timestamps
+    public Query findByClientModificationTimeBetween(String afterDate, String beforeDate) {
+        return findByColumnValueBetween(LAST_MODIFIED_CLIENT, afterDate, beforeDate);
+    }
+
+    // find records where the given column has values in [min, max], inclusive.
+    public Query findByColumnValueBetween(String columnName, String min, String max) {
+        final String[] columnNames = {columnName, columnName};
+        final String[] columnValues = {min, max};
+        final String[] operators = {GREATER_THAN_EQUALS, LESS_THAN_EQUALS};
+        return new Query(tableUri, columnNames, columnValues, columnName, operators);
+    }
+
+    // find the maximum server-side modification timestamp
+    public String findLastServerModificationTime(ContentResolver contentResolver) {
+        Query query = new Query(tableUri, null, null, LAST_MODIFIED_SERVER + " " + DESCENDING);
+        Cursor cursor = query.selectRange(contentResolver, 0, 1);
+        return toString(cursor, LAST_MODIFIED_SERVER);
+    }
+
+    // find the minimum server-side modification timestamp
+    public String findFirstServerModificationTime(ContentResolver contentResolver) {
+        Query query = new Query(tableUri, null, null, LAST_MODIFIED_SERVER + " " + ASCENDING);
+        Cursor cursor = query.selectRange(contentResolver, 0, 1);
+        return toString(cursor, LAST_MODIFIED_SERVER);
+    }
+
+    // find the maximum client-side modification timestamp
+    public String findLastClientModificationTime(ContentResolver contentResolver) {
+        Query query = new Query(tableUri, null, null, LAST_MODIFIED_CLIENT + " " + DESCENDING);
+        Cursor cursor = query.selectRange(contentResolver, 0, 1);
+        return toString(cursor, LAST_MODIFIED_CLIENT);
+    }
+
+    // find the minimum client-side modification timestamp
+    public String findFirstClientModificationTime(ContentResolver contentResolver) {
+        Query query = new Query(tableUri, null, null, LAST_MODIFIED_CLIENT + " " + ASCENDING);
+        Cursor cursor = query.selectRange(contentResolver, 0, 1);
+        return toString(cursor, OpenHDS.Common.LAST_MODIFIED_CLIENT);
+    }
+
+    // get a string from the first result
+    protected String toString(Cursor cursor, String columnName) {
+        if(!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+        String result = extractString(cursor, columnName);
+        cursor.close();
+        return result;
+    }
+
     // convert first result and close cursor
     protected T toEntity(Cursor cursor) {
         if(!cursor.moveToFirst()) {
@@ -178,8 +244,15 @@ public abstract class Gateway<T> {
     protected ContentValues[] fromList(List<T> entities) {
         List<ContentValues> allContentValues = new ArrayList<ContentValues>();
         for (T entity : entities) {
-            allContentValues.add(converter.toContentValues(entity));
+            allContentValues.add(toContentValues(entity));
         }
         return allContentValues.toArray(new ContentValues[allContentValues.size()]);
+    }
+
+    // convert entity to content values, and assign client-side modification time
+    protected ContentValues toContentValues(T entity) {
+        ContentValues contentValues = converter.toContentValues(entity);
+        contentValues.put(LAST_MODIFIED_CLIENT, Calendar.getInstance().toString());
+        return contentValues;
     }
 }

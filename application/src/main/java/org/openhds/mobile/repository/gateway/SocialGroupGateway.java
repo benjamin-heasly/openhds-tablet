@@ -74,5 +74,11 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
 
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(SocialGroup entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }

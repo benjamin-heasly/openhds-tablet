@@ -14,13 +14,15 @@ public class LocationHierarchyLevelGatewayTest extends GatewayTest<LocationHiera
     }
 
     @Override
-    protected LocationHierarchyLevel makeTestEntity(String id, String name) {
-        LocationHierarchyLevel locationHierarchy = new LocationHierarchyLevel();
+    protected LocationHierarchyLevel makeTestEntity(String id, String name, String modificationDate) {
+        LocationHierarchyLevel locationHierarchyLevel = new LocationHierarchyLevel();
 
-        locationHierarchy.setUuid(id);
-        locationHierarchy.setName(name);
-        locationHierarchy.setKeyIdentifier(name.hashCode());
+        locationHierarchyLevel.setUuid(id);
+        locationHierarchyLevel.setName(name);
+        locationHierarchyLevel.setKeyIdentifier(name.hashCode());
+        locationHierarchyLevel.setLastModifiedServer(modificationDate);
+        locationHierarchyLevel.setLastModifiedClient(modificationDate);
 
-        return locationHierarchy;
+        return locationHierarchyLevel;
     }
 }

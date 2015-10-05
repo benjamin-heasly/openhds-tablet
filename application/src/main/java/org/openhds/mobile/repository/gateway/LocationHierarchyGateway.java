@@ -87,5 +87,11 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
             dataWrapper.setCategory(state);
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(LocationHierarchy entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }

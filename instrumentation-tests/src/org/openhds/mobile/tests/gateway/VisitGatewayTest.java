@@ -14,7 +14,7 @@ public class VisitGatewayTest extends GatewayTest<Visit> {
     }
 
     @Override
-    protected Visit makeTestEntity(String id, String name) {
+    protected Visit makeTestEntity(String id, String name, String modificationDate) {
         Visit visit = new Visit();
 
         visit.setUuid(id);
@@ -22,6 +22,8 @@ public class VisitGatewayTest extends GatewayTest<Visit> {
         visit.setVisitDate("2000-01-01 00:00:00");
         visit.setLocationUuid("LOCATION");
         visit.setFieldWorkerUuid("FIELD_WORKER");
+        visit.setLastModifiedClient(modificationDate);
+        visit.setLastModifiedServer(modificationDate);
 
         return visit;
     }

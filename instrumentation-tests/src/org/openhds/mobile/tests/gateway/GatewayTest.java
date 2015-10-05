@@ -2,8 +2,10 @@ package org.openhds.mobile.tests.gateway;
 
 import android.content.ContentResolver;
 import android.test.ProviderTestCase2;
+
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteOpenHelper;
+
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.provider.OpenHDSProvider;
 import org.openhds.mobile.provider.PasswordHelper;
@@ -11,6 +13,7 @@ import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.gateway.Gateway;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,7 +38,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         this.gateway = gateway;
     }
 
-    protected abstract T makeTestEntity(String id, String name);
+    protected abstract T makeTestEntity(String id, String name, String modificationDate);
 
     @Override
     protected void setUp() throws Exception {
@@ -75,7 +78,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
     public void testAdd() {
         String id = "TEST";
-        T entity = makeTestEntity(id, "mr. test");
+        T entity = makeTestEntity(id, "mr. test", "test date");
 
         boolean wasInserted = gateway.insertOrUpdate(contentResolver, entity);
         assertEquals(true, wasInserted);
@@ -110,7 +113,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         int nEntities = 10;
         for (int i = 0; i < nEntities; i++) {
             String id = String.format("%05d", i);
-            T entity = makeTestEntity(id, "test person");
+            T entity = makeTestEntity(id, "test person", "test date");
             manyEntities.add(entity);
         }
 
@@ -125,8 +128,8 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
     }
 
     public void testFindAll() {
-        T entity1 = makeTestEntity("TEST1", "first person");
-        T entity2 = makeTestEntity("TEST2", "second person");
+        T entity1 = makeTestEntity("TEST1", "first person", "test date");
+        T entity2 = makeTestEntity("TEST2", "second person", "test date");
         gateway.insertOrUpdate(contentResolver, entity1);
         gateway.insertOrUpdate(contentResolver, entity2);
 
@@ -150,8 +153,8 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
                 gateway.getQueryResultIterator(contentResolver, gateway.findAll(), "test");
         assertFalse(allQueryResultsIterator.hasNext());
 
-        T entity1 = makeTestEntity("TEST1", "test person");
-        T entity2 = makeTestEntity("TEST2", "test person");
+        T entity1 = makeTestEntity("TEST1", "test person", "test date");
+        T entity2 = makeTestEntity("TEST2", "test person", "test date");
         gateway.insertOrUpdate(contentResolver, entity1);
         gateway.insertOrUpdate(contentResolver, entity2);
 
@@ -179,7 +182,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         int nEntities = 15;
         for (int i = 0; i < nEntities; i++) {
             String id = String.format("%05d", i);
-            T entity = makeTestEntity(id, "test person");
+            T entity = makeTestEntity(id, "test person", "test date");
             gateway.insertOrUpdate(contentResolver, entity);
         }
 
@@ -199,7 +202,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
     public void testDelete() {
         String id = "TEST";
-        T entity = makeTestEntity(id, "mr. test");
+        T entity = makeTestEntity(id, "mr. test", "test date");
 
         boolean wasInserted = gateway.insertOrUpdate(contentResolver, entity);
 
@@ -216,5 +219,88 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
 
         savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNull(savedEntity);
+    }
+
+    // server-side timestamps are assigned externally from REST calls
+    public void testFindByServerModificationTime() {
+        // use Calendar to stand in for server-side dates
+        Calendar date = Calendar.getInstance();
+        int nDates = 4;
+        Calendar[] dates = new Calendar[nDates];
+        for (int i = 0; i < nDates; i++) {
+            dates[i] = (Calendar) date.clone();
+            dates[i].add(Calendar.SECOND, i);
+
+            String when = dates[i].toString();
+            T entity = makeTestEntity(when, when, when);
+            gateway.insertOrUpdate(contentResolver, entity);
+        }
+
+        // check the range of stored timestamps
+        String firstTime = gateway.findFirstServerModificationTime(contentResolver);
+        assertEquals(dates[0].toString(), firstTime);
+
+        String lastTime = gateway.findLastServerModificationTime(contentResolver);
+        assertEquals(dates[nDates - 1].toString(), lastTime);
+
+        // get just the first one
+        List<T> firstOnes = gateway.getList(contentResolver, gateway.findByServerModificationTimeBetween(firstTime, firstTime));
+        assertEquals(1, firstOnes.size());
+        assertEquals(dates[0].toString(), gateway.getConverter().getId(firstOnes.get(0)));
+
+        // get just the last one
+        List<T> lastOnes = gateway.getList(contentResolver, gateway.findByServerModificationTimeBetween(lastTime, lastTime));
+        assertEquals(1, lastOnes.size());
+        assertEquals(dates[nDates - 1].toString(), gateway.getConverter().getId(lastOnes.get(0)));
+
+        // get the middle two
+        Calendar firstPlusEps = (Calendar) dates[0].clone();
+        firstPlusEps.add(Calendar.MILLISECOND, 1);
+        Calendar lastMinusEps = (Calendar) dates[nDates - 1].clone();
+        lastMinusEps.add(Calendar.MILLISECOND, -1);
+        List<T> middleOnes = gateway.getList(contentResolver, gateway.findByServerModificationTimeBetween(firstPlusEps.toString(), lastMinusEps.toString()));
+        assertEquals(nDates - 2, middleOnes.size());
+        assertEquals(dates[1].toString(), gateway.getConverter().getId(middleOnes.get(0)));
+        assertEquals(dates[nDates - 2].toString(), gateway.getConverter().getId(middleOnes.get(middleOnes.size() - 1)));
+    }
+
+    // client-size modification times are assigned internally by the Gateway
+    public void testFindByClientModificationTime() throws Exception {
+        int nDates = 4;
+        String[] dates = new String[4];
+        for (int i = 0; i < nDates; i++) {
+            String id = "test id " + Integer.toString(i);
+            T entity = makeTestEntity(id, id, "test time");
+            gateway.insertOrUpdate(contentResolver, entity);
+
+            T persisted = gateway.getFirst(contentResolver, gateway.findById(id));
+            dates[i] = gateway.getConverter().getClientModificationTime(persisted);
+
+            // pause, to make sure each date is unique
+            Thread.sleep(2);
+        }
+
+        // check the range of stored timestamps
+        String firstTime = gateway.findFirstClientModificationTime(contentResolver);
+        assertEquals(dates[0], firstTime);
+
+        String lastTime = gateway.findLastClientModificationTime(contentResolver);
+        assertEquals(dates[nDates - 1], lastTime);
+
+        // get just the first one
+        List<T> firstOnes = gateway.getList(contentResolver, gateway.findByClientModificationTimeBetween(firstTime, firstTime));
+        assertEquals(1, firstOnes.size());
+        assertEquals(dates[0], gateway.getConverter().getClientModificationTime(firstOnes.get(0)));
+
+        // get just the last one
+        List<T> lastOnes = gateway.getList(contentResolver, gateway.findByClientModificationTimeBetween(lastTime, lastTime));
+        assertEquals(1, lastOnes.size());
+        assertEquals(dates[nDates - 1], gateway.getConverter().getClientModificationTime(lastOnes.get(0)));
+
+        // get the middle two
+        List<T> middleOnes = gateway.getList(contentResolver, gateway.findByClientModificationTimeBetween(dates[1], dates[nDates - 2]));
+        assertEquals(nDates - 2, middleOnes.size());
+        assertEquals(dates[1], gateway.getConverter().getClientModificationTime(middleOnes.get(0)));
+        assertEquals(dates[nDates - 2], gateway.getConverter().getClientModificationTime(middleOnes.get(middleOnes.size() - 1)));
     }
 }

@@ -14,7 +14,7 @@ public class LocationGatewayTest extends GatewayTest<Location> {
     }
 
     @Override
-    protected Location makeTestEntity(String id, String name) {
+    protected Location makeTestEntity(String id, String name, String modificationDate) {
         Location location = new Location();
 
         location.setUuid(id);
@@ -23,6 +23,8 @@ public class LocationGatewayTest extends GatewayTest<Location> {
         location.setLongitude("1234.5678");
         location.setLatitude("9876.5432");
         location.setHierarchyUuid("HIERARCHY");
+        location.setLastModifiedServer(modificationDate);
+        location.setLastModifiedClient(modificationDate);
 
         return location;
     }

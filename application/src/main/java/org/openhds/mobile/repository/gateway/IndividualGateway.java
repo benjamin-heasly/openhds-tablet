@@ -99,5 +99,11 @@ public class IndividualGateway extends Gateway<Individual> {
 
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(Individual entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }

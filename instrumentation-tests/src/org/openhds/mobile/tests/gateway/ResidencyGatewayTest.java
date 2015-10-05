@@ -14,12 +14,14 @@ public class ResidencyGatewayTest extends GatewayTest<Residency> {
     }
 
     @Override
-    protected Residency makeTestEntity(String id, String name) {
+    protected Residency makeTestEntity(String id, String name, String modificationDate) {
         Residency residency = new Residency();
 
         residency.setUuid(id);
         residency.setIndividualUuid(id);
         residency.setLocationUuid("LOCATION");
+        residency.setLastModifiedServer(modificationDate);
+        residency.setLastModifiedClient(modificationDate);
 
         return residency;
     }

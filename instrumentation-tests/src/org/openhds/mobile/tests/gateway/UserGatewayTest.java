@@ -14,7 +14,7 @@ public class UserGatewayTest extends GatewayTest<User> {
     }
 
     @Override
-    protected User makeTestEntity(String id, String name) {
+    protected User makeTestEntity(String id, String name, String modificationDate) {
         User user = new User();
 
         user.setUuid(id);
@@ -22,6 +22,8 @@ public class UserGatewayTest extends GatewayTest<User> {
         user.setFirstName(name);
         user.setLastName("LASTNAME");
         user.setPasswordHash("PASSWORD_HASH");
+        user.setLastModifiedServer(modificationDate);
+        user.setLastModifiedClient(modificationDate);
 
         return user;
     }

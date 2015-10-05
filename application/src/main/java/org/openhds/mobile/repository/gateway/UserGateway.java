@@ -76,5 +76,11 @@ public class UserGateway extends Gateway<User> {
 
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(User entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }

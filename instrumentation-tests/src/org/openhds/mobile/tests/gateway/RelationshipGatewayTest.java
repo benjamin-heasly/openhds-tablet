@@ -14,7 +14,7 @@ public class RelationshipGatewayTest extends GatewayTest<Relationship> {
     }
 
     @Override
-    protected Relationship makeTestEntity(String id, String name) {
+    protected Relationship makeTestEntity(String id, String name, String modificationDate) {
         Relationship relationship = new Relationship();
 
         relationship.setUuid(id);
@@ -22,6 +22,8 @@ public class RelationshipGatewayTest extends GatewayTest<Relationship> {
         relationship.setIndividualB("INDIVIDUALB");
         relationship.setStartDate("2000-01-01 00:00:00");
         relationship.setType("TYPE");
+        relationship.setLastModifiedServer(modificationDate);
+        relationship.setLastModifiedClient(modificationDate);
 
         return relationship;
     }

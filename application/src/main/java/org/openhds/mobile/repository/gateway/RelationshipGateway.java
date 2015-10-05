@@ -38,7 +38,7 @@ public class RelationshipGateway extends Gateway<Relationship> {
     // take care to update at BOTH correct individuals
     @Override
     public boolean insertOrUpdate(ContentResolver contentResolver, Relationship relationship) {
-        ContentValues contentValues = converter.toContentValues(relationship);
+        ContentValues contentValues = toContentValues(relationship);
 
         String individualAId = relationship.getIndividualA();
         String individualBId = relationship.getIndividualB();
@@ -107,5 +107,11 @@ public class RelationshipGateway extends Gateway<Relationship> {
 
             return dataWrapper;
         }
+
+        @Override
+        public String getClientModificationTime(Relationship entity) {
+            return entity.getLastModifiedClient();
+        }
+
     }
 }
