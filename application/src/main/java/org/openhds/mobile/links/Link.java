@@ -1,6 +1,10 @@
 package org.openhds.mobile.links;
 
+import android.net.Uri;
+import android.util.Log;
+
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -44,15 +48,20 @@ public class Link {
         return url;
     }
 
-    public String buildUrlWithParameters(String... params) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(url);
-        char delimiter = '?';
-        for (int i = 0; i < params.length; i++) {
-            builder.append(delimiter).append(params[i]);
-            delimiter = 0 == i % 2 ? '=' : '&';
+    public String buildUrlWithParameters(Map<String, String> params) {
+        if (null == params) {
+            return url;
         }
-        return builder.toString();
+
+        Uri.Builder builder = Uri.parse(url).buildUpon();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            builder.appendQueryParameter(entry.getKey(), entry.getValue());
+
+            if (!parameters.contains(entry.getKey())) {
+                Log.w(this.getClass().getName(), "Building Url with query for <" + entry.getKey() + "> but Link declares no such parameter.");
+            }
+        }
+        return builder.build().toString();
     }
 
     public String getRel() {

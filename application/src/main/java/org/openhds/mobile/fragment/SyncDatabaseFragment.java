@@ -1,5 +1,6 @@
 package org.openhds.mobile.fragment;
 
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -17,18 +19,23 @@ import org.openhds.mobile.links.RelInterpretation;
 import org.openhds.mobile.links.ResourceLinkRegistry;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Queue;
+import java.util.TimeZone;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
 /**
  * Allow user to sync entities with the server.
- *
+ * <p/>
  * Shows a table with sync status and progress for each entity.
  * The user may sync one table at a time or queue up all tables at once.
- *
+ * <p/>
  * BSH
  */
 public class SyncDatabaseFragment extends Fragment {
@@ -58,7 +65,7 @@ public class SyncDatabaseFragment extends Fragment {
             tableRow.setTag(interpretation);
             tableLayout.addView(tableRow);
 
-            Button actionButton = (Button) tableRow.findViewById(R.id.action_column);
+            Button actionButton = (Button) tableRow.findViewById(R.id.sync_button);
             actionButton.setOnClickListener(actionButtonListener);
             actionButton.setTag(interpretation);
         }
@@ -107,48 +114,59 @@ public class SyncDatabaseFragment extends Fragment {
     }
 
     // Update column values and button status.
-    private void updateTableRow(RelInterpretation<?> interpretation, int records, int errors, int actionId) {
+    private void updateTableRow(RelInterpretation<?> interpretation, int records, int errors, int actionId, String minDate, String maxDate) {
         View view = getView();
         if (null == view) {
             return;
         }
 
         TableRow tableRow = (TableRow) view.findViewWithTag(interpretation);
-        TextView entityText = (TextView) tableRow.findViewById(R.id.entity_column);
-        TextView recordsText = (TextView) tableRow.findViewById(R.id.records_column);
-        TextView errorsText = (TextView) tableRow.findViewById(R.id.errors_column);
-        Button actionButton = (Button) tableRow.findViewById(R.id.action_column);
+        Button actionButton = (Button) tableRow.findViewById(R.id.sync_button);
+        TextView recordsText = (TextView) tableRow.findViewById(R.id.record_count);
+        TextView errorsText = (TextView) tableRow.findViewById(R.id.error_count);
+        TextView minDateText = (TextView) tableRow.findViewById(R.id.min_date);
+        TextView maxDateText = (TextView) tableRow.findViewById(R.id.max_date);
 
-        entityText.setText(interpretation.getLabel());
+        actionButton.setText(interpretation.getLabel());
 
         if (IGNORE != records) {
             if (UNKNOWN == records) {
                 recordsText.setText(R.string.sync_database_unknown_value);
             } else {
-                recordsText.setText(Integer.toString(records));
+                recordsText.setText(String.format("%d", records));
             }
         }
 
         if (IGNORE != errors) {
-            if (UNKNOWN == errors) {
-                errorsText.setText(R.string.sync_database_unknown_value);
+            if (UNKNOWN == errors || 0 == errors) {
+                errorsText.setText("");
             } else {
-                errorsText.setText(Integer.toString(errors));
+                errorsText.setText(String.format("%d", errors));
             }
         }
 
         if (IGNORE != actionId) {
-            actionButton.setText(actionId);
+            actionButton.setTextColor(getResources().getColor(actionId));
             actionButton.setTag(interpretation);
+        }
+
+        if (null != minDate) {
+            minDateText.setText(minDate);
+        }
+
+        if (null != maxDate) {
+            maxDateText.setText(maxDate);
         }
     }
 
     // Refresh a table with stored data and ready to sync.
     private void resetTableRow(RelInterpretation<?> interpretation) {
         SyncDatabaseHelper currentSync = getQueuedSync(interpretation);
-        int errors = null == currentSync ?  UNKNOWN : currentSync.getErrorCount();
+        int errors = null == currentSync ? UNKNOWN : currentSync.getErrorCount();
         int records = getRecordCount(interpretation);
-        updateTableRow(interpretation, records, errors, R.string.sync_database_button_sync);
+        String minDate = getMinServerDate(interpretation);
+        String maxDate = getMaxServerDate(interpretation);
+        updateTableRow(interpretation, records, errors, R.color.Black, minDate, maxDate);
     }
 
     private void removeCurrentSync() {
@@ -185,27 +203,37 @@ public class SyncDatabaseFragment extends Fragment {
     }
 
     // Add an entity to the queue to be synced.
-    private void enqueueSync(RelInterpretation<?> interpretation) {
+    private void enqueueSync(RelInterpretation<?> interpretation, String afterDate) {
         if (null != getQueuedSync(interpretation)) {
-            return;
+            removeSync(interpretation);
         }
 
         // mark the table row for this entity as "waiting"
-        updateTableRow(interpretation, UNKNOWN, UNKNOWN, R.string.sync_database_button_waiting);
+        updateTableRow(interpretation, UNKNOWN, UNKNOWN, R.color.Yellow, null, null);
 
         // add this entity to the queue and run it if ready
-        queuedSyncHelpers.add(createSyncHelper(interpretation));
+        queuedSyncHelpers.add(createSyncHelper(interpretation, afterDate));
         startNextSync();
     }
 
-    private SyncDatabaseHelper createSyncHelper(RelInterpretation<?> interpretation) {
+    private SyncDatabaseHelper createSyncHelper(RelInterpretation<?> interpretation, String afterDate) {
         String username = (String) getActivity().getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
         String password = (String) getActivity().getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
-        return new SyncDatabaseHelper(interpretation, new SyncListener(), username, password, getActivity().getContentResolver());
+        SyncDatabaseHelper syncDatabaseHelper = new SyncDatabaseHelper(interpretation, new SyncListener(), username, password, getActivity().getContentResolver());
+        syncDatabaseHelper.addDataQueryParameter("afterDate", afterDate);
+        return syncDatabaseHelper;
     }
 
     private int getRecordCount(RelInterpretation<?> interpretation) {
-        return  interpretation.getGateway().countAll(getActivity().getContentResolver());
+        return interpretation.getGateway().countAll(getActivity().getContentResolver());
+    }
+
+    private String getMinServerDate(RelInterpretation<?> interpretation) {
+        return interpretation.getGateway().findFirstServerModificationTime(getActivity().getContentResolver());
+    }
+
+    private String getMaxServerDate(RelInterpretation<?> interpretation) {
+        return interpretation.getGateway().findLastServerModificationTime(getActivity().getContentResolver());
     }
 
     // Take the next entity off the queue and start the sync process.
@@ -219,7 +247,7 @@ public class SyncDatabaseFragment extends Fragment {
         RelInterpretation<?> interpretation = currentHelper.getRelInterpretation();
 
         // reset the table row for this entity
-        updateTableRow(interpretation, UNKNOWN, 0, R.string.sync_database_button_cancel);
+        updateTableRow(interpretation, UNKNOWN, 0, R.color.Green, null, null);
 
         // start syncing this entity
         currentHelper.start();
@@ -229,9 +257,7 @@ public class SyncDatabaseFragment extends Fragment {
     private class SyncAllButtonListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            for (String rel : ResourceLinkRegistry.activeRels()) {
-                enqueueSync(ResourceLinkRegistry.getInterpretation(rel));
-            }
+            showDatePickerForSync(null);
         }
     }
 
@@ -254,8 +280,8 @@ public class SyncDatabaseFragment extends Fragment {
                 resetTableRow(interpretation);
 
             } else {
-                // button should change from "sync" to "waiting"
-                enqueueSync(interpretation);
+                // pick a date, then button should change from "sync" to "waiting"
+                showDatePickerForSync(interpretation);
             }
         }
     }
@@ -276,7 +302,7 @@ public class SyncDatabaseFragment extends Fragment {
 
         @Override
         public void onParseDataProgress(RelInterpretation<?> relInterpretation, int progress) {
-            updateTableRow(relInterpretation, progress, IGNORE, IGNORE);
+            updateTableRow(relInterpretation, progress, IGNORE, IGNORE, null, null);
         }
 
         @Override
@@ -288,9 +314,87 @@ public class SyncDatabaseFragment extends Fragment {
 
         @Override
         public void onError(RelInterpretation<?> relInterpretation, String message, int errorCount) {
-            updateTableRow(relInterpretation, IGNORE, errorCount, R.string.sync_database_button_sync);
+            int records = getRecordCount(relInterpretation);
+            String minDate = getMinServerDate(relInterpretation);
+            String maxDate = getMaxServerDate(relInterpretation);
+            updateTableRow(relInterpretation, records, errorCount, R.color.Black, minDate, maxDate);
             errorMessage(relInterpretation.getLabel(), message);
             removeCurrentSync();
         }
+    }
+
+    private void showDatePickerForSync(RelInterpretation<?> relInterpretation) {
+
+        Calendar calendar;
+        if (null == relInterpretation) {
+            calendar = Calendar.getInstance();
+        } else {
+            String latest = getMaxServerDate(relInterpretation);
+            calendar = parseDateIso(latest);
+        }
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                getActivity(),
+                new DatePickForSyncListener(relInterpretation),
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.setTitle(R.string.sync_database_choose_min_date);
+        datePickerDialog.show();
+    }
+
+    private class DatePickForSyncListener implements DatePickerDialog.OnDateSetListener {
+
+        private final RelInterpretation<?> relInterpretation;
+
+        public DatePickForSyncListener(RelInterpretation<?> relInterpretation) {
+            this.relInterpretation = relInterpretation;
+        }
+
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            Calendar chosenDate = Calendar.getInstance();
+            chosenDate.set(year, month, day, 0, 0, 0);
+
+            String afterDate = formatDateIso(chosenDate);
+
+            if (null == relInterpretation) {
+                for (String rel : ResourceLinkRegistry.activeRels()) {
+                    enqueueSync(ResourceLinkRegistry.getInterpretation(rel), afterDate);
+                }
+                return;
+            }
+
+            enqueueSync(relInterpretation, afterDate);
+        }
+    }
+
+    // want like this: 2015-10-05T21:08:48.989Z[UTC]
+    private String formatDateIso(Calendar calendar) {
+        // move calendar to UTC
+        Calendar utc = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        utc.setTimeInMillis(calendar.getTimeInMillis());
+
+        // build an ISO date time string that the server likes
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US);
+        String zoneless = simpleDateFormat.format(utc.getTime());
+        return zoneless + "Z[UTC]";
+    }
+
+    // only get the date, truncate the time
+    private Calendar parseDateIso(String string) {
+        if (null == string) {
+            return Calendar.getInstance();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+        try {
+            calendar.setTime(simpleDateFormat.parse(string));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return calendar;
     }
 }

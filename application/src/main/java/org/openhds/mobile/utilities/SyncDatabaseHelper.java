@@ -16,6 +16,7 @@ import org.openhds.mobile.task.parsing.ParseEntityTaskRequest;
 import org.openhds.mobile.task.parsing.entities.ParseLinksTask;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,15 +37,17 @@ public class SyncDatabaseHelper {
 
     private final ContentResolver contentResolver;
 
+    private final Map<String, String> dataQueryParameters;
+
     public String linkMediaType = "application/hal+json";
 
     public String dataMediaType = "application/json";
 
-    private HttpTask getLinksTask = null;
+    private HttpTask linksTask = null;
 
     private ParseLinksTask parseLinksTask = null;
 
-    private HttpTask getDataTask = null;
+    private HttpTask dataTask = null;
 
     private ParseEntityTask parseEntityTask = null;
 
@@ -56,6 +59,8 @@ public class SyncDatabaseHelper {
         this.username = username;
         this.password = password;
         this.contentResolver = contentResolver;
+
+        dataQueryParameters = new HashMap<>();
     }
 
     public interface SyncDatabaseListener {
@@ -88,6 +93,14 @@ public class SyncDatabaseHelper {
         this.dataMediaType = dataMediaType;
     }
 
+    public void addDataQueryParameter(String key, String value) {
+        if (null == key || null == value) {
+            return;
+        }
+
+        dataQueryParameters.put(key, value);
+    }
+
     public RelInterpretation<?> getRelInterpretation() {
         return relInterpretation;
     }
@@ -97,14 +110,14 @@ public class SyncDatabaseHelper {
     }
 
     public void cancel() {
-        cancelTask(getLinksTask);
-        getLinksTask = null;
+        cancelTask(linksTask);
+        linksTask = null;
 
         cancelTask(parseLinksTask);
         parseLinksTask = null;
 
-        cancelTask(getDataTask);
-        getDataTask = null;
+        cancelTask(dataTask);
+        dataTask = null;
 
         cancelTask(parseEntityTask);
         parseEntityTask = null;
@@ -127,11 +140,11 @@ public class SyncDatabaseHelper {
                 username,
                 password);
 
-        getLinksTask = new HttpTask(new GetLinksResponseHandler());
-        getLinksTask.execute(getLinkRequest);
+        linksTask = new HttpTask(new LinksResponseHandler());
+        linksTask.execute(getLinkRequest);
     }
 
-    private class GetLinksResponseHandler implements HttpTask.HttpTaskResponseHandler {
+    private class LinksResponseHandler implements HttpTask.HttpTaskResponseHandler {
         @Override
         public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse) {
             if (httpTaskResponse.isSuccess()) {
@@ -168,16 +181,16 @@ public class SyncDatabaseHelper {
 
     private void getData(Link link) {
         HttpTaskRequest getDataRequest = new HttpTaskRequest(relInterpretation.getLabel(),
-                link.getUrl(),
+                link.buildUrlWithParameters(dataQueryParameters),
                 dataMediaType,
                 username,
                 password);
 
-        getDataTask = new HttpTask(new GetDataResponseHandler());
-        getDataTask.execute(getDataRequest);
+        dataTask = new HttpTask(new DataResponseHandler());
+        dataTask.execute(getDataRequest);
     }
 
-    private class GetDataResponseHandler implements HttpTask.HttpTaskResponseHandler {
+    private class DataResponseHandler implements HttpTask.HttpTaskResponseHandler {
         @Override
         public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse) {
             if (httpTaskResponse.isSuccess()) {
