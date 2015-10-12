@@ -3,7 +3,6 @@ package org.openhds.mobile.projectdata.FormFilters;
 import org.openhds.mobile.activity.NavigateActivity;
 import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
-import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
@@ -142,7 +141,7 @@ public class UpdateFormFilters {
 
     private static boolean isIndividualFemale(Individual selectedIndividual) {
 
-        return selectedIndividual.getGender().equals(ProjectResources.Individual.GENDER_FEMALE);
+        return selectedIndividual.getGender().equals("Female");
 
     }
 

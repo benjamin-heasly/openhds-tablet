@@ -11,11 +11,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.form.FormHelper;
 import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectResources;
 
 import java.io.File;
 import java.util.Map;
@@ -211,8 +211,6 @@ public class LayoutUtils {
     // Set up a form list item based on a given form instance.
     public static void configureFormListItem(Context context, View view, FormInstance formInstance) {
         // get the data we want to display
-        int formTypeLocalizedId= ProjectResources.FormType.getFormTypeStringId(formInstance.getFormName());
-        String formTypeName = context.getResources().getString(formTypeLocalizedId);
 
         File formFile = new File(formInstance.getFilePath());
         EncryptionHelper.decryptFile(formFile, context);
@@ -225,7 +223,7 @@ public class LayoutUtils {
 
         // stuff values into the view widget
         TextView formTypeView = (TextView) view.findViewById(R.id.form_instance_list_type);
-        formTypeView.setText(formTypeName);
+        formTypeView.setText(formInstance.getFormName());
 
         TextView formIdView = (TextView) view.findViewById(R.id.form_instance_list_id);
         formIdView.setText(entityId);

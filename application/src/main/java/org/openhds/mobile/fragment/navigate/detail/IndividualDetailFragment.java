@@ -1,24 +1,24 @@
 package org.openhds.mobile.fragment.navigate.detail;
 
-import java.util.List;
-
 import android.content.ContentResolver;
-import android.widget.ScrollView;
-import org.openhds.mobile.R;
-import org.openhds.mobile.model.core.Individual;
-import org.openhds.mobile.model.core.Membership;
-import org.openhds.mobile.projectdata.ProjectResources;
-
-import static org.openhds.mobile.utilities.LayoutUtils.makeLargeTextWithValueAndLabel;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.openhds.mobile.R;
+import org.openhds.mobile.model.core.Individual;
+import org.openhds.mobile.model.core.Membership;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
 import org.openhds.mobile.repository.gateway.MembershipGateway;
+
+import java.util.List;
+
+import static org.openhds.mobile.utilities.LayoutUtils.makeLargeTextWithValueAndLabel;
 
 public class IndividualDetailFragment extends DetailFragment {
 
@@ -68,7 +68,7 @@ public class IndividualDetailFragment extends DetailFragment {
 
         personalInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
                 R.string.gender_lbl,
-                getString(ProjectResources.Individual.getIndividualStringId(individual.getGender())),
+                individual.getGender(),
                 labelColor, valueColor, R.color.NA_Gray));
 
         personalInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),

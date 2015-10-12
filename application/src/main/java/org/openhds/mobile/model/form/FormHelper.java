@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -13,8 +14,6 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.provider.FormsProviderAPI;
 import org.openhds.mobile.provider.InstanceProviderAPI;
 
@@ -101,8 +100,8 @@ public class FormHelper {
     }
 
     public static boolean isFormReviewed(String formFilePath) {
-        String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, formFilePath);
-        return needsReview != null && needsReview.equalsIgnoreCase(ProjectResources.General.FORM_NO_REVIEW_NEEDED);
+        String needsReview = FormHelper.getFormTagValue("0", formFilePath);
+        return needsReview != null && needsReview.equalsIgnoreCase("1");
     }
 
     public static boolean setFormTagValue(String tag, String value, String formFilePath) {

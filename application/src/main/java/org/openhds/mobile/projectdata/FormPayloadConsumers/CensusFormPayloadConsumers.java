@@ -15,7 +15,6 @@ import org.openhds.mobile.projectdata.FormAdapters.LocationFormAdapter;
 import org.openhds.mobile.projectdata.FormAdapters.VisitFormAdapter;
 import org.openhds.mobile.projectdata.ProjectActivityBuilder;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectResources;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.IndividualGateway;
@@ -83,7 +82,7 @@ public class CensusFormPayloadConsumers {
                 sector.setName(sectorName);
                 locationHierarchyGateway.insertOrUpdate(contentResolver,sector);
 
-                formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NEEDS_REVIEW);
+                formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, "0");
                 formPayload.put(ProjectFormFields.Locations.HIERERCHY_UUID, sector.getUuid());
                 formPayload.put(ProjectFormFields.Locations.HIERERCHY_PARENT_UUID, sector.getParentUuid());
                 formPayload.put(ProjectFormFields.Locations.HIERERCHY_EXTID, sector.getExtId());

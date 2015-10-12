@@ -1,10 +1,9 @@
 package org.openhds.mobile.projectdata.FormPayloadBuilders;
 
 import org.openhds.mobile.activity.NavigateActivity;
-import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.projectdata.ProjectFormFields;
-import org.openhds.mobile.projectdata.ProjectResources;
+import org.openhds.mobile.repository.DataWrapper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,9 +14,9 @@ public class PayloadTools {
 
     public static void flagForReview(Map<String, String> formPayload, boolean shouldReview) {
         if (shouldReview) {
-            formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NEEDS_REVIEW);
+            formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, "0");
         } else {
-            formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, ProjectResources.General.FORM_NO_REVIEW_NEEDED);
+            formPayload.put(ProjectFormFields.General.NEEDS_REVIEW, "1");
         }
     }
 
