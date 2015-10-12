@@ -103,7 +103,7 @@ public class RelationshipGateway extends Gateway<Relationship> {
 
             dataWrapper.setUuid(relationship.getUuid());
             dataWrapper.setName(relationship.getType());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
 
             return dataWrapper;
         }

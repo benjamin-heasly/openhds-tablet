@@ -14,7 +14,7 @@ import java.util.Map;
  * <p/>
  * Facilitates generic lists and views of results, for example at various levels of
  * hierarchy navigation.  But it's up to the caller to interpret the QueryResult
- * correctly, for example using the extId and "category" (i.e. hierarchy level).
+ * correctly, for example using the extId and "level" (i.e. hierarchy level).
  * <p/>
  * Payloads may contain arbitrary data, for example to display with result name and extId.
  * <p/>
@@ -24,18 +24,18 @@ public class DataWrapper implements Parcelable {
 
 
     private String uuid;
-    private String category;
+    private String level;
     private String extId;
     private String name;
     private Map<Integer, String> stringsPayload = new HashMap<Integer, String>();
     private Map<Integer, Integer> stringIdsPayload = new HashMap<Integer, Integer>();
 
-    public String getCategory() {
-        return category;
+    public String getLevel() {
+        return level;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getUuid() {
@@ -75,13 +75,13 @@ public class DataWrapper implements Parcelable {
 
     @Override
     public String toString() {
-        return "QueryResult[name: " + name + " extId: " + extId + " category: "
-                + category + " + payload size: " + stringsPayload.size() + "]";
+        return "QueryResult[name: " + name + " extId: " + extId + " level: "
+                + level + " + payload size: " + stringsPayload.size() + "]";
     }
 
     // for Parcelable
     private DataWrapper(Parcel parcel) {
-        category = parcel.readString();
+        level = parcel.readString();
         extId = parcel.readString();
         name = parcel.readString();
         uuid = parcel.readString();
@@ -119,7 +119,7 @@ public class DataWrapper implements Parcelable {
     // for Parcelable
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(category);
+        parcel.writeString(level);
         parcel.writeString(extId);
         parcel.writeString(name);
         parcel.writeString(uuid);

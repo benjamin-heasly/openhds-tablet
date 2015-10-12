@@ -23,11 +23,9 @@ import org.openhds.mobile.model.form.FormBehaviour;
 import org.openhds.mobile.model.form.FormHelper;
 import org.openhds.mobile.model.form.FormInstance;
 import org.openhds.mobile.model.update.Visit;
-import org.openhds.mobile.projectdata.FormPayloadConsumers.ConsumerResults;
-import org.openhds.mobile.projectdata.FormPayloadConsumers.FormPayloadConsumer;
-import org.openhds.mobile.projectdata.ModuleUiHelper;
-import org.openhds.mobile.projectdata.NavigatePluginModule;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+import org.openhds.mobile.modules.ModuleAppearance;
+import org.openhds.mobile.modules.ModuleRegistry;
+import org.openhds.mobile.modules.NavigationModule;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.utilities.EncryptionHelper;
@@ -71,7 +69,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private static final String CURRENT_RESULTS_KEY = "currentResults";
 
 
-    NavigatePluginModule builder;
+    NavigationModule builder;
 
     private FormHelper formHelper;
     private StateMachine stateMachine;
@@ -82,7 +80,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private Visit currentVisit;
     private HashMap<MenuItem, String> menuItemTags;
     private String currentModuleName;
-    private ConsumerResults previousConsumerResults;
 
 
     @Override
@@ -92,8 +89,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
         FieldWorker fieldWorker = (FieldWorker) getIntent().getExtras().get(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA);
         setCurrentFieldWorker(fieldWorker);
-        currentModuleName = (String) getIntent().getExtras().get(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA);
-        builder = ProjectActivityBuilder.getModuleByName(currentModuleName);
+        currentModuleName = (String) getIntent().getExtras().get(ModuleRegistry.MODULE_NAME_EXTRA_KEY);
+        builder = ModuleRegistry.getModuleByName(currentModuleName);
 
         hierarchyPath = new HashMap<String, DataWrapper>();
         formHelper = new FormHelper(getContentResolver());
@@ -172,8 +169,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         setActivityVisualTheme(builder.getModuleUiHelper());
     }
 
-    // Takes in a NavigatePluginModule's (builder) ModuleUiHelper and sets all the fragment's drawables
-    private void setActivityVisualTheme(ModuleUiHelper uiHelper) {
+    // Takes in a NavigationModule's (builder) ModuleAppearance and sets all the fragment's drawables
+    private void setActivityVisualTheme(ModuleAppearance uiHelper) {
 
         setTitle(getString(uiHelper.getModuleTitleStringId()));
         hierarchyButtonFragment.setHiearchySelectionDrawableId(uiHelper.getHierarchySelectionDrawableId());
@@ -214,7 +211,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         menuItemTags = new HashMap<>();
 
         // get the list of modules to iterate through
-        List<String> modulesList = ProjectActivityBuilder.getActivityModuleNames();
+        List<String> modulesList = ModuleRegistry.getActivityModuleNames();
 
         // reference to the current hierarchy's name
         String currentHierarchy = builder.getHierarchyInfo().getHierarchyName();
@@ -223,13 +220,13 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         for (String moduleName : modulesList) {
 
             // keep a reference to make the code readable
-            NavigatePluginModule module = ProjectActivityBuilder.getModuleByName(moduleName);
+            NavigationModule module = ModuleRegistry.getModuleByName(moduleName);
 
             // if that module has the same hierarchy as the current module
             if (module.getHierarchyInfo().getHierarchyName().equals(currentHierarchy) && !moduleName.equals(currentModuleName)) {
 
                 // keep a reference to make the code readable
-                ModuleUiHelper uiHelper = module.getModuleUiHelper();
+                ModuleAppearance uiHelper = module.getModuleUiHelper();
 
                 // add a menuItem for the module, set its UI, give it a tag for OnClick
                 MenuItem menuItem = menu.add(uiHelper.getModuleTitleStringId());
@@ -265,7 +262,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         if (null != menuItemTags.get(item)) {
             intent.setClass(this, NavigateActivity.class);
             intent.putExtra(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA, getCurrentFieldWorker());
-            intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA, menuItemTags.get(item));
+            intent.putExtra(ModuleRegistry.MODULE_NAME_EXTRA_KEY, menuItemTags.get(item));
             intent.putParcelableArrayListExtra(CURRENT_RESULTS_KEY, (ArrayList<DataWrapper>) currentResults);
 
             ArrayList<String> hierarchyPathKeys = new ArrayList<String>(hierarchyPath.keySet());
@@ -401,9 +398,9 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     public void stepDown(DataWrapper selected) {
         String currentState = getState();
 
-        if (!currentState.equals(selected.getCategory())) {
+        if (!currentState.equals(selected.getLevel())) {
             throw new IllegalStateException("Selected state <"
-                    + selected.getCategory() + "> mismatch with current state <"
+                    + selected.getLevel() + "> mismatch with current state <"
                     + currentState + ">");
         }
 
@@ -432,7 +429,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             formFieldData.putAll(followUpFormHints);
         }
 
-        formBehaviour.getFormPayloadBuilder().buildFormPayload(formFieldData, this);
         formHelper.setFormFieldData(formFieldData);
 
         // if needed, ask the user to search for required form field data
@@ -568,23 +564,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             switch (requestCode) {
                 case ODK_ACTIVITY_REQUEST_CODE:
                     // consume form data that the user entered with ODK
-                    FormBehaviour formBehaviour = formHelper.getFormBehaviour();
-                    formHelper.checkFormInstanceStatus();
-                    if (null != formHelper.getFinalizedFormFilePath()) {
-                        FormPayloadConsumer consumer = formBehaviour.getFormPayloadConsumer();
-                        if (null != consumer) {
-
-                            previousConsumerResults = consumer.consumeFormPayload(formHelper.fetchFormInstanceData(), this);
-                            if (previousConsumerResults.needsPostfill()) {
-                                consumer.postFillFormPayload(formHelper.getFormFieldData());
-                                formHelper.updateExistingFormInstance();
-                            }
-                            if (null != previousConsumerResults.getFollowUpFormBehaviour()) {
-                                launchForm(previousConsumerResults.getFollowUpFormBehaviour(), previousConsumerResults.getFollowUpFormHints());
-                                return;
-                            }
-                        }
-                    }
+                    // TODO: consume as declared in form
 
                     // encrypt files regardless
                     List<FormInstance> allFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
@@ -637,10 +617,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         return currentVisit;
     }
 
-    public ConsumerResults getPreviousConsumerResults() {
-        return previousConsumerResults;
-    }
-
     public void setCurrentVisit(Visit currentVisit) {
         this.currentVisit = currentVisit;
     }
@@ -676,11 +652,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             List<FormBehaviour> filteredForms = builder.getFormsForStates().get(state);
             List<FormBehaviour> validForms = new ArrayList<FormBehaviour>();
 
-            for (FormBehaviour form : filteredForms) {
-                if (form.getFormFilter().amIValid(NavigateActivity.this)) {
-                    validForms.add(form);
-                }
-            }
+            // TODO: let forms declare filter criteria
+
 
             if (shouldShowDetailFragment()) {
                 showDetailFragment();

@@ -72,7 +72,7 @@ public class UserGateway extends Gateway<User> {
             dataWrapper.setUuid(user.getUuid());
             dataWrapper.setExtId(user.getUsername());
             dataWrapper.setName(user.getFirstName());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
 
             return dataWrapper;
         }

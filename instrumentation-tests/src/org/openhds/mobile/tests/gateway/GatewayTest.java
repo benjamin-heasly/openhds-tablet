@@ -72,7 +72,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         T entity = gateway.getFirst(contentResolver, gateway.findById("INVALID"));
         assertNull(entity);
 
-        DataWrapper result = gateway.getFirstQueryResult(contentResolver, gateway.findById("INVALID"), "test");
+        DataWrapper result = gateway.getFirstDataWrapper(contentResolver, gateway.findById("INVALID"), "test");
         assertNull(result);
     }
 
@@ -88,7 +88,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         String savedId = gateway.getConverter().getId(savedEntity);
         assertEquals(id, savedId);
 
-        DataWrapper savedDataWrapper = gateway.getFirstQueryResult(contentResolver, gateway.findById(id), "test");
+        DataWrapper savedDataWrapper = gateway.getFirstDataWrapper(contentResolver, gateway.findById(id), "test");
         assertNotNull(savedDataWrapper);
         assertEquals(id, savedDataWrapper.getUuid());
 
@@ -140,7 +140,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         String id2 = gateway.getConverter().getId(allEntities.get(1));
         assertNotSame(id1, id2);
 
-        List<DataWrapper> allDataWrappers = gateway.getQueryResultList(contentResolver, gateway.findAll(), "test");
+        List<DataWrapper> allDataWrappers = gateway.getDataWrapperList(contentResolver, gateway.findAll(), "test");
         assertEquals(2, allDataWrappers.size());
         assertNotSame(allDataWrappers.get(0).getUuid(), allDataWrappers.get(1).getUuid());
     }

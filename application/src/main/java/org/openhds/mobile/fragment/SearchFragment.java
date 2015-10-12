@@ -169,7 +169,7 @@ public class SearchFragment extends Fragment {
         final String[] columnNames = columnNamesAndValues.keySet().toArray(new String[nValues]);
         final String[] columnValues = wildCardValues.toArray(new String[nValues]);
         Query query = currentPluginModule.getGateway().findByCriteriaLike(columnNames, columnValues, columnNames[0]);
-        List<DataWrapper> dataWrappers = currentPluginModule.getGateway().getQueryResultList(
+        List<DataWrapper> dataWrappers = currentPluginModule.getGateway().getDataWrapperList(
                 getActivity().getContentResolver(), query, DATA_CATEGORY);
 
         // report the results to the listener

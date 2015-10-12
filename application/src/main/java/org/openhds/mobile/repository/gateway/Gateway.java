@@ -113,7 +113,7 @@ public abstract class Gateway<T> {
     }
 
     // get the first result from a query as a QueryResult or null
-    public DataWrapper getFirstQueryResult(ContentResolver contentResolver, Query query, String state) {
+    public DataWrapper getFirstDataWrapper(ContentResolver contentResolver, Query query, String state) {
         T entity = getFirst(contentResolver, query);
         if (null == entity) {
             return null;
@@ -122,12 +122,12 @@ public abstract class Gateway<T> {
     }
 
     // get all results from a query as a list of QueryResults
-    public List<DataWrapper> getQueryResultList(ContentResolver contentResolver, Query query, String state) {
+    public List<DataWrapper> getDataWrapperList(ContentResolver contentResolver, Query query, String level) {
         List<DataWrapper> dataWrappers = new ArrayList<DataWrapper>();
         Cursor cursor = query.select(contentResolver);
         List<T> entities = toList(cursor);
         for (T entity : entities) {
-            dataWrappers.add(converter.toDataWrapper(contentResolver, entity, state));
+            dataWrappers.add(converter.toDataWrapper(contentResolver, entity, level));
         }
         return dataWrappers;
     }
@@ -149,7 +149,12 @@ public abstract class Gateway<T> {
 
     // find entities ordered by id, might be huge
     public Query findAll() {
-        return new Query(tableUri, null, null, idColumnName);
+        return findAll(idColumnName);
+    }
+
+    // find entities ordered by given columnOrderBy
+    public Query findAll(String columnOrderBy) {
+        return new Query(tableUri, null, null, columnOrderBy);
     }
 
     // find entities where given columns equal corresponding values

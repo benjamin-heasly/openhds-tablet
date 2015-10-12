@@ -84,8 +84,8 @@ public class FieldWorkerLoginFragment extends Fragment implements
         // intent and send'er'over to skeletor
 
         intent.putExtra(FIELD_WORKER_EXTRA, fieldWorker);
-//		intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA,
-//				ProjectActivityBuilder.getActivityModuleNames().get(0));
+//		intent.putExtra(ModuleRegistry.MODULE_NAME_EXTRA_KEY,
+//				ModuleRegistry.getActivityModuleNames().get(0));
 
         startActivity(intent);
     }

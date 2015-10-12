@@ -79,7 +79,7 @@ public class LocationGateway extends Gateway<Location> {
             dataWrapper.setUuid(location.getUuid());
             dataWrapper.setExtId(location.getExtId());
             dataWrapper.setName(location.getName());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
 
             return dataWrapper;
         }

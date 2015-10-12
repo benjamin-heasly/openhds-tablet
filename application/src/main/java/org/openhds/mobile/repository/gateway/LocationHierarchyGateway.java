@@ -84,7 +84,7 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
             dataWrapper.setExtId(locationHierarchy.getExtId());
             dataWrapper.setUuid(locationHierarchy.getUuid());
             dataWrapper.setName(locationHierarchy.getName());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
             return dataWrapper;
         }
 

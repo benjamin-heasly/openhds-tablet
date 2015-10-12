@@ -95,7 +95,7 @@ public class IndividualGateway extends Gateway<Individual> {
             dataWrapper.setUuid(individual.getUuid());
             dataWrapper.setExtId(individual.getExtId());
             dataWrapper.setName(getFullName(individual));
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
 
             return dataWrapper;
         }

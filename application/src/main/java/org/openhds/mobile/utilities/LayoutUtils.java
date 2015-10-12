@@ -15,7 +15,6 @@ import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.form.FormHelper;
 import org.openhds.mobile.model.form.FormInstance;
-import org.openhds.mobile.projectdata.ProjectFormFields;
 
 import java.io.File;
 import java.util.Map;
@@ -217,22 +216,18 @@ public class LayoutUtils {
         Map<String, String> instanceData = FormHelper.fetchFormInstanceData(formInstance.getFilePath());
         EncryptionHelper.encryptFile(formFile, context);
 
-        String entityId = safeGetMapField(instanceData, ProjectFormFields.General.ENTITY_EXTID);
-        String fieldWorker = safeGetMapField(instanceData, ProjectFormFields.General.FIELD_WORKER_EXTID);
-        String date = safeGetMapField(instanceData, ProjectFormFields.General.COLLECTION_DATE_TIME);
-
         // stuff values into the view widget
         TextView formTypeView = (TextView) view.findViewById(R.id.form_instance_list_type);
         formTypeView.setText(formInstance.getFormName());
 
         TextView formIdView = (TextView) view.findViewById(R.id.form_instance_list_id);
-        formIdView.setText(entityId);
+        formIdView.setText("TODO: entity Id");
 
         TextView fieldWorkerView = (TextView) view.findViewById(R.id.form_instance_list_fieldworker);
-        fieldWorkerView.setText(fieldWorker);
+        fieldWorkerView.setText("TODO: fieldworker Id");
 
         TextView formDateView = (TextView) view.findViewById(R.id.form_instance_list_date);
-        formDateView.setText(date);
+        formDateView.setText("TODO: date");
     }
 
     private static String safeGetMapField(Map<String, String> map, String key) {

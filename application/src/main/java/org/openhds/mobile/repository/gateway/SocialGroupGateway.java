@@ -70,7 +70,7 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
 
             dataWrapper.setUuid(socialGroup.getUuid());
             dataWrapper.setName(socialGroup.getGroupName());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
 
             return dataWrapper;
         }

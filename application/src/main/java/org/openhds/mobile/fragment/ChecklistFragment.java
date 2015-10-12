@@ -16,7 +16,6 @@ import org.openhds.mobile.activity.SupervisorMainActivity;
 import org.openhds.mobile.adapter.ChecklistAdapter;
 import org.openhds.mobile.model.form.FormHelper;
 import org.openhds.mobile.model.form.FormInstance;
-import org.openhds.mobile.projectdata.ProjectFormFields;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
@@ -146,7 +145,7 @@ public class ChecklistFragment extends Fragment {
             for (FormInstance instance : formInstances) {
                 File instanceFile = new File(instance.getFilePath());
                 EncryptionHelper.decryptFile(instanceFile, getActivity());
-                String needsReview = FormHelper.getFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, instance.getFilePath());
+                String needsReview = FormHelper.getFormTagValue("needsReview", instance.getFilePath());
 
                 if ("0".equalsIgnoreCase(needsReview)) {
                     needApproval.add(instance);
@@ -197,8 +196,7 @@ public class ChecklistFragment extends Fragment {
         for (FormInstance instance: forms) {
             File instanceFile = new File(instance.getFilePath());
             EncryptionHelper.decryptFile(instanceFile, getActivity());
-            FormHelper.setFormTagValue(ProjectFormFields.General.NEEDS_REVIEW, "1",
-                    instance.getFilePath());
+            FormHelper.setFormTagValue("needsReview", "1", instance.getFilePath());
             OdkCollectHelper.setStatusComplete(getActivity().getContentResolver(), Uri.parse(instance.getUriString()));
             EncryptionHelper.encryptFile(instanceFile, getActivity());
         }

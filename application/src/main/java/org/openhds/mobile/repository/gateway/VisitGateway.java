@@ -72,7 +72,7 @@ public class VisitGateway extends Gateway<Visit> {
             dataWrapper.setUuid(visit.getUuid());
             dataWrapper.setExtId(visit.getExtId());
             dataWrapper.setName(visit.getLocationUuid());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
 
             return dataWrapper;
         }

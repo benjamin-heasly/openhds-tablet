@@ -98,7 +98,7 @@ public class MembershipGateway extends Gateway<Membership> {
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Membership membership, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setUuid(membership.getUuid());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
             return dataWrapper;
         }
 

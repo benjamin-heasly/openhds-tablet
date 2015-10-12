@@ -8,9 +8,11 @@ import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.model.core.LocationHierarchyLevel;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
+import org.openhds.mobile.repository.Query;
 
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
+import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
 import static org.openhds.mobile.repository.RepositoryUtils.extractInt;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
@@ -22,6 +24,12 @@ public class LocationHierarchyLevelGateway extends Gateway<LocationHierarchyLeve
 
     public LocationHierarchyLevelGateway() {
         super(OpenHDS.LocationHierarchyLevels.CONTENT_ID_URI_BASE, OpenHDS.LocationHierarchyLevels.UUID, new LocationHierarchyLevelConverter());
+    }
+
+    public Query findByKeyIdentifier(String keyIdentifier) {
+        final String[] columnNames = {OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER};
+        final String[] columnValues = {keyIdentifier};
+        return new Query(tableUri, columnNames, columnValues, OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER, EQUALS);
     }
 
     private static class LocationHierarchyLevelConverter implements Converter<LocationHierarchyLevel> {
@@ -64,7 +72,7 @@ public class LocationHierarchyLevelGateway extends Gateway<LocationHierarchyLeve
             dataWrapper.setUuid(LocationHierarchyLevel.getUuid());
             dataWrapper.setExtId(LocationHierarchyLevel.getName());
             dataWrapper.setName(LocationHierarchyLevel.getName());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
 
             return dataWrapper;
         }

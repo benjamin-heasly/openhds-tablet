@@ -19,8 +19,8 @@ import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.core.FieldWorker;
 import org.openhds.mobile.model.form.FormInstance;
-import org.openhds.mobile.projectdata.ModuleUiHelper;
-import org.openhds.mobile.projectdata.ProjectActivityBuilder;
+import org.openhds.mobile.modules.ModuleAppearance;
+import org.openhds.mobile.modules.ModuleRegistry;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
@@ -51,10 +51,10 @@ public class PortalActivity extends Activity implements OnClickListener {
 
         // fill the middle column with a button for each available activity
         LinearLayout activitiesLayout = (LinearLayout) findViewById(R.id.portal_middle_column);
-        List<String> activityModuleNames = ProjectActivityBuilder.getActivityModuleNames();
+        List<String> activityModuleNames = ModuleRegistry.getActivityModuleNames();
         for (String name : activityModuleNames) {
 
-            ModuleUiHelper moduleInfo = ProjectActivityBuilder.getModuleByName(name).getModuleUiHelper();
+            ModuleAppearance moduleInfo = ModuleRegistry.getModuleByName(name).getModuleUiHelper();
 
             RelativeLayout layout = makeTextWithPayload(this,
                     getString(moduleInfo.getModuleLabelStringId()),
@@ -103,7 +103,7 @@ public class PortalActivity extends Activity implements OnClickListener {
         intent.putExtra(FieldWorkerLoginFragment.FIELD_WORKER_EXTRA, currentFieldWorker);
 
         String activityName = (String) v.getTag();
-        intent.putExtra(ProjectActivityBuilder.ACTIVITY_MODULE_EXTRA, activityName);
+        intent.putExtra(ModuleRegistry.MODULE_NAME_EXTRA_KEY, activityName);
 
         startActivity(intent);
     }

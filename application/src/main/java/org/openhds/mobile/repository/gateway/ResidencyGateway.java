@@ -55,6 +55,10 @@ public class ResidencyGateway extends Gateway<Residency> {
         return new Query(tableUri, INDIVIDUAL_UUID, individualId, INDIVIDUAL_UUID);
     }
 
+    public Query findByLocation(String locationId) {
+        return new Query(tableUri, LOCATION_UUID, locationId, LOCATION_UUID);
+    }
+
     public Query findByLocationAndIndividual(String locationId, String individualId) {
         final String[] columnNames = {LOCATION_UUID, INDIVIDUAL_UUID};
         final String[] columnValues = {locationId, individualId};
@@ -100,7 +104,7 @@ public class ResidencyGateway extends Gateway<Residency> {
         public DataWrapper toDataWrapper(ContentResolver contentResolver, Residency residency, String state) {
             DataWrapper dataWrapper = new DataWrapper();
             dataWrapper.setUuid(residency.getUuid());
-            dataWrapper.setCategory(state);
+            dataWrapper.setLevel(state);
             return dataWrapper;
         }
 
