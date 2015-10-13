@@ -9,8 +9,6 @@
     <string name="configuration">Configuración</string>
     <string name="configureDatabase">Configurar Base de Datos </string>
     <string name="databaseSync">Sincronizar con OpenHDS Base de Datos</string>
-    <string name="default_interop_server_url">http://cims-bioko.org:8080/openhds</string>
-    <string name="default_openhds_server_url">http://cims-bioko.org:8080/openhds</string>
     <string name="delete_form_btn">Borrar Impreso(s)</string>
     <string name="download_form_button">Descargar Impresos</string>
     <string name="failure_reasons_txt">Mensajes de Falla:</string>
@@ -160,7 +158,7 @@
 
     <!-- Individual Labels -->
     <string name="individual_full_name_label">Nombre </string>
- 	<string name="individual_other_names_label">Nombre de casa (sobrenombre)</string>
+    <string name="individual_other_names_label">Nombre de casa (sobrenombre)</string>
     <string name="individual_age_label">Edad</string>
     <string name="individual_date_of_birth_label">Fecha de Nacimiento</string>
     <string name="individual_relationship_to_head_label">Relación al Jefe del Hogar</string>
@@ -218,11 +216,6 @@
     <string name="update_portal_label">Iniciar Actualización de Datos</string>
     <string name="update_portal_description">Realizar visitas en locaciónes y actualizar datos desde la ultima visita</string>
 
-    <!-- Bednet Strings -->
-    <string name="distribute_bednets">Distribuir Telas Mosquiteras</string>
-    <string name="bioko_portal_label">Iniciar Rociamiento o Distribución de Telas Mosquiteras</string>
-    <string name="bioko_portal_description">Registrar la rociamiento de locaciónes o la distribución de telas mosquiteras</string>
-
     <!-- Form Types -->
     <string name="form_type_other">Otro</string>
     <string name="form_type_individual">Individuo</string>
@@ -251,7 +244,6 @@
     <string name="supervisor_approve_selected">Aprobar Seleccionado</string>
     <string name="sub_district_label">SubDistrito</string>
     <string name="census_activity_title">Actividad de Censo</string>
-    <string name="bioko_activity_title">Actividad de Rociamiento y Telas</string>
     <string name="update_activity_title">Actividad Actualización</string>
     <string name="launching_odk_collect">Iniciando ODKCollect...</string>
     <string name="delete_button_label">Eliminar</string>

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
@@ -32,8 +33,6 @@ import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class PortalActivity extends Activity implements OnClickListener {
 
-    private static final String SEARCH_FRAGMENT_TAG = "searchFragment";
-
     private FieldWorker currentFieldWorker;
     private ListView formInstanceView;
     private List<FormInstance> formInstances;
@@ -51,16 +50,21 @@ public class PortalActivity extends Activity implements OnClickListener {
 
         // fill the middle column with a button for each available activity
         LinearLayout activitiesLayout = (LinearLayout) findViewById(R.id.portal_middle_column);
-        List<String> activityModuleNames = ModuleRegistry.getActivityModuleNames();
+        List<String> activityModuleNames = ModuleRegistry.getModuleNames();
         for (String name : activityModuleNames) {
 
-            ModuleAppearance moduleInfo = ModuleRegistry.getModuleByName(name).getModuleUiHelper();
+            ModuleAppearance moduleInfo = ModuleRegistry.getModuleByName(name).getModuleAppearance();
 
             RelativeLayout layout = makeTextWithPayload(this,
-                    getString(moduleInfo.getModuleLabelStringId()),
-                    getString(moduleInfo.getModuleDescriptionStringId()),
-                    name, this, activitiesLayout,
-                    moduleInfo.getModulePortalDrawableId(), null, null,true);
+                    getString(moduleInfo.getLabelId()),
+                    getString(moduleInfo.getDescriptionId()),
+                    name,
+                    this,
+                    activitiesLayout,
+                    moduleInfo.getPortalDrawableId(),
+                    null,
+                    null,
+                    true);
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getLayoutParams();
             params.setMargins(0, 0, 0, 20);

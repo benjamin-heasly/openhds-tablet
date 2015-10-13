@@ -47,8 +47,6 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		navigateActivity.toggleMiddleFragment();
 	}
 
 	public void setButtonEnabled(boolean isEnabled) {

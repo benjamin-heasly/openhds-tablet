@@ -261,12 +261,6 @@
     <string name="update_portal_label">Start Update Activity</string>
     <string name="update_portal_description">Conduct visits at locations and update changes since the last visit.</string>
 
-    <!-- Bednet Strings -->
-    <string name="distribute_bednets">Distribute Bednets</string>
-    <string name="spray_household">Record Household Spraying</string>
-    <string name="bioko_portal_label">Start Spraying and Bed Net Activity</string>
-    <string name="bioko_portal_description">Record household IRS spraying and bed net distributions</string>
-
     <!-- Form Types -->
     <string name="form_type_other">Other</string>
     <string name="form_type_individual">Individual</string>
@@ -293,7 +287,6 @@
     <string name="record_pregnancy_observation">Record a Pregnancy Observation</string>
     <string name="record_pregnancy_outcome">Record a Pregnancy Outcome</string>
     <string name="census_activity_title">Census Activity</string>
-    <string name="bioko_activity_title">Bed Net Activity</string>
     <string name="update_activity_title">Update Activity</string>
     <string name="launching_odk_collect">Launching ODKCollect...</string>
     <string name="delete_button_label">Delete Selected</string>

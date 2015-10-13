@@ -171,14 +171,6 @@
     <color name="UpdateDataFillPressed">#B3F76775</color>
     <color name="UpdateMiddleColumnFill">#4DFBA6AE</color>
 
-    <color name="BiokoHierarchyBorder">#218D0B</color>
-    <color name="BiokoHierarchyFill">#41BA28</color>
-    <color name="BiokoHierarchyFillPressed">#6FD559</color>
-    <color name="BiokoDataBorder">#218D0B</color>
-    <color name="BiokoDataFill">#B341BA28</color>
-    <color name="BiokoDataFillPressed">#B36FD559</color>
-    <color name="BiokoMiddleColumnFill">#4DA9EB9C</color>
-
     <color name="FormHierarchyBorder">#A84F0D</color>
     <color name="FormHierarchyFill">#DF7A30</color>
     <color name="FormHierarchyFillPressed">#FFAA6B</color>
