@@ -50,14 +50,20 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
                 context.getContentResolver(),
                 locationHierarchyLevelGateway.findAll(OpenHDS.LocationHierarchyLevels.KEY_IDENTIFIER));
         for (LocationHierarchyLevel locationHierarchyLevel : locationHierarchyLevels) {
-            String levelId = locationHierarchyLevel.getUuid();
+
+            // ignore the unknown level
+            if ("UNKNOWN".equals(locationHierarchyLevel.getUuid())) {
+                continue;
+            }
+
+            String levelId = Integer.toString(locationHierarchyLevel.getKeyIdentifier());
             levelSequence.add(levelId);
             levelLabels.put(levelId, locationHierarchyLevel.getName());
         }
 
         // add Locations beneath the LocationHierarchy
         levelSequence.add(LOCATION_LEVEL_ID);
-        levelLabels.put(LOCATION_LEVEL_ID, context.getResources().getString(R.string.individual_label));
+        levelLabels.put(LOCATION_LEVEL_ID, context.getResources().getString(R.string.household_label));
 
         // add Individuals beneath Locations, to be found by residency
         levelSequence.add(INDIVIDUAL_LEVEL_ID);
@@ -86,12 +92,14 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
         if (INDIVIDUAL_LEVEL_ID.equals(levelId)) {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             return individualGateway.getDataWrapperList(contentResolver, individualGateway.findAll(), INDIVIDUAL_LEVEL_ID);
+            // TODO: sort by extId
         }
 
         // all locations
         if (LOCATION_LEVEL_ID.equals(levelId)) {
             LocationGateway locationGateway = GatewayRegistry.getLocationGateway();
             return locationGateway.getDataWrapperList(contentResolver, locationGateway.findAll(), LOCATION_LEVEL_ID);
+            // TODO: sort by extId
         }
 
         // all location hierarchies at the given level
@@ -139,6 +147,7 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
                         individualGateway.findById(residency.getIndividualUuid()), INDIVIDUAL_LEVEL_ID));
             }
             return individuals;
+            // TODO: sort by extId
         }
 
         // find locations after the lowest level of location hierarchy
@@ -148,6 +157,7 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
                     contentResolver,
                     locationGateway.findByHierarchy(dataWrapper.getUuid()),
                     LOCATION_LEVEL_ID);
+            // TODO: sort by extId
         }
 
 
@@ -158,6 +168,7 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
                 contentResolver,
                 locationHierarchyGateway.findByParent(dataWrapper.getUuid()),
                 childLevelId);
+        // TODO: sort by extId
     }
 
     // the level just above locations

@@ -31,6 +31,7 @@ import static org.openhds.mobile.repository.RepositoryUtils.delete;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 import static org.openhds.mobile.repository.RepositoryUtils.insert;
 import static org.openhds.mobile.repository.RepositoryUtils.update;
+import static org.openhds.mobile.utilities.DateUtils.formatDateTimeIso;
 
 /**
  * Supertype for database table Gateways.  Expose and implement query and CRUD operations,
@@ -257,7 +258,7 @@ public abstract class Gateway<T> {
     // convert entity to content values, and assign client-side modification time
     protected ContentValues toContentValues(T entity) {
         ContentValues contentValues = converter.toContentValues(entity);
-        contentValues.put(LAST_MODIFIED_CLIENT, Calendar.getInstance().toString());
+        contentValues.put(LAST_MODIFIED_CLIENT, formatDateTimeIso(Calendar.getInstance()));
         return contentValues;
     }
 }

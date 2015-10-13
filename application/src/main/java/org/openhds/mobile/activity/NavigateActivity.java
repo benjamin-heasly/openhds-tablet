@@ -470,9 +470,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     .beginTransaction()
                     .replace(R.id.middle_column, valueFragment, VALUE_FRAGMENT_TAG).commit();
             getFragmentManager().executePendingTransactions();
-
-            valueFragment.populateData(currentResults);
         }
+        valueFragment.populateData(currentResults);
     }
 
     @Override
@@ -567,6 +566,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             if (!level.equals(getLevelSequence().get(getLevelSequence().size() - 1))) {
                 hierarchyButtonFragment.setButtonAllowed(level, true);
             }
+
+            showValueFragment();
 
             // TODO: let forms declare filter criteria
             //formFragment.createFormButtons(validForms);

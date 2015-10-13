@@ -19,15 +19,13 @@ import org.openhds.mobile.links.RelInterpretation;
 import org.openhds.mobile.links.ResourceLinkRegistry;
 import org.openhds.mobile.utilities.SyncDatabaseHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.Queue;
-import java.util.TimeZone;
 
 import static org.openhds.mobile.utilities.ConfigUtils.getResourceString;
+import static org.openhds.mobile.utilities.DateUtils.formatDateTimeIso;
+import static org.openhds.mobile.utilities.DateUtils.parseDateIso;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 
 /**
@@ -356,7 +354,7 @@ public class SyncDatabaseFragment extends Fragment {
             Calendar chosenDate = Calendar.getInstance();
             chosenDate.set(year, month, day, 0, 0, 0);
 
-            String afterDate = formatDateIso(chosenDate);
+            String afterDate = formatDateTimeIso(chosenDate);
 
             if (null == relInterpretation) {
                 for (String rel : ResourceLinkRegistry.activeRels()) {
@@ -367,34 +365,5 @@ public class SyncDatabaseFragment extends Fragment {
 
             enqueueSync(relInterpretation, afterDate);
         }
-    }
-
-    // want like this: 2015-10-05T21:08:48.989Z[UTC]
-    private String formatDateIso(Calendar calendar) {
-        // move calendar to UTC
-        Calendar utc = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
-        utc.setTimeInMillis(calendar.getTimeInMillis());
-
-        // build an ISO date time string that the server likes
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.US);
-        String zoneless = simpleDateFormat.format(utc.getTime());
-        return zoneless + "Z[UTC]";
-    }
-
-    // only get the date, truncate the time
-    private Calendar parseDateIso(String string) {
-        if (null == string) {
-            return Calendar.getInstance();
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
-        try {
-            calendar.setTime(simpleDateFormat.parse(string));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return calendar;
     }
 }
