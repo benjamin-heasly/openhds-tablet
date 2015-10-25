@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openhds.mobile.repository.DataWrapper;
-import org.openhds.mobile.model.form.FormBehaviour;
+import org.openhds.mobile.forms.FormBehaviour;
 
 public interface HierarchyNavigator {
 

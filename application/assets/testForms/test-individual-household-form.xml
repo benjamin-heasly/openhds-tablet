@@ -1,28 +1,38 @@
 <?xml version="1.0"?>
 <IndividualHouseholdRegistration>
 
+    <!-- static -->
     <registrationVersion>101</registrationVersion>
     <registrationVersionName>bsh-thesis</registrationVersionName>
-    <registrationDateTime>2015-06-10T15:30:00.000Z</registrationDateTime>
     <registrationSystemName>openhds-tablet</registrationSystemName>
 
-    <collectedByUuid>UNKNOWN</collectedByUuid>
-
-    <relationToHead>UNKNOWN</relationToHead>
-    <headOfHouseholdId>UNKNOWN</headOfHouseholdId>
-    <locationUuid>UNKNOWN</locationUuid>
-    <socialGroupUuid>UNKNOWN</socialGroupUuid>
-    <motherUuid>UNKNOWN</motherUuid>
-    <fatherUuid>UNKNOWN</fatherUuid>
-
+    <!-- generate with xform binding -->
+    <registrationDateTime>2015-06-10T15:30:00.000Z</registrationDateTime>
     <relationshipUuid>TEST_RELATIONSHIP</relationshipUuid>
     <membershipUuid>TEST_RELATIONSHIP</membershipUuid>
     <residencyUuid>TEST_RELATIONSHIP</residencyUuid>
 
+    <!-- fill in from navigate activity -->
+    <collectedByUuid>UNKNOWN</collectedByUuid>
+    <locationUuid>UNKNOWN</locationUuid>
+
+    <!-- user form input -->
+    <relationToHead>UNKNOWN</relationToHead>
+
+    <!-- user search -->
+    <motherUuid>UNKNOWN</motherUuid>
+    <fatherUuid>UNKNOWN</fatherUuid>
+
+    <!-- let the server figure it out? -->
+    <socialGroupUuid>UNKNOWN</socialGroupUuid>
+    <headOfHouseholdUuid>UNKNOWN</headOfHouseholdUuid>
+
     <individual>
+        <!-- generate with xform binding -->
         <uuid>TEST_INDIVIDUAL</uuid>
         <collectionDateTime>2015-09-21T19:15:31.199Z[UTC]</collectionDateTime>
-        <extId>test-individual</extId>
+
+        <!-- user form input-->
         <extId>test-individual</extId>
         <firstName>test-individual</firstName>
         <gender>FEMALE</gender>

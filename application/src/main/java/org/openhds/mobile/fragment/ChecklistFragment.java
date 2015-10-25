@@ -14,8 +14,8 @@ import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.SupervisorMainActivity;
 import org.openhds.mobile.adapter.ChecklistAdapter;
-import org.openhds.mobile.model.form.FormHelper;
-import org.openhds.mobile.model.form.FormInstance;
+import org.openhds.mobile.forms.FormHelper;
+import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 

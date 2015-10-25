@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.form.FormBehaviour;
+import org.openhds.mobile.forms.FormBehaviour;
 
 import java.util.List;
 

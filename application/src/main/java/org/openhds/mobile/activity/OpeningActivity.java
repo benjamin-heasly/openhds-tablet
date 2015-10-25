@@ -11,7 +11,7 @@ import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.fragment.SupervisorLoginFragment;
-import org.openhds.mobile.model.form.FormInstance;
+import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 

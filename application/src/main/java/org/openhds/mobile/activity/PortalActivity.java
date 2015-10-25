@@ -19,7 +19,7 @@ import org.openhds.mobile.R;
 import org.openhds.mobile.adapter.FormInstanceAdapter;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.core.FieldWorker;
-import org.openhds.mobile.model.form.FormInstance;
+import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.modules.ModuleAppearance;
 import org.openhds.mobile.modules.ModuleRegistry;
 import org.openhds.mobile.utilities.EncryptionHelper;

@@ -1,4 +1,4 @@
-package org.openhds.mobile.model.form;
+package org.openhds.mobile.forms;
 
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 

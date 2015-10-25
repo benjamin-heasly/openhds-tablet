@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.form.FormInstance;
+import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.LayoutUtils;
 

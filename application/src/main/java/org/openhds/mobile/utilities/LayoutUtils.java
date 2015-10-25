@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.model.form.FormHelper;
-import org.openhds.mobile.model.form.FormInstance;
+import org.openhds.mobile.forms.FormHelper;
+import org.openhds.mobile.forms.FormInstance;
 
 import java.io.File;
 import java.util.Map;

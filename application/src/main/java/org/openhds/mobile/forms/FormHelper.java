@@ -1,4 +1,4 @@
-package org.openhds.mobile.model.form;
+package org.openhds.mobile.forms;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
