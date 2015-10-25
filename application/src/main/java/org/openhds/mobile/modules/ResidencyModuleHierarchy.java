@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * Follow a variable number of LocationHierarchyLevels downloaded from the server, followed by
- * Locations, followed by Individuals resident at the locaitons.
+ * Locations, followed by Individuals resident at the Locations.
  *
  * Created by ben on 10/12/15.
  */
@@ -32,6 +32,7 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
 
     public final String LOCATION_LEVEL_ID = "location";
     public final String INDIVIDUAL_LEVEL_ID = "individual";
+    public final String BOTTOM_LEVEL_ID = "bottom";
 
     private final List<String> levelSequence = new ArrayList<>();
 
@@ -68,6 +69,10 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
         // add Individuals beneath Locations, to be found by residency
         levelSequence.add(INDIVIDUAL_LEVEL_ID);
         levelLabels.put(INDIVIDUAL_LEVEL_ID, context.getResources().getString(R.string.individual_label));
+
+        // add a bumper at the bottom, after individual selected
+        levelSequence.add(BOTTOM_LEVEL_ID);
+        ;levelLabels.put(BOTTOM_LEVEL_ID, context.getResources().getString(R.string.bottom_label));
     }
 
     @Override
@@ -87,6 +92,11 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
 
     @Override
     public List<DataWrapper> getAll(ContentResolver contentResolver, String levelId) {
+
+        // there is nothing at the bottom
+        if (BOTTOM_LEVEL_ID.equals(levelId)) {
+            return null;
+        }
 
         // all individuals
         if (INDIVIDUAL_LEVEL_ID.equals(levelId)) {
@@ -120,6 +130,11 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
     public List<DataWrapper> getChildren(ContentResolver contentResolver, DataWrapper dataWrapper) {
 
         final String levelId = dataWrapper.getLevel();
+
+        // there is nothing at the bottom
+        if (BOTTOM_LEVEL_ID.equals(levelId)) {
+            return null;
+        }
 
         // individuals are the bottom of the hierarchy
         if (INDIVIDUAL_LEVEL_ID.equals(levelId)) {
@@ -173,7 +188,7 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
 
     // the level just above locations
     private String lastLocationHierarchyLevelId() {
-        return levelSequence.get(levelSequence.size() - 3);
+        return levelSequence.get(levelSequence.size() - 4);
     }
 
     // the next level after the given level

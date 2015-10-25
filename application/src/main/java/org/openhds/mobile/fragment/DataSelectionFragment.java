@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import org.openhds.mobile.R;
 import org.openhds.mobile.repository.DataWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
@@ -40,6 +41,12 @@ public class DataSelectionFragment extends Fragment {
     }
 
     public void populateData(List<DataWrapper> dataWrappers) {
+
+        // treat null like empty list, allows view to clear
+        if (null == dataWrappers) {
+            dataWrappers = new ArrayList<>();
+        }
+
         dataWrapperAdapter = new DataSelectionListAdapter(getActivity(), R.layout.generic_list_item_white_text, dataWrappers);
         listView.setAdapter(dataWrapperAdapter);
     }
