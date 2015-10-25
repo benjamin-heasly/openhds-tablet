@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<LocationRegistration>
+
+    <registrationVersion>101</registrationVersion>
+    <registrationVersionName>bsh-thesis</registrationVersionName>
+    <registrationDateTime>2015-06-10T15:30:00.000Z</registrationDateTime>
+    <registrationSystemName>openhds-tablet</registrationSystemName>
+
+    <collectedByUuid>UNKNOWN</collectedByUuid>
+
+    <locationHierarchyUuid>UNKNOWN</locationHierarchyUuid>
+
+    <location>
+        <uuid>TEST_LOCATION</uuid>
+        <collectionDateTime>2015-09-21T19:15:31.199Z[UTC]</collectionDateTime>
+        <extId>test-location</extId>
+        <name>test-location</name>
+        <type>RURAL</type>
+        <description>test-location</description>
+    </location>
+
+</LocationRegistration>
