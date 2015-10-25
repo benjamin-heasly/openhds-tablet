@@ -98,14 +98,13 @@ public class RelationshipGateway extends Gateway<Relationship> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, Relationship relationship, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-
-            dataWrapper.setUuid(relationship.getUuid());
-            dataWrapper.setName(relationship.getType());
-            dataWrapper.setLevel(state);
-
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Relationship entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getIndividualA(),
+                    entity.getIndividualB(),
+                    level,
+                    Relationship.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

@@ -95,11 +95,13 @@ public class MembershipGateway extends Gateway<Membership> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, Membership membership, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-            dataWrapper.setUuid(membership.getUuid());
-            dataWrapper.setLevel(state);
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Membership entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getIndividualUuid(),
+                    entity.getSocialGroupUuid(),
+                    level,
+                    Membership.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

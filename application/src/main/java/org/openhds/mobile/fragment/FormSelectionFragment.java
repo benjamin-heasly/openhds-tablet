@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.model.form.FormBehaviour;
 
@@ -71,13 +72,15 @@ public class FormSelectionFragment extends Fragment {
 
             FormBehaviour form = formListAdapter.getItem(position);
 
+            String label = getActivity().getString(form.getFormLabelId());
+
             if (convertView == null) {
-                convertView = makeTextWithPayload(getActivity(), getString(form.getFormLabelId()), null,
-                        form.getFormLabelId(), null, null, formSelectionDrawableId, null, null,true);
+                convertView = makeTextWithPayload(getActivity(), label, null,
+                        form.getFormLabelId(), null, null, formSelectionDrawableId, null ,true);
             }
 
             configureTextWithPayload(getActivity(),
-                    (RelativeLayout) convertView, getString(form.getFormLabelId()), null, null, null,true);
+                    (RelativeLayout) convertView, label, null, null, true);
             return convertView;
         }
     }

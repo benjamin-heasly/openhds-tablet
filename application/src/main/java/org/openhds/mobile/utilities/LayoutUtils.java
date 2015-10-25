@@ -1,6 +1,7 @@
 package org.openhds.mobile.utilities;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
@@ -44,10 +45,15 @@ public class LayoutUtils {
     }
 
     // Create a new Layout that contains two text views and optionally several "payload" text views beneath.
-    public static RelativeLayout makeTextWithPayload(Activity activity, String primaryText, String secondaryText,
-                                                     Object layoutTag, OnClickListener listener, ViewGroup container,
-                                                     int background, Map<Integer, String> stringsPayLoad,
-                                                     Map<Integer, Integer> stringsIdsPayLoad, boolean centerText) {
+    public static RelativeLayout makeTextWithPayload(Activity activity,
+                                                     String primaryText,
+                                                     String secondaryText,
+                                                     Object layoutTag,
+                                                     OnClickListener listener,
+                                                     ViewGroup container,
+                                                     int background,
+                                                     ContentValues contentValues,
+                                                     boolean centerText) {
 
         RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.generic_list_item_white_text, null);
         layout.setTag(layoutTag);
@@ -64,15 +70,18 @@ public class LayoutUtils {
             layout.setBackgroundResource(background);
         }
 
-        configureTextWithPayload(activity, layout, primaryText, secondaryText, stringsPayLoad, stringsIdsPayLoad, centerText);
+        configureTextWithPayload(activity, layout, primaryText, secondaryText, contentValues, centerText);
 
         return layout;
     }
 
     // Pass new data to a layout that was created with makeTextWithPayload().
-    public static void configureTextWithPayload(Activity activity, RelativeLayout layout, String primaryText,
-                                                String secondaryText, Map<Integer, String> stringsPayload,
-                                                Map<Integer, Integer> stringsIdsPayload, boolean centerText) {
+    public static void configureTextWithPayload(Activity activity,
+                                                RelativeLayout layout,
+                                                String primaryText,
+                                                String secondaryText,
+                                                ContentValues contentValues,
+                                                boolean centerText) {
 
         TextView primary = (TextView) layout.findViewById(R.id.primary_text);
         TextView secondary = (TextView) layout.findViewById(R.id.secondary_text);
@@ -95,24 +104,9 @@ public class LayoutUtils {
         // fill in payload strings, if any
         payLoadContainer.removeAllViews();
 
-        if (null != stringsPayload) {
-            for (Integer key : stringsPayload.keySet()) {
-                String value = stringsPayload.get(key);
-
-                if (null == value) {
-                    continue;
-                }
-
-                RelativeLayout relativeLayout = makeSmallTextWithValueAndLabel(activity, key, value, R.color.Black, R.color.AcidGray, R.color.AliceBlue);
-                relativeLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                payLoadContainer.addView(relativeLayout);
-            }
-        }
-
-        if (null != stringsIdsPayload) {
-            for (Integer key : stringsIdsPayload.keySet()) {
-                String value = activity.getResources().getString(stringsIdsPayload.get(key));
-
+        if (null != contentValues) {
+            for (String key : contentValues.keySet()) {
+                String value = contentValues.getAsString(key);
                 if (null == value) {
                     continue;
                 }
@@ -129,54 +123,58 @@ public class LayoutUtils {
             payLoadContainer.setVisibility(View.VISIBLE);
         }
 
-        if(centerText){
+        if (centerText) {
             primary.setGravity(Gravity.CENTER);
             secondary.setGravity(Gravity.CENTER);
             payLoadContainer.setGravity(Gravity.CENTER);
-            primary.setPadding(0,0,0,0);
-            secondary.setPadding(0,0,0,0);
-            payLoadContainer.setPadding(0,0,0,0);
+            primary.setPadding(0, 0, 0, 0);
+            secondary.setPadding(0, 0, 0, 0);
+            payLoadContainer.setPadding(0, 0, 0, 0);
 
         } else {
             primary.setGravity(Gravity.CENTER);
             secondary.setGravity(Gravity.CENTER);
             payLoadContainer.setGravity(Gravity.NO_GRAVITY);
-            primary.setPadding(0,0,0,0);
-            secondary.setPadding(0,0,0,0);
-            payLoadContainer.setPadding(15,0,0,0);
+            primary.setPadding(0, 0, 0, 0);
+            secondary.setPadding(0, 0, 0, 0);
+            payLoadContainer.setPadding(15, 0, 0, 0);
 
         }
     }
 
     // Create a pair of text views to represent some value plus its label, with given colors.
-    public static RelativeLayout makeLargeTextWithValueAndLabel(Activity activity, int labelId, String valueText,
-                                                                int labelColorId, int valueColorId, int missingColorId) {
+    public static RelativeLayout makeLargeTextWithValueAndLabel(Activity activity,
+                                                                String label,
+                                                                String valueText,
+                                                                int labelColorId,
+                                                                int valueColorId,
+                                                                int missingColorId) {
 
         RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.value_with_label_large, null);
-        configureTextWithValueAndLabel(layout, labelId, valueText, labelColorId, valueColorId, missingColorId);
+        configureTextWithValueAndLabel(layout, label, valueText, labelColorId, valueColorId, missingColorId);
 
         return layout;
     }
 
     // Create a pair of text views to represent some value plus its label, with given colors.
-    public static RelativeLayout makeSmallTextWithValueAndLabel(Activity activity, int labelId, String valueText,
+    public static RelativeLayout makeSmallTextWithValueAndLabel(Activity activity, String label, String valueText,
                                                                 int labelColorId, int valueColorId, int missingColorId) {
 
         RelativeLayout layout = (RelativeLayout) activity.getLayoutInflater().inflate(R.layout.value_with_label_small, null);
-        configureTextWithValueAndLabel(layout, labelId, valueText, labelColorId, valueColorId, missingColorId);
+        configureTextWithValueAndLabel(layout, label, valueText, labelColorId, valueColorId, missingColorId);
 
         return layout;
     }
 
     // Pass new data to text views created with makeLargeTextWithValueAndLabel().
-    public static void configureTextWithValueAndLabel(RelativeLayout layout, int labelId, String valueText,
+    public static void configureTextWithValueAndLabel(RelativeLayout layout, String label, String valueText,
                                                       int labelColorId, int valueColorId, int missingColorId) {
 
         TextView labelTextView = (TextView) layout.findViewById(R.id.label_text);
         TextView delimiterTextView = (TextView) layout.findViewById(R.id.delimiter_text);
         TextView valueTextView = (TextView) layout.findViewById(R.id.value_text);
 
-        labelTextView.setText(labelId);
+        labelTextView.setText(label);
         valueTextView.setText(valueText);
 
         Context context = layout.getContext();

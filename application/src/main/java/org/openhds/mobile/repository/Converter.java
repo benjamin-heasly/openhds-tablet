@@ -17,6 +17,6 @@ public interface Converter<T> {
 
     String getClientModificationTime(T entity);
 
-    DataWrapper toDataWrapper(ContentResolver contentResolver, T entity, String state);
+    DataWrapper toDataWrapper(ContentResolver contentResolver, T entity, String level);
 
 }

@@ -101,11 +101,13 @@ public class ResidencyGateway extends Gateway<Residency> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, Residency residency, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-            dataWrapper.setUuid(residency.getUuid());
-            dataWrapper.setLevel(state);
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Residency entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getIndividualUuid(),
+                    entity.getLocationUuid(),
+                    level,
+                    Residency.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

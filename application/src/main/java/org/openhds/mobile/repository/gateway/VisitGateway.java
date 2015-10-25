@@ -66,15 +66,13 @@ public class VisitGateway extends Gateway<Visit> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, Visit visit, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-
-            dataWrapper.setUuid(visit.getUuid());
-            dataWrapper.setExtId(visit.getExtId());
-            dataWrapper.setName(visit.getLocationUuid());
-            dataWrapper.setLevel(state);
-
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Visit entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getExtId(),
+                    entity.getExtId(),
+                    level,
+                    Visit.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

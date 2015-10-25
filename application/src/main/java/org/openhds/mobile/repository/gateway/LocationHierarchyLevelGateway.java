@@ -66,15 +66,13 @@ public class LocationHierarchyLevelGateway extends Gateway<LocationHierarchyLeve
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, LocationHierarchyLevel LocationHierarchyLevel, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-
-            dataWrapper.setUuid(LocationHierarchyLevel.getUuid());
-            dataWrapper.setExtId(LocationHierarchyLevel.getName());
-            dataWrapper.setName(LocationHierarchyLevel.getName());
-            dataWrapper.setLevel(state);
-
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, LocationHierarchyLevel entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    Integer.toString(entity.getKeyIdentifier()),
+                    entity.getName(),
+                    level,
+                    LocationHierarchyLevel.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

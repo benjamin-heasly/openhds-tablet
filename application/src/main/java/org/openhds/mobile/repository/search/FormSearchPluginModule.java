@@ -16,9 +16,6 @@ import java.util.List;
  * Extends SearchPluginModule to add the name of the form field that
  * needs filling, and the value to fill into it.
  *
- * TODO: add a consumer to take a QueryResult and return up a related value
- * to be filled into the form field instead of the QueryResult extId.
- * The consumer must implement Parcelable, too.
  */
 public class FormSearchPluginModule extends SearchPluginModule implements Parcelable {
     private String fieldName;

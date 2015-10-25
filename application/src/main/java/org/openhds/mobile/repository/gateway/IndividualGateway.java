@@ -89,15 +89,13 @@ public class IndividualGateway extends Gateway<Individual> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, Individual individual, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-
-            dataWrapper.setUuid(individual.getUuid());
-            dataWrapper.setExtId(individual.getExtId());
-            dataWrapper.setName(getFullName(individual));
-            dataWrapper.setLevel(state);
-
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Individual entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getExtId(),
+                    entity.getFirstName(),
+                    level,
+                    Individual.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

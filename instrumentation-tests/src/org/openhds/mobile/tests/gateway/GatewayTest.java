@@ -150,7 +150,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         assertFalse(allIterator.hasNext());
 
         Iterator<DataWrapper> allQueryResultsIterator =
-                gateway.getQueryResultIterator(contentResolver, gateway.findAll(), "test");
+                gateway.getDataWrapperIterator(contentResolver, gateway.findAll(), "test");
         assertFalse(allQueryResultsIterator.hasNext());
 
         T entity1 = makeTestEntity("TEST1", "test person", "test date");
@@ -166,7 +166,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         assertFalse(allIterator.hasNext());
 
         // expect both query results to come out, ordered by id
-        allQueryResultsIterator = gateway.getQueryResultIterator(contentResolver, gateway.findAll(), "test");
+        allQueryResultsIterator = gateway.getDataWrapperIterator(contentResolver, gateway.findAll(), "test");
         assertTrue(allQueryResultsIterator.hasNext());
         assertEquals("TEST1", allQueryResultsIterator.next().getUuid());
         assertEquals("TEST2", allQueryResultsIterator.next().getUuid());

@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.repository.DataWrapper;
 
@@ -83,10 +84,10 @@ public class DataSelectionFragment extends Fragment {
 
             if (convertView == null) {
                 convertView = makeTextWithPayload(getActivity(), dataWrapper.getName(), dataWrapper.getExtId(), dataWrapper.getName(),
-                        null, null, dataSelectionDrawableId, dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), false);
+                        null, null, dataSelectionDrawableId, dataWrapper.getContentValues(), false);
             } else {
                 configureTextWithPayload(getActivity(), (RelativeLayout) convertView, dataWrapper.getName(), dataWrapper.getExtId(),
-                        dataWrapper.getStringsPayload(), dataWrapper.getStringIdsPayload(), false);
+                        dataWrapper.getContentValues(), false);
             }
 
             return convertView;

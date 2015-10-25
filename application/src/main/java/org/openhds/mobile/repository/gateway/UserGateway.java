@@ -66,15 +66,13 @@ public class UserGateway extends Gateway<User> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, User user, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-
-            dataWrapper.setUuid(user.getUuid());
-            dataWrapper.setExtId(user.getUsername());
-            dataWrapper.setName(user.getFirstName());
-            dataWrapper.setLevel(state);
-
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, User entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getUsername(),
+                    entity.getFirstName(),
+                    level,
+                    User.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

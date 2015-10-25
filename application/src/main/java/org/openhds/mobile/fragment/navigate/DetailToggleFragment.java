@@ -1,11 +1,5 @@
 package org.openhds.mobile.fragment.navigate;
 
-import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
-import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
-
-import org.openhds.mobile.R;
-import org.openhds.mobile.activity.NavigateActivity;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +9,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
+
+import org.openhds.mobile.R;
+import org.openhds.mobile.activity.NavigateActivity;
+
+import static org.openhds.mobile.utilities.LayoutUtils.configureTextWithPayload;
+import static org.openhds.mobile.utilities.LayoutUtils.makeTextWithPayload;
 
 public class DetailToggleFragment extends Fragment implements OnClickListener {
 
@@ -28,13 +28,13 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 
 		LinearLayout toggleContainer = (LinearLayout) inflater.inflate(
 				R.layout.detail_toggle_fragment, container, false);
 
 		layout = makeTextWithPayload(getActivity(), null, null, null, this,
-                toggleContainer, 0, null, null,true);
+				toggleContainer, 0, null ,true);
 		LayoutParams params = (LayoutParams) layout.getLayoutParams();
 		params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -85,16 +85,16 @@ public class DetailToggleFragment extends Fragment implements OnClickListener {
 					R.color.LightGreen));
 
 			configureTextWithPayload(getActivity(), layout, getResources()
-                            .getString(R.string.toggle_fragment_button_show_children),
-                    null, null, null,true);
+							.getString(R.string.toggle_fragment_button_show_children),
+					null, null, true);
 
 		} else if (isEnabled && !isHighlighted) {
 			layout.setBackgroundColor(getResources().getColor(
 					R.color.DarkSeaGreen));
 
 			configureTextWithPayload(getActivity(), layout, getResources()
-                            .getString(R.string.toggle_fragment_button_show_details),
-                    null, null, null,true);
+							.getString(R.string.toggle_fragment_button_show_details),
+					null, null, true);
 
 		}
 

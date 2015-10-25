@@ -65,14 +65,13 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, SocialGroup socialGroup, String state) {
-            DataWrapper dataWrapper = new DataWrapper();
-
-            dataWrapper.setUuid(socialGroup.getUuid());
-            dataWrapper.setName(socialGroup.getGroupName());
-            dataWrapper.setLevel(state);
-
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, SocialGroup entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getExtId(),
+                    entity.getExtId(),
+                    level,
+                    SocialGroup.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.fragment.DataSelectionFragment;
 import org.openhds.mobile.fragment.SearchFragment;
@@ -112,12 +113,14 @@ public class FormSearchActivity extends Activity {
 
             FormSearchPluginModule plugin = getItem(position);
 
+            String label = getString(plugin.getLabelId());
+
             if (convertView == null) {
                 convertView = makeLargeTextWithValueAndLabel(FormSearchActivity.this,
-                        plugin.getLabelId(), plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
+                        label, plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
             } else {
                 configureTextWithValueAndLabel((RelativeLayout) convertView,
-                        plugin.getLabelId(), plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
+                        label, plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
             }
             convertView.setBackgroundResource(R.drawable.gray_list_item_selector);
             return convertView;

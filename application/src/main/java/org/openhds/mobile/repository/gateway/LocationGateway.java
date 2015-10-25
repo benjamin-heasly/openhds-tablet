@@ -73,15 +73,13 @@ public class LocationGateway extends Gateway<Location> {
         }
 
         @Override
-        public DataWrapper toDataWrapper(ContentResolver contentResolver, Location location, String state) {
-
-            DataWrapper dataWrapper = new DataWrapper();
-            dataWrapper.setUuid(location.getUuid());
-            dataWrapper.setExtId(location.getExtId());
-            dataWrapper.setName(location.getName());
-            dataWrapper.setLevel(state);
-
-            return dataWrapper;
+        public DataWrapper toDataWrapper(ContentResolver contentResolver, Location entity, String level) {
+            return new DataWrapper(entity.getUuid(),
+                    entity.getExtId(),
+                    entity.getName(),
+                    level,
+                    Location.class.getSimpleName(),
+                    toContentValues(entity));
         }
 
         @Override

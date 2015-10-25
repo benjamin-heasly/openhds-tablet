@@ -62,23 +62,23 @@ public class IndividualDetailFragment extends DetailFragment {
 
         // Name
         personalInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
-                R.string.individual_full_name_label,
+                getActivity().getString(R.string.individual_full_name_label),
                 individual.getFirstName() + " " + individual.getLastName(),
                 labelColor, valueColor, R.color.NA_Gray));
 
         personalInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
-                R.string.gender_lbl,
+                getActivity().getString(R.string.gender_lbl),
                 individual.getGender(),
                 labelColor, valueColor, R.color.NA_Gray));
 
         personalInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
-                R.string.individual_date_of_birth_label,
+                getActivity().getString(R.string.individual_date_of_birth_label),
                 individual.getDob(),
                 labelColor, valueColor, R.color.NA_Gray));
 
         //UUID
         personalInfoContainer.addView(makeLargeTextWithValueAndLabel(getActivity(),
-                R.string.uuid,
+                getActivity().getString( R.string.uuid),
                 individual.getUuid(),
                 labelColor, valueColor, R.color.NA_Gray));
 

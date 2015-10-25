@@ -63,7 +63,6 @@ public class PortalActivity extends Activity implements OnClickListener {
                     activitiesLayout,
                     moduleInfo.getPortalDrawableId(),
                     null,
-                    null,
                     true);
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) layout.getLayoutParams();

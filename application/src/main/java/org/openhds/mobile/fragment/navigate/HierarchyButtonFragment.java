@@ -47,7 +47,6 @@ public class HierarchyButtonFragment extends Fragment {
                     selectionContainer,
                     hiearchySelectionDrawableId,
                     null,
-                    null,
                     true);
             LayoutParams params = (LayoutParams) layout.getLayoutParams();
             params.setMargins(0, 0, 0, BUTTON_MARGIN);
@@ -79,7 +78,7 @@ public class HierarchyButtonFragment extends Fragment {
         if (null == layout) {
             return;
         }
-        configureTextWithPayload(getActivity(), layout, name, id, null, null, centerText);
+        configureTextWithPayload(getActivity(), layout, name, id, null, centerText);
     }
 
     public void setHiearchySelectionDrawableId(int hiearchySelectionDrawableId) {

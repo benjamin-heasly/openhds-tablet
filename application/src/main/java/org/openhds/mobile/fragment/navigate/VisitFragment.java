@@ -31,7 +31,7 @@ public class VisitFragment extends Fragment implements OnClickListener {
 				R.layout.visit_fragment, container, false);
 
 		layout = makeTextWithPayload(getActivity(), null, null, null, this,
-                toggleContainer, 0, null, null, true);
+                toggleContainer, 0, null, true);
 		LayoutParams params = (LayoutParams) layout.getLayoutParams();
 		params.setMargins(0, 0, 0, BUTTON_MARGIN);
 
@@ -58,7 +58,7 @@ public class VisitFragment extends Fragment implements OnClickListener {
 			layout.setBackgroundResource(R.drawable.visit_selector);
 			configureTextWithPayload(getActivity(), layout, getResources()
                             .getString(R.string.finish_visit), null,
-                    null, null,true );
+                    null ,true );
 			layout.setClickable(true);
 
 		} else {

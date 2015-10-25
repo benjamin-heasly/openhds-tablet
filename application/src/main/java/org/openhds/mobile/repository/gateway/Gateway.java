@@ -133,13 +133,13 @@ public abstract class Gateway<T> {
         return dataWrappers;
     }
 
-    // get an iterator over all results from a query as QueryResults
-    public Iterator<DataWrapper> getQueryResultIterator(ContentResolver contentResolver, Query query, String state) {
+    // get an iterator over all results from a query as DataWrapper
+    public Iterator<DataWrapper> getDataWrapperIterator(ContentResolver contentResolver, Query query, String state) {
         return new QueryResultsIterator<T>(contentResolver, query, converter, state);
     }
 
-    // get an iterator over all results from a query as QueryResults, with given iterator window size
-    public Iterator<DataWrapper> getQueryResultIterator(ContentResolver contentResolver, Query query, String state, int windowSize) {
+    // get an iterator over all results from a query as DataWrapper, with given iterator window size
+    public Iterator<DataWrapper> getDataWrapperIterator(ContentResolver contentResolver, Query query, String state, int windowSize) {
         return new QueryResultsIterator<T>(contentResolver, query, converter, state, windowSize);
     }
 
