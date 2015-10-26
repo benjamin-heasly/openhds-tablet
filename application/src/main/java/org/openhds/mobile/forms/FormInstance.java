@@ -23,34 +23,16 @@ public class FormInstance implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String formName;
+    private FormBehaviour formBehaviour;
     private String filePath;
-    private String fileName;
     private String uriString;
-    private String formVersion;
 
-    public String getFormVersion() {
-        return formVersion;
+    public FormBehaviour getFormBehaviour() {
+        return formBehaviour;
     }
 
-    public void setFormVersion(String formVersion) {
-        this.formVersion = formVersion;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFormName() {
-        return formName;
-    }
-
-    public void setFormName(String formName) {
-        this.formName = formName;
+    public void setFormBehaviour(FormBehaviour formBehaviour) {
+        this.formBehaviour = formBehaviour;
     }
 
     public String getFilePath() {

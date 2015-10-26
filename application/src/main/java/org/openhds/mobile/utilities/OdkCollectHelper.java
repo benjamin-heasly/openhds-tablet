@@ -59,8 +59,8 @@ public class OdkCollectHelper {
 
             formInstance.setFilePath(filePath);
             formInstance.setUriString(uri.toString());
-            formInstance.setFormName(formName);
-            formInstance.setFileName(fileName);
+//            formInstance.setFormName(formName);
+//            formInstance.setFileName(fileName);
 
             formInstances.add(formInstance);
 
@@ -109,8 +109,8 @@ public class OdkCollectHelper {
             fileName = cursor.getString(cursor.getColumnIndex(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
 
 			formInstance.setFilePath(filePath);
-            formInstance.setFormName(formName);
-            formInstance.setFileName(fileName);
+//            formInstance.setFormName(formName);
+//            formInstance.setFileName(fileName);
 
             formInstance.setUriString(uri.toString());
 

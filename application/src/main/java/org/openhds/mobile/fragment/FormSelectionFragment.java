@@ -72,15 +72,15 @@ public class FormSelectionFragment extends Fragment {
 
             FormBehaviour form = formListAdapter.getItem(position);
 
-            String label = getActivity().getString(form.getFormLabelId());
+            //String label = getActivity().getString(form.getFormLabelId());
 
             if (convertView == null) {
-                convertView = makeTextWithPayload(getActivity(), label, null,
-                        form.getFormLabelId(), null, null, formSelectionDrawableId, null ,true);
+                //convertView = makeTextWithPayload(getActivity(), label, null,
+              //          form.getFormLabelId(), null, null, formSelectionDrawableId, null ,true);
             }
 
-            configureTextWithPayload(getActivity(),
-                    (RelativeLayout) convertView, label, null, null, true);
+//            configureTextWithPayload(getActivity(),
+//                    (RelativeLayout) convertView, label, null, null, true);
             return convertView;
         }
     }

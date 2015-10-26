@@ -216,7 +216,7 @@ public class LayoutUtils {
 
         // stuff values into the view widget
         TextView formTypeView = (TextView) view.findViewById(R.id.form_instance_list_type);
-        formTypeView.setText(formInstance.getFormName());
+        //formTypeView.setText(formInstance.getFormName());
 
         TextView formIdView = (TextView) view.findViewById(R.id.form_instance_list_id);
         formIdView.setText("TODO: entity Id");

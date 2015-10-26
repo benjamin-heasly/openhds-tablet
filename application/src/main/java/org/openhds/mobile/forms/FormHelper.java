@@ -14,7 +14,6 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.openhds.mobile.provider.FormsProviderAPI;
 import org.openhds.mobile.provider.InstanceProviderAPI;
 
 import java.io.File;
@@ -29,9 +28,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-
-import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
-import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 
 public class FormHelper {
 
@@ -197,83 +193,84 @@ public class FormHelper {
 
 
     public FormInstance newFormInstance() throws JDOMException, IOException {
-        this.finalizedFormFilePath = null;
-        FormInstance formInstance = new FormInstance();
-
-        // find a form definition with the name of the current form behaviour
-        final String[] columnNames = new String[]{
-                FormsProviderAPI.FormsColumns.JR_FORM_ID,
-                FormsProviderAPI.FormsColumns.FORM_FILE_PATH,
-                FormsProviderAPI.FormsColumns.JR_VERSION};
-        Cursor cursor = contentResolver.query(
-                FormsProviderAPI.FormsColumns.CONTENT_URI, columnNames,
-                FormsProviderAPI.FormsColumns.JR_FORM_ID + " " + LIKE + " ?",
-                new String[]{formBehaviour.getFormName() + LIKE_WILD_CARD}, null);
-
-        // read the path and type for the new form instance
-        if (cursor.moveToFirst()) {
-            formInstance.setFormName(cursor.getString(0));
-            formInstance.setFilePath(cursor.getString(1));
-            formInstance.setFormVersion(cursor.getString(2));
-            cursor.close();
-        } else {
-            cursor.close();
-            return null;
-        }
-
-
-        // populate the fields of the new form instance
-        SAXBuilder builder = new SAXBuilder();
-
-        // get reference to unfilled form
-        Document blankDoc = builder.build(new File(formInstance.getFilePath()));
-        Element root = blankDoc.getRootElement();
-        ElementFilter filter = new ElementFilter("data");
-        Document filledForm = new Document();
-        Iterator<Element> itr = root.getDescendants(filter);
-
-        if (itr.hasNext()) {
-
-            Element filledFormRoot = itr.next();
-            filledFormRoot.detach();
-            filledForm.setRootElement(filledFormRoot);
-            Iterator<Element> dataDescendantsItr = filledFormRoot.getDescendants(new ElementFilter());
-
-            Map<Element, String> toModify = new HashMap<>();
-
-            while (dataDescendantsItr.hasNext()) {
-
-                Element child = dataDescendantsItr.next();
-                String name = child.getName();
-
-                boolean isNestedElement = child.getParentElement().hasAttributes();
-
-                if (child.getParentElement() != filledFormRoot && isNestedElement) {
-                    filledFormRoot.removeChild(name);
-                }
-
-                if (formFieldData.containsKey(name) && null != formFieldData.get(name)) {
-                    toModify.put(child, formFieldData.get(name));
-                }
-
-            }
-
-            for (Element child : toModify.keySet()) {
-                child.setText(toModify.get(child));
-            }
-        }
-
-        // write out the filled-in form instance
-        File editableFormFile = getExternalStorageXmlFile(formInstance.getFormName(), formBehaviour.getFormName(), ".xml");
-        FileOutputStream fileOutputStream = new FileOutputStream(editableFormFile);
-        XMLOutputter xmlOutput = new XMLOutputter();
-        xmlOutput.setFormat(Format.getPrettyFormat());
-        xmlOutput.output(filledForm, fileOutputStream);
-        fileOutputStream.close();
-
-        contentUri = shareOdkFormInstance(editableFormFile, editableFormFile.getName(), formInstance.getFormName(), formInstance.getFormVersion());
-
-        return formInstance;
+//        this.finalizedFormFilePath = null;
+//        FormInstance formInstance = new FormInstance();
+//
+//        // find a form definition with the name of the current form behaviour
+//        final String[] columnNames = new String[]{
+//                FormsProviderAPI.FormsColumns.JR_FORM_ID,
+//                FormsProviderAPI.FormsColumns.FORM_FILE_PATH,
+//                FormsProviderAPI.FormsColumns.JR_VERSION};
+//        Cursor cursor = contentResolver.query(
+//                FormsProviderAPI.FormsColumns.CONTENT_URI, columnNames,
+//                FormsProviderAPI.FormsColumns.JR_FORM_ID + " " + LIKE + " ?",
+//                new String[]{formBehaviour.getFormName() + LIKE_WILD_CARD}, null);
+//
+//        // read the path and type for the new form instance
+//        if (cursor.moveToFirst()) {
+//            formInstance.setFormName(cursor.getString(0));
+//            formInstance.setFilePath(cursor.getString(1));
+//            formInstance.setFormVersion(cursor.getString(2));
+//            cursor.close();
+//        } else {
+//            cursor.close();
+//            return null;
+//        }
+//
+//
+//        // populate the fields of the new form instance
+//        SAXBuilder builder = new SAXBuilder();
+//
+//        // get reference to unfilled form
+//        Document blankDoc = builder.build(new File(formInstance.getFilePath()));
+//        Element root = blankDoc.getRootElement();
+//        ElementFilter filter = new ElementFilter("data");
+//        Document filledForm = new Document();
+//        Iterator<Element> itr = root.getDescendants(filter);
+//
+//        if (itr.hasNext()) {
+//
+//            Element filledFormRoot = itr.next();
+//            filledFormRoot.detach();
+//            filledForm.setRootElement(filledFormRoot);
+//            Iterator<Element> dataDescendantsItr = filledFormRoot.getDescendants(new ElementFilter());
+//
+//            Map<Element, String> toModify = new HashMap<>();
+//
+//            while (dataDescendantsItr.hasNext()) {
+//
+//                Element child = dataDescendantsItr.next();
+//                String name = child.getName();
+//
+//                boolean isNestedElement = child.getParentElement().hasAttributes();
+//
+//                if (child.getParentElement() != filledFormRoot && isNestedElement) {
+//                    filledFormRoot.removeChild(name);
+//                }
+//
+//                if (formFieldData.containsKey(name) && null != formFieldData.get(name)) {
+//                    toModify.put(child, formFieldData.get(name));
+//                }
+//
+//            }
+//
+//            for (Element child : toModify.keySet()) {
+//                child.setText(toModify.get(child));
+//            }
+//        }
+//
+//        // write out the filled-in form instance
+//        File editableFormFile = getExternalStorageXmlFile(formInstance.getFormName(), formBehaviour.getFormName(), ".xml");
+//        FileOutputStream fileOutputStream = new FileOutputStream(editableFormFile);
+//        XMLOutputter xmlOutput = new XMLOutputter();
+//        xmlOutput.setFormat(Format.getPrettyFormat());
+//        xmlOutput.output(filledForm, fileOutputStream);
+//        fileOutputStream.close();
+//
+//        contentUri = shareOdkFormInstance(editableFormFile, editableFormFile.getName(), formInstance.getFormName(), formInstance.getFormVersion());
+//
+//        return formInstance;
+        return null;
     }
 
     // ODKCollectHelper

@@ -10,15 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.forms.FormBehaviour;
+import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.fragment.DataSelectionFragment;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.FormSelectionFragment;
 import org.openhds.mobile.fragment.navigate.HierarchyButtonFragment;
 import org.openhds.mobile.fragment.navigate.VisitFragment;
 import org.openhds.mobile.model.core.FieldWorker;
-import org.openhds.mobile.forms.FormBehaviour;
-import org.openhds.mobile.forms.FormHelper;
-import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.modules.ModuleAppearance;
 import org.openhds.mobile.modules.ModuleRegistry;
@@ -35,9 +34,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
-import static org.openhds.mobile.utilities.ConfigUtils.getAppVersionNumber;
-import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class NavigateActivity extends Activity implements HierarchyNavigator {
 
@@ -60,15 +56,15 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private static final String CURRENT_RESULTS_KEY = "currentResults";
 
     private NavigationModule navigationModule;
+    private HashMap<MenuItem, String> menuItemTags;
 
-    private FormHelper formHelper;
     private StateMachine stateMachine;
     private Map<String, DataWrapper> hierarchyPath;
     private List<DataWrapper> currentResults;
     private DataWrapper currentSelection;
     private FieldWorker currentFieldWorker;
     private Visit currentVisit;
-    private HashMap<MenuItem, String> menuItemTags;
+    private FormInstance currentFormInstance;
 
 
     @Override
@@ -86,7 +82,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         }
 
         hierarchyPath = new HashMap<>();
-        formHelper = new FormHelper(getContentResolver());
         stateMachine = new StateMachine(new HashSet<>(getLevelSequence()), getLevelSequence().get(0));
 
         for (String level : getLevelSequence()) {
@@ -388,79 +383,69 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     }
 
     @Override
-    public void launchForm(FormBehaviour formBehaviour, Map<String, String> followUpFormHints) {
+    public void launchForm(FormBehaviour formBehaviour) {
 
-
-        // use the given form as the current form
-        formHelper.setFormBehaviour(formBehaviour);
-
-
-        Map<String, String> formFieldData = new HashMap<String, String>();
-        if (null != followUpFormHints) {
-            formFieldData.putAll(followUpFormHints);
-        }
-
-        formHelper.setFormFieldData(formFieldData);
+        currentFormInstance = formBehaviour.createNewInstance();
 
         // if needed, ask the user to search for required form field data
-        if (formBehaviour.getNeedsFormFieldSearch()) {
-            launchCurrentFormInSearchActivity();
-            return;
-        }
+//        if (formBehaviour.getNeedsFormFieldSearch()) {
+//            launchCurrentFormInSearchActivity();
+//            return;
+//        }
 
         // otherwise, launch the form in ODK immediately
         launchCurrentFormInODK();
     }
 
     private void launchCurrentFormInODK() {
-        FormBehaviour formBehaviour = formHelper.getFormBehaviour();
-        if (null != formBehaviour && null != formBehaviour.getFormName()) {
-
-            FormInstance formInstance;
-            try {
-                formInstance = formHelper.newFormInstance();
-            } catch (Exception e) {
-                showShortToast(this, "Error creating Form instance: " + e.getMessage());
-                return;
-            }
-
-            if (null == formInstance) {
-                showShortToast(this, "Warning: Could not find '" + formBehaviour.getFormName() + "' form.");
-                return;
-            }
-
-            if (null == formInstance.getFormVersion()) {
-                showShortToast(this, "Warning: Form has no defined Version Number.");
-                return;
-            }
-
-            String appVersionNumber = Integer.toString(getAppVersionNumber(this));
-
-            if (!formInstance.getFormVersion().equals(appVersionNumber)) {
-                showShortToast(this, "Warning: Version difference between OpenHDS (" + appVersionNumber + ") and ODK (" + formInstance.getFormVersion() + ").");
-            }
-
-            Intent intent = formHelper.buildEditFormInstanceIntent();
-            showShortToast(this, R.string.launching_odk_collect);
-
-            // clear currentResults to get the most up-to-date currentResults after the form is consumed
-            currentResults = null;
-
-            startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
-            return;
-
-        }
+//        FormBehaviour formBehaviour = formHelper.getFormBehaviour();
+//        if (null != formBehaviour && null != formBehaviour.getFormName()) {
+//
+//            FormInstance formInstance;
+//            try {
+//                formInstance = formHelper.newFormInstance();
+//            } catch (Exception e) {
+//                showShortToast(this, "Error creating Form instance: " + e.getMessage());
+//                return;
+//            }
+//
+//            if (null == formInstance) {
+//                showShortToast(this, "Warning: Could not find '" + formBehaviour.getFormName() + "' form.");
+//                return;
+//            }
+//
+//            if (null == formInstance.getFormVersion()) {
+//                showShortToast(this, "Warning: Form has no defined Version Number.");
+//                return;
+//            }
+//
+//            String appVersionNumber = Integer.toString(getAppVersionNumber(this));
+//
+//            if (!formInstance.getFormVersion().equals(appVersionNumber)) {
+//                showShortToast(this, "Warning: Version difference between OpenHDS (" + appVersionNumber + ") and ODK (" + formInstance.getFormVersion() + ").");
+//            }
+//
+//            Intent intent = formHelper.buildEditFormInstanceIntent();
+//            showShortToast(this, R.string.launching_odk_collect);
+//
+//            // clear currentResults to get the most up-to-date currentResults after the form is consumed
+//            currentResults = null;
+//
+//            startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
+////            return;
+//
+//        }
     }
 
     private void launchCurrentFormInSearchActivity() {
-        FormBehaviour formBehaviour = formHelper.getFormBehaviour();
-        if (null != formBehaviour) {
-            // put form search plugins in the intent so we know what the user needs to search for
-            Intent intent = new Intent(this, FormSearchActivity.class);
-            intent.putParcelableArrayListExtra(
-                    FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, formBehaviour.getFormSearchPluginModules());
-            startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE);
-        }
+//        FormBehaviour formBehaviour = formHelper.getFormBehaviour();
+//        if (null != formBehaviour) {
+//            // put form search plugins in the intent so we know what the user needs to search for
+//            Intent intent = new Intent(this, FormSearchActivity.class);
+//            intent.putParcelableArrayListExtra(
+//                    FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, formBehaviour.getFormSearchPluginModules());
+//            startActivityForResult(intent, SEARCH_ACTIVITY_REQUEST_CODE);
+//        }
     }
 
     private void showValueFragment() {
@@ -498,7 +483,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
 
                     // merge searched fields with the existing form payload
                     for (FormSearchPluginModule plugin : formSearchPluginModules) {
-                        formHelper.getFormFieldData().put(plugin.getFieldName(), plugin.getFieldValue());
+                        // formHelper.getFormFieldData().put(plugin.getFieldName(), plugin.getFieldValue());
                     }
 
                     // now let the user finish filling in the form in ODK
@@ -591,7 +576,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private class FormSelectionHandler implements FormSelectionFragment.SelectionHandler {
         @Override
         public void handleSelectedForm(FormBehaviour formBehaviour) {
-            NavigateActivity.this.launchForm(formBehaviour, null);
+            NavigateActivity.this.launchForm(formBehaviour);
         }
     }
 }

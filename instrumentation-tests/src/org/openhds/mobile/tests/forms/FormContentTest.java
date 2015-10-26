@@ -12,7 +12,7 @@ import java.io.InputStream;
 public class FormContentTest extends AndroidTestCase {
 
     public void testReadHouseholdFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-individual-household-form.xml", "testReadHouseholdFormContent.xml");
+        File file = writeAssetTempFile("testForms/test-individual-household-instance.xml", "testReadHouseholdFormContent.xml");
         FormInstance formInstance = new FormInstance();
         formInstance.setFilePath(file.getAbsolutePath());
 
@@ -38,7 +38,7 @@ public class FormContentTest extends AndroidTestCase {
     }
 
     public void testReadLocationFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-location-form.xml", "testReadLocationFormContent.xml");
+        File file = writeAssetTempFile("testForms/test-location-instance.xml", "testReadLocationFormContent.xml");
         FormInstance formInstance = new FormInstance();
         formInstance.setFilePath(file.getAbsolutePath());
 
@@ -61,7 +61,7 @@ public class FormContentTest extends AndroidTestCase {
     }
 
     public void testWriteHouseholdFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-individual-household-form.xml", "testWriteHouseholdFormContent.xml");
+        File file = writeAssetTempFile("testForms/test-individual-household-instance.xml", "testWriteHouseholdFormContent.xml");
         FormInstance formInstance = new FormInstance();
         formInstance.setFilePath(file.getAbsolutePath());
 
@@ -93,7 +93,7 @@ public class FormContentTest extends AndroidTestCase {
     }
 
     public void testWriteLocationFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-location-form.xml", "testWriteLocationFormContent.xml");
+        File file = writeAssetTempFile("testForms/test-location-instance.xml", "testWriteLocationFormContent.xml");
         FormInstance formInstance = new FormInstance();
         formInstance.setFilePath(file.getAbsolutePath());
 
