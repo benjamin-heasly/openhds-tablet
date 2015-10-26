@@ -3,6 +3,7 @@ package org.openhds.mobile.repository.search;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.Gateway;
 
@@ -21,8 +22,8 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
     private String fieldName;
     private String fieldValue;
 
-    public FormSearchPluginModule(Gateway gateway, int labelId, String fieldName) {
-        super(gateway, labelId);
+    public FormSearchPluginModule(Gateway gateway, String label, String fieldName) {
+        super(gateway, label);
         this.fieldName = fieldName;
     }
 
@@ -44,7 +45,7 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
 
     // for Parcelable
     private FormSearchPluginModule(Parcel parcel) {
-        labelId = parcel.readInt();
+        label = parcel.readString();
         fieldName = parcel.readString();
         fieldValue = parcel.readString();
 
@@ -71,7 +72,7 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
     // for Parcelable
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeInt(labelId);
+        parcel.writeString(label);
         parcel.writeString(fieldName);
         parcel.writeString(fieldValue);
 

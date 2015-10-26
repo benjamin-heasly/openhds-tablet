@@ -11,13 +11,13 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.forms.FormHelper;
+import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.fragment.ChecklistFragment;
 import org.openhds.mobile.fragment.DeleteWarningDialogFragment;
 import org.openhds.mobile.fragment.DeleteWarningDialogListener;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.fragment.SyncDatabaseFragment;
-import org.openhds.mobile.forms.FormHelper;
-import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchUtils;
 import org.openhds.mobile.utilities.EncryptionHelper;
@@ -110,10 +110,10 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
 
     private void searchDatabase() {
         ArrayList<FormSearchPluginModule> searchPluginModules = new ArrayList<>();
-        searchPluginModules.add(SearchUtils.getFieldWorkerPlugin("fieldWorker"));
-        searchPluginModules.add(SearchUtils.getIndividualPlugin("individual", R.string.search_individual_label));
-        searchPluginModules.add(SearchUtils.getLocationPlugin("location"));
-        searchPluginModules.add(SearchUtils.getSocialGroupPlugin("socialGroup"));
+        searchPluginModules.add(SearchUtils.getFieldWorkerPlugin("fieldWorker", getString(R.string.search_field_worker_label)));
+        searchPluginModules.add(SearchUtils.getIndividualPlugin("individual", getString(R.string.search_individual_label)));
+        searchPluginModules.add(SearchUtils.getLocationPlugin("location", getString(R.string.search_location_label)));
+        searchPluginModules.add(SearchUtils.getSocialGroupPlugin("socialGroup", getString(R.string.search_social_group_label)));
 
         Intent intent = new Intent(this, FormSearchActivity.class);
         intent.putParcelableArrayListExtra(FormSearchActivity.FORM_SEARCH_PLUGINS_KEY, searchPluginModules);

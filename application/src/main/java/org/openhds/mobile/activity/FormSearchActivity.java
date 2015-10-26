@@ -113,7 +113,7 @@ public class FormSearchActivity extends Activity {
 
             FormSearchPluginModule plugin = getItem(position);
 
-            String label = getString(plugin.getLabelId());
+            String label = plugin.getLabel();
 
             if (convertView == null) {
                 convertView = makeLargeTextWithValueAndLabel(FormSearchActivity.this,

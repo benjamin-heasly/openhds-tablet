@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import org.openhds.mobile.R;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
@@ -82,9 +83,9 @@ public class SearchFragment extends Fragment {
         setPluginModule(searchPluginModules.get(0));
     }
 
-    public void setTitle(int titleId) {
+    public void setTitle(String title) {
         TextView titleText = (TextView) getView().findViewById(R.id.search_fragment_title);
-        titleText.setText(titleId);
+        titleText.setText(title);
     }
 
     private void updateStatus(int resultCount) {
@@ -111,7 +112,7 @@ public class SearchFragment extends Fragment {
     // Set up search fields for a selected search plugin module.
     private void setPluginModule(SearchPluginModule searchPluginModule) {
         currentPluginModule = searchPluginModule;
-        setTitle(searchPluginModule.getLabelId());
+        setTitle(searchPluginModule.getLabel());
         updateStatus(NO_SEARCH);
         configureEditTexts();
     }
@@ -202,7 +203,7 @@ public class SearchFragment extends Fragment {
             // set the text of this item from the corresponding search module plugin
             final TextView textView = (TextView) convertView;
             SearchPluginModule searchPluginModule = getItem(position);
-            textView.setText(searchPluginModule.getLabelId());
+            textView.setText(searchPluginModule.getLabel());
             return convertView;
         }
 

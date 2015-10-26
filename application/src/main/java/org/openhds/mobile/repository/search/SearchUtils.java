@@ -14,9 +14,9 @@ import org.openhds.mobile.repository.GatewayRegistry;
 public class SearchUtils {
 
     // Search for a field worker based on name and id.
-    public static FormSearchPluginModule getFieldWorkerPlugin(String fieldName) {
+    public static FormSearchPluginModule getFieldWorkerPlugin(String fieldName, String label) {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
-                GatewayRegistry.getFieldWorkerGateway(), R.string.search_field_worker_label, fieldName);
+                GatewayRegistry.getFieldWorkerGateway(), label, fieldName);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.FieldWorkers.FIRST_NAME, R.string.field_worker_first_name_label);
         plugin.getColumnsAndLabels().put(
@@ -28,9 +28,9 @@ public class SearchUtils {
     }
 
     // Search for an individual based name and phone number.
-    public static FormSearchPluginModule getIndividualPlugin(String fieldName, int searchLabel) {
+    public static FormSearchPluginModule getIndividualPlugin(String fieldName, String label) {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
-                GatewayRegistry.getIndividualGateway(), searchLabel, fieldName);
+                GatewayRegistry.getIndividualGateway(), label, fieldName);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.Individuals.FIRST_NAME, R.string.individual_first_name_label);
         plugin.getColumnsAndLabels().put(
@@ -40,9 +40,9 @@ public class SearchUtils {
     }
 
     // Search for a location based on name, id, and location hierarchy names.
-    public static FormSearchPluginModule getLocationPlugin(String fieldName) {
+    public static FormSearchPluginModule getLocationPlugin(String fieldName, String label) {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
-                GatewayRegistry.getLocationGateway(), R.string.search_location_label, fieldName);
+                GatewayRegistry.getLocationGateway(), label, fieldName);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.Locations.NAME, R.string.location_name_label);
         plugin.getColumnsAndLabels().put(
@@ -52,9 +52,9 @@ public class SearchUtils {
     }
 
     // Search for a social group based on name and id.
-    public static FormSearchPluginModule getSocialGroupPlugin(String fieldName) {
+    public static FormSearchPluginModule getSocialGroupPlugin(String fieldName, String label) {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
-                GatewayRegistry.getSocialGroupGateway(), R.string.search_social_group_label, fieldName);
+                GatewayRegistry.getSocialGroupGateway(), label, fieldName);
         plugin.getColumnsAndLabels().put(
                 OpenHDS.SocialGroups.GROUP_NAME, R.string.social_group_name);
         plugin.getColumnsAndLabels().put(

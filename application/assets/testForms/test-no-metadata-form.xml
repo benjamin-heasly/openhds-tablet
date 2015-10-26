@@ -7,48 +7,7 @@
                 <data id="location" version="101">
                     <openhdsTagName>bsh-thesis</openhdsTagName>
 
-                    <!-- Only care about meta element.  The rest is cruft parser should ignore.-->
-                    <meta>
-                        <instanceID />
-
-                        <!-- display criteria -->
-                        <displayLevel>level</displayLevel>
-                        <displayFilter>
-                            <individual><gender>FEMALE</gender></individual>
-                            <location><type>URBAN</type></location>
-                        </displayFilter>
-
-                        <!-- record consumers-->
-                        <consumer>individual</consumer>
-                        <consumer>residency</consumer>
-                        <consumer>relationship</consumer>
-
-                        <!-- follow up form criteria -->
-                        <followUp>
-                            <formId>unconditional-follow-up</formId>
-                        </followUp>
-
-                        <followUp>
-                            <formId>conditional-follow-up</formId>
-                            <filter>
-                                <individual><gender>FEMALE</gender></individual>
-                                <location><type>URBAN</type></location>
-                            </filter>
-                        </followUp>
-
-                        <!-- search fields and gateway names -->
-                        <search>
-                            <IndividualGateway>
-                                <motherUuid>Find the Mother</motherUuid>
-                                <fatherUuid>Find the Father</fatherUuid>
-                            </IndividualGateway>
-
-                            <LocationGateway>
-                                <locationUuid>Find the Location</locationUuid>
-                            </LocationGateway>
-                        </search>
-
-                    </meta>
+                    <!-- No meta element, and the rest is cruft parser should ignore.-->
 
                     <collectionDateTime />
                     <processedByMirth />

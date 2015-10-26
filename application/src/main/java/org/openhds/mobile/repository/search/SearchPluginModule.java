@@ -1,9 +1,7 @@
 package org.openhds.mobile.repository.search;
 
-import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.Gateway;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,14 +23,14 @@ public class SearchPluginModule {
     private static final long serialVersionUID = 91916640L;
 
     protected Gateway gateway;
-    protected int labelId;
+    protected String label;
     protected Map<String, Integer> columnsAndLabels;
 
     public SearchPluginModule() {}
 
-    public SearchPluginModule(Gateway gateway, int labelId) {
+    public SearchPluginModule(Gateway gateway, String label) {
         this.gateway = gateway;
-        this.labelId = labelId;
+        this.label = label;
         columnsAndLabels = new HashMap<>();
     }
 
@@ -52,11 +50,11 @@ public class SearchPluginModule {
         this.gateway = gateway;
     }
 
-    public int getLabelId() {
-        return labelId;
+    public String getLabel() {
+        return label;
     }
 
-    public void setLabelId(int labelId) {
-        this.labelId = labelId;
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

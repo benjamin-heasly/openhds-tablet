@@ -25,96 +25,64 @@ public class GatewayRegistry {
 
     static {
         allGateways = new HashMap<>();
+
+        allGateways.put(FieldWorkerGateway.class.getSimpleName(), new FieldWorkerGateway());
+        allGateways.put(UserGateway.class.getSimpleName(), new UserGateway());
+        allGateways.put(IndividualGateway.class.getSimpleName(), new IndividualGateway());
+        allGateways.put(LocationGateway.class.getSimpleName(), new LocationGateway());
+        allGateways.put(LocationHierarchyGateway.class.getSimpleName(), new LocationHierarchyGateway());
+        allGateways.put(LocationHierarchyLevelGateway.class.getSimpleName(), new LocationHierarchyLevelGateway());
+        allGateways.put(MembershipGateway.class.getSimpleName(), new MembershipGateway());
+        allGateways.put(ResidencyGateway.class.getSimpleName(), new ResidencyGateway());
+        allGateways.put(RelationshipGateway.class.getSimpleName(), new RelationshipGateway());
+        allGateways.put(SocialGroupGateway.class.getSimpleName(), new SocialGroupGateway());
+        allGateways.put(VisitGateway.class.getSimpleName(), new VisitGateway());
     }
 
     private GatewayRegistry () {};
 
     public static FieldWorkerGateway getFieldWorkerGateway() {
-        final String gatewayName = FieldWorkerGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new FieldWorkerGateway());
-        }
-        return (FieldWorkerGateway) allGateways.get(gatewayName);
+        return (FieldWorkerGateway) allGateways.get(FieldWorkerGateway.class.getSimpleName());
     }
 
     public static UserGateway getUsesrGateway() {
-        final String gatewayName = UserGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new UserGateway());
-        }
-        return (UserGateway) allGateways.get(gatewayName);
+        return (UserGateway) allGateways.get(UserGateway.class.getSimpleName());
     }
 
     public static IndividualGateway getIndividualGateway() {
-        final String gatewayName = IndividualGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new IndividualGateway());
-        }
-        return (IndividualGateway) allGateways.get(gatewayName);
+        return (IndividualGateway) allGateways.get(IndividualGateway.class.getSimpleName());
     }
 
     public static LocationGateway getLocationGateway() {
-        final String gatewayName = LocationGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new LocationGateway());
-        }
-        return (LocationGateway) allGateways.get(gatewayName);
+        return (LocationGateway) allGateways.get(LocationGateway.class.getSimpleName());
     }
 
     public static LocationHierarchyGateway getLocationHierarchyGateway() {
-        final String gatewayName = LocationHierarchyGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new LocationHierarchyGateway());
-        }
-        return (LocationHierarchyGateway) allGateways.get(gatewayName);
+        return (LocationHierarchyGateway) allGateways.get(LocationHierarchyGateway.class.getSimpleName());
     }
 
     public static LocationHierarchyLevelGateway getLocationHierarchyLevelGateway() {
-        final String gatewayName = LocationHierarchyLevelGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new LocationHierarchyLevelGateway());
-        }
-        return (LocationHierarchyLevelGateway) allGateways.get(gatewayName);
+        return (LocationHierarchyLevelGateway) allGateways.get(LocationHierarchyLevelGateway.class.getSimpleName());
     }
 
     public static MembershipGateway getMembershipGateway() {
-        final String gatewayName = MembershipGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new MembershipGateway());
-        }
-        return (MembershipGateway) allGateways.get(gatewayName);
+        return (MembershipGateway) allGateways.get(MembershipGateway.class.getSimpleName());
     }
 
     public static ResidencyGateway getResidencyGateway() {
-        final String gatewayName = ResidencyGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new ResidencyGateway());
-        }
-        return (ResidencyGateway) allGateways.get(gatewayName);
+        return (ResidencyGateway) allGateways.get(ResidencyGateway.class.getSimpleName());
     }
 
     public static RelationshipGateway getRelationshipGateway() {
-        final String gatewayName = RelationshipGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new RelationshipGateway());
-        }
-        return (RelationshipGateway) allGateways.get(gatewayName);
+        return (RelationshipGateway) allGateways.get(RelationshipGateway.class.getSimpleName());
     }
 
     public static SocialGroupGateway getSocialGroupGateway() {
-        final String gatewayName = SocialGroupGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new SocialGroupGateway());
-        }
-        return (SocialGroupGateway) allGateways.get(gatewayName);
+        return (SocialGroupGateway) allGateways.get(SocialGroupGateway.class.getSimpleName());
     }
 
     public static VisitGateway getVisitGateway() {
-        final String gatewayName = VisitGateway.class.getName();
-        if (!allGateways.containsKey(gatewayName)) {
-            allGateways.put(gatewayName, new VisitGateway());
-        }
-        return (VisitGateway) allGateways.get(gatewayName);
+        return (VisitGateway) allGateways.get(VisitGateway.class.getSimpleName());
     }
 
     public static Gateway getGatewayByName(String gatewayName) {
