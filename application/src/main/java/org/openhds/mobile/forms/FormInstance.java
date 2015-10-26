@@ -83,9 +83,6 @@ public class FormInstance implements Serializable {
             for (Element topLevelElement : topLevelElements) {
 
                 String topLevelName = topLevelElement.getName();
-                if (!formContent.hasContent(topLevelName)) {
-                    continue;
-                }
 
                 // look for element fields under this top-level element
                 List<Element> fieldElements = topLevelElement.getChildren();
