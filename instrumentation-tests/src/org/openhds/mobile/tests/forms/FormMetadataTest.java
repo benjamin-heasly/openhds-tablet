@@ -6,17 +6,16 @@ import org.openhds.mobile.forms.FormBehaviour;
 import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
+import org.openhds.mobile.utilities.FileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FormMetadataTest extends AndroidTestCase {
 
     public void testParseMetadata() throws Exception {
-        File file = writeAssetTempFile("testForms/test-metadata-form.xml", "testParseMetadata.xml");
+        File file = FileUtils.writeAssetTempFile(getContext(), "testForms/test-metadata-form.xml", "testParseMetadata.xml");
         FormDefinition formDefinition = new FormDefinition();
         formDefinition.setFilePath(file.getAbsolutePath());
         FormBehaviour formBehaviour = new FormBehaviour(formDefinition);
@@ -75,7 +74,7 @@ public class FormMetadataTest extends AndroidTestCase {
     }
 
     public void testParseNoMetadata() throws Exception {
-        File file = writeAssetTempFile("testForms/test-no-metadata-form.xml", "testParseNoMetadata.xml");
+        File file = FileUtils.writeAssetTempFile(getContext(), "testForms/test-no-metadata-form.xml", "testParseNoMetadata.xml");
         FormDefinition formDefinition = new FormDefinition();
         formDefinition.setFilePath(file.getAbsolutePath());
         FormBehaviour formBehaviour = new FormBehaviour(formDefinition);
@@ -116,26 +115,6 @@ public class FormMetadataTest extends AndroidTestCase {
         // no default searches
         List<FormSearchPluginModule> searches = formBehaviour.getSearchPlugins();
         assertEquals(0, searches.size());
-    }
-
-    private File writeAssetTempFile(String assetName, String fileName) {
-        File file = new File(getContext().getCacheDir() + "/" + fileName);
-        if (!file.exists()) try {
-
-            InputStream inputStream = getContext().getAssets().open(assetName);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(buffer);
-            fileOutputStream.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return file;
     }
 
 }

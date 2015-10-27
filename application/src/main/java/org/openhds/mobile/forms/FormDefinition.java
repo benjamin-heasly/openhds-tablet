@@ -2,25 +2,6 @@ package org.openhds.mobile.forms;
 
 /**
  * A form definition consistent with ODK form data model.
- *
- * <p/>
- * See: https://github.com/opendatakit/collect/blob/master/collect_app/src/main/java/org/odk/collect/android/provider/FormsProviderAPI.java
- * <p/>
- * public static final String DISPLAY_NAME = "displayName";
- * public static final String DESCRIPTION = "description";  // can be null
- * public static final String JR_FORM_ID = "jrFormId";
- * public static final String JR_VERSION = "jrVersion"; // can be null
- * public static final String FORM_FILE_PATH = "formFilePath";
- * public static final String SUBMISSION_URI = "submissionUri"; // can be null
- * public static final String BASE64_RSA_PUBLIC_KEY = "base64RsaPublicKey"; // can be null
- * <p/>
- * // these are generated for you (but you can insert something else if you want)
- * public static final String DISPLAY_SUBTEXT = "displaySubtext";
- * public static final String MD5_HASH = "md5Hash";
- * public static final String DATE = "date";
- * public static final String JRCACHE_FILE_PATH = "jrcacheFilePath";
- * public static final String FORM_MEDIA_PATH = "formMediaPath";
- *
  */
 public class FormDefinition {
 

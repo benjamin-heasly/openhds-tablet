@@ -3,15 +3,14 @@ package org.openhds.mobile.tests.forms;
 import android.test.AndroidTestCase;
 
 import org.openhds.mobile.forms.FormContent;
+import org.openhds.mobile.utilities.FileUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 
 public class FormContentTest extends AndroidTestCase {
 
     public void testReadHouseholdFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-individual-household-instance.xml", "testReadHouseholdFormContent.xml");
+        File file = FileUtils.writeAssetTempFile(getContext(), "testForms/test-individual-household-instance.xml", "testReadHouseholdFormContent.xml");
         FormContent formContent = FormContent.readFormContent(file);
         assertNotNull(formContent);
 
@@ -34,7 +33,7 @@ public class FormContentTest extends AndroidTestCase {
     }
 
     public void testReadLocationFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-location-instance.xml", "testReadLocationFormContent.xml");
+        File file = FileUtils.writeAssetTempFile(getContext(), "testForms/test-location-instance.xml", "testReadLocationFormContent.xml");
         FormContent formContent = FormContent.readFormContent(file);
         assertNotNull(formContent);
 
@@ -54,7 +53,7 @@ public class FormContentTest extends AndroidTestCase {
     }
 
     public void testWriteHouseholdFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-individual-household-instance.xml", "testWriteHouseholdFormContent.xml");
+        File file = FileUtils.writeAssetTempFile(getContext(), "testForms/test-individual-household-instance.xml", "testWriteHouseholdFormContent.xml");
 
         // new values to write out
         FormContent formContentOut = new FormContent();
@@ -84,7 +83,7 @@ public class FormContentTest extends AndroidTestCase {
     }
 
     public void testWriteLocationFormContent() throws Exception {
-        File file = writeAssetTempFile("testForms/test-location-instance.xml", "testWriteLocationFormContent.xml");
+        File file = FileUtils.writeAssetTempFile(getContext(), "testForms/test-location-instance.xml", "testWriteLocationFormContent.xml");
 
         // new values to write out
         FormContent formContentOut = new FormContent();
@@ -111,26 +110,6 @@ public class FormContentTest extends AndroidTestCase {
         assertFalse(formContentIn.hasContent("notAnAliasUuid", FormContent.UUID_FIELD_NAME));
         assertFalse(formContentIn.hasContent("notAnAlias", "extId"));
         assertFalse(formContentIn.hasContent("location", "notAFieldName"));
-    }
-
-    private File writeAssetTempFile(String assetName, String fileName) {
-        File file = new File(getContext().getCacheDir() + "/" + fileName);
-        if (!file.exists()) try {
-
-            InputStream inputStream = getContext().getAssets().open(assetName);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(buffer);
-            fileOutputStream.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return file;
     }
 
 }

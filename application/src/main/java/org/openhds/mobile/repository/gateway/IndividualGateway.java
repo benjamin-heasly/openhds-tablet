@@ -21,7 +21,6 @@ import static org.openhds.mobile.OpenHDS.Individuals.LAST_NAME;
 import static org.openhds.mobile.OpenHDS.Individuals.MIDDLE_NAME;
 import static org.openhds.mobile.OpenHDS.Individuals.MOTHER;
 import static org.openhds.mobile.OpenHDS.Individuals.UUID;
-import static org.openhds.mobile.model.core.Individual.getFullName;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE;
 import static org.openhds.mobile.repository.RepositoryUtils.LIKE_WILD_CARD;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
