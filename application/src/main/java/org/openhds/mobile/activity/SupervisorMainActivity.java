@@ -2,6 +2,7 @@ package org.openhds.mobile.activity;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.forms.FormHelper;
 import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.fragment.ChecklistFragment;
@@ -20,6 +22,7 @@ import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.fragment.SyncDatabaseFragment;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchUtils;
+import org.openhds.mobile.task.odk.FormsToOdkTask;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
+import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
 public class SupervisorMainActivity extends Activity implements DeleteWarningDialogListener {
@@ -37,8 +41,6 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
     private static final String PREFERENCE_FRAGMENT_TAG = "preferenceFragment";
 
     private ChecklistFragment checklistFragment;
-    private SyncDatabaseFragment syncDatabaseFragment;
-    private PreferenceFragment preferenceFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,13 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
                 R.string.search_database_description,
                 R.string.search_database_label,
                 R.string.search_database_label,
+                buttonClickListener,
+                supervisorButtonLayout);
+
+        makeButton(this,
+                R.string.register_odk_form_definitions_description,
+                R.string.register_odk_form_definitions_label,
+                R.string.register_odk_form_definitions_label,
                 buttonClickListener,
                 supervisorButtonLayout);
 
@@ -75,6 +84,8 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
                 buttonClickListener,
                 supervisorButtonLayout);
 
+        SyncDatabaseFragment syncDatabaseFragment;
+        PreferenceFragment preferenceFragment;
         if (null == savedInstanceState)  {
             checklistFragment = new ChecklistFragment();
             syncDatabaseFragment = new SyncDatabaseFragment();
@@ -89,8 +100,6 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
 
         } else {
             checklistFragment = (ChecklistFragment) getFragmentManager().findFragmentByTag(CHECKLIST_FRAGMENT_TAG);
-            syncDatabaseFragment = (SyncDatabaseFragment) getFragmentManager().findFragmentByTag(SYNC_FRAGMENT_TAG);
-            preferenceFragment = (LoginPreferenceFragment) getFragmentManager().findFragmentByTag(PREFERENCE_FRAGMENT_TAG);
         }
     }
 
@@ -106,6 +115,19 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
         if (null != allFormInstances) {
             EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
         }
+    }
+
+    private void registerBundledForms() {
+        final Context context = SupervisorMainActivity.this;
+        final FormsToOdkTask.Listener listener = new FormsToOdkTask.Listener() {
+            @Override
+            public void onComplete(List<FormDefinition> formDefinitions) {
+                showLongToast(context, formDefinitions.size() + " forms registered with Odk.");
+            }
+        };
+
+        FormsToOdkTask formsToOdkTask = new FormsToOdkTask(listener);
+        formsToOdkTask.execute(context);
     }
 
     private void searchDatabase() {
@@ -158,6 +180,8 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
             Integer tag = (Integer) v.getTag();
             if (tag.equals(R.string.search_database_label)) {
                 searchDatabase();
+            } else if (tag.equals(R.string.register_odk_form_definitions_label)) {
+                registerBundledForms();
             } else if (tag.equals(R.string.send_finalized_forms_label)) {
                 sendApprovedForms();
             } else if (tag.equals(R.string.delete_recent_forms_label)) {

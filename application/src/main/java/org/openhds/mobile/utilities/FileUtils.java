@@ -13,37 +13,37 @@ import java.util.Calendar;
  */
 public class FileUtils {
 
-    private File getExternalStorageFile(String subDir, String baseName, String extension, boolean appendTimestamp) {
+    public static String relativeFilePath(String subDir, String fileName, boolean includeTimestamp) {
+        String timestamp = includeTimestamp ? DateUtils.formatDateTimeIso(Calendar.getInstance()) + "-" : "";
+        return subDir + File.separator + timestamp + fileName;
+    }
 
-        String timestamp = appendTimestamp ? "-" + DateUtils.formatDateTimeIso(Calendar.getInstance()) : "";
-        String newName = baseName + timestamp + extension;
+    public static String openHdsExternalFilesPath() {
+        return Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator
+                + "org.openhds.mobile";
+    }
 
-        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        String newPath = rootPath + File.separator
-                + "Android" + File.separator
-                + "data" + File.separator
-                + "org.openhds.mobile" + File.separator
-                + "files" + File.separator
-                + subDir;
-
-        File parentFolder = new File(newPath);
-        if (!parentFolder.exists() && !parentFolder.mkdirs()) {
-            return null;
-        }
-
-        return new File(newPath + File.separator + newName);
+    public static File writeAssetExternalFile(Context context, String assetName, String fileName) {
+        File file = new File(openHdsExternalFilesPath() + File.separator + fileName);
+        return writeAssetToFile(context, assetName, file);
     }
 
     public static File writeAssetTempFile(Context context, String assetName, String fileName) {
         File file = new File(context.getCacheDir() + File.separator + fileName);
-        if (!file.exists()) try {
+        return writeAssetToFile(context, assetName, file);
+    }
 
+    public static File writeAssetToFile(Context context, String assetName, File file) {
+
+        try {
             InputStream inputStream = context.getAssets().open(assetName);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);
             inputStream.close();
 
+            file.getParentFile().mkdirs();
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             fileOutputStream.write(buffer);
             fileOutputStream.close();

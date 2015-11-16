@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.apache.http.HttpStatus;
+import org.mindrot.jbcrypt.BCrypt;
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.OpeningActivity;
 import org.openhds.mobile.activity.SupervisorMainActivity;
@@ -119,7 +120,7 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
         UserGateway userGateway = GatewayRegistry.getUsesrGateway();
         User user = userGateway.getFirst(getActivity().getContentResolver(),userGateway.findByUsername(username));
 
-        if (!password.equals(user.getPasswordHash())) {
+        if (null == user || !BCrypt.checkpw(password, user.getPasswordHash())) {
             showLongToast(getActivity(), R.string.supervisor_bad_credentials);
             return;
         }

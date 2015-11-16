@@ -41,7 +41,7 @@ public class ParseEntityTask extends AsyncTask<ParseEntityTaskRequest, Integer, 
         this.progressListener = progressListener;
     }
 
-    public void unhookUnputStream() {
+    public void unhookInputStream() {
         if (null == parseEntityTaskRequest) {
             return;
         }

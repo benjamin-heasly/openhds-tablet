@@ -1,0 +1,168 @@
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+
+        <h:title>Location</h:title>
+
+        <model>
+
+            <instance>
+                <data id="location" version="101">
+                    <openhdsTagName>bsh-thesis</openhdsTagName>
+
+                    <meta>
+                        <instanceID />
+                        <consumer>location</consumer>
+                    </meta>
+
+                    <registrationVersion>101</registrationVersion>
+                    <registrationVersionName>bsh-thesis</registrationVersionName>
+                    <registrationSystemName>openhds-tablet</registrationSystemName>
+
+                    <!-- generate with xform binding -->
+                    <registrationDateTime />
+
+                    <!-- fill in from navigate activity -->
+                    <collectedByUuid />
+                    <locationHierarchyUuid />
+
+                    <location>
+                        <uuid />
+                        <extId />
+                        <name />
+                        <type />
+                        <description />
+                    </location>
+                </data>
+            </instance>
+
+            <itext>
+                <translation lang="English">
+                    <text id="/data/collectedByUuid:label">
+                        <value>Field Worker Id</value>
+                    </text>
+                    <text id="/data/collectedByUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/registrationDateTime:label">
+                        <value>Registration Date Time</value>
+                    </text>
+                    <text id="/data/registrationDateTime:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/locationHierarchyUuid:label">
+                        <value>Location Hierarchy Id</value>
+                    </text>
+                    <text id="/data/locationHierarchyUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/location/uuid:label">
+                        <value>Location Uuid</value>
+                    </text>
+                    <text id="/data/location/uuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/location/extId:label">
+                        <value>Location ExtId</value>
+                    </text>
+                    <text id="/data/location/extId:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/location/name:label">
+                        <value>Location Name</value>
+                    </text>
+                    <text id="/data/location/name:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/location/type:label">
+                        <value>Location Type</value>
+                    </text>
+                    <text id="/data/location/type:hint">
+                        <value />
+                    </text>
+                    <text id="/data/location/type:option0">
+                        <value>Rural</value>
+                    </text>
+                    <text id="/data/location/type:option1">
+                        <value>Urban</value>
+                    </text>
+
+                    <text id="/data/location/description:label">
+                        <value>Location Description</value>
+                    </text>
+                    <text id="/data/location/description:hint">
+                        <value />
+                    </text>
+                </translation>
+            </itext>
+
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID"
+                readonly="true()" type="string" />
+
+            <bind nodeset="/data/collectedByUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/registrationDateTime" readonly="true()" type="datetime" />
+            <bind nodeset="/data/locationHierarchyUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/location/uuid" readonly="true()" type="string" />
+
+            <bind nodeset="/data/location/extId" type="string" />
+            <bind nodeset="/data/location/name" readonly="true()" type="string" />
+            <bind nodeset="/data/location/type" readonly="true()" type="string" />
+            <bind nodeset="/data/location/description" readonly="true()" type="string" />
+
+        </model>
+
+    </h:head>
+    <h:body>
+
+        <group appearance="field-list">
+            <input ref="/data/collectedByUuid">
+                <label ref="jr:itext('/data/collectedByUuid:label')" />
+                <hint ref="jr:itext('/data/collectedByUuid:hint')" />
+            </input>
+            <input ref="/data/registrationDateTime">
+                <label ref="jr:itext('/data/registrationDateTime:label')" />
+                <hint ref="jr:itext('/data/registrationDateTime:hint')" />
+            </input>
+            <input ref="/data/locationHierarchyUuid">
+                <label ref="jr:itext('/data/locationHierarchyUuid:label')" />
+                <hint ref="jr:itext('/data/locationHierarchyUuid:hint')" />
+            </input>
+            <input ref="/data/location/uuid">
+                <label ref="jr:itext('/data/location/uuid:label')" />
+                <hint ref="jr:itext('/data/location/uuid:hint')" />
+            </input>
+        </group>
+        <group appearance="field-list">
+            <input ref="/data/location/extId">
+                <label ref="jr:itext('/data/location/extId:label')" />
+                <hint ref="jr:itext('/data/location/extId:hint')" />
+            </input>
+            <input ref="/data/location/name">
+                <label ref="jr:itext('/data/location/name:label')" />
+                <hint ref="jr:itext('/data/location/name:hint')" />
+            </input>
+            <input ref="/data/location/description">
+                <label ref="jr:itext('/data/location/description:label')" />
+                <hint ref="jr:itext('/data/location/description:hint')" />
+            </input>
+            <select1 ref="/data/location/type">
+                <label ref="jr:itext('/data/location/type:label')" />
+                <hint ref="jr:itext('/data/location/type:hint')" />
+                <item>
+                    <label ref="jr:itext('/data/location/type:option0')" />
+                    <value>RURAL</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/location/type:option1')" />
+                    <value>URBAN</value>
+                </item>
+            </select1>
+        </group>
+    </h:body>
+</h:html>

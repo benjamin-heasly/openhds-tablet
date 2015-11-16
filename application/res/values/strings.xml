@@ -79,7 +79,9 @@
     <string name="preference_invalid_label">Invalid!</string>
     <string name="preference_invalid_warning">Invalid preference value</string>
     <string name="send_finalized_forms_label">Send Forms</string>
-    <string name="send_finalized_forms_description">Send Finished Forms to ODKAggregate</string>
+    <string name="send_finalized_forms_description">Send Finished Forms to ODK Aggregate</string>
+    <string name="register_odk_form_definitions_label">Register Forms</string>
+    <string name="register_odk_form_definitions_description">Register bundled form definitions with ODK Aggregate</string>
     <string name="delete_recent_forms_label">Delete Forms</string>
     <string name="delete_recent_forms_description">Delete Forms Created Since Last Sync</string>
     <string name="approve_recent_forms_label">Approve Forms</string>

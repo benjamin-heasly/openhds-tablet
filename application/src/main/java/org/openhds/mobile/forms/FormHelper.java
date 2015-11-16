@@ -198,12 +198,12 @@ public class FormHelper {
 //
 //        // find a form definition with the name of the current form behaviour
 //        final String[] columnNames = new String[]{
-//                FormsProviderAPI.FormsColumns.JR_FORM_ID,
-//                FormsProviderAPI.FormsColumns.FORM_FILE_PATH,
-//                FormsProviderAPI.FormsColumns.JR_VERSION};
+//                FormsProviderApi.FormsColumns.JR_FORM_ID,
+//                FormsProviderApi.FormsColumns.FORM_FILE_PATH,
+//                FormsProviderApi.FormsColumns.JR_VERSION};
 //        Cursor cursor = contentResolver.query(
-//                FormsProviderAPI.FormsColumns.CONTENT_URI, columnNames,
-//                FormsProviderAPI.FormsColumns.JR_FORM_ID + " " + LIKE + " ?",
+//                FormsProviderApi.FormsColumns.CONTENT_URI, columnNames,
+//                FormsProviderApi.FormsColumns.JR_FORM_ID + " " + LIKE + " ?",
 //                new String[]{formBehaviour.getFormName() + LIKE_WILD_CARD}, null);
 //
 //        // read the path and type for the new form instance
