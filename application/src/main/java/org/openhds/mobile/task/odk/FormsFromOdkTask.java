@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * Created by ben on 11/16/15.
  *
- * Register apk-bundled forms with an installed ODK Collect app.
+ * Query for forms from an installed ODK Collect app.
  *
  */
-public class FormsToOdkTask extends AsyncTask<Context, Void, List<FormDefinition>> {
+public class FormsFromOdkTask extends AsyncTask<Context, Void, List<FormDefinition>> {
 
     public interface Listener {
         void onComplete(List<FormDefinition> formDefinitions);
@@ -22,7 +22,7 @@ public class FormsToOdkTask extends AsyncTask<Context, Void, List<FormDefinition
 
     private final Listener listener;
 
-    public FormsToOdkTask(Listener listener) {
+    public FormsFromOdkTask(Listener listener) {
         this.listener = listener;
     }
 
@@ -33,8 +33,7 @@ public class FormsToOdkTask extends AsyncTask<Context, Void, List<FormDefinition
         }
 
         Context context = contexts[0];
-        List<FormDefinition> formDefinitions = OdkFormGateway.expandBundledForms(context);
-        return OdkFormGateway.registerForms(context.getContentResolver(), formDefinitions);
+        return OdkFormGateway.findRegisteredForms(context.getContentResolver());
     }
 
     @Override

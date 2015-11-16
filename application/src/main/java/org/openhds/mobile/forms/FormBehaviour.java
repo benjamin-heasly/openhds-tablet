@@ -39,6 +39,10 @@ public class FormBehaviour {
         this.formDefinition = formDefinition;
     }
 
+    public FormDefinition getFormDefinition() {
+        return formDefinition;
+    }
+
     public boolean parseMetadata() {
         try {
             // read form definition into DOM document
@@ -124,6 +128,10 @@ public class FormBehaviour {
             }
         }
         return byName;
+    }
+
+    public String getDisplayLevel() {
+        return displayLevel;
     }
 
     public boolean shouldDisplay(String level) {

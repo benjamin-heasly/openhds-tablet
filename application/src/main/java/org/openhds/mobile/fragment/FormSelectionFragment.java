@@ -50,7 +50,7 @@ public class FormSelectionFragment extends Fragment {
     }
 
     public interface SelectionHandler {
-        public void handleSelectedForm(FormBehaviour formBehaviour);
+        void handleSelectedForm(FormBehaviour formBehaviour);
     }
 
     private class FormClickListener implements OnItemClickListener {
@@ -70,17 +70,28 @@ public class FormSelectionFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            FormBehaviour form = formListAdapter.getItem(position);
-
-            //String label = getActivity().getString(form.getFormLabelId());
+            FormBehaviour formBehaviour = formListAdapter.getItem(position);
+            String label = formBehaviour.getFormDefinition().getDisplayName();
 
             if (convertView == null) {
-                //convertView = makeTextWithPayload(getActivity(), label, null,
-              //          form.getFormLabelId(), null, null, formSelectionDrawableId, null ,true);
+                convertView = makeTextWithPayload(getActivity(),
+                        label,
+                        null,
+                        label,
+                        null,
+                        null,
+                        formSelectionDrawableId,
+                        null,
+                        true);
             }
 
-//            configureTextWithPayload(getActivity(),
-//                    (RelativeLayout) convertView, label, null, null, true);
+            configureTextWithPayload(getActivity(),
+                    (RelativeLayout) convertView,
+                    label,
+                    null,
+                    null,
+                    true);
+
             return convertView;
         }
     }

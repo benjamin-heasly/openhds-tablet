@@ -11,6 +11,7 @@ import android.view.View;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.forms.FormBehaviour;
+import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.fragment.DataSelectionFragment;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
@@ -24,6 +25,7 @@ import org.openhds.mobile.modules.ModuleRegistry;
 import org.openhds.mobile.modules.NavigationModule;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
+import org.openhds.mobile.task.odk.FormsFromOdkTask;
 import org.openhds.mobile.utilities.EncryptionHelper;
 import org.openhds.mobile.utilities.OdkCollectHelper;
 import org.openhds.mobile.utilities.StateMachine;
@@ -64,6 +66,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private DataWrapper currentSelection;
     private FieldWorker currentFieldWorker;
     private Visit currentVisit;
+    private Map<String, List<FormBehaviour>> formBehaviors = new HashMap<>();
     private FormInstance currentFormInstance;
 
 
@@ -144,6 +147,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         }
 
         setActivityVisualTheme(navigationModule.getModuleAppearance());
+        queryFormDefinitions();
     }
 
     // Takes in a NavigationModule's ModuleAppearance and sets all the fragment's drawables
@@ -154,6 +158,55 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         formFragment.setFormSelectionDrawableId(moduleAppearance.getFormSelectionDrawableId());
         View middleColumn = findViewById(R.id.middle_column);
         middleColumn.setBackgroundResource(moduleAppearance.getMiddleColumnDrawableId());
+    }
+
+    // Ask Odk Collect what form definitions are installed.
+    private void queryFormDefinitions() {
+        final FormsFromOdkTask.Listener listener = new FormsFromOdkTask.Listener() {
+            @Override
+            public void onComplete(List<FormDefinition> formDefinitions) {
+                parseFormBehaviors(formDefinitions);
+            }
+        };
+        FormsFromOdkTask formsFromOdkTask = new FormsFromOdkTask(listener);
+        formsFromOdkTask.execute(NavigateActivity.this);
+    }
+
+    // Parse form behaviors and cache for easy lookup.
+    private void parseFormBehaviors(List<FormDefinition> formDefinitions) {
+        formBehaviors.clear();
+        for (FormDefinition formDefinition : formDefinitions) {
+
+            // parse behavior out of form definition
+            FormBehaviour formBehaviour = new FormBehaviour((formDefinition));
+            if (!formBehaviour.parseMetadata()) {
+                continue;
+            }
+
+            // cache behaviors, indexed by level (null == any level)
+            String level = formBehaviour.getDisplayLevel();
+            if (!formBehaviors.containsKey(level)) {
+                formBehaviors.put(level, new ArrayList<FormBehaviour>());
+            }
+            formBehaviors.get(level).add(formBehaviour);
+        }
+    }
+
+    // Which forms should be displayed at this level?
+    private List<FormBehaviour> getActiveFormBehaviors(String level) {
+        List<FormBehaviour> activeForms = new ArrayList<>();
+
+        // the always-on default forms
+        if (formBehaviors.containsKey(null)) {
+            activeForms.addAll(formBehaviors.get(null));
+        }
+
+        // the forms for the current hierarchy level
+        if (formBehaviors.containsKey(level)) {
+            activeForms.addAll(formBehaviors.get(level));
+        }
+
+        return activeForms;
     }
 
     @Override
@@ -552,9 +605,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             }
 
             showValueFragment();
-
-            // TODO: let forms declare filter criteria
-            //formFragment.createFormButtons(validForms);
+            formFragment.createFormButtons(getActiveFormBehaviors(level));
         }
 
         @Override
