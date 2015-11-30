@@ -22,6 +22,18 @@ public class DateUtils {
         return zoneless + "Z[UTC]";
     }
 
+    public static String formatDateTimeForFilename(Calendar calendar) {
+        // move calendar to UTC
+        Calendar utc = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        utc.setTimeInMillis(calendar.getTimeInMillis());
+
+        // build a time string good for a file name
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss-SSS", Locale.US);
+        String zoneless = simpleDateFormat.format(utc.getTime());
+        return zoneless + "-UTC";
+    }
+
+
     // only get the date, truncate the time
     public static Calendar parseDateIso(String string) {
         if (null == string) {

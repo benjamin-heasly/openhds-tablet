@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.GatewayRegistry;
 import org.openhds.mobile.repository.gateway.Gateway;
 
@@ -19,35 +20,25 @@ import java.util.List;
  *
  */
 public class FormSearchPluginModule extends SearchPluginModule implements Parcelable {
-    private String fieldName;
-    private String fieldValue;
+    private DataWrapper dataWrapper;
 
-    public FormSearchPluginModule(Gateway gateway, String label, String fieldName) {
+    public FormSearchPluginModule(Gateway gateway, String label, String fieldName, String level) {
         super(gateway, label);
-        this.fieldName = fieldName;
+        dataWrapper = new DataWrapper(null, null, fieldName, level, null, null);
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public DataWrapper getDataWrapper() {
+        return dataWrapper;
     }
 
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
-    }
-
-    public String getFieldValue() {
-        return fieldValue;
-    }
-
-    public void setFieldValue(String fieldValue) {
-        this.fieldValue = fieldValue;
+    public void setDataWrapper(DataWrapper dataWrapper) {
+        this.dataWrapper = dataWrapper;
     }
 
     // for Parcelable
     private FormSearchPluginModule(Parcel parcel) {
         label = parcel.readString();
-        fieldName = parcel.readString();
-        fieldValue = parcel.readString();
+        dataWrapper = parcel.readParcelable(DataWrapper.class.getClassLoader());
 
         final String gatewayName = parcel.readString();
         gateway = GatewayRegistry.getGatewayByName(gatewayName);
@@ -73,8 +64,7 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(label);
-        parcel.writeString(fieldName);
-        parcel.writeString(fieldValue);
+        parcel.writeParcelable(dataWrapper, flags);
 
         String gatewayName = gateway.getClass().getName();
         parcel.writeString(gatewayName);

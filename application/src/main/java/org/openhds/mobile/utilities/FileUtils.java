@@ -14,7 +14,7 @@ import java.util.Calendar;
 public class FileUtils {
 
     public static String relativeFilePath(String subDir, String fileName, boolean includeTimestamp) {
-        String timestamp = includeTimestamp ? DateUtils.formatDateTimeIso(Calendar.getInstance()) + "-" : "";
+        String timestamp = includeTimestamp ? DateUtils.formatDateTimeForFilename(Calendar.getInstance()) + "-" : "";
         return subDir + File.separator + timestamp + fileName;
     }
 

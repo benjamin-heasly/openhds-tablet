@@ -175,14 +175,11 @@ public class FormBehaviour {
 
             for (String fieldName : searches.getFieldNames(gatewayName)) {
                 String label = searches.getContentString(gatewayName, fieldName);
-                searchPluginModules.add(new FormSearchPluginModule(gateway, label, fieldName));
+                searchPluginModules.add(new FormSearchPluginModule(gateway, label, fieldName, FormContent.TOP_LEVEL_ALIAS));
             }
         }
 
         return searchPluginModules;
     }
 
-    public FormInstance createNewInstance() {
-        return null;
-    }
 }

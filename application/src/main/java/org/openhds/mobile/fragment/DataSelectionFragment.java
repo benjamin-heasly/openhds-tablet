@@ -35,8 +35,6 @@ public class DataSelectionFragment extends Fragment {
         listView = (ListView) viewGroup.findViewById(R.id.data_fragment_listview);
         listView.setOnItemClickListener(new DataClickListener());
 
-
-
         return viewGroup;
     }
 

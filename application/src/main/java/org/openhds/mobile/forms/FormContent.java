@@ -69,6 +69,18 @@ public class FormContent {
         contentByAlias.get(alias).put(fieldName, value);
     }
 
+    // replace any existing content that matches given content
+    public void addAll(FormContent otherContent) {
+        for (Map.Entry<String, ContentValues> entry : otherContent.contentByAlias.entrySet()) {
+            String alias = entry.getKey();
+            ContentValues contentValues = entry.getValue();
+            for (String fieldName : contentValues.keySet()) {
+                String value = contentValues.getAsString(fieldName);
+                setContent(alias, fieldName, value);
+            }
+        }
+    }
+
     // true iff all content in subset is present and equal in this
     public boolean matchesAll(FormContent subset) {
         for (Map.Entry<String, ContentValues> entry : subset.contentByAlias.entrySet()) {
@@ -93,14 +105,36 @@ public class FormContent {
         return true;
     }
 
-    public boolean writeFormContent(File file) {
+    public boolean initializeFormContent(File file, Element element) {
+        try {
+            // write new Dom to file
+            element.detach();
+            Document document = new Document();
+            document.setRootElement(element);
+
+            file.getParentFile().mkdirs();
+            FileOutputStream fos = new FileOutputStream(file.getAbsolutePath());
+            XMLOutputter xmlOutput = new XMLOutputter();
+            xmlOutput.setFormat(Format.getPrettyFormat());
+            xmlOutput.output(document, fos);
+            fos.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean updateFormContent(File file) {
 
         try {
-            // read XML form into DOM document
+            // read existing XML form into DOM document
             SAXBuilder builder = new SAXBuilder();
             Document document = builder.build(file);
 
-            writeFormContent(document.getRootElement());
+            updateFormContent(document.getRootElement());
 
             // write modified Dom document back to file
             FileOutputStream fos = new FileOutputStream(file.getAbsolutePath());
@@ -117,7 +151,7 @@ public class FormContent {
         return true;
     }
 
-    public boolean writeFormContent(Element rootElement) {
+    public boolean updateFormContent(Element rootElement) {
 
         // match form content with XML elements by name
         List<Element> topLevelElements = rootElement.getChildren();

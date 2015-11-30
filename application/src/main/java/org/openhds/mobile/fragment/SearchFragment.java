@@ -35,13 +35,13 @@ import static org.openhds.mobile.utilities.LayoutUtils.makeEditText;
 public class SearchFragment extends Fragment {
 
     private static final String LIKE_WILD_CARD = "%";
-    private static final String DATA_CATEGORY = "searchFragment";
     private static final int RESULTS_PENDING = -1;
     private static final int NO_SEARCH = -2;
 
     private SearchPluginModule currentPluginModule;
     private ResultsHandler resultsHandler;
     private ArrayAdapter<SearchPluginModule> searchPluginAdapter;
+    private String level;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +51,14 @@ public class SearchFragment extends Fragment {
         button.setOnClickListener(new ButtonClickHandler());
 
         return view;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public void setResultsHandler(ResultsHandler resultsHandler) {
@@ -171,7 +179,7 @@ public class SearchFragment extends Fragment {
         final String[] columnValues = wildCardValues.toArray(new String[nValues]);
         Query query = currentPluginModule.getGateway().findByCriteriaLike(columnNames, columnValues, columnNames[0]);
         List<DataWrapper> dataWrappers = currentPluginModule.getGateway().getDataWrapperList(
-                getActivity().getContentResolver(), query, DATA_CATEGORY);
+                getActivity().getContentResolver(), query, level);
 
         // report the results to the listener
         if (null != resultsHandler) {

@@ -8,6 +8,7 @@ import android.net.Uri;
 
 import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.repository.RepositoryUtils;
+import org.openhds.mobile.utilities.ConfigUtils;
 import org.openhds.mobile.utilities.FileUtils;
 
 import java.io.File;
@@ -54,6 +55,7 @@ public class OdkFormGateway {
                 formDefinition.setFilePath(assetFile.getAbsolutePath());
                 formDefinition.setDisplayName(basename);
                 formDefinition.setId(basename);
+                formDefinition.setVersion(Integer.toString(ConfigUtils.getAppVersionNumber(context)));
                 forms.add(formDefinition);
             }
 
@@ -73,9 +75,13 @@ public class OdkFormGateway {
             // insert new or update existing?
             FormDefinition existing = findRegisteredFormById(contentResolver, formDefinition.getId());
             if (null == existing) {
-                Uri uri = contentResolver.insert(CONTENT_URI, contentValues);
-                if (null != uri) {
-                    registeredForms.add(formDefinition);
+                try {
+                    Uri uri = contentResolver.insert(CONTENT_URI, contentValues);
+                    if (null != uri) {
+                        registeredForms.add(formDefinition);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else {
                 final String[] columnNames = {JR_FORM_ID};
@@ -99,6 +105,9 @@ public class OdkFormGateway {
         Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, columnValues, JR_FORM_ID);
 
         FormDefinition formDefinition = null;
+        if (null == cursor) {
+            return formDefinition;
+        }
         if (cursor.moveToNext()) {
             formDefinition = fromCursor(cursor);
         }
@@ -111,6 +120,9 @@ public class OdkFormGateway {
         Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, null, JR_FORM_ID);
 
         List<FormDefinition> formDefinitions = new ArrayList<>();
+        if (null == cursor) {
+            return formDefinitions;
+        }
         while (cursor.moveToNext()) {
             formDefinitions.add(fromCursor(cursor));
         }

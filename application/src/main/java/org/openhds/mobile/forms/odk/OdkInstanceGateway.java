@@ -53,6 +53,9 @@ public class OdkInstanceGateway {
         Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, null, JR_FORM_ID);
 
         List<FormInstance> formInstances = new ArrayList<>();
+        if (null == cursor) {
+            return formInstances;
+        }
         while (cursor.moveToNext()) {
             formInstances.add(fromCursor(cursor));
         }
@@ -68,6 +71,9 @@ public class OdkInstanceGateway {
         Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, columnValues, JR_FORM_ID);
 
         List<FormInstance> formInstances = new ArrayList<>();
+        if (null == cursor) {
+            return formInstances;
+        }
         while (cursor.moveToNext()) {
             formInstances.add(fromCursor(cursor));
         }
@@ -76,17 +82,16 @@ public class OdkInstanceGateway {
     }
 
     public static FormInstance findByUri(ContentResolver contentResolver, String instanceUri) {
-        final String[] columnNames = {SUBMISSION_URI};
-        final String[] operators = {RepositoryUtils.EQUALS};
-        final String[] columnValues = {instanceUri};
-        final String whereStatement = RepositoryUtils.buildWhereStatement(columnNames, operators);
-        Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, columnValues, JR_FORM_ID);
-
+        Cursor cursor = contentResolver.query(Uri.parse(instanceUri), null, null, null, null);
         FormInstance formInstance = null;
+        if (null == cursor) {
+            return formInstance;
+        }
         if (cursor.moveToNext()) {
             formInstance = fromCursor(cursor);
         }
         cursor.close();
+        formInstance.setUri(instanceUri);
         return formInstance;
     }
 
@@ -98,6 +103,9 @@ public class OdkInstanceGateway {
         Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, columnValues, JR_FORM_ID);
 
         FormInstance formInstance = null;
+        if (null == cursor) {
+            return formInstance;
+        }
         if (cursor.moveToNext()) {
             formInstance = fromCursor(cursor);
         }
@@ -137,7 +145,7 @@ public class OdkInstanceGateway {
         }
 
         formContent.setContent(FormContent.TOP_LEVEL_ALIAS, REVIEW_LEVEL_FIELD_NAME, REVIEW_LEVEL_NEEDS_REVIEW);
-        boolean updatedContent = formContent.writeFormContent(formFile);
+        boolean updatedContent = formContent.updateFormContent(formFile);
         boolean updatedStatus = updateInstanceStatus(contentResolver, formInstance.getUri(), InstanceProviderAPI.STATUS_INCOMPLETE);
         return updatedContent && updatedStatus;
     }
@@ -150,38 +158,43 @@ public class OdkInstanceGateway {
         }
 
         formContent.setContent(FormContent.TOP_LEVEL_ALIAS, REVIEW_LEVEL_FIELD_NAME, REVIEW_LEVEL_REVIEW_OK);
-        boolean updatedContent = formContent.writeFormContent(formFile);
+        boolean updatedContent = formContent.updateFormContent(formFile);
         boolean updatedStatus = updateInstanceStatus(contentResolver, formInstance.getUri(), InstanceProviderAPI.STATUS_COMPLETE);
         return updatedContent && updatedStatus;
     }
 
 
-    public static String registerOrUpdateInstance(ContentResolver contentResolver, FormInstance formInstance) {
+    public static FormInstance registerOrUpdateInstance(ContentResolver contentResolver, FormInstance formInstance) {
         // the new instance to register
         ContentValues contentValues = toContentValues(formInstance);
 
         // insert new or update existing?
-        FormInstance existing = findByUri(contentResolver, formInstance.getUri());
+        String existingUri = formInstance.getUri();
+        FormInstance existing = null == existingUri ? null : findByUri(contentResolver, formInstance.getUri());
         if (null == existing) {
-            return String.valueOf(contentResolver.insert(CONTENT_URI, contentValues));
+            existingUri = String.valueOf(contentResolver.insert(CONTENT_URI, contentValues));
         } else {
-            final String[] columnNames = {SUBMISSION_URI};
-            final String[] operators = {RepositoryUtils.EQUALS};
-            final String[] columnValues = {existing.getUri()};
-            final String whereStatement = RepositoryUtils.buildWhereStatement(columnNames, operators);
-            int rowCount = contentResolver.update(CONTENT_URI, contentValues, whereStatement, columnValues);
-            return rowCount > 0 ? existing.getUri() : null;
+            int rowCount = contentResolver.update(Uri.parse(existingUri), contentValues, null, null);
+            if (0 == rowCount) {
+                return null;
+            }
         }
+
+        return findByUri(contentResolver, existingUri);
     }
 
-    public FormInstance instantiateFormDefinition(FormDefinition formDefinition) {
+    public static FormInstance instantiateFormDefinition(FormDefinition formDefinition) {
         FormInstance formInstance = new FormInstance();
         formInstance.setDisplayName(formDefinition.getDisplayName());
         formInstance.setDisplaySubtext(formDefinition.getDisplaySubtext());
         formInstance.setFormId(formDefinition.getId());
+        formInstance.setVersion(formDefinition.getVersion());
 
         String filePath = FileUtils.openHdsExternalFilesPath()
-                + FileUtils.relativeFilePath(formDefinition.getId(), formDefinition.getId(), true);
+                + File.separator
+                + FileUtils.relativeFilePath(formDefinition.getId(), formDefinition.getId()
+                + ".xml",
+                true);
         formInstance.setFilePath(filePath);
 
         Element dataElement = getDataElement(formDefinition);
@@ -194,16 +207,12 @@ public class OdkInstanceGateway {
             return null;
         }
 
-        defaultContent.writeFormContent(new File(formInstance.getFilePath()));
+        defaultContent.initializeFormContent(new File(formInstance.getFilePath()), dataElement);
 
         return formInstance;
     }
 
-    public Intent buildEditFormInstanceIntent(String instanceUri) {
-        return new Intent(Intent.ACTION_EDIT, Uri.parse(instanceUri));
-    }
-
-    private Element getDataElement(FormDefinition formDefinition) {
+    private static Element getDataElement(FormDefinition formDefinition) {
         SAXBuilder builder = new SAXBuilder();
 
         try {
@@ -222,13 +231,16 @@ public class OdkInstanceGateway {
         }
     }
 
+    public static Intent buildEditFormInstanceIntent(String instanceUri) {
+        return new Intent(Intent.ACTION_EDIT, Uri.parse(instanceUri));
+    }
+
     private static FormInstance fromCursor(Cursor cursor) {
         FormInstance formInstance = new FormInstance();
 
         formInstance.setDisplayName(extractString(cursor, DISPLAY_NAME));
         formInstance.setDisplaySubtext(extractString(cursor, DISPLAY_SUBTEXT));
         formInstance.setFilePath(extractString(cursor, INSTANCE_FILE_PATH));
-        formInstance.setUri(extractString(cursor, SUBMISSION_URI));
         formInstance.setFormId(extractString(cursor, JR_FORM_ID));
         formInstance.setVersion(extractString(cursor, JR_VERSION));
         formInstance.setStatus(extractString(cursor, STATUS));
@@ -244,7 +256,6 @@ public class OdkInstanceGateway {
         putIfNotNull(contentValues, DISPLAY_NAME, formInstance.getDisplayName());
         putIfNotNull(contentValues, DISPLAY_SUBTEXT, formInstance.getDisplaySubtext());
         putIfNotNull(contentValues, INSTANCE_FILE_PATH, formInstance.getFilePath());
-        putIfNotNull(contentValues, SUBMISSION_URI, formInstance.getUri());
         putIfNotNull(contentValues, JR_FORM_ID, formInstance.getFormId());
         putIfNotNull(contentValues, JR_VERSION, formInstance.getVersion());
         putIfNotNull(contentValues, STATUS, formInstance.getStatus());

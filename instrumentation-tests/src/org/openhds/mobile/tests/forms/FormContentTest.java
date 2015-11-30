@@ -66,7 +66,7 @@ public class FormContentTest extends AndroidTestCase {
         formContentOut.setContent("individual", "notAFieldName", "notAValue");
 
         // write out and read back in
-        assertTrue(formContentOut.writeFormContent(file));
+        assertTrue(formContentOut.updateFormContent(file));
         FormContent formContentIn = FormContent.readFormContent(file);
         assertNotNull(formContentIn);
 
@@ -96,7 +96,7 @@ public class FormContentTest extends AndroidTestCase {
         formContentOut.setContent("location", "notAFieldName", "notAValue");
 
         // write out and read back in
-        assertTrue(formContentOut.writeFormContent(file));
+        assertTrue(formContentOut.updateFormContent(file));
         FormContent formContentIn = FormContent.readFormContent(file);
         assertNotNull(formContentIn);
 

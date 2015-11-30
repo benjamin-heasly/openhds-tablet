@@ -117,10 +117,10 @@ public class FormSearchActivity extends Activity {
 
             if (convertView == null) {
                 convertView = makeLargeTextWithValueAndLabel(FormSearchActivity.this,
-                        label, plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
+                        label, plugin.getDataWrapper().getUuid(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
             } else {
                 configureTextWithValueAndLabel((RelativeLayout) convertView,
-                        label, plugin.getFieldValue(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
+                        label, plugin.getDataWrapper().getUuid(), LABEL_COLOR, VALUE_COLOR, MISSING_COLOR);
             }
             convertView.setBackgroundResource(R.drawable.gray_list_item_selector);
             return convertView;
@@ -134,6 +134,7 @@ public class FormSearchActivity extends Activity {
 
             List<FormSearchPluginModule> plugins = new ArrayList<>();
             plugins.add(currentFormSearchPluginModule);
+            searchFragment.setLevel(currentFormSearchPluginModule.getDataWrapper().getLevel());
             searchFragment.setSearchPluginModules(plugins);
             dataSelectionFragment.clearData();
         }
@@ -149,7 +150,7 @@ public class FormSearchActivity extends Activity {
     private class DataSelectionHandler implements DataSelectionFragment.SelectionHandler {
         @Override
         public void handleSelectedData(DataWrapper dataWrapper) {
-            currentFormSearchPluginModule.setFieldValue(dataWrapper.getUuid());
+            currentFormSearchPluginModule.setDataWrapper(dataWrapper);
             searchPluginListAdapter.notifyDataSetChanged();
         }
     }
