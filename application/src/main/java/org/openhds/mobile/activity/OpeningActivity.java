@@ -7,17 +7,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import org.openhds.mobile.R;
+import org.openhds.mobile.forms.FormInstance;
+import org.openhds.mobile.forms.odk.OdkInstanceGateway;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.fragment.SupervisorLoginFragment;
-import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.utilities.EncryptionHelper;
-import org.openhds.mobile.utilities.OdkCollectHelper;
-
-import static org.openhds.mobile.utilities.ConfigUtils.getAppFullName;
 
 import java.util.List;
+
+import static org.openhds.mobile.utilities.ConfigUtils.getAppFullName;
 
 public class OpeningActivity extends Activity {
 
@@ -29,7 +30,7 @@ public class OpeningActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        List<FormInstance> allFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
+        List<FormInstance> allFormInstances = OdkInstanceGateway.findAllInstances(getContentResolver());
         if (null != allFormInstances) {
             EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
         }

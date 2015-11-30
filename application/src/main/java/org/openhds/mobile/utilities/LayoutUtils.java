@@ -14,11 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.forms.FormHelper;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.forms.FormInstance;
+import org.openhds.mobile.task.parsing.AbstractPageParser;
 
 import java.io.File;
-import java.util.Map;
 
 public class LayoutUtils {
 
@@ -208,28 +208,40 @@ public class LayoutUtils {
     // Set up a form list item based on a given form instance.
     public static void configureFormListItem(Context context, View view, FormInstance formInstance) {
         // get the data we want to display
-
         File formFile = new File(formInstance.getFilePath());
         EncryptionHelper.decryptFile(formFile, context);
-        Map<String, String> instanceData = FormHelper.fetchFormInstanceData(formInstance.getFilePath());
+        FormContent formContent = FormContent.readFormContent(new File(formInstance.getFilePath()));
         EncryptionHelper.encryptFile(formFile, context);
 
         // stuff values into the view widget
         TextView formTypeView = (TextView) view.findViewById(R.id.form_instance_list_type);
-        //formTypeView.setText(formInstance.getFormName());
+        formTypeView.setText(formInstance.getDisplayName());
 
         TextView formIdView = (TextView) view.findViewById(R.id.form_instance_list_id);
-        formIdView.setText("TODO: entity Id");
+        setTextIfExists(formIdView, formContent, FormContent.TOP_LEVEL_ALIAS, "extId");
 
         TextView fieldWorkerView = (TextView) view.findViewById(R.id.form_instance_list_fieldworker);
-        fieldWorkerView.setText("TODO: fieldworker Id");
+        setTextIfExists(fieldWorkerView, formContent, FormContent.TOP_LEVEL_ALIAS, "collectedByUuid");
 
         TextView formDateView = (TextView) view.findViewById(R.id.form_instance_list_date);
-        formDateView.setText("TODO: date");
+        setTextIfExists(formDateView, formContent, FormContent.TOP_LEVEL_ALIAS, "registrationDateTime");
     }
 
-    private static String safeGetMapField(Map<String, String> map, String key) {
-        return null == map || !map.containsKey(key) ? "" : map.get(key);
-    }
+    private static void setTextIfExists(TextView textView, FormContent formContent, String alias, String fieldName) {
+        if (null == textView) {
+            return;
+        }
 
+        if (null == formContent) {
+            textView.setText(R.string.not_available);
+            return;
+        }
+
+        String value = formContent.getContentString(alias, fieldName);
+        if (null == value) {
+            textView.setText(R.string.not_available);
+        } else {
+            textView.setText(value);
+        }
+    }
 }

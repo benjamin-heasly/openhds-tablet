@@ -11,16 +11,30 @@ public class FormInstance implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private FormBehaviour formBehaviour;
+    private String displayName;
+    private String displaySubtext;
     private String filePath;
-    private String uriString;
+    private String uri;
+    private String formId;
+    private String version;
+    private String status;
+    private String canEditWhenComplete;
+    private String lastStatusChangeDate;
 
-    public FormBehaviour getFormBehaviour() {
-        return formBehaviour;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setFormBehaviour(FormBehaviour formBehaviour) {
-        this.formBehaviour = formBehaviour;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getDisplaySubtext() {
+        return displaySubtext;
+    }
+
+    public void setDisplaySubtext(String displaySubtext) {
+        this.displaySubtext = displaySubtext;
     }
 
     public String getFilePath() {
@@ -31,12 +45,52 @@ public class FormInstance implements Serializable {
         this.filePath = filePath;
     }
 
-    public String getUriString() {
-        return uriString;
+    public String getUri() {
+        return uri;
     }
 
-    public void setUriString(String uriString) {
-        this.uriString = uriString;
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCanEditWhenComplete() {
+        return canEditWhenComplete;
+    }
+
+    public void setCanEditWhenComplete(String canEditWhenComplete) {
+        this.canEditWhenComplete = canEditWhenComplete;
+    }
+
+    public String getLastStatusChangeDate() {
+        return lastStatusChangeDate;
+    }
+
+    public void setLastStatusChangeDate(String lastStatusChangeDate) {
+        this.lastStatusChangeDate = lastStatusChangeDate;
     }
 
     public static List<File> toListOfFiles(List<FormInstance> formInstances) {
@@ -52,7 +106,7 @@ public class FormInstance implements Serializable {
         ArrayList<Uri> uriList = new ArrayList<Uri>();
 
         for (FormInstance instance : formInstances) {
-            uriList.add(Uri.parse(instance.getUriString()));
+            uriList.add(Uri.parse(instance.getUri()));
         }
         return uriList;
     }

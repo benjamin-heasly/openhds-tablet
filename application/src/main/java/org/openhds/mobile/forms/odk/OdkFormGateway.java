@@ -118,7 +118,7 @@ public class OdkFormGateway {
         return formDefinitions;
     }
 
-    public static FormDefinition fromCursor(Cursor cursor) {
+    private static FormDefinition fromCursor(Cursor cursor) {
         FormDefinition formDefinition = new FormDefinition();
 
         formDefinition.setDisplayName(extractString(cursor, DISPLAY_NAME));
@@ -133,7 +133,7 @@ public class OdkFormGateway {
         return formDefinition;
     }
 
-    public static ContentValues toContentValues(FormDefinition formDefinition) {
+    private static ContentValues toContentValues(FormDefinition formDefinition) {
         ContentValues contentValues = new ContentValues();
 
         putIfNotNull(contentValues, DISPLAY_NAME, formDefinition.getDisplayName());

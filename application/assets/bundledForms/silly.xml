@@ -7,7 +7,7 @@
         <model>
 
             <instance>
-                <data id="silly" version="101">
+                <data formId="silly" version="101">
                     <openhdsTagName>bsh-thesis</openhdsTagName>
 
                     <meta>
@@ -38,65 +38,65 @@
 
             <itext>
                 <translation lang="English">
-                    <text id="/data/collectedByUuid:label">
+                    <text formId="/data/collectedByUuid:label">
                         <value>Field Worker Id</value>
                     </text>
-                    <text id="/data/collectedByUuid:hint">
+                    <text formId="/data/collectedByUuid:hint">
                         <value />
                     </text>
 
-                    <text id="/data/registrationDateTime:label">
+                    <text formId="/data/registrationDateTime:label">
                         <value>Registration Date Time</value>
                     </text>
-                    <text id="/data/registrationDateTime:hint">
+                    <text formId="/data/registrationDateTime:hint">
                         <value />
                     </text>
 
-                    <text id="/data/locationHierarchyUuid:label">
+                    <text formId="/data/locationHierarchyUuid:label">
                         <value>Location Hierarchy Id</value>
                     </text>
-                    <text id="/data/locationHierarchyUuid:hint">
+                    <text formId="/data/locationHierarchyUuid:hint">
                         <value />
                     </text>
 
-                    <text id="/data/location/uuid:label">
+                    <text formId="/data/location/uuid:label">
                         <value>Location Uuid</value>
                     </text>
-                    <text id="/data/location/uuid:hint">
+                    <text formId="/data/location/uuid:hint">
                         <value />
                     </text>
 
-                    <text id="/data/location/extId:label">
+                    <text formId="/data/location/extId:label">
                         <value>Location ExtId</value>
                     </text>
-                    <text id="/data/location/extId:hint">
+                    <text formId="/data/location/extId:hint">
                         <value />
                     </text>
 
-                    <text id="/data/location/name:label">
+                    <text formId="/data/location/name:label">
                         <value>Location Name</value>
                     </text>
-                    <text id="/data/location/name:hint">
+                    <text formId="/data/location/name:hint">
                         <value />
                     </text>
 
-                    <text id="/data/location/type:label">
+                    <text formId="/data/location/type:label">
                         <value>Location Type</value>
                     </text>
-                    <text id="/data/location/type:hint">
+                    <text formId="/data/location/type:hint">
                         <value />
                     </text>
-                    <text id="/data/location/type:option0">
+                    <text formId="/data/location/type:option0">
                         <value>Rural</value>
                     </text>
-                    <text id="/data/location/type:option1">
+                    <text formId="/data/location/type:option1">
                         <value>Urban</value>
                     </text>
 
-                    <text id="/data/location/description:label">
+                    <text formId="/data/location/description:label">
                         <value>Location Description</value>
                     </text>
-                    <text id="/data/location/description:hint">
+                    <text formId="/data/location/description:hint">
                         <value />
                     </text>
                 </translation>

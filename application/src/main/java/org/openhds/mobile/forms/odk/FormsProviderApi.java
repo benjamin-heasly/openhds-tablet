@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-// This file copied from ODK Collect source code:
-//  https://raw.githubusercontent.com/opendatakit/collect/master/collect_app/src/main/java/org/odk/collect/android/provider/FormsProviderAPI.java
-
 package org.openhds.mobile.forms.odk;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
+ * This file copied from ODK Collect source code:
+ *  https://raw.githubusercontent.com/opendatakit/collect/master/collect_app/src/main/java/org/odk/collect/android/provider/FormsProviderAPI.java
+ *
  * Convenience definitions for NotePadProvider
  */
 public final class FormsProviderApi {

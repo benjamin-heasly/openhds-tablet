@@ -16,7 +16,7 @@
 
     <profiles>
         <profile>
-            <id>integration</id>
+            <formId>integration</formId>
             <modules>
                 <module>application</module>
                 <module>instrumentation-tests</module>

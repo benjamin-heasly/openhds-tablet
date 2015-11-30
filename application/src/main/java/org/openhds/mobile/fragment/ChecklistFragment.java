@@ -1,7 +1,6 @@
 package org.openhds.mobile.fragment;
 
 import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +13,10 @@ import android.widget.TextView;
 import org.openhds.mobile.R;
 import org.openhds.mobile.activity.SupervisorMainActivity;
 import org.openhds.mobile.adapter.ChecklistAdapter;
-import org.openhds.mobile.forms.FormHelper;
 import org.openhds.mobile.forms.FormInstance;
+import org.openhds.mobile.forms.odk.InstanceProviderAPI;
+import org.openhds.mobile.forms.odk.OdkInstanceGateway;
 import org.openhds.mobile.utilities.EncryptionHelper;
-import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -94,7 +93,7 @@ public class ChecklistFragment extends Fragment {
 
     private ChecklistAdapter setupDeleteAdapter() {
 
-        List<FormInstance> formInstances = OdkCollectHelper.getAllUnsentFormInstances(getActivity().getContentResolver());
+        List<FormInstance> formInstances = OdkInstanceGateway.findInstancesByStatus(getActivity().getContentResolver(), InstanceProviderAPI.STATUS_COMPLETE);
         ChecklistAdapter adapter = new ChecklistAdapter(getActivity(), R.id.form_instance_check_item_orange, formInstances);
         return adapter;
 
@@ -138,16 +137,14 @@ public class ChecklistFragment extends Fragment {
 
     private ChecklistAdapter setupApproveAdapter() {
 
-        List<FormInstance> formInstances = OdkCollectHelper.getAllUnsentFormInstances(getActivity().getContentResolver());
+        List<FormInstance> formInstances = OdkInstanceGateway.findInstancesByStatus(getActivity().getContentResolver(), InstanceProviderAPI.STATUS_COMPLETE);
         List<FormInstance> needApproval = new ArrayList<>();
 
         if (null != formInstances) {
             for (FormInstance instance : formInstances) {
                 File instanceFile = new File(instance.getFilePath());
                 EncryptionHelper.decryptFile(instanceFile, getActivity());
-                String needsReview = FormHelper.getFormTagValue("needsReview", instance.getFilePath());
-
-                if ("0".equalsIgnoreCase(needsReview)) {
+                if (OdkInstanceGateway.instanceNeedsReview(getActivity().getContentResolver(), instance)) {
                     needApproval.add(instance);
                 }
                 EncryptionHelper.encryptFile(instanceFile, getActivity());
@@ -192,12 +189,11 @@ public class ChecklistFragment extends Fragment {
 
     }
 
-    private void approveForms(List<FormInstance> forms) {
-        for (FormInstance instance: forms) {
+    private void approveForms(List<FormInstance> formInstances) {
+        for (FormInstance instance: formInstances) {
             File instanceFile = new File(instance.getFilePath());
             EncryptionHelper.decryptFile(instanceFile, getActivity());
-            FormHelper.setFormTagValue("needsReview", "1", instance.getFilePath());
-            OdkCollectHelper.setStatusComplete(getActivity().getContentResolver(), Uri.parse(instance.getUriString()));
+            OdkInstanceGateway.setInstanceReviewOk(getActivity().getContentResolver(), instance);
             EncryptionHelper.encryptFile(instanceFile, getActivity());
         }
     }
@@ -207,8 +203,7 @@ public class ChecklistFragment extends Fragment {
             File instanceFile = new File(instance.getFilePath());
             EncryptionHelper.decryptFile(instanceFile, getActivity());
             instanceFile.delete();
-            OdkCollectHelper.setStatusSubmitted(getActivity().getContentResolver(), Uri.parse(instance.getUriString()));
-            //OdkCollectHelper.deleteInstance(getActivity().getContentResolver(), Uri.parse(instance.getUriString()), instance.getFilePath());
+            OdkInstanceGateway.updateInstanceStatus(getActivity().getContentResolver(), instance.getUri(), InstanceProviderAPI.STATUS_COMPLETE);
         }
     }
 

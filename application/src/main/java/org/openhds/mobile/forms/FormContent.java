@@ -18,7 +18,7 @@ import java.util.Set;
 
 /**
  *
- * Container for data going to or coming from a form.
+ * Container for data going to or coming from a form instance.
  *
  * Has a small amount of structure: values are represented by alias and field name.  Aliases should
  * refer to an entity record by name or class name, for example "district" or "locationHierarchy".

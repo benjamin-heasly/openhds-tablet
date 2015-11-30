@@ -12,9 +12,11 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.forms.FormDefinition;
-import org.openhds.mobile.forms.FormHelper;
 import org.openhds.mobile.forms.FormInstance;
+import org.openhds.mobile.forms.odk.InstanceProviderAPI;
+import org.openhds.mobile.forms.odk.OdkInstanceGateway;
 import org.openhds.mobile.fragment.ChecklistFragment;
 import org.openhds.mobile.fragment.DeleteWarningDialogFragment;
 import org.openhds.mobile.fragment.DeleteWarningDialogListener;
@@ -24,7 +26,6 @@ import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.repository.search.SearchUtils;
 import org.openhds.mobile.task.odk.FormsToOdkTask;
 import org.openhds.mobile.utilities.EncryptionHelper;
-import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
 
         SyncDatabaseFragment syncDatabaseFragment;
         PreferenceFragment preferenceFragment;
-        if (null == savedInstanceState)  {
+        if (null == savedInstanceState) {
             checklistFragment = new ChecklistFragment();
             syncDatabaseFragment = new SyncDatabaseFragment();
             syncDatabaseFragment.setRetainInstance(true);
@@ -111,7 +112,7 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
     }
 
     private void encryptAllForms() {
-        List<FormInstance> allFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
+        List<FormInstance> allFormInstances = OdkInstanceGateway.findAllInstances(getContentResolver());
         if (null != allFormInstances) {
             EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
         }
@@ -144,12 +145,12 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
 
     public void sendApprovedForms() {
 
-        List<FormInstance> allFormInstances = OdkCollectHelper.getAllUnsentFormInstances(this.getContentResolver());
+        List<FormInstance> allFormInstances = OdkInstanceGateway.findInstancesByStatus(this.getContentResolver(), InstanceProviderAPI.STATUS_COMPLETE);
         EncryptionHelper.decryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
-        for (FormInstance instance: allFormInstances) {
+        for (FormInstance instance : allFormInstances) {
             File instanceFile = new File(instance.getFilePath());
-            if (!FormHelper.isFormReviewed(instance.getFilePath())) {
-                OdkCollectHelper.setStatusIncomplete(this.getContentResolver(), Uri.parse(instance.getUriString()));
+            if (OdkInstanceGateway.instanceNeedsReview(getContentResolver(), instance)) {
+                OdkInstanceGateway.updateInstanceStatus(getContentResolver(), instance.getUri(), InstanceProviderAPI.STATUS_INCOMPLETE);
                 EncryptionHelper.encryptFile(instanceFile, this);
             }
         }

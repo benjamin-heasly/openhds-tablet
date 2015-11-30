@@ -64,7 +64,7 @@ public class ChecklistAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 FormInstance selected = (FormInstance) v.getTag();
-                Uri uri = Uri.parse(selected.getUriString());
+                Uri uri = Uri.parse(selected.getUri());
 
                 File selectedFile = new File(selected.getFilePath());
                 EncryptionHelper.decryptFile(selectedFile, getContext());

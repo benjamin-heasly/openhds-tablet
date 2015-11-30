@@ -4,7 +4,7 @@
         <h:title>Location</h:title>
         <model>
             <instance>
-                <data id="location" version="101">
+                <data formId="location" version="101">
                     <openhdsTagName>bsh-thesis</openhdsTagName>
 
                     <!-- Only care about meta element.  The rest is cruft parser should ignore.-->
@@ -79,210 +79,210 @@
             </instance>
             <itext>
                 <translation lang="Spanish">
-                    <text id="/data/fieldWorkerExtId:label">
+                    <text formId="/data/fieldWorkerExtId:label">
                         <value>ID Externo del Encuestador</value>
                     </text>
-                    <text id="/data/fieldWorkerExtId:hint">
+                    <text formId="/data/fieldWorkerExtId:hint">
                         <value />
                     </text>
-                    <text id="/data/collectionDateTime:label">
+                    <text formId="/data/collectionDateTime:label">
                         <value>Fecha de Colección</value>
                     </text>
-                    <text id="/data/collectionDateTime:hint">
+                    <text formId="/data/collectionDateTime:hint">
                         <value />
                     </text>
-                    <text id="/data/locationExtId:label">
+                    <text formId="/data/locationExtId:label">
                         <value>ID Externo de Locación</value>
                     </text>
-                    <text id="/data/locationExtId:hint">
+                    <text formId="/data/locationExtId:hint">
                         <value />
                     </text>
-                    <text id="/data/locationBuildingNumber:label">
+                    <text formId="/data/locationBuildingNumber:label">
                         <value># de Edificio</value>
                     </text>
-                    <text id="/data/locationBuildingNumber:hint">
+                    <text formId="/data/locationBuildingNumber:hint">
                         <value />
                     </text>
-                    <text id="/data/locationFloorNumber:label">
+                    <text formId="/data/locationFloorNumber:label">
                         <value># de Piso</value>
                     </text>
-                    <text id="/data/locationFloorNumber:hint">
+                    <text formId="/data/locationFloorNumber:hint">
                         <value />
                     </text>
-                    <text id="/data/locationName:label">
+                    <text formId="/data/locationName:label">
                         <value>Nombre de Locación</value>
                     </text>
-                    <text id="/data/locationName:hint">
+                    <text formId="/data/locationName:hint">
                         <value />
                     </text>
-                    <text id="/data/hierarchyExtId:label">
+                    <text formId="/data/hierarchyExtId:label">
                         <value>ID Externo de Jerarquía</value>
                     </text>
-                    <text id="/data/hierarchyExtId:hint">
+                    <text formId="/data/hierarchyExtId:hint">
                         <value />
                     </text>
-                    <text id="/data/locationType:label">
+                    <text formId="/data/locationType:label">
                         <value>Tipo de Localidad</value>
                     </text>
-                    <text id="/data/locationType:hint">
+                    <text formId="/data/locationType:hint">
                         <value />
                     </text>
-                    <text id="/data/locationType:option0">
+                    <text formId="/data/locationType:option0">
                         <value>Rural</value>
                     </text>
-                    <text id="/data/locationType:option1">
+                    <text formId="/data/locationType:option1">
                         <value>Urbano</value>
                     </text>
-                    <text id="/data/communityName:label">
+                    <text formId="/data/communityName:label">
                         <value>Nombre de la Comunidad</value>
                     </text>
-                    <text id="/data/communityName:hint">
+                    <text formId="/data/communityName:hint">
                         <value />
                     </text>
-                    <text id="/data/communityCode:label">
+                    <text formId="/data/communityCode:label">
                         <value>Codigo de la Comunidad</value>
                     </text>
-                    <text id="/data/communityCode:hint">
+                    <text formId="/data/communityCode:hint">
                         <value />
                     </text>
-                    <text id="/data/mapAreaName:label">
+                    <text formId="/data/mapAreaName:label">
                         <value>Nombre de Area de Mapa</value>
                     </text>
-                    <text id="/data/mapAreaName:hint">
+                    <text formId="/data/mapAreaName:hint">
                         <value />
                     </text>
-                    <text id="/data/localityName:label">
+                    <text formId="/data/localityName:label">
                         <value>Nombre de la Localidad</value>
                     </text>
-                    <text id="/data/localityName:hint">
+                    <text formId="/data/localityName:hint">
                         <value />
                     </text>
-                    <text id="/data/sectorName:label">
+                    <text formId="/data/sectorName:label">
                         <value>Nombre del Sector</value>
                     </text>
-                    <text id="/data/sectorName:hint">
+                    <text formId="/data/sectorName:hint">
                         <value />
                     </text>
-                    <text id="/data/description:label">
+                    <text formId="/data/description:label">
                         <value>Descripción</value>
                     </text>
-                    <text id="/data/description:hint">
+                    <text formId="/data/description:hint">
                         <value />
                     </text>
-                    <text id="/data/longitude:label">
+                    <text formId="/data/longitude:label">
                         <value>Longitud</value>
                     </text>
-                    <text id="/data/longitude:hint">
+                    <text formId="/data/longitude:hint">
                         <value />
                     </text>
-                    <text id="/data/latitude:label">
+                    <text formId="/data/latitude:label">
                         <value>Latitud</value>
                     </text>
-                    <text id="/data/latitude:hint">
+                    <text formId="/data/latitude:hint">
                         <value />
                     </text>
                 </translation>
                 <translation lang="English">
-                    <text id="/data/fieldWorkerExtId:label">
+                    <text formId="/data/fieldWorkerExtId:label">
                         <value>Field Worker Ext Id</value>
                     </text>
-                    <text id="/data/fieldWorkerExtId:hint">
+                    <text formId="/data/fieldWorkerExtId:hint">
                         <value />
                     </text>
-                    <text id="/data/collectionDateTime:label">
+                    <text formId="/data/collectionDateTime:label">
                         <value>Collected Date Time</value>
                     </text>
-                    <text id="/data/collectionDateTime:hint">
+                    <text formId="/data/collectionDateTime:hint">
                         <value />
                     </text>
-                    <text id="/data/locationExtId:label">
+                    <text formId="/data/locationExtId:label">
                         <value>Location Ext Id</value>
                     </text>
-                    <text id="/data/locationExtId:hint">
+                    <text formId="/data/locationExtId:hint">
                         <value />
                     </text>
-                    <text id="/data/locationBuildingNumber:label">
+                    <text formId="/data/locationBuildingNumber:label">
                         <value>Building #</value>
                     </text>
-                    <text id="/data/locationBuildingNumber:hint">
+                    <text formId="/data/locationBuildingNumber:hint">
                         <value />
                     </text>
-                    <text id="/data/locationFloorNumber:label">
+                    <text formId="/data/locationFloorNumber:label">
                         <value>Floor #</value>
                     </text>
-                    <text id="/data/locationFloorNumber:hint">
+                    <text formId="/data/locationFloorNumber:hint">
                         <value />
                     </text>
-                    <text id="/data/locationName:label">
+                    <text formId="/data/locationName:label">
                         <value>Location Name</value>
                     </text>
-                    <text id="/data/locationName:hint">
+                    <text formId="/data/locationName:hint">
                         <value />
                     </text>
-                    <text id="/data/hierarchyExtId:label">
+                    <text formId="/data/hierarchyExtId:label">
                         <value>Hierarchy Ext Id</value>
                     </text>
-                    <text id="/data/hierarchyExtId:hint">
+                    <text formId="/data/hierarchyExtId:hint">
                         <value />
                     </text>
-                    <text id="/data/locationType:label">
+                    <text formId="/data/locationType:label">
                         <value>Location Type</value>
                     </text>
-                    <text id="/data/locationType:hint">
+                    <text formId="/data/locationType:hint">
                         <value />
                     </text>
-                    <text id="/data/locationType:option0">
+                    <text formId="/data/locationType:option0">
                         <value>Rural</value>
                     </text>
-                    <text id="/data/locationType:option1">
+                    <text formId="/data/locationType:option1">
                         <value>Urban</value>
                     </text>
-                    <text id="/data/communityName:label">
+                    <text formId="/data/communityName:label">
                         <value>Community Name</value>
                     </text>
-                    <text id="/data/communityName:hint">
+                    <text formId="/data/communityName:hint">
                         <value />
                     </text>
-                    <text id="/data/communityCode:label">
+                    <text formId="/data/communityCode:label">
                         <value>Community Code</value>
                     </text>
-                    <text id="/data/communityCode:hint">
+                    <text formId="/data/communityCode:hint">
                         <value />
                     </text>
-                    <text id="/data/mapAreaName:label">
+                    <text formId="/data/mapAreaName:label">
                         <value>Map Area Name</value>
                     </text>
-                    <text id="/data/mapAreaName:hint">
+                    <text formId="/data/mapAreaName:hint">
                         <value />
                     </text>
-                    <text id="/data/localityName:label">
+                    <text formId="/data/localityName:label">
                         <value>Locality Name</value>
                     </text>
-                    <text id="/data/localityName:hint">
+                    <text formId="/data/localityName:hint">
                         <value />
                     </text>
-                    <text id="/data/sectorName:label">
+                    <text formId="/data/sectorName:label">
                         <value>Sector Name</value>
                     </text>
-                    <text id="/data/sectorName:hint">
+                    <text formId="/data/sectorName:hint">
                         <value />
                     </text>
-                    <text id="/data/description:label">
+                    <text formId="/data/description:label">
                         <value>Description</value>
                     </text>
-                    <text id="/data/description:hint">
+                    <text formId="/data/description:hint">
                         <value />
                     </text>
-                    <text id="/data/longitude:label">
+                    <text formId="/data/longitude:label">
                         <value>Longitude</value>
                     </text>
-                    <text id="/data/longitude:hint">
+                    <text formId="/data/longitude:hint">
                         <value />
                     </text>
-                    <text id="/data/latitude:label">
+                    <text formId="/data/latitude:label">
                         <value>Latitude</value>
                     </text>
-                    <text id="/data/latitude:hint">
+                    <text formId="/data/latitude:hint">
                         <value />
                     </text>
                 </translation>

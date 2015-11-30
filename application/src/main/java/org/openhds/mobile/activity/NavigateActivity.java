@@ -13,6 +13,7 @@ import org.openhds.mobile.R;
 import org.openhds.mobile.forms.FormBehaviour;
 import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.forms.FormInstance;
+import org.openhds.mobile.forms.odk.OdkInstanceGateway;
 import org.openhds.mobile.fragment.DataSelectionFragment;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.fragment.FormSelectionFragment;
@@ -27,7 +28,6 @@ import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.task.odk.FormsFromOdkTask;
 import org.openhds.mobile.utilities.EncryptionHelper;
-import org.openhds.mobile.utilities.OdkCollectHelper;
 import org.openhds.mobile.utilities.StateMachine;
 import org.openhds.mobile.utilities.StateMachine.StateListener;
 
@@ -522,7 +522,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     // TODO: consume as declared in form
 
                     // encrypt files regardless
-                    List<FormInstance> allFormInstances = OdkCollectHelper.getAllFormInstances(getContentResolver());
+                    List<FormInstance> allFormInstances = OdkInstanceGateway.findAllInstances(getContentResolver());
                     if (null != allFormInstances) {
                         EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
                     }

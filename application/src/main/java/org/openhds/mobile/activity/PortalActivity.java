@@ -17,13 +17,14 @@ import android.widget.TextView;
 
 import org.openhds.mobile.R;
 import org.openhds.mobile.adapter.FormInstanceAdapter;
+import org.openhds.mobile.forms.FormInstance;
+import org.openhds.mobile.forms.odk.InstanceProviderAPI;
+import org.openhds.mobile.forms.odk.OdkInstanceGateway;
 import org.openhds.mobile.fragment.FieldWorkerLoginFragment;
 import org.openhds.mobile.model.core.FieldWorker;
-import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.modules.ModuleAppearance;
 import org.openhds.mobile.modules.ModuleRegistry;
 import org.openhds.mobile.utilities.EncryptionHelper;
-import org.openhds.mobile.utilities.OdkCollectHelper;
 
 import java.io.File;
 import java.util.List;
@@ -119,7 +120,7 @@ public class PortalActivity extends Activity implements OnClickListener {
 
     // Display a list of recent form instances not yet sent to the ODK server
     private void populateFormInstanceListView() {
-        formInstances = OdkCollectHelper.getAllUnsentFormInstances(getContentResolver());
+        formInstances = OdkInstanceGateway.findInstancesByStatus(getContentResolver(), InstanceProviderAPI.STATUS_COMPLETE);
         if (null == formInstances || formInstances.isEmpty()) {
             return;
         }
@@ -138,7 +139,7 @@ public class PortalActivity extends Activity implements OnClickListener {
 
             if (position > 0 && position <= formInstances.size()) {
                 FormInstance selected = formInstances.get(position - 1);
-                Uri uri = Uri.parse(selected.getUriString());
+                Uri uri = Uri.parse(selected.getUri());
 
                 File selectedFile = new File(selected.getFilePath());
                 EncryptionHelper.decryptFile(selectedFile, getApplicationContext());
