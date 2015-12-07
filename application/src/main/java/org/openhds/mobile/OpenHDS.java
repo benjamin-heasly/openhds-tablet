@@ -48,6 +48,8 @@ public class OpenHDS {
         public static final String NAME = "name";
         public static final String LATITUDE = "latitude";
         public static final String LONGITUDE = "longitude";
+        public static final String DESCRIPTION = "description";
+        public static final String TYPE = "type";
         public static final String LOCATION_HIERARCHY_UUID = "hierarchyUuid";
     }
 

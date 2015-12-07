@@ -12,7 +12,7 @@
 
                     <meta>
                         <instanceID />
-                        <displayLevel>location</displayLevel>
+                        <displayLevel>bottom</displayLevel>
                     </meta>
 
                     <registrationVersion>101</registrationVersion>
@@ -111,9 +111,9 @@
             <bind nodeset="/data/location/uuid" readonly="true()" type="string" />
 
             <bind nodeset="/data/location/extId" type="string" />
-            <bind nodeset="/data/location/name" readonly="true()" type="string" />
-            <bind nodeset="/data/location/type" readonly="true()" type="string" />
-            <bind nodeset="/data/location/description" readonly="true()" type="string" />
+            <bind nodeset="/data/location/name" type="string" />
+            <bind nodeset="/data/location/type" type="string" />
+            <bind nodeset="/data/location/description" type="string" />
 
         </model>
 

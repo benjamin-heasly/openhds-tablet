@@ -5,10 +5,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.core.LocationHierarchy;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
+
+import java.text.Normalizer;
 
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
@@ -71,6 +74,24 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
             contentValues.put(LAST_MODIFIED_SERVER, locationHierarchy.getLastModifiedServer());
 
             return contentValues;
+        }
+
+        @Override
+        public ContentValues toContentValues(FormContent formContent, String entityAlias) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(EXT_ID, formContent.getContentString(entityAlias, EXT_ID));
+            contentValues.put(NAME, formContent.getContentString(entityAlias, NAME));
+            contentValues.put(LOCATION_HIERARCHY_LEVEL_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "locationHierarchyLevelUuid"));
+            contentValues.put(PARENT_UUID, formContent.getContentString(entityAlias, "parentUuid"));
+            contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
+
+            return contentValues;
+        }
+
+        @Override
+        public String getDefaultAlias() {
+            return "locationHierarchy";
         }
 
         @Override

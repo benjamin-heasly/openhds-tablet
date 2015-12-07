@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.core.Residency;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
@@ -94,6 +95,24 @@ public class ResidencyGateway extends Gateway<Residency> {
 
             return contentValues;
         }
+
+        @Override
+        public ContentValues toContentValues(FormContent formContent, String entityAlias) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(INDIVIDUAL_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "individualUuid"));
+            contentValues.put(LOCATION_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "locationUuid"));
+            contentValues.put(END_TYPE, formContent.getContentString(entityAlias, END_TYPE));
+            contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
+
+            return contentValues;
+        }
+
+        @Override
+        public String getDefaultAlias() {
+            return "residency";
+        }
+
 
         @Override
         public String getId(Residency residency) {

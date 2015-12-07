@@ -280,6 +280,8 @@ public class OpenHDSProvider extends ContentProvider {
                     + OpenHDS.Locations.LAST_MODIFIED_CLIENT + " TEXT,"
                     + OpenHDS.Locations.EXT_ID + " TEXT NOT NULL,"
                     + OpenHDS.Locations.NAME + " TEXT NOT NULL,"
+                    + OpenHDS.Locations.DESCRIPTION + " TEXT,"
+                    + OpenHDS.Locations.TYPE + " TEXT,"
                     + OpenHDS.Locations.LATITUDE + " TEXT,"
                     + OpenHDS.Locations.LONGITUDE + " TEXT,"
                     + OpenHDS.Locations.LOCATION_HIERARCHY_UUID + " TEXT NOT NULL);");

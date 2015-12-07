@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.core.User;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
@@ -12,8 +13,12 @@ import org.openhds.mobile.repository.Query;
 
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
+import static org.openhds.mobile.OpenHDS.Users.FIRST_NAME;
+import static org.openhds.mobile.OpenHDS.Users.LAST_NAME;
+import static org.openhds.mobile.OpenHDS.Users.PASSWORD_HASH;
+import static org.openhds.mobile.OpenHDS.Users.USERNAME;
+import static org.openhds.mobile.OpenHDS.Users.UUID;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
-
 
 /**
  * Convert User to and from database.  User-specific queries.
@@ -21,11 +26,11 @@ import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 public class UserGateway extends Gateway<User> {
 
     public UserGateway() {
-        super(OpenHDS.Users.CONTENT_ID_URI_BASE, OpenHDS.Users.UUID, new UserConverter());
+        super(OpenHDS.Users.CONTENT_ID_URI_BASE, UUID, new UserConverter());
     }
 
     public Query findByUsername(String username) {
-        return new Query(tableUri, OpenHDS.Users.USERNAME, username, OpenHDS.Users.USERNAME);
+        return new Query(tableUri, USERNAME, username, USERNAME);
     }
 
     private static class UserConverter implements Converter<User> {
@@ -34,11 +39,11 @@ public class UserGateway extends Gateway<User> {
         public User fromCursor(Cursor cursor) {
             User user = new User();
 
-            user.setUuid(extractString(cursor, OpenHDS.Users.UUID));
-            user.setUsername(extractString(cursor, OpenHDS.Users.USERNAME));
-            user.setFirstName(extractString(cursor, OpenHDS.Users.FIRST_NAME));
-            user.setLastName(extractString(cursor, OpenHDS.Users.LAST_NAME));
-            user.setPasswordHash(extractString(cursor, OpenHDS.Users.PASSWORD_HASH));
+            user.setUuid(extractString(cursor, UUID));
+            user.setUsername(extractString(cursor, USERNAME));
+            user.setFirstName(extractString(cursor, FIRST_NAME));
+            user.setLastName(extractString(cursor, LAST_NAME));
+            user.setPasswordHash(extractString(cursor, PASSWORD_HASH));
             user.setLastModifiedClient(extractString(cursor, LAST_MODIFIED_CLIENT));
             user.setLastModifiedServer(extractString(cursor, LAST_MODIFIED_SERVER));
 
@@ -49,16 +54,34 @@ public class UserGateway extends Gateway<User> {
         public ContentValues toContentValues(User user) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(OpenHDS.Users.UUID, user.getUuid());
-            contentValues.put(OpenHDS.Users.USERNAME, user.getUsername());
-            contentValues.put(OpenHDS.Users.PASSWORD_HASH, user.getPasswordHash());
-            contentValues.put(OpenHDS.Users.LAST_NAME, user.getLastName());
-            contentValues.put(OpenHDS.Users.FIRST_NAME, user.getFirstName());
+            contentValues.put(UUID, user.getUuid());
+            contentValues.put(USERNAME, user.getUsername());
+            contentValues.put(PASSWORD_HASH, user.getPasswordHash());
+            contentValues.put(LAST_NAME, user.getLastName());
+            contentValues.put(FIRST_NAME, user.getFirstName());
             contentValues.put(LAST_MODIFIED_CLIENT, user.getLastModifiedClient());
             contentValues.put(LAST_MODIFIED_SERVER, user.getLastModifiedServer());
 
             return contentValues;
         }
+
+        @Override
+        public ContentValues toContentValues(FormContent formContent, String entityAlias) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(USERNAME, formContent.getContentString(entityAlias, USERNAME));
+            contentValues.put(PASSWORD_HASH, formContent.getContentString(entityAlias, PASSWORD_HASH));
+            contentValues.put(LAST_NAME, formContent.getContentString(entityAlias, LAST_NAME));
+            contentValues.put(FIRST_NAME, formContent.getContentString(entityAlias, FIRST_NAME));
+
+            return contentValues;
+        }
+
+        @Override
+        public String getDefaultAlias() {
+            return "socialGroup";
+        }
+
 
         @Override
         public String getId(User user) {

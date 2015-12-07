@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
+import static org.openhds.mobile.OpenHDS.Common.UUID;
 import static org.openhds.mobile.repository.RepositoryUtils.ASCENDING;
 import static org.openhds.mobile.repository.RepositoryUtils.DESCENDING;
 import static org.openhds.mobile.repository.RepositoryUtils.EQUALS;
@@ -50,6 +52,12 @@ public abstract class Gateway<T> {
 
     public Converter<T> getConverter() {
         return converter;
+    }
+
+    // true if entity was inserted, false if updated
+    public boolean insertOrUpdate(ContentResolver contentResolver, FormContent formContent) {
+        ContentValues contentValues = toContentValues(formContent);
+        return insertOrUpdate(contentResolver, contentValues);
     }
 
     // true if entity was inserted, false if updated
@@ -281,6 +289,22 @@ public abstract class Gateway<T> {
     protected ContentValues toContentValues(T entity) {
         ContentValues contentValues = converter.toContentValues(entity);
         contentValues.put(LAST_MODIFIED_CLIENT, formatDateTimeIso(Calendar.getInstance()));
+        return contentValues;
+    }
+
+    // convert form content to content values, assign client-side modification time, uuid if needed
+    protected ContentValues toContentValues(FormContent formContent) {
+        String alias = converter.getDefaultAlias();
+        ContentValues contentValues = converter.toContentValues(formContent, alias);
+
+        String uuid = formContent.getContentString(alias, UUID);
+        if (null == uuid || uuid.isEmpty()) {
+            uuid = java.util.UUID.randomUUID().toString();
+        }
+        contentValues.put(UUID, uuid);
+
+        contentValues.put(LAST_MODIFIED_CLIENT, formatDateTimeIso(Calendar.getInstance()));
+
         return contentValues;
     }
 }

@@ -23,18 +23,20 @@ public class FormMetadataTest extends AndroidTestCase {
         assertTrue(formBehaviour.parseMetadata());
 
         // form display criteria
-        assertTrue(formBehaviour.shouldDisplay("level"));
+        assertEquals(2, formBehaviour.getDisplayLevels().size());
+        assertTrue(formBehaviour.shouldDisplay("level-1"));
+        assertTrue(formBehaviour.shouldDisplay("level-2"));
         assertFalse(formBehaviour.shouldDisplay("notALevel"));
 
         FormContent shouldDisplayContent = new FormContent();
         shouldDisplayContent.setContent("individual", "gender", "FEMALE");
         shouldDisplayContent.setContent("location", "type", "URBAN");
-        assertTrue(formBehaviour.shouldDisplay("level", shouldDisplayContent));
+        assertTrue(formBehaviour.shouldDisplay("level-1", shouldDisplayContent));
 
         FormContent notDisplayContent = new FormContent();
         notDisplayContent.setContent("individual", "gender", "MALE");
         notDisplayContent.setContent("location", "type", "RURAL");
-        assertFalse(formBehaviour.shouldDisplay("level", notDisplayContent));
+        assertFalse(formBehaviour.shouldDisplay("level-1", notDisplayContent));
 
         // record consumers
         List<String> consumers = formBehaviour.getConsumers();

@@ -91,4 +91,8 @@ public class GatewayRegistry {
         }
         return null;
     }
+
+    public static Gateway getGatewayByEntityName(String entityName) {
+        return getGatewayByName(entityName + "gateway");
+    }
 }

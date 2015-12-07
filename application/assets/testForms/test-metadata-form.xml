@@ -12,7 +12,7 @@
                         <instanceID />
 
                         <!-- display criteria -->
-                        <displayLevel>level</displayLevel>
+                        <displayLevel>level-1,level-2</displayLevel>
                         <displayFilter>
                             <individual><gender>FEMALE</gender></individual>
                             <location><type>URBAN</type></location>

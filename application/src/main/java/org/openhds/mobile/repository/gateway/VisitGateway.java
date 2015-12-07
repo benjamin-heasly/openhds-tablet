@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
@@ -58,6 +59,24 @@ public class VisitGateway extends Gateway<Visit> {
             contentValues.put(LAST_MODIFIED_SERVER, visit.getLastModifiedServer());
 
             return contentValues;
+        }
+
+        @Override
+        public ContentValues toContentValues(FormContent formContent, String entityAlias) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(LOCATION_UUID, formContent.getContentString(entityAlias, "locationUuid"));
+            contentValues.put(FIELD_WORKER_UUID, formContent.getContentString(entityAlias, "collectedByUuid"));
+            contentValues.put(EXT_ID, formContent.getContentString(entityAlias, EXT_ID));
+            contentValues.put(DATE, formContent.getContentString(entityAlias, DATE));
+            contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
+
+            return contentValues;
+        }
+
+        @Override
+        public String getDefaultAlias() {
+            return "visit";
         }
 
         @Override

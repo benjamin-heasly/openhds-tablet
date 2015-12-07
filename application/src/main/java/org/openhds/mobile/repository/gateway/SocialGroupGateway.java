@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.core.SocialGroup;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
@@ -58,6 +59,23 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
 
             return contentValues;
         }
+
+        @Override
+        public ContentValues toContentValues(FormContent formContent, String entityAlias) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(EXT_ID, formContent.getContentString(entityAlias, EXT_ID));
+            contentValues.put(GROUP_NAME, formContent.getContentString(entityAlias, GROUP_NAME));
+            contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
+
+            return contentValues;
+        }
+
+        @Override
+        public String getDefaultAlias() {
+            return "socialGroup";
+        }
+
 
         @Override
         public String getId(SocialGroup socialGroup) {

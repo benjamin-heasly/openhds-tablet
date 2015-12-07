@@ -18,6 +18,7 @@ import java.util.Map;
 
 public class FormBehaviour {
 
+    public static final String LIST_SPLITTER = ",";
     public static final String META_ELEMENT_NAME = "meta";
     public static final String DISPLAY_LEVEL_ELEMENT_NAME = "displayLevel";
     public static final String DISPLAY_FILTER_ELEMENT_NAME = "displayFilter";
@@ -29,7 +30,7 @@ public class FormBehaviour {
 
     private final FormDefinition formDefinition;
 
-    private String displayLevel;
+    private final List<String> displayLevels = new ArrayList<>();
     private FormContent displayFilter;
     private final List<String> consumers = new ArrayList<>();
     private final Map<String, FormContent> followUpFilters = new HashMap<>();
@@ -70,7 +71,12 @@ public class FormBehaviour {
 
     private void parseDisplayCriteria(Element metaElement) {
         Element displayLevelElement = getChildIgnoreNamespace(metaElement, DISPLAY_LEVEL_ELEMENT_NAME);
-        displayLevel = null == displayLevelElement ? null : displayLevelElement.getText();
+        if (null != displayLevelElement) {
+            String[] levels = displayLevelElement.getText().split(LIST_SPLITTER);
+            for (String level : levels) {
+                displayLevels.add(level.trim());
+            }
+        }
 
         Element displayFilterElement = getChildIgnoreNamespace(metaElement, DISPLAY_FILTER_ELEMENT_NAME);
         displayFilter = null == displayFilterElement ? null : FormContent.readFormContent(displayFilterElement);
@@ -130,12 +136,12 @@ public class FormBehaviour {
         return byName;
     }
 
-    public String getDisplayLevel() {
-        return displayLevel;
+    public List<String> getDisplayLevels() {
+        return displayLevels;
     }
 
     public boolean shouldDisplay(String level) {
-        return null == displayLevel || displayLevel.equals(level);
+        return displayLevels.isEmpty() || displayLevels.contains(level);
     }
 
     public boolean shouldDisplay(String level, FormContent formContent) {

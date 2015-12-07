@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.core.Individual;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
@@ -80,6 +81,28 @@ public class IndividualGateway extends Gateway<Individual> {
             contentValues.put(LAST_MODIFIED_SERVER, individual.getLastModifiedServer());
 
             return contentValues;
+        }
+
+        @Override
+        public ContentValues toContentValues(FormContent formContent, String entityAlias) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(EXT_ID, formContent.getContentString(entityAlias, EXT_ID));
+            contentValues.put(FIRST_NAME, formContent.getContentString(entityAlias, FIRST_NAME));
+            contentValues.put(MIDDLE_NAME, formContent.getContentString(entityAlias, MIDDLE_NAME));
+            contentValues.put(LAST_NAME, formContent.getContentString(entityAlias, LAST_NAME));
+            contentValues.put(DOB, formContent.getContentString(entityAlias, DOB));
+            contentValues.put(GENDER, formContent.getContentString(entityAlias, GENDER));
+            contentValues.put(MOTHER, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "motherUuid"));
+            contentValues.put(FATHER, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "fatherUuid"));
+            contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
+
+            return contentValues;
+        }
+
+        @Override
+        public String getDefaultAlias() {
+            return "individual";
         }
 
         @Override

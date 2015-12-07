@@ -26,6 +26,8 @@ import org.openhds.mobile.modules.ModuleAppearance;
 import org.openhds.mobile.modules.ModuleRegistry;
 import org.openhds.mobile.modules.NavigationModule;
 import org.openhds.mobile.repository.DataWrapper;
+import org.openhds.mobile.repository.GatewayRegistry;
+import org.openhds.mobile.repository.gateway.Gateway;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
 import org.openhds.mobile.task.odk.FormsFromOdkTask;
 import org.openhds.mobile.utilities.ConfigUtils;
@@ -191,11 +193,23 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             }
 
             // cache behaviors, indexed by level (null == any level)
-            String level = formBehaviour.getDisplayLevel();
-            if (!formBehaviors.containsKey(level)) {
-                formBehaviors.put(level, new ArrayList<FormBehaviour>());
+            List<String> levels = formBehaviour.getDisplayLevels();
+            if (levels.isEmpty()) {
+                // add to all levels
+                if (!formBehaviors.containsKey(null)) {
+                    formBehaviors.put(null, new ArrayList<FormBehaviour>());
+                }
+                formBehaviors.get(null).add(formBehaviour);
+
+            } else {
+                // add behavior to each named level
+                for (String level : levels) {
+                    if (!formBehaviors.containsKey(level)) {
+                        formBehaviors.put(level, new ArrayList<FormBehaviour>());
+                    }
+                    formBehaviors.get(level).add(formBehaviour);
+                }
             }
-            formBehaviors.get(level).add(formBehaviour);
         }
     }
 
@@ -540,18 +554,26 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                 case ODK_ACTIVITY_REQUEST_CODE: {
                     // consume form data that the user entered with ODK
                     FormContent formContent = FormContent.readFormContent(new File(currentFormInstance.getFilePath()));
-                    if (null == formContent) {
-                        showShortToast(this, "Got no content :(");
-                    } else {
-                        showShortToast(this, "Got form content with some aliases: " + formContent.getAliases().size());
-                    }
 
-                    // TODO: consume as declared in form
-
-                    // encrypt files regardless
+                    // done reading, encrypt forms
                     List<FormInstance> allFormInstances = OdkInstanceGateway.findAllInstances(getContentResolver());
                     if (null != allFormInstances) {
                         EncryptionHelper.encryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
+                    }
+
+                    // consume form records into database
+                    List<String> consumers = currentFormInstance.getFormBehaviour().getConsumers();
+                    if (!consumers.isEmpty()) {
+                        FormContent entityContent = buildNavigationContent();
+                        entityContent.addAll(formContent);
+
+                        for (String consumer : consumers) {
+                            Gateway<?> gateway = GatewayRegistry.getGatewayByEntityName(consumer);
+                            if (null != gateway) {
+                                showShortToast(this, getString(R.string.consuming_form_record) + ": " + consumer);
+                                gateway.insertOrUpdate(getContentResolver(), entityContent);
+                            }
+                        }
                     }
 
                     // TODO: check whether we should launch a follow-up form
@@ -613,6 +635,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         formContent.setContent(dataWrapper.getName(), dataWrapper.getContentValues());
         formContent.setContent(dataWrapper.getLevel(), dataWrapper.getContentValues());
         formContent.setContent(dataWrapper.getClassName(), dataWrapper.getContentValues());
+        formContent.setContent("parent", dataWrapper.getContentValues());
     }
 
     @Override

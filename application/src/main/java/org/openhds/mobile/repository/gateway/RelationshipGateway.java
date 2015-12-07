@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.openhds.mobile.OpenHDS;
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.core.Relationship;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
@@ -91,6 +92,25 @@ public class RelationshipGateway extends Gateway<Relationship> {
 
             return contentValues;
         }
+
+        @Override
+        public ContentValues toContentValues(FormContent formContent, String entityAlias) {
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(INDIVIDUAL_A_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "individualAUuid"));
+            contentValues.put(INDIVIDUAL_B_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "individualBUuid"));
+            contentValues.put(START_DATE, formContent.getContentString(entityAlias, START_DATE));
+            contentValues.put(TYPE, formContent.getContentString(entityAlias, TYPE));
+            contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
+
+            return contentValues;
+        }
+
+        @Override
+        public String getDefaultAlias() {
+            return "relationship";
+        }
+
 
         @Override
         public String getId(Relationship relationship) {
