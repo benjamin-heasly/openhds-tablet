@@ -480,11 +480,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             return;
         }
 
-        FormContent navigationContent = buildNavigationContent();
-        if (null != previousContent) {
-            navigationContent.addAll(previousContent);
-        }
-
+        // sanity check the form version
         String formVersion = currentFormInstance.getVersion();
         if (null == formVersion) {
             showShortToast(this, "Warning: Form has no defined version number.");
@@ -500,12 +496,19 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     + ").");
         }
 
-        Intent intent = OdkInstanceGateway.buildEditFormInstanceIntent(currentFormInstance.getUri());
-        showShortToast(this, R.string.launching_odk_collect);
+        // auto-fill form fields based on field worker and hierarchy navigation
+        FormContent navigationContent = buildNavigationContent();
+        if (null != previousContent) {
+            navigationContent.addAll(previousContent);
+        }
+        navigationContent.updateFormContent(new File(currentFormInstance.getFilePath()));
 
         // clear currentResults to get the most up-to-date currentResults after the form is consumed
         currentResults = null;
 
+        // ask ODK Collect to edit this form instance
+        Intent intent = OdkInstanceGateway.buildEditFormInstanceIntent(currentFormInstance.getUri());
+        showShortToast(this, R.string.launching_odk_collect);
         startActivityForResult(intent, ODK_ACTIVITY_REQUEST_CODE);
     }
 

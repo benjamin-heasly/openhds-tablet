@@ -26,68 +26,68 @@ public class GatewayRegistry {
     static {
         allGateways = new HashMap<>();
 
-        allGateways.put(FieldWorkerGateway.class.getSimpleName(), new FieldWorkerGateway());
-        allGateways.put(UserGateway.class.getSimpleName(), new UserGateway());
-        allGateways.put(IndividualGateway.class.getSimpleName(), new IndividualGateway());
-        allGateways.put(LocationGateway.class.getSimpleName(), new LocationGateway());
-        allGateways.put(LocationHierarchyGateway.class.getSimpleName(), new LocationHierarchyGateway());
-        allGateways.put(LocationHierarchyLevelGateway.class.getSimpleName(), new LocationHierarchyLevelGateway());
-        allGateways.put(MembershipGateway.class.getSimpleName(), new MembershipGateway());
-        allGateways.put(ResidencyGateway.class.getSimpleName(), new ResidencyGateway());
-        allGateways.put(RelationshipGateway.class.getSimpleName(), new RelationshipGateway());
-        allGateways.put(SocialGroupGateway.class.getSimpleName(), new SocialGroupGateway());
-        allGateways.put(VisitGateway.class.getSimpleName(), new VisitGateway());
+        allGateways.put(FieldWorkerGateway.class.getSimpleName().toLowerCase(), new FieldWorkerGateway());
+        allGateways.put(UserGateway.class.getSimpleName().toLowerCase(), new UserGateway());
+        allGateways.put(IndividualGateway.class.getSimpleName().toLowerCase(), new IndividualGateway());
+        allGateways.put(LocationGateway.class.getSimpleName().toLowerCase(), new LocationGateway());
+        allGateways.put(LocationHierarchyGateway.class.getSimpleName().toLowerCase(), new LocationHierarchyGateway());
+        allGateways.put(LocationHierarchyLevelGateway.class.getSimpleName().toLowerCase(), new LocationHierarchyLevelGateway());
+        allGateways.put(MembershipGateway.class.getSimpleName().toLowerCase(), new MembershipGateway());
+        allGateways.put(ResidencyGateway.class.getSimpleName().toLowerCase(), new ResidencyGateway());
+        allGateways.put(RelationshipGateway.class.getSimpleName().toLowerCase(), new RelationshipGateway());
+        allGateways.put(SocialGroupGateway.class.getSimpleName().toLowerCase(), new SocialGroupGateway());
+        allGateways.put(VisitGateway.class.getSimpleName().toLowerCase(), new VisitGateway());
     }
 
     private GatewayRegistry () {};
 
     public static FieldWorkerGateway getFieldWorkerGateway() {
-        return (FieldWorkerGateway) allGateways.get(FieldWorkerGateway.class.getSimpleName());
+        return (FieldWorkerGateway) allGateways.get(FieldWorkerGateway.class.getSimpleName().toLowerCase());
     }
 
     public static UserGateway getUsesrGateway() {
-        return (UserGateway) allGateways.get(UserGateway.class.getSimpleName());
+        return (UserGateway) allGateways.get(UserGateway.class.getSimpleName().toLowerCase());
     }
 
     public static IndividualGateway getIndividualGateway() {
-        return (IndividualGateway) allGateways.get(IndividualGateway.class.getSimpleName());
+        return (IndividualGateway) allGateways.get(IndividualGateway.class.getSimpleName().toLowerCase());
     }
 
     public static LocationGateway getLocationGateway() {
-        return (LocationGateway) allGateways.get(LocationGateway.class.getSimpleName());
+        return (LocationGateway) allGateways.get(LocationGateway.class.getSimpleName().toLowerCase());
     }
 
     public static LocationHierarchyGateway getLocationHierarchyGateway() {
-        return (LocationHierarchyGateway) allGateways.get(LocationHierarchyGateway.class.getSimpleName());
+        return (LocationHierarchyGateway) allGateways.get(LocationHierarchyGateway.class.getSimpleName().toLowerCase());
     }
 
     public static LocationHierarchyLevelGateway getLocationHierarchyLevelGateway() {
-        return (LocationHierarchyLevelGateway) allGateways.get(LocationHierarchyLevelGateway.class.getSimpleName());
+        return (LocationHierarchyLevelGateway) allGateways.get(LocationHierarchyLevelGateway.class.getSimpleName().toLowerCase());
     }
 
     public static MembershipGateway getMembershipGateway() {
-        return (MembershipGateway) allGateways.get(MembershipGateway.class.getSimpleName());
+        return (MembershipGateway) allGateways.get(MembershipGateway.class.getSimpleName().toLowerCase());
     }
 
     public static ResidencyGateway getResidencyGateway() {
-        return (ResidencyGateway) allGateways.get(ResidencyGateway.class.getSimpleName());
+        return (ResidencyGateway) allGateways.get(ResidencyGateway.class.getSimpleName().toLowerCase());
     }
 
     public static RelationshipGateway getRelationshipGateway() {
-        return (RelationshipGateway) allGateways.get(RelationshipGateway.class.getSimpleName());
+        return (RelationshipGateway) allGateways.get(RelationshipGateway.class.getSimpleName().toLowerCase());
     }
 
     public static SocialGroupGateway getSocialGroupGateway() {
-        return (SocialGroupGateway) allGateways.get(SocialGroupGateway.class.getSimpleName());
+        return (SocialGroupGateway) allGateways.get(SocialGroupGateway.class.getSimpleName().toLowerCase());
     }
 
     public static VisitGateway getVisitGateway() {
-        return (VisitGateway) allGateways.get(VisitGateway.class.getSimpleName());
+        return (VisitGateway) allGateways.get(VisitGateway.class.getSimpleName().toLowerCase());
     }
 
     public static Gateway getGatewayByName(String gatewayName) {
-        if (allGateways.containsKey(gatewayName)) {
-            return allGateways.get(gatewayName);
+        if (allGateways.containsKey(gatewayName.toLowerCase())) {
+            return allGateways.get(gatewayName.toLowerCase());
         }
         return null;
     }

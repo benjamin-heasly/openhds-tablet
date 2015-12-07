@@ -37,15 +37,15 @@ public class FormContent {
     }
 
     public Set<String> getFieldNames(String alias) {
-        return contentByAlias.containsKey(alias) ? contentByAlias.get(alias).keySet() : new HashSet<String>();
+        return containsAlias(alias) ? getByAlias(alias).keySet() : new HashSet<String>();
     }
 
     public boolean hasContent(String alias) {
-        return contentByAlias.containsKey(alias);
+        return containsAlias(alias);
     }
 
     public boolean hasContent(String alias, String fieldName) {
-        return contentByAlias.containsKey(alias) && contentByAlias.get(alias).containsKey(fieldName);
+        return containsAlias(alias) && getByAlias(alias).containsKey(fieldName);
     }
 
     // null if no content at alias and fieldName
@@ -53,20 +53,20 @@ public class FormContent {
         if (!hasContent(alias, fieldName)) {
             return null;
         }
-        return contentByAlias.get(alias).getAsString(fieldName);
+        return getByAlias(alias).getAsString(fieldName);
     }
 
     // replace any existing content at the same alias
     public void setContent(String alias, ContentValues contentValues) {
-        contentByAlias.put(alias, contentValues);
+        putByAlias(alias, contentValues);
     }
 
     // replace any existing content at the same alias and fieldName
     public void setContent(String alias, String fieldName, String value) {
-        if (!contentByAlias.containsKey(alias)) {
-            contentByAlias.put(alias, new ContentValues());
+        if (!containsAlias(alias)) {
+            putByAlias(alias, new ContentValues());
         }
-        contentByAlias.get(alias).put(fieldName, value);
+        getByAlias(alias).put(fieldName, value);
     }
 
     // replace any existing content that matches given content
@@ -85,7 +85,7 @@ public class FormContent {
     public boolean matchesAll(FormContent subset) {
         for (Map.Entry<String, ContentValues> entry : subset.contentByAlias.entrySet()) {
             String alias = entry.getKey();
-            if (!contentByAlias.containsKey(alias)) {
+            if (!containsAlias(alias)) {
                 return false;
             }
 
@@ -103,6 +103,21 @@ public class FormContent {
         }
 
         return true;
+    }
+
+    // treat alias as case insensitive
+    private boolean containsAlias(String alias) {
+        return contentByAlias.containsKey(alias.toLowerCase());
+    }
+
+    // treat alias as case insensitive
+    private ContentValues getByAlias(String alias) {
+        return contentByAlias.get(alias.toLowerCase());
+    }
+
+    // treat alias as case insensitive
+    private ContentValues putByAlias(String alias, ContentValues contentValues) {
+        return contentByAlias.put(alias.toLowerCase(), contentValues);
     }
 
     public boolean initializeFormContent(File file, Element element) {

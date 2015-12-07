@@ -66,7 +66,7 @@ public class FormMetadataTest extends AndroidTestCase {
         // dig out plugin field names and check them
         List<String> pluginFieldNames = new ArrayList<>();
         for (FormSearchPluginModule plugin : searches) {
-            pluginFieldNames.add(plugin.getFieldName());
+            pluginFieldNames.add(plugin.getDataWrapper().getName());
         }
         assertTrue(pluginFieldNames.contains("motherUuid"));
         assertTrue(pluginFieldNames.contains("fatherUuid"));
