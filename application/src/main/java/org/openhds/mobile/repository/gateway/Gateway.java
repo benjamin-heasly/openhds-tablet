@@ -55,12 +55,34 @@ public abstract class Gateway<T> {
     // true if entity was inserted, false if updated
     public boolean insertOrUpdate(ContentResolver contentResolver, T entity) {
         ContentValues contentValues = toContentValues(entity);
-        String id = converter.getId(entity);
+        return insertOrUpdate(contentResolver, contentValues);
+    }
+
+    // true if entity was inserted, false if updated
+    public boolean insertOrUpdate(ContentResolver contentResolver, ContentValues contentValues) {
+        if (null == contentValues || !contentValues.containsKey(idColumnName)) {
+            return false;
+        }
+
+        String id = contentValues.getAsString(idColumnName);
         if (exists(contentResolver, id)) {
-            update(contentResolver, tableUri, contentValues, idColumnName, id);
+            T entity = getFirst(contentResolver, findById(id));
+            ContentValues existing = toContentValues(entity);
+            addAllNotNull(existing, contentValues);
+            update(contentResolver, tableUri, existing, idColumnName, id);
             return false;
         } else {
             return null != insert(contentResolver, tableUri, contentValues);
+        }
+    }
+
+    // put all non-null entries from second into the first
+    private void addAllNotNull(ContentValues original, ContentValues other) {
+        for (String key : other.keySet()) {
+            String value = other.getAsString(key);
+            if (null != value) {
+                original.put(key, value);
+            }
         }
     }
 
