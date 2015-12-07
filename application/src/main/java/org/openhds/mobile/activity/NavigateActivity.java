@@ -567,7 +567,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     FormContent formContent = new FormContent();
                     for (FormSearchPluginModule plugin : formSearchPluginModules) {
                         DataWrapper dataWrapper = plugin.getDataWrapper();
-                        addFormContent(formContent, dataWrapper);
+                        addContentAliases(formContent, dataWrapper);
                     }
 
                     // now let the user finish filling in the form in ODK
@@ -602,20 +602,17 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         for (String level : navigationModule.getModuleHierarchy().getLevelSequence()) {
             if (hierarchyPath.containsKey(level)) {
                 DataWrapper dataWrapper = hierarchyPath.get(level);
-                addFormContent(formContent, dataWrapper);
+                addContentAliases(formContent, dataWrapper);
             }
         }
 
         return formContent;
     }
 
-    private void addFormContent(FormContent formContent, DataWrapper dataWrapper) {
-        formContent.setContent(dataWrapper.getName(), "uuid", dataWrapper.getUuid());
-        formContent.setContent(dataWrapper.getName(), "extId", dataWrapper.getExtId());
-        formContent.setContent(dataWrapper.getLevel(), "uuid", dataWrapper.getUuid());
-        formContent.setContent(dataWrapper.getLevel(), "extId", dataWrapper.getExtId());
-        formContent.setContent(dataWrapper.getClassName(), "uuid", dataWrapper.getUuid());
-        formContent.setContent(dataWrapper.getClassName(), "extId", dataWrapper.getExtId());
+    private void addContentAliases(FormContent formContent, DataWrapper dataWrapper) {
+        formContent.setContent(dataWrapper.getName(), dataWrapper.getContentValues());
+        formContent.setContent(dataWrapper.getLevel(), dataWrapper.getContentValues());
+        formContent.setContent(dataWrapper.getClassName(), dataWrapper.getContentValues());
     }
 
     @Override
