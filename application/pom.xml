@@ -12,7 +12,7 @@
     <!-- sqlcipher is no longer available on Maven Central so manage it with an in-project repo -->
     <repositories>
         <repository>
-            <formId>sqlcipher-local-repo</formId>
+            <id>sqlcipher-local-repo</id>
             <url>${project.baseUri}sqlcipher-local-repo</url>
         </repository>
     </repositories>
@@ -113,7 +113,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <formId>update-manifest</formId>
+                        <id>update-manifest</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>manifest-update</goal>
