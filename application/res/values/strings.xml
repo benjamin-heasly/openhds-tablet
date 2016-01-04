@@ -19,7 +19,7 @@
     <string name="form_status">Form Status:</string>
     <string name="form_view_lbl">Form View</string>
     <string name="household_not_found">A household was not found for this Individual</string>
-    <string name="idGenerationFailure">An error occurred while generating an formId</string>
+    <string name="idGenerationFailure">An error occurred while generating an id</string>
     <string name="location_lbl">Location:</string>
     <string name="form_lbl">Form:</string>
     <string name="login_btn">Login</string>
