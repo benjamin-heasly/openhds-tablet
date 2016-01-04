@@ -19,13 +19,8 @@
                     <registrationVersion>101</registrationVersion>
                     <registrationVersionName>bsh-thesis</registrationVersionName>
                     <registrationSystemName>openhds-tablet</registrationSystemName>
-
-                    <!-- generate with xform binding -->
                     <registrationDateTime />
-
-                    <!-- fill in from navigate activity -->
                     <collectedByUuid />
-                    <locationHierarchyUuid />
 
                     <location>
                         <uuid />
@@ -34,6 +29,9 @@
                         <type />
                         <description />
                     </location>
+
+                    <locationHierarchyUuid />
+
                 </data>
             </instance>
 
@@ -113,7 +111,7 @@
 
             <bind nodeset="/data/location/extId" type="string" />
             <bind nodeset="/data/location/name" type="string" />
-            <bind nodeset="/data/location/type" type="string" />
+            <bind nodeset="/data/location/type" type="select1" />
             <bind nodeset="/data/location/description" type="string" />
 
         </model>

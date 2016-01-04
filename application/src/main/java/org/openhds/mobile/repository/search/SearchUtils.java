@@ -1,7 +1,6 @@
 package org.openhds.mobile.repository.search;
 
 import org.openhds.mobile.OpenHDS;
-import org.openhds.mobile.R;
 import org.openhds.mobile.repository.GatewayRegistry;
 
 /**
@@ -18,11 +17,11 @@ public class SearchUtils {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
                 GatewayRegistry.getFieldWorkerGateway(), label, fieldName, "collectedBy");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.FieldWorkers.FIRST_NAME, R.string.field_worker_first_name_label);
+                OpenHDS.FieldWorkers.FIRST_NAME, "First Name");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.FieldWorkers.LAST_NAME, R.string.field_worker_last_name_label);
+                OpenHDS.FieldWorkers.LAST_NAME, "Last Name");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.FieldWorkers.FIELD_WORKER_ID, R.string.field_worker_id_label);
+                OpenHDS.FieldWorkers.FIELD_WORKER_ID, "Id");
 
         return plugin;
     }
@@ -32,9 +31,9 @@ public class SearchUtils {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
                 GatewayRegistry.getIndividualGateway(), label, fieldName, "individual");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.Individuals.FIRST_NAME, R.string.individual_first_name_label);
+                OpenHDS.Individuals.FIRST_NAME, "First Name");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.Individuals.LAST_NAME, R.string.individual_last_name_label);
+                OpenHDS.Individuals.LAST_NAME, "Last Name");
 
         return plugin;
     }
@@ -44,9 +43,9 @@ public class SearchUtils {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
                 GatewayRegistry.getLocationGateway(), label, fieldName, "location");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.Locations.NAME, R.string.location_name_label);
+                OpenHDS.Locations.NAME, "Name");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.Locations.EXT_ID, R.string.location_ext_id_label);
+                OpenHDS.Locations.EXT_ID, "Id");
 
         return plugin;
     }
@@ -56,9 +55,9 @@ public class SearchUtils {
         FormSearchPluginModule plugin = new FormSearchPluginModule(
                 GatewayRegistry.getSocialGroupGateway(), label, fieldName, "socialGroup");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.SocialGroups.GROUP_NAME, R.string.social_group_name);
+                OpenHDS.SocialGroups.GROUP_NAME, "Group Name");
         plugin.getColumnsAndLabels().put(
-                OpenHDS.SocialGroups.UUID, R.string.social_group_ext_id);
+                OpenHDS.SocialGroups.UUID, "Group Id");
 
         return plugin;
     }

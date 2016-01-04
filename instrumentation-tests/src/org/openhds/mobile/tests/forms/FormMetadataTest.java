@@ -62,7 +62,7 @@ public class FormMetadataTest extends AndroidTestCase {
         assertTrue(oneFollowUpId.contains("unconditional-follow-up"));
 
         // search plugins
-        List<FormSearchPluginModule> searches = formBehaviour.getSearchPlugins();
+        List<FormSearchPluginModule> searches = formBehaviour.getSearchPlugins("test");
         assertEquals(3, searches.size());
 
         // dig out plugin field names and check them
@@ -115,7 +115,7 @@ public class FormMetadataTest extends AndroidTestCase {
         assertEquals(0, oneFollowUpId.size());
 
         // no default searches
-        List<FormSearchPluginModule> searches = formBehaviour.getSearchPlugins();
+        List<FormSearchPluginModule> searches = formBehaviour.getSearchPlugins("test");
         assertEquals(0, searches.size());
     }
 

@@ -133,8 +133,8 @@ public class SearchFragment extends Fragment {
         LinearLayout editTextContainer = (LinearLayout) getView().findViewById(R.id.search_fragment_container);
         editTextContainer.removeAllViews();
         for (String columnName : currentPluginModule.getColumnsAndLabels().keySet()) {
-            Integer textHintId = currentPluginModule.getColumnsAndLabels().get(columnName);
-            EditText editText = makeEditText(getActivity(), textHintId, columnName);
+            String textHint = currentPluginModule.getColumnsAndLabels().get(columnName);
+            EditText editText = makeEditText(getActivity(), textHint, columnName);
             editTextContainer.addView(editText);
         }
     }

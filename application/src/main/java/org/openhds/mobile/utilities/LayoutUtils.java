@@ -205,6 +205,20 @@ public class LayoutUtils {
         editText.setText(null);
     }
 
+    // Create a new edit text with the given hint (String resource id) and tag.
+    public static EditText makeEditText(Activity activity, String hint, String tag) {
+        EditText editText = (EditText) activity.getLayoutInflater().inflate(R.layout.generic_edit_text, null);
+        configureEditText(editText, hint, tag);
+        return editText;
+    }
+
+    // Pass new data to an edit text that was created with makeEditText().
+    public static void configureEditText(EditText editText, String hint, String tag) {
+        editText.setHint(hint);
+        editText.setTag(tag);
+        editText.setText(null);
+    }
+
     // Set up a form list item based on a given form instance.
     public static void configureFormListItem(Context context, View view, FormInstance formInstance) {
         // get the data we want to display

@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class FormBehaviour {
 
@@ -166,7 +167,7 @@ public class FormBehaviour {
         return followUpFormIds;
     }
 
-    public List<FormSearchPluginModule> getSearchPlugins() {
+    public List<FormSearchPluginModule> getSearchPlugins(String level) {
         List<FormSearchPluginModule> searchPluginModules = new ArrayList<>();
 
         if (null == searches) {
@@ -181,7 +182,13 @@ public class FormBehaviour {
 
             for (String fieldName : searches.getFieldNames(gatewayName)) {
                 String label = searches.getContentString(gatewayName, fieldName);
-                searchPluginModules.add(new FormSearchPluginModule(gateway, label, fieldName, FormContent.TOP_LEVEL_ALIAS));
+                FormSearchPluginModule formSearchPluginModule = new FormSearchPluginModule(gateway, label, fieldName, level);
+                searchPluginModules.add(formSearchPluginModule);
+
+                Set<String> columns = gateway.getColumns();
+                for (String column : columns) {
+                    formSearchPluginModule.getColumnsAndLabels().put(column, column);
+                }
             }
         }
 

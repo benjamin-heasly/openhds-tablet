@@ -7,9 +7,12 @@ import android.database.Cursor;
 import org.openhds.mobile.OpenHDS;
 import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.model.core.User;
+import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
+
+import java.util.Set;
 
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
@@ -31,6 +34,11 @@ public class UserGateway extends Gateway<User> {
 
     public Query findByUsername(String username) {
         return new Query(tableUri, USERNAME, username, USERNAME);
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new User()).keySet();
     }
 
     private static class UserConverter implements Converter<User> {

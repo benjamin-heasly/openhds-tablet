@@ -11,6 +11,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import java.util.Set;
+
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.SocialGroups.EXT_ID;
@@ -26,6 +28,11 @@ public class SocialGroupGateway extends Gateway<SocialGroup> {
 
     public SocialGroupGateway() {
         super(OpenHDS.SocialGroups.CONTENT_ID_URI_BASE, UUID, new SocialGroupConverter());
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new SocialGroup()).keySet();
     }
 
     public Query findByExtId(String extId) {

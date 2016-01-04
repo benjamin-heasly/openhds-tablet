@@ -11,6 +11,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import java.util.Set;
+
 import static org.openhds.mobile.OpenHDS.Memberships.INDIVIDUAL_UUID;
 import static org.openhds.mobile.OpenHDS.Memberships.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Memberships.LAST_MODIFIED_SERVER;
@@ -29,6 +31,11 @@ public class MembershipGateway extends Gateway<Membership> {
 
     public MembershipGateway() {
         super(OpenHDS.Memberships.CONTENT_ID_URI_BASE, UUID, new MembershipConverter());
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new Membership()).keySet();
     }
 
     // true if membership was inserted, false if updated

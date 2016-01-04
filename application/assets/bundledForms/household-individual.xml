@@ -1,0 +1,384 @@
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+
+        <h:title>Household Individual</h:title>
+
+        <model>
+
+            <instance>
+                <data id="household-individual" version="101">
+                    <openhdsTagName>bsh-thesis</openhdsTagName>
+
+                    <meta>
+                        <instanceID />
+                        <consumer>household-individual</consumer>
+                        <displayLevel>individual,bottom</displayLevel>
+                        <followUp>
+                            <formId>pregnancy-observation</formId>
+                            <filter>
+                                <individual><gender>FEMALE</gender></individual>
+                            </filter>
+                        </followUp>
+                        <search>
+                            <IndividualGateway>
+                                <mother>Individual's Mother</mother>
+                                <father>Individual's Father</father>
+                            </IndividualGateway>
+                        </search>
+                    </meta>
+
+                    <registrationVersion>101</registrationVersion>
+                    <registrationVersionName>bsh-thesis</registrationVersionName>
+                    <registrationSystemName>openhds-tablet</registrationSystemName>
+                    <registrationDateTime />
+                    <collectedByUuid />
+
+                    <individual>
+                        <uuid />
+                        <extId />
+                        <firstName />
+                        <middleName />
+                        <lastName />
+                        <dateOfBirth />
+                        <gender />
+                    </individual>
+
+                    <relationToHead />
+                    <headOfHouseholdUuid />
+                    <relationshipUuid />
+                    <locationUuid />
+                    <socialGroupUuid />
+                    <motherUuid />
+                    <fatherUuid />
+                    <membershipUuid />
+                    <residencyUuid />
+
+                    <isPregnant />
+
+                </data>
+            </instance>
+
+            <itext>
+                <translation lang="English">
+                    <text id="/data/collectedByUuid:label">
+                        <value>Field Worker Id</value>
+                    </text>
+                    <text id="/data/collectedByUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/registrationDateTime:label">
+                        <value>Registration Date Time</value>
+                    </text>
+                    <text id="/data/registrationDateTime:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/relationToHead:label">
+                        <value>Relationship to Head of Household</value>
+                    </text>
+                    <text id="/data/relationToHead:hint">
+                        <value />
+                    </text>
+                    <text id="/data/relationToHead:option0">
+                        <value>Self</value>
+                    </text>
+                    <text id="/data/relationToHead:option1">
+                        <value>Spouse</value>
+                    </text>
+                    <text id="/data/relationToHead:option2">
+                        <value>Son or Daughter</value>
+                    </text>
+                    <text id="/data/relationToHead:option3">
+                        <value>Brother or Sister</value>
+                    </text>
+                    <text id="/data/relationToHead:option4">
+                        <value>Parent</value>
+                    </text>
+                    <text id="/data/relationToHead:option5">
+                        <value>Grandchild</value>
+                    </text>
+                    <text id="/data/relationToHead:option6">
+                        <value>Not Related</value>
+                    </text>
+                    <text id="/data/relationToHead:option7">
+                        <value>Other Relative</value>
+                    </text>
+                    <text id="/data/relationToHead:option8">
+                        <value>Unknown</value>
+                    </text>
+
+                    <text id="/data/relationshipUuid:label">
+                        <value>Relationship Id</value>
+                    </text>
+                    <text id="/data/relationshipUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/headOfHouseholdUuid:label">
+                        <value>Head of Household Id</value>
+                    </text>
+                    <text id="/data/headOfHouseholdUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/locationUuid:label">
+                        <value>Household Location Id</value>
+                    </text>
+                    <text id="/data/locationUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/socialGroupUuid:label">
+                        <value>Household Social Group Id</value>
+                    </text>
+                    <text id="/data/socialGroupUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/motherUuid:label">
+                        <value>Mother's Id</value>
+                    </text>
+                    <text id="/data/motherUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/fatherUuid:label">
+                        <value>Father's Id</value>
+                    </text>
+                    <text id="/data/fatherUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/membershipUuid:label">
+                        <value>Membership Id</value>
+                    </text>
+                    <text id="/data/membershipUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/residencyUuid:label">
+                        <value>Residency Id</value>
+                    </text>
+                    <text id="/data/residencyUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/individual/uuid:label">
+                        <value>Individual's Uuid</value>
+                    </text>
+                    <text id="/data/individual/uuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/individual/extId:label">
+                        <value>Individual's ExtId</value>
+                    </text>
+                    <text id="/data/individual/extId:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/individual/firstName:label">
+                        <value>Individual's First Name</value>
+                    </text>
+                    <text id="/data/individual/firstName:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/individual/middleName:label">
+                        <value>Individual's Middle Name</value>
+                    </text>
+                    <text id="/data/individual/middleName:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/individual/lastName:label">
+                        <value>Individual's Last Name</value>
+                    </text>
+                    <text id="/data/individual/lastName:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/individual/dateOfBirth:label">
+                        <value>Individual's Birth Date</value>
+                    </text>
+                    <text id="/data/individual/dateOfBirth:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/individual/gender:label">
+                        <value>Individual's Gender</value>
+                    </text>
+                    <text id="/data/individual/gender:hint">
+                        <value />
+                    </text>
+                    <text id="/data/individual/gender:option0">
+                        <value>Male</value>
+                    </text>
+                    <text id="/data/individual/gender:option1">
+                        <value>Female</value>
+                    </text>
+
+                    <text id="/data/isPregnant:label">
+                        <value>Is the Individual Pregnant?</value>
+                    </text>
+                    <text id="/data/isPregnant:hint">
+                        <value />
+                    </text>
+                    <text id="/data/isPregnant:option0">
+                        <value>Yes</value>
+                    </text>
+                    <text id="/data/isPregnant:option1">
+                        <value>No</value>
+                    </text>
+                </translation>
+            </itext>
+
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID"
+                readonly="true()" type="string" />
+
+            <bind nodeset="/data/collectedByUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/registrationDateTime" readonly="true()" type="datetime" />
+
+            <bind nodeset="/data/headOfHouseholdUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/relationshipUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/locationUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/socialGroupUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/motherUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/fatherUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/membershipUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/residencyUuid" readonly="true()" type="string" />
+
+            <bind nodeset="/data/relationToHead" required="true()" type="select1" />
+
+            <bind nodeset="/data/individual/uuid" readonly="true()" type="string" />
+
+            <bind nodeset="/data/individual/extId" required="true()" type="string" />
+            <bind nodeset="/data/individual/firstName" required="true()" type="string" />
+            <bind nodeset="/data/individual/middleName" type="string" />
+            <bind nodeset="/data/individual/lastName" required="true()" type="string" />
+            <bind nodeset="/data/individual/dateOfBirth" required="true()" type="date" />
+            <bind nodeset="/data/individual/gender" required="true()" type="select1" />
+
+            <bind nodeset="/data/isPregnant" relevant="selected(/data/individual/gender, 'FEMALE')"
+                required="true()" type="select1" />
+
+        </model>
+
+    </h:head>
+    <h:body>
+
+        <group appearance="field-list">
+            <input ref="/data/collectedByUuid">
+                <label ref="jr:itext('/data/collectedByUuid:label')" />
+                <hint ref="jr:itext('/data/collectedByUuid:hint')" />
+            </input>
+            <input ref="/data/registrationDateTime">
+                <label ref="jr:itext('/data/registrationDateTime:label')" />
+                <hint ref="jr:itext('/data/registrationDateTime:hint')" />
+            </input>
+            <input ref="/data/motherUuid">
+                <label ref="jr:itext('/data/motherUuid:label')" />
+                <hint ref="jr:itext('/data/motherUuid:hint')" />
+            </input>
+            <input ref="/data/fatherUuid">
+                <label ref="jr:itext('/data/fatherUuid:label')" />
+                <hint ref="jr:itext('/data/fatherUuid:hint')" />
+            </input>
+            <input ref="/data/individual/uuid">
+                <label ref="jr:itext('/data/individual/uuid:label')" />
+                <hint ref="jr:itext('/data/individual/uuid:hint')" />
+            </input>
+        </group>
+        <group appearance="field-list">
+            <input ref="/data/individual/extId">
+                <label ref="jr:itext('/data/individual/extId:label')" />
+                <hint ref="jr:itext('/data/individual/extId:hint')" />
+            </input>
+            <input ref="/data/individual/firstName">
+                <label ref="jr:itext('/data/individual/firstName:label')" />
+                <hint ref="jr:itext('/data/individual/firstName:hint')" />
+            </input>
+            <input ref="/data/individual/middleName">
+                <label ref="jr:itext('/data/individual/middleName:label')" />
+                <hint ref="jr:itext('/data/individual/middleName:hint')" />
+            </input>
+            <input ref="/data/individual/lastName">
+                <label ref="jr:itext('/data/individual/lastName:label')" />
+                <hint ref="jr:itext('/data/individual/lastName:hint')" />
+            </input>
+        </group>
+        <group appearance="field-list">
+            <input appearance="no-calendar" ref="/data/individual/dateOfBirth">
+                <label ref="jr:itext('/data/individual/dateOfBirth:label')" />
+                <hint ref="jr:itext('/data/individual/dateOfBirth:hint')" />
+            </input>
+            <select1 ref="/data/individual/gender">
+                <label ref="jr:itext('/data/individual/gender:label')" />
+                <hint ref="jr:itext('/data/individual/gender:hint')" />
+                <item>
+                    <label ref="jr:itext('/data/individual/gender:option0')" />
+                    <value>MALE</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/individual/gender:option1')" />
+                    <value>FEMALE</value>
+                </item>
+            </select1>
+            <select1 ref="/data/relationToHead">
+                <label ref="jr:itext('/data/relationToHead:label')" />
+                <hint ref="jr:itext('/data/relationToHead:hint')" />
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option0')" />
+                    <value>SELF</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option1')" />
+                    <value>SPOUSE</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option2')" />
+                    <value>SON_OR_DAUGHTER</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option3')" />
+                    <value>BROTHER_OR_SISTER</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option4')" />
+                    <value>PARENT</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option5')" />
+                    <value>GRANDCHILD</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option6')" />
+                    <value>NOT_RELATED</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option7')" />
+                    <value>OPTHER_RELATIVE</value>
+                </item>
+                <item>
+                    <label ref="jr:itext('/data/relationToHead:option8')" />
+                    <value>UNKNOWN</value>
+                </item>
+            </select1>
+        </group>
+        <select1 ref="/data/isPregnant">
+            <label ref="jr:itext('/data/isPregnant:label')"/>
+            <hint ref="jr:itext('/data/isPregnant:hint')"/>
+            <item>
+                <label ref="jr:itext('/data/isPregnant:option0')"/>
+                <value>YES</value>
+            </item>
+            <item>
+                <label ref="jr:itext('/data/isPregnant:option1')"/>
+                <value>NO</value>
+            </item>
+        </select1>
+
+    </h:body>
+</h:html>

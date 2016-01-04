@@ -480,7 +480,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         currentFormInstance = formInstance;
 
         // if needed, ask the user to search for required form field data
-        List<FormSearchPluginModule> searchPlugins = formBehaviour.getSearchPlugins();
+        List<FormSearchPluginModule> searchPlugins = formBehaviour.getSearchPlugins(getLevel());
         if (!searchPlugins.isEmpty()) {
             launchFormSearchActivity(searchPlugins);
             return;
@@ -590,6 +590,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     for (FormSearchPluginModule plugin : formSearchPluginModules) {
                         DataWrapper dataWrapper = plugin.getDataWrapper();
                         addContentAliases(formContent, dataWrapper);
+                        formContent.setContent(plugin.getFieldName(), dataWrapper.getContentValues());
                     }
 
                     // now let the user finish filling in the form in ODK

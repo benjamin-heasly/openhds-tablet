@@ -11,6 +11,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import java.util.Set;
+
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Relationships.INDIVIDUAL_A_UUID;
@@ -33,6 +35,11 @@ public class RelationshipGateway extends Gateway<Relationship> {
 
     public RelationshipGateway() {
         super(OpenHDS.Relationships.CONTENT_ID_URI_BASE, UUID, new RelationshipConverter());
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new Relationship()).keySet();
     }
 
     // true if relationship was inserted, false if updated

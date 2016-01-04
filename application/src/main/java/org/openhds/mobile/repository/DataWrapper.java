@@ -58,7 +58,12 @@ public class DataWrapper implements Parcelable {
         name = parcel.readString();
         level = parcel.readString();
         className = parcel.readString();
-        contentValues = ContentValues.CREATOR.createFromParcel(parcel);
+        int hasContentValues = parcel.readInt();
+        if (0 == hasContentValues) {
+            contentValues = null;
+        } else {
+            contentValues = ContentValues.CREATOR.createFromParcel(parcel);
+        }
     }
 
     // for Parcelable
@@ -75,7 +80,12 @@ public class DataWrapper implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(level);
         parcel.writeString(className);
-        contentValues.writeToParcel(parcel, flags);
+        if (null == contentValues) {
+            parcel.writeInt(0);
+        } else {
+            parcel.writeInt(1);
+            contentValues.writeToParcel(parcel, flags);
+        }
     }
 
     // for Parcelable

@@ -117,6 +117,9 @@ public class FormContent {
 
     // treat alias as case insensitive
     private ContentValues putByAlias(String alias, ContentValues contentValues) {
+        if (null == contentValues || null == alias) {
+            return null;
+        }
         return contentByAlias.put(alias.toLowerCase(), contentValues);
     }
 

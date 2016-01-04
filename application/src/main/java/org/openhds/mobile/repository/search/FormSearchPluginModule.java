@@ -20,11 +20,13 @@ import java.util.List;
  *
  */
 public class FormSearchPluginModule extends SearchPluginModule implements Parcelable {
+    private String fieldName;
     private DataWrapper dataWrapper;
 
     public FormSearchPluginModule(Gateway gateway, String label, String fieldName, String level) {
         super(gateway, label);
         dataWrapper = new DataWrapper(null, null, fieldName, level, null, null);
+        this.fieldName = fieldName;
     }
 
     public DataWrapper getDataWrapper() {
@@ -35,9 +37,18 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
         this.dataWrapper = dataWrapper;
     }
 
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
     // for Parcelable
     private FormSearchPluginModule(Parcel parcel) {
         label = parcel.readString();
+        fieldName = parcel.readString();
         dataWrapper = parcel.readParcelable(DataWrapper.class.getClassLoader());
 
         final String gatewayName = parcel.readString();
@@ -50,7 +61,7 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
         final Bundle columnsAndLabelsBundle = parcel.readBundle();
         columnsAndLabels = new HashMap<>();
         for (String key : columnList) {
-            columnsAndLabels.put(key, columnsAndLabelsBundle.getInt(key));
+            columnsAndLabels.put(key, columnsAndLabelsBundle.getString(key));
         }
     }
 
@@ -64,9 +75,10 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(label);
+        parcel.writeString(fieldName);
         parcel.writeParcelable(dataWrapper, flags);
 
-        String gatewayName = gateway.getClass().getName();
+        String gatewayName = gateway.getClass().getSimpleName();
         parcel.writeString(gatewayName);
 
         // Android recommends parceling Maps as Bundles
@@ -75,7 +87,7 @@ public class FormSearchPluginModule extends SearchPluginModule implements Parcel
 
         Bundle columnsAndLabelsBundle = new Bundle();
         for (String key : columnList) {
-            columnsAndLabelsBundle.putInt(key, columnsAndLabels.get(key));
+            columnsAndLabelsBundle.putString(key, columnsAndLabels.get(key));
         }
         parcel.writeBundle(columnsAndLabelsBundle);
     }

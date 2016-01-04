@@ -24,7 +24,7 @@ public class SearchPluginModule {
 
     protected Gateway gateway;
     protected String label;
-    protected Map<String, Integer> columnsAndLabels;
+    protected Map<String, String> columnsAndLabels;
 
     public SearchPluginModule() {}
 
@@ -34,11 +34,11 @@ public class SearchPluginModule {
         columnsAndLabels = new HashMap<>();
     }
 
-    public Map<String, Integer> getColumnsAndLabels() {
+    public Map<String, String> getColumnsAndLabels() {
         return columnsAndLabels;
     }
 
-    public void setColumnsAndLabels(Map<String, Integer> columnsAndLabels) {
+    public void setColumnsAndLabels(Map<String, String> columnsAndLabels) {
         this.columnsAndLabels = columnsAndLabels;
     }
 

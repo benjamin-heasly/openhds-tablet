@@ -11,6 +11,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import java.util.Set;
+
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Locations.DESCRIPTION;
@@ -30,6 +32,11 @@ public class LocationGateway extends Gateway<Location> {
 
     public LocationGateway() {
         super(OpenHDS.Locations.CONTENT_ID_URI_BASE, UUID, new LocationConverter());
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new Location()).keySet();
     }
 
     public Query findByHierarchy(String hierarchyId) {

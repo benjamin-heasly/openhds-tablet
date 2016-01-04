@@ -10,6 +10,8 @@ import org.openhds.mobile.model.update.Visit;
 import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 
+import java.util.Set;
+
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Visits.DATE;
@@ -27,6 +29,11 @@ public class VisitGateway extends Gateway<Visit> {
 
     public VisitGateway() {
         super(OpenHDS.Visits.CONTENT_ID_URI_BASE, OpenHDS.Visits.UUID, new VisitConverter());
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new Visit()).keySet();
     }
 
     private static class VisitConverter implements Converter<Visit> {

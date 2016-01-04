@@ -11,6 +11,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import java.util.Set;
+
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.Individuals.DOB;
@@ -35,6 +37,11 @@ public class IndividualGateway extends Gateway<Individual> {
 
     public IndividualGateway() {
         super(OpenHDS.Individuals.CONTENT_ID_URI_BASE, UUID, new IndividualConverter());
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new Individual()).keySet();
     }
 
     public Query findByExtIdPrefixDescending(String extIdPrefix) {

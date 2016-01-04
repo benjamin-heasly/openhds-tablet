@@ -15,8 +15,10 @@ import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
@@ -53,6 +55,8 @@ public abstract class Gateway<T> {
     public Converter<T> getConverter() {
         return converter;
     }
+
+    public abstract Set<String> getColumns();
 
     // true if entity was inserted, false if updated
     public boolean insertOrUpdate(ContentResolver contentResolver, FormContent formContent) {

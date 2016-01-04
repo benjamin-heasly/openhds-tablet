@@ -11,6 +11,8 @@ import org.openhds.mobile.repository.Converter;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.repository.Query;
 
+import java.util.Set;
+
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_CLIENT;
 import static org.openhds.mobile.OpenHDS.Common.LAST_MODIFIED_SERVER;
 import static org.openhds.mobile.OpenHDS.FieldWorkers.FIELD_WORKER_ID;
@@ -28,6 +30,11 @@ public class FieldWorkerGateway extends Gateway<FieldWorker> {
 
     public FieldWorkerGateway() {
         super(OpenHDS.FieldWorkers.CONTENT_ID_URI_BASE, UUID, new FieldWorkerConverter());
+    }
+
+    @Override
+    public Set<String> getColumns() {
+        return converter.toContentValues(new FieldWorker()).keySet();
     }
 
     public Query findByExtId(String extId) {
