@@ -1,0 +1,144 @@
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+
+        <h:title>Pregnancy Observation</h:title>
+
+        <model>
+
+            <instance>
+                <data id="pregnancy-observation" version="101">
+                    <openhdsTagName>bsh-thesis</openhdsTagName>
+
+                    <meta>
+                        <instanceID />
+                        <consumer>pregnancy-observation</consumer>
+                        <displayLevel>bottom</displayLevel>
+                    </meta>
+
+                    <registrationVersion>101</registrationVersion>
+                    <registrationVersionName>bsh-thesis</registrationVersionName>
+                    <registrationSystemName>openhds-tablet</registrationSystemName>
+                    <registrationDateTime />
+                    <collectedByUuid />
+
+                    <pregnancyObservation>
+                        <uuid />
+                        <expectedDeliveryDate />
+                        <pregnancyDate />
+                    </pregnancyObservation>
+
+                    <motherUuid/>
+                    <individualUuid/>
+                    <locationUuid/>
+                </data>
+            </instance>
+
+            <itext>
+                <translation lang="English">
+                    <text id="/data/collectedByUuid:label">
+                        <value>Field Worker Id</value>
+                    </text>
+                    <text id="/data/collectedByUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/registrationDateTime:label">
+                        <value>Registration Date Time</value>
+                    </text>
+                    <text id="/data/registrationDateTime:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/locationUuid:label">
+                        <value>Location Id</value>
+                    </text>
+                    <text id="/data/locationUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/motherUuid:label">
+                        <value>Mother Uuid</value>
+                    </text>
+                    <text id="/data/motherUuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/pregnancyObservation/uuid:label">
+                        <value>Observation Id</value>
+                    </text>
+                    <text id="/data/pregnancyObservation/uuid:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/pregnancyObservation/expectedDeliveryDate:label">
+                        <value>Expected Delivery Date</value>
+                    </text>
+                    <text id="/data/pregnancyObservation/expectedDeliveryDate:hint">
+                        <value />
+                    </text>
+
+                    <text id="/data/pregnancyObservation/pregnancyDate:label">
+                        <value>Pregnancy Date</value>
+                    </text>
+                    <text id="/data/pregnancyObservation/pregnancyDate:hint">
+                        <value />
+                    </text>
+                </translation>
+            </itext>
+
+            <bind calculate="concat('uuid:', uuid())" nodeset="/data/meta/instanceID"
+                readonly="true()" type="string" />
+
+            <!-- copy id of individual who is pregnant as the id of the mother -->
+            <bind calculate="concat(/data/individualUuid)" nodeset="/data/motherUuid"
+                readonly="true()" type="string" />
+
+            <bind nodeset="/data/collectedByUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/registrationDateTime" readonly="true()" type="datetime" />
+            <bind nodeset="/data/locationUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/motherUuid" readonly="true()" type="string" />
+            <bind nodeset="/data/pregnancyObservation/uuid" readonly="true()" type="string" />
+
+            <bind nodeset="/data/pregnancyObservation/expectedDeliveryDate" type="date" />
+            <bind nodeset="/data/pregnancyObservation/pregnancyDate" type="date" />
+
+        </model>
+
+    </h:head>
+    <h:body>
+
+        <group appearance="field-list">
+            <input ref="/data/collectedByUuid">
+                <label ref="jr:itext('/data/collectedByUuid:label')" />
+                <hint ref="jr:itext('/data/collectedByUuid:hint')" />
+            </input>
+            <input ref="/data/registrationDateTime">
+                <label ref="jr:itext('/data/registrationDateTime:label')" />
+                <hint ref="jr:itext('/data/registrationDateTime:hint')" />
+            </input>
+            <input ref="/data/locationUuid">
+                <label ref="jr:itext('/data/locationUuid:label')" />
+                <hint ref="jr:itext('/data/locationUuid:hint')" />
+            </input>
+            <input ref="/data/motherUuid">
+                <label ref="jr:itext('/data/motherUuid:label')" />
+                <hint ref="jr:itext('/data/motherUuid:hint')" />
+            </input>
+            <input ref="/data/pregnancyObservation/uuid">
+                <label ref="jr:itext('/data/pregnancyObservation/uuid:label')" />
+                <hint ref="jr:itext('/data/pregnancyObservation/uuid:hint')" />
+            </input>
+        </group>
+        <group appearance="field-list">
+            <input appearance="no-calendar" ref="/data/pregnancyObservation/expectedDeliveryDate">
+                <label ref="jr:itext('/data/pregnancyObservation/expectedDeliveryDate:label')" />
+                <hint ref="jr:itext('/data/pregnancyObservation/expectedDeliveryDate:hint')" />
+            </input>
+            <input appearance="no-calendar" ref="/data/pregnancyObservation/pregnancyDate">
+                <label ref="jr:itext('/data/pregnancyObservation/pregnancyDate:label')" />
+                <hint ref="jr:itext('/data/pregnancyObservation/pregnancyDate:hint')" />
+            </input>
+        </group>
+    </h:body>
+</h:html>

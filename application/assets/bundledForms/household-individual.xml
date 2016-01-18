@@ -17,7 +17,7 @@
                         <followUp>
                             <formId>pregnancy-observation</formId>
                             <filter>
-                                <individual><gender>FEMALE</gender></individual>
+                                <isPregnant>YES</isPregnant>
                             </filter>
                         </followUp>
                         <search>

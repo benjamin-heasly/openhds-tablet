@@ -3,6 +3,7 @@ package org.openhds.mobile.activity;
 import java.util.List;
 import java.util.Map;
 
+import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.repository.DataWrapper;
 import org.openhds.mobile.forms.FormBehaviour;
 
@@ -16,5 +17,5 @@ public interface HierarchyNavigator {
 
 	void stepDown(DataWrapper qr);
 	
-	void launchForm(FormBehaviour form);
+	void launchForm(FormBehaviour form, FormContent previousContent);
 }

@@ -461,7 +461,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     }
 
     @Override
-    public void launchForm(FormBehaviour formBehaviour) {
+    public void launchForm(FormBehaviour formBehaviour, FormContent previousContent) {
 
         FormInstance formInstance = OdkInstanceGateway.instantiateFormDefinition(formBehaviour.getFormDefinition());
         if (null == formInstance) {
@@ -486,7 +486,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             return;
         }
 
-        launchCurrentFormInODK(null);
+        launchCurrentFormInODK(previousContent);
     }
 
     private void launchCurrentFormInODK(FormContent previousContent) {
@@ -553,7 +553,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             switch (requestCode) {
                 case ODK_ACTIVITY_REQUEST_CODE: {
                     // consume form data that the user entered with ODK
-                    FormContent formContent = FormContent.readFormContent(new File(currentFormInstance.getFilePath()));
+                    final FormContent formContent = FormContent.readFormContent(new File(currentFormInstance.getFilePath()));
 
                     // done reading, encrypt forms
                     List<FormInstance> allFormInstances = OdkInstanceGateway.findAllInstances(getContentResolver());
@@ -562,7 +562,8 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     }
 
                     // consume form records into database
-                    List<String> consumers = currentFormInstance.getFormBehaviour().getConsumers();
+                    FormBehaviour formBehaviour = currentFormInstance.getFormBehaviour();
+                    List<String> consumers = formBehaviour.getConsumers();
                     if (!consumers.isEmpty()) {
                         FormContent entityContent = buildNavigationContent();
                         entityContent.addAll(formContent);
@@ -576,7 +577,27 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                         }
                     }
 
-                    // TODO: check whether we should launch a follow-up form
+                    // check whether we should launch a follow-up form
+                    List<String> formIds = formBehaviour.getFollowUpForms(formContent);
+                    if (!formIds.isEmpty()) {
+
+                        // Ask ODK to find a form with this id.
+                        final String formId = formIds.get(0);
+                        final FormsFromOdkTask.Listener listener = new FormsFromOdkTask.Listener() {
+                            @Override
+                            public void onComplete(List<FormDefinition> formDefinitions) {
+                                if (formDefinitions.isEmpty()) {
+                                    showShortToast(NavigateActivity.this, "No form definition found with formId <" + formId + ">");
+                                } else {
+                                    // roll previous content into the follow up form
+                                    FormBehaviour followUpBehavior = new FormBehaviour(formDefinitions.get(0));
+                                    launchForm(followUpBehavior, formContent);
+                                }
+                            }
+                        };
+                        FormsFromOdkTask formsFromOdkTask = new FormsFromOdkTask(listener, formId);
+                        formsFromOdkTask.execute(NavigateActivity.this);
+                    }
 
                     return;
                 }
@@ -589,7 +610,6 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     FormContent formContent = new FormContent();
                     for (FormSearchPluginModule plugin : formSearchPluginModules) {
                         DataWrapper dataWrapper = plugin.getDataWrapper();
-                        addContentAliases(formContent, dataWrapper);
                         formContent.setContent(plugin.getFieldName(), dataWrapper.getContentValues());
                     }
 
@@ -716,7 +736,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
     private class FormSelectionHandler implements FormSelectionFragment.SelectionHandler {
         @Override
         public void handleSelectedForm(FormBehaviour formBehaviour) {
-            NavigateActivity.this.launchForm(formBehaviour);
+            NavigateActivity.this.launchForm(formBehaviour, null);
         }
     }
 }

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.forms.odk.OdkFormGateway;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,8 +23,15 @@ public class FormsFromOdkTask extends AsyncTask<Context, Void, List<FormDefiniti
 
     private final Listener listener;
 
+    private final String formId;
+
     public FormsFromOdkTask(Listener listener) {
+        this(listener, null);
+    }
+
+    public FormsFromOdkTask(Listener listener, String formId) {
         this.listener = listener;
+        this.formId = formId;
     }
 
     @Override
@@ -33,7 +41,16 @@ public class FormsFromOdkTask extends AsyncTask<Context, Void, List<FormDefiniti
         }
 
         Context context = contexts[0];
-        return OdkFormGateway.findRegisteredForms(context.getContentResolver());
+        if (null == formId) {
+            return OdkFormGateway.findRegisteredForms(context.getContentResolver());
+        } else {
+            List<FormDefinition> formDefinitions = new ArrayList<>();
+            FormDefinition formDefinition = OdkFormGateway.findRegisteredFormById(context.getContentResolver(), formId);
+            if (null != formDefinition) {
+                formDefinitions.add(formDefinition);
+            }
+            return formDefinitions;
+        }
     }
 
     @Override
