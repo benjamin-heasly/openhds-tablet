@@ -39,24 +39,30 @@ public class ResidencyGateway extends Gateway<Residency> {
         return converter.toContentValues(new Residency()).keySet();
     }
 
-    // true if residency was inserted, false if updated
     // take care to update at the correct location AND individual
     @Override
-    public boolean insertOrUpdate(ContentResolver contentResolver, Residency residency) {
+    public Residency insertOrUpdate(ContentResolver contentResolver, Residency residency) {
         ContentValues contentValues = toContentValues(residency);
 
         String locationId = residency.getLocationUuid();
         String individualId = residency.getIndividualUuid();
         Residency existingResidency = getFirst(contentResolver, findByLocationAndIndividual(locationId, individualId));
 
+        String id = contentValues.getAsString(idColumnName);
+        if (null == id || id.trim().isEmpty()) {
+            id = java.util.UUID.randomUUID().toString();
+            contentValues.put(idColumnName, id);
+        }
+
         if (null == existingResidency) {
-            return null != insert(contentResolver, tableUri, contentValues);
+            insert(contentResolver, tableUri, contentValues);
         } else {
             final String[] columnNames = {LOCATION_UUID, INDIVIDUAL_UUID};
             final String[] columnValues = {locationId, individualId};
             update(contentResolver, tableUri, contentValues, columnNames, columnValues);
-            return false;
         }
+
+        return getFirst(contentResolver, findByLocationAndIndividual(locationId, individualId));
     }
 
     public Query findByIndividual(String individualId) {

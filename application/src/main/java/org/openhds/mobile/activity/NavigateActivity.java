@@ -2,6 +2,7 @@ package org.openhds.mobile.activity;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -569,10 +570,14 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                         entityContent.addAll(formContent);
 
                         for (String consumer : consumers) {
-                            Gateway<?> gateway = GatewayRegistry.getGatewayByEntityName(consumer);
+                            Gateway gateway = GatewayRegistry.getGatewayByEntityName(consumer);
                             if (null != gateway) {
                                 showShortToast(this, getString(R.string.consuming_form_record) + ": " + consumer);
-                                gateway.insertOrUpdate(getContentResolver(), entityContent);
+                                DataWrapper dataWrapper = gateway.getConverter().toDataWrapper(
+                                        getContentResolver(),
+                                        gateway.insertOrUpdate(getContentResolver(), entityContent),
+                                        getLevel());
+                                addContentAliases(formContent, dataWrapper);
                             }
                         }
                     }

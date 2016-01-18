@@ -15,7 +15,6 @@ import org.openhds.mobile.repository.ResultsIterator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -58,34 +57,44 @@ public abstract class Gateway<T> {
 
     public abstract Set<String> getColumns();
 
-    // true if entity was inserted, false if updated
-    public boolean insertOrUpdate(ContentResolver contentResolver, FormContent formContent) {
+    public String getIdColumnName() {
+        return idColumnName;
+    }
+
+    // inserted/updated record, or null if failed
+    public T insertOrUpdate(ContentResolver contentResolver, FormContent formContent) {
         ContentValues contentValues = toContentValues(formContent);
         return insertOrUpdate(contentResolver, contentValues);
     }
 
-    // true if entity was inserted, false if updated
-    public boolean insertOrUpdate(ContentResolver contentResolver, T entity) {
+    // inserted/updated record, or null if failed
+    public T insertOrUpdate(ContentResolver contentResolver, T entity) {
         ContentValues contentValues = toContentValues(entity);
         return insertOrUpdate(contentResolver, contentValues);
     }
 
-    // true if entity was inserted, false if updated
-    public boolean insertOrUpdate(ContentResolver contentResolver, ContentValues contentValues) {
+    // inserted/updated record, or null if failed
+    public T insertOrUpdate(ContentResolver contentResolver, ContentValues contentValues) {
         if (null == contentValues || !contentValues.containsKey(idColumnName)) {
-            return false;
+            return null;
         }
 
         String id = contentValues.getAsString(idColumnName);
+        if (null == id || id.trim().isEmpty()) {
+            id = java.util.UUID.randomUUID().toString();
+            contentValues.put(idColumnName, id);
+        }
+
         if (exists(contentResolver, id)) {
             T entity = getFirst(contentResolver, findById(id));
             ContentValues existing = toContentValues(entity);
             addAllNotNull(existing, contentValues);
-            update(contentResolver, tableUri, existing, idColumnName, id);
-            return false;
+            update(contentResolver, tableUri, existing, idColumnName, id);;
         } else {
-            return null != insert(contentResolver, tableUri, contentValues);
+            insert(contentResolver, tableUri, contentValues);
         }
+
+        return getFirst(contentResolver, findById(id));
     }
 
     // put all non-null entries from second into the first

@@ -1,6 +1,7 @@
 package org.openhds.mobile.tests.gateway;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.test.ProviderTestCase2;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -80,8 +81,8 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         String id = "TEST";
         T entity = makeTestEntity(id, "mr. test", "test date");
 
-        boolean wasInserted = gateway.insertOrUpdate(contentResolver, entity);
-        assertEquals(true, wasInserted);
+        T inserted = gateway.insertOrUpdate(contentResolver, entity);
+        assertEquals(id, gateway.getConverter().getId(inserted));
 
         T savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNotNull(savedEntity);
@@ -92,8 +93,8 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         assertNotNull(savedDataWrapper);
         assertEquals(id, savedDataWrapper.getUuid());
 
-        wasInserted = gateway.insertOrUpdate(contentResolver, entity);
-        assertEquals(false, wasInserted);
+        inserted = gateway.insertOrUpdate(contentResolver, entity);
+        assertEquals(id, gateway.getConverter().getId(inserted));
 
         savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNotNull(savedEntity);
@@ -204,7 +205,7 @@ public abstract class GatewayTest<T> extends ProviderTestCase2<OpenHDSProvider> 
         String id = "TEST";
         T entity = makeTestEntity(id, "mr. test", "test date");
 
-        boolean wasInserted = gateway.insertOrUpdate(contentResolver, entity);
+        gateway.insertOrUpdate(contentResolver, entity);
 
         T savedEntity = gateway.getFirst(contentResolver, gateway.findById(id));
         assertNotNull(savedEntity);

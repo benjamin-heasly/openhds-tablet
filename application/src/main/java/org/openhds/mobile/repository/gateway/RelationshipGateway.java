@@ -42,24 +42,30 @@ public class RelationshipGateway extends Gateway<Relationship> {
         return converter.toContentValues(new Relationship()).keySet();
     }
 
-    // true if relationship was inserted, false if updated
     // take care to update at BOTH correct individuals
     @Override
-    public boolean insertOrUpdate(ContentResolver contentResolver, Relationship relationship) {
+    public Relationship insertOrUpdate(ContentResolver contentResolver, Relationship relationship) {
         ContentValues contentValues = toContentValues(relationship);
 
         String individualAId = relationship.getIndividualA();
         String individualBId = relationship.getIndividualB();
         Relationship existingRelationship = getFirst(contentResolver, findByBothIndividuals(individualAId, individualBId));
 
+        String id = contentValues.getAsString(idColumnName);
+        if (null == id || id.trim().isEmpty()) {
+            id = java.util.UUID.randomUUID().toString();
+            contentValues.put(idColumnName, id);
+        }
+
         if (null == existingRelationship) {
-            return null != insert(contentResolver, tableUri, contentValues);
+            insert(contentResolver, tableUri, contentValues);
         } else {
             final String[] columnNames = {INDIVIDUAL_A_UUID, INDIVIDUAL_B_UUID};
             final String[] columnValues = {individualAId, individualBId};
             update(contentResolver, tableUri, contentValues, columnNames, columnValues);
-            return false;
         }
+
+        return getFirst(contentResolver, findByBothIndividuals(individualAId, individualBId));
     }
 
     public Query findByBothIndividuals(String individualAId, String individualBId) {

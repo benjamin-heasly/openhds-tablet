@@ -38,10 +38,9 @@ public class MembershipGateway extends Gateway<Membership> {
         return converter.toContentValues(new Membership()).keySet();
     }
 
-    // true if membership was inserted, false if updated
     // take care to update at the correct social group AND individual
     @Override
-    public boolean insertOrUpdate(ContentResolver contentResolver, Membership membership) {
+    public Membership insertOrUpdate(ContentResolver contentResolver, Membership membership) {
         ContentValues contentValues = toContentValues(membership);
 
         String socialGroupId = membership.getSocialGroupUuid();
@@ -49,14 +48,21 @@ public class MembershipGateway extends Gateway<Membership> {
         Membership existingMembership = getFirst(contentResolver,
                 findBySocialGroupAndIndividual(socialGroupId, individualId));
 
+        String id = contentValues.getAsString(idColumnName);
+        if (null == id || id.trim().isEmpty()) {
+            id = java.util.UUID.randomUUID().toString();
+            contentValues.put(idColumnName, id);
+        }
+
         if (null == existingMembership) {
-            return null != insert(contentResolver, tableUri, contentValues);
+            insert(contentResolver, tableUri, contentValues);
         } else {
             final String[] columnNames = {SOCIAL_GROUP_UUID, INDIVIDUAL_UUID};
             final String[] columnValues = {socialGroupId, individualId};
             update(contentResolver, tableUri, contentValues, columnNames, columnValues);
-            return false;
         }
+
+        return getFirst(contentResolver, findBySocialGroupAndIndividual(socialGroupId, individualId));
     }
 
     public Query findByIndividual(String individualId) {
