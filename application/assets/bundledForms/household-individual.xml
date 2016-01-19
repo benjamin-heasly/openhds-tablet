@@ -12,7 +12,7 @@
 
                     <meta>
                         <instanceID />
-                        <consumer>household-individual</consumer>
+                        <consumer>individual,residency</consumer>
                         <displayLevel>individual,bottom</displayLevel>
                         <followUp>
                             <formId>pregnancy-observation</formId>

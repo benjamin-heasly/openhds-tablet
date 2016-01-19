@@ -157,9 +157,13 @@ public class ResidencyModuleHierarchy implements ModuleHierarchy {
             IndividualGateway individualGateway = GatewayRegistry.getIndividualGateway();
             List<DataWrapper> individuals = new ArrayList<>(residencies.size());
             for (Residency residency : residencies) {
-                individuals.add(individualGateway.getFirstDataWrapper(
+                DataWrapper individualWrapper = individualGateway.getFirstDataWrapper(
                         contentResolver,
-                        individualGateway.findById(residency.getIndividualUuid()), INDIVIDUAL_LEVEL_ID));
+                        individualGateway.findById(residency.getIndividualUuid()), INDIVIDUAL_LEVEL_ID);
+                if (null == individualWrapper) {
+                    continue;
+                }
+                individuals.add(individualWrapper);
             }
             return individuals;
             // TODO: sort by extId

@@ -2,7 +2,6 @@ package org.openhds.mobile.activity;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -461,6 +460,13 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         }
     }
 
+    private void updateResultsForCurrentSelection() {
+        currentResults = navigationModule.getModuleHierarchy().getChildren(
+                getContentResolver(),
+                currentSelection);
+        showValueFragment();
+    }
+
     @Override
     public void launchForm(FormBehaviour formBehaviour, FormContent previousContent) {
 
@@ -567,12 +573,11 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     List<String> consumers = formBehaviour.getConsumers();
                     if (!consumers.isEmpty()) {
                         FormContent entityContent = buildNavigationContent();
-                        entityContent.addAll(formContent);
-
                         for (String consumer : consumers) {
                             Gateway gateway = GatewayRegistry.getGatewayByEntityName(consumer);
                             if (null != gateway) {
                                 showShortToast(this, getString(R.string.consuming_form_record) + ": " + consumer);
+                                entityContent.addAll(formContent);
                                 DataWrapper dataWrapper = gateway.getConverter().toDataWrapper(
                                         getContentResolver(),
                                         gateway.insertOrUpdate(getContentResolver(), entityContent),
@@ -604,6 +609,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                         formsFromOdkTask.execute(NavigateActivity.this);
                     }
 
+                    updateResultsForCurrentSelection();
                     return;
                 }
 

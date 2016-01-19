@@ -41,18 +41,14 @@ public class ResidencyGateway extends Gateway<Residency> {
 
     // take care to update at the correct location AND individual
     @Override
-    public Residency insertOrUpdate(ContentResolver contentResolver, Residency residency) {
-        ContentValues contentValues = toContentValues(residency);
-
-        String locationId = residency.getLocationUuid();
-        String individualId = residency.getIndividualUuid();
-        Residency existingResidency = getFirst(contentResolver, findByLocationAndIndividual(locationId, individualId));
-
-        String id = contentValues.getAsString(idColumnName);
-        if (null == id || id.trim().isEmpty()) {
-            id = java.util.UUID.randomUUID().toString();
-            contentValues.put(idColumnName, id);
+    public Residency insertOrUpdate(ContentResolver contentResolver, ContentValues contentValues) {
+        if (null == contentValues || !contentValues.containsKey(LOCATION_UUID) || !contentValues.containsKey(INDIVIDUAL_UUID)) {
+            return null;
         }
+
+        String locationId = contentValues.getAsString(LOCATION_UUID);
+        String individualId = contentValues.getAsString(INDIVIDUAL_UUID);
+        Residency existingResidency = getFirst(contentResolver, findByLocationAndIndividual(locationId, individualId));
 
         if (null == existingResidency) {
             insert(contentResolver, tableUri, contentValues);
@@ -113,8 +109,8 @@ public class ResidencyGateway extends Gateway<Residency> {
         public ContentValues toContentValues(FormContent formContent, String entityAlias) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(INDIVIDUAL_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "individualUuid"));
-            contentValues.put(LOCATION_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "locationUuid"));
+            contentValues.put(INDIVIDUAL_UUID, formContent.getContentString("individual", UUID));
+            contentValues.put(LOCATION_UUID, formContent.getContentString("location", UUID));
             contentValues.put(END_TYPE, formContent.getContentString(entityAlias, END_TYPE));
             contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
 

@@ -85,7 +85,7 @@ public class LocationGateway extends Gateway<Location> {
         public ContentValues toContentValues(FormContent formContent, String entityAlias) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(LOCATION_HIERARCHY_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "locationHierarchyUuid"));
+            contentValues.put(LOCATION_HIERARCHY_UUID, formContent.getContentString("locationHierarchy", UUID));
             contentValues.put(EXT_ID, formContent.getContentString(entityAlias, EXT_ID));
             contentValues.put(LATITUDE, formContent.getContentString(entityAlias, LATITUDE));
             contentValues.put(LONGITUDE, formContent.getContentString(entityAlias, LONGITUDE));

@@ -87,7 +87,7 @@ public class LocationHierarchyGateway extends Gateway<LocationHierarchy> {
 
             contentValues.put(EXT_ID, formContent.getContentString(entityAlias, EXT_ID));
             contentValues.put(NAME, formContent.getContentString(entityAlias, NAME));
-            contentValues.put(LOCATION_HIERARCHY_LEVEL_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "locationHierarchyLevelUuid"));
+            contentValues.put(LOCATION_HIERARCHY_LEVEL_UUID, formContent.getContentString("locationHierarchyLevel", UUID));
             contentValues.put(PARENT_UUID, formContent.getContentString(entityAlias, "parentUuid"));
             contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
 

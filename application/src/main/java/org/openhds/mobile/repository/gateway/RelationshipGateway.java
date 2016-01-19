@@ -44,29 +44,26 @@ public class RelationshipGateway extends Gateway<Relationship> {
 
     // take care to update at BOTH correct individuals
     @Override
-    public Relationship insertOrUpdate(ContentResolver contentResolver, Relationship relationship) {
-        ContentValues contentValues = toContentValues(relationship);
-
-        String individualAId = relationship.getIndividualA();
-        String individualBId = relationship.getIndividualB();
-        Relationship existingRelationship = getFirst(contentResolver, findByBothIndividuals(individualAId, individualBId));
-
-        String id = contentValues.getAsString(idColumnName);
-        if (null == id || id.trim().isEmpty()) {
-            id = java.util.UUID.randomUUID().toString();
-            contentValues.put(idColumnName, id);
+    public Relationship insertOrUpdate(ContentResolver contentResolver, ContentValues contentValues) {
+        if (null == contentValues || !contentValues.containsKey(INDIVIDUAL_A_UUID) || !contentValues.containsKey(INDIVIDUAL_B_UUID)) {
+            return null;
         }
 
-        if (null == existingRelationship) {
+        String locationId = contentValues.getAsString(INDIVIDUAL_A_UUID);
+        String individualId = contentValues.getAsString(INDIVIDUAL_B_UUID);
+        Relationship existingResidency = getFirst(contentResolver, findByBothIndividuals(locationId, individualId));
+
+        if (null == existingResidency) {
             insert(contentResolver, tableUri, contentValues);
         } else {
             final String[] columnNames = {INDIVIDUAL_A_UUID, INDIVIDUAL_B_UUID};
-            final String[] columnValues = {individualAId, individualBId};
+            final String[] columnValues = {locationId, individualId};
             update(contentResolver, tableUri, contentValues, columnNames, columnValues);
         }
 
-        return getFirst(contentResolver, findByBothIndividuals(individualAId, individualBId));
+        return getFirst(contentResolver, findByBothIndividuals(locationId, individualId));
     }
+
 
     public Query findByBothIndividuals(String individualAId, String individualBId) {
         final String[] columnNames = {INDIVIDUAL_A_UUID, INDIVIDUAL_B_UUID};
@@ -110,8 +107,8 @@ public class RelationshipGateway extends Gateway<Relationship> {
         public ContentValues toContentValues(FormContent formContent, String entityAlias) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(INDIVIDUAL_A_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "individualAUuid"));
-            contentValues.put(INDIVIDUAL_B_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "individualBUuid"));
+            contentValues.put(INDIVIDUAL_A_UUID, formContent.getContentString("individualA", UUID));
+            contentValues.put(INDIVIDUAL_B_UUID, formContent.getContentString("individualB", UUID));
             contentValues.put(START_DATE, formContent.getContentString(entityAlias, START_DATE));
             contentValues.put(TYPE, formContent.getContentString(entityAlias, TYPE));
             contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));

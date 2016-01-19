@@ -89,7 +89,7 @@ public abstract class Gateway<T> {
             T entity = getFirst(contentResolver, findById(id));
             ContentValues existing = toContentValues(entity);
             addAllNotNull(existing, contentValues);
-            update(contentResolver, tableUri, existing, idColumnName, id);;
+            update(contentResolver, tableUri, existing, idColumnName, id);
         } else {
             insert(contentResolver, tableUri, contentValues);
         }

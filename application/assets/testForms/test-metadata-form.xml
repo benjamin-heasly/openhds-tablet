@@ -19,9 +19,7 @@
                         </displayFilter>
 
                         <!-- record consumers-->
-                        <consumer>individual</consumer>
-                        <consumer>residency</consumer>
-                        <consumer>relationship</consumer>
+                        <consumer>individual,residency,relationship</consumer>
 
                         <!-- follow up form criteria -->
                         <followUp>

@@ -100,8 +100,8 @@ public class IndividualGateway extends Gateway<Individual> {
             contentValues.put(LAST_NAME, formContent.getContentString(entityAlias, LAST_NAME));
             contentValues.put(DOB, formContent.getContentString(entityAlias, DOB));
             contentValues.put(GENDER, formContent.getContentString(entityAlias, GENDER));
-            contentValues.put(MOTHER, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "motherUuid"));
-            contentValues.put(FATHER, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "fatherUuid"));
+            contentValues.put(MOTHER, formContent.getContentString("mother", UUID));
+            contentValues.put(FATHER, formContent.getContentString("father", UUID));
             contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
 
             return contentValues;

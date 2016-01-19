@@ -84,11 +84,11 @@ public class FormBehaviour {
     }
 
     private void parseConsumers(Element metaElement) {
-        List<Element> consumerElements = getChildrenIgnoreNamespace(metaElement, CONSUMER_ELEMENT_NAME);
-        for (Element consumer : consumerElements) {
-            String consumerName = consumer.getText().trim();
-            if (!consumerName.isEmpty()) {
-                consumers.add(consumerName);
+        Element consumerElement = getChildIgnoreNamespace(metaElement, CONSUMER_ELEMENT_NAME);
+        if (null != consumerElement) {
+            String[] consumersNames = consumerElement.getText().split(LIST_SPLITTER);
+            for (String consumerName : consumersNames) {
+                consumers.add(consumerName.trim());
             }
         }
     }

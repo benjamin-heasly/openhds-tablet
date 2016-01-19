@@ -58,6 +58,9 @@ public class FormContent {
 
     // replace any existing content at the same alias
     public void setContent(String alias, ContentValues contentValues) {
+        if (null == contentValues) {
+            return;
+        }
         putByAlias(alias, contentValues);
     }
 
@@ -120,7 +123,7 @@ public class FormContent {
         if (null == contentValues || null == alias) {
             return null;
         }
-        return contentByAlias.put(alias.toLowerCase(), contentValues);
+        return contentByAlias.put(alias.toLowerCase(), new ContentValues(contentValues));
     }
 
     public boolean initializeFormContent(File file, Element element) {

@@ -1,6 +1,7 @@
 package org.openhds.mobile.fragment;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -86,6 +87,9 @@ public class DataSelectionFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             DataWrapper dataWrapper = dataWrapperAdapter.getItem(position);
+            if (null == dataWrapper) {
+                dataWrapper = new DataWrapper("none", "none", "none", "none", "none", new ContentValues());
+            }
 
             if (convertView == null) {
                 convertView = makeTextWithPayload(getActivity(), dataWrapper.getName(), dataWrapper.getExtId(), dataWrapper.getName(),

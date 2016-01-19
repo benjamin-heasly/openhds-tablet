@@ -40,30 +40,26 @@ public class MembershipGateway extends Gateway<Membership> {
 
     // take care to update at the correct social group AND individual
     @Override
-    public Membership insertOrUpdate(ContentResolver contentResolver, Membership membership) {
-        ContentValues contentValues = toContentValues(membership);
-
-        String socialGroupId = membership.getSocialGroupUuid();
-        String individualId = membership.getIndividualUuid();
-        Membership existingMembership = getFirst(contentResolver,
-                findBySocialGroupAndIndividual(socialGroupId, individualId));
-
-        String id = contentValues.getAsString(idColumnName);
-        if (null == id || id.trim().isEmpty()) {
-            id = java.util.UUID.randomUUID().toString();
-            contentValues.put(idColumnName, id);
+    public Membership insertOrUpdate(ContentResolver contentResolver, ContentValues contentValues) {
+        if (null == contentValues || !contentValues.containsKey(SOCIAL_GROUP_UUID) || !contentValues.containsKey(INDIVIDUAL_UUID)) {
+            return null;
         }
 
-        if (null == existingMembership) {
+        String locationId = contentValues.getAsString(SOCIAL_GROUP_UUID);
+        String individualId = contentValues.getAsString(INDIVIDUAL_UUID);
+        Membership existingResidency = getFirst(contentResolver, findBySocialGroupAndIndividual(locationId, individualId));
+
+        if (null == existingResidency) {
             insert(contentResolver, tableUri, contentValues);
         } else {
             final String[] columnNames = {SOCIAL_GROUP_UUID, INDIVIDUAL_UUID};
-            final String[] columnValues = {socialGroupId, individualId};
+            final String[] columnValues = {locationId, individualId};
             update(contentResolver, tableUri, contentValues, columnNames, columnValues);
         }
 
-        return getFirst(contentResolver, findBySocialGroupAndIndividual(socialGroupId, individualId));
+        return getFirst(contentResolver, findBySocialGroupAndIndividual(locationId, individualId));
     }
+
 
     public Query findByIndividual(String individualId) {
         return new Query(tableUri, INDIVIDUAL_UUID, individualId, INDIVIDUAL_UUID);
@@ -107,8 +103,8 @@ public class MembershipGateway extends Gateway<Membership> {
         public ContentValues toContentValues(FormContent formContent, String entityAlias) {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(INDIVIDUAL_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "individualUuid"));
-            contentValues.put(SOCIAL_GROUP_UUID, formContent.getContentString(FormContent.TOP_LEVEL_ALIAS, "socialGroupUuid"));
+            contentValues.put(INDIVIDUAL_UUID, formContent.getContentString("individual", UUID));
+            contentValues.put(SOCIAL_GROUP_UUID, formContent.getContentString("socialGroup", UUID));
             contentValues.put(UUID, formContent.getContentString(entityAlias, UUID));
 
             return contentValues;
