@@ -4,31 +4,17 @@
     <item android:state_pressed="true">
 
         <shape android:shape="rectangle">
-            <corners
-                    android:radius="15dp"
-                    />
-            <solid
-                    android:color="@color/CensusDataFillPressed"
-                    />
+            <corners android:radius="15dp" />
+            <solid android:color="@color/CensusDataFillPressed" />
 
-            <stroke
-                    android:width="3dp"
-                    android:color="@color/CensusDataBorder"
-                    />
+            <stroke android:width="3dp" android:color="@color/CensusDataBorder" />
         </shape>
     </item>
     <item android:state_pressed="false">
         <shape android:shape="rectangle">
-            <corners
-                    android:radius="20dp"
-                    />
-            <solid
-                    android:color="@color/CensusDataFill"
-                    />
-            <stroke
-                    android:width="3dp"
-                    android:color="@color/CensusDataBorder"
-                    />
+            <corners android:radius="20dp" />
+            <solid android:color="@color/CensusDataFill" />
+            <stroke android:width="3dp" android:color="@color/CensusDataBorder" />
         </shape>
     </item>
 

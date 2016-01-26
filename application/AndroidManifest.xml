@@ -50,6 +50,9 @@
         <activity
             android:name="org.openhds.mobile.activity.FormSearchActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name="org.openhds.mobile.activity.FormReviewActivity"
+            android:label="@string/app_name" />
 
     </application>
 

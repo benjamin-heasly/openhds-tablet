@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static android.provider.BaseColumns._ID;
 import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.CAN_EDIT_WHEN_COMPLETE;
 import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.CONTENT_URI;
 import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.DISPLAY_NAME;
@@ -32,7 +33,6 @@ import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.J
 import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.JR_VERSION;
 import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.STATUS;
-import static org.openhds.mobile.forms.odk.InstanceProviderAPI.InstanceColumns.SUBMISSION_URI;
 import static org.openhds.mobile.repository.RepositoryUtils.extractString;
 
 
@@ -49,8 +49,12 @@ public class OdkInstanceGateway {
     public static final String REVIEW_LEVEL_FIELD_NAME = "needsReview";
 
     public static List<FormInstance> findAllInstances(ContentResolver contentResolver) {
+        return findAllInstances(contentResolver, JR_FORM_ID);
+    }
+
+    public static List<FormInstance> findAllInstances(ContentResolver contentResolver, String orderBy) {
         final String whereStatement = RepositoryUtils.buildWhereStatement(null, null);
-        Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, null, JR_FORM_ID);
+        Cursor cursor = RepositoryUtils.query(contentResolver, CONTENT_URI, whereStatement, null, orderBy);
 
         List<FormInstance> formInstances = new ArrayList<>();
         if (null == cursor) {
@@ -193,7 +197,7 @@ public class OdkInstanceGateway {
         String filePath = FileUtils.openHdsExternalFilesPath()
                 + File.separator
                 + FileUtils.relativeFilePath(formDefinition.getId(), formDefinition.getId()
-                + ".xml",
+                        + ".xml",
                 true);
         formInstance.setFilePath(filePath);
 
@@ -232,11 +236,16 @@ public class OdkInstanceGateway {
     }
 
     public static Intent buildEditFormInstanceIntent(String instanceUri) {
-        return new Intent(Intent.ACTION_EDIT, Uri.parse(instanceUri));
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setDataAndType(Uri.parse(instanceUri), InstanceProviderAPI.InstanceColumns.CONTENT_ITEM_TYPE);
+        return intent;
     }
 
     private static FormInstance fromCursor(Cursor cursor) {
         FormInstance formInstance = new FormInstance();
+
+        String id = extractString(cursor, _ID);
+        formInstance.setUri(instanceUriForId(id));
 
         formInstance.setDisplayName(extractString(cursor, DISPLAY_NAME));
         formInstance.setDisplaySubtext(extractString(cursor, DISPLAY_SUBTEXT));
@@ -263,6 +272,11 @@ public class OdkInstanceGateway {
         putIfNotNull(contentValues, LAST_STATUS_CHANGE_DATE, formInstance.getLastStatusChangeDate());
 
         return contentValues;
+    }
+
+    // ie content://org.odk.collect.android.provider.odk.instances/instances/46
+    private static String instanceUriForId(String id) {
+        return "content://" + InstanceProviderAPI.AUTHORITY + "/instances/" + id;
     }
 
     private static void putIfNotNull(ContentValues contentValues, String key, String value) {

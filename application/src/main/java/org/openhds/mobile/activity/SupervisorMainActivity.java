@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.forms.odk.InstanceProviderAPI;
@@ -61,6 +59,13 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
                 R.string.register_odk_form_definitions_description,
                 R.string.register_odk_form_definitions_label,
                 R.string.register_odk_form_definitions_label,
+                buttonClickListener,
+                supervisorButtonLayout);
+
+        makeButton(this,
+                R.string.send_forms_to_openhds_description,
+                R.string.send_forms_to_openhds_label,
+                R.string.send_forms_to_openhds_label,
                 buttonClickListener,
                 supervisorButtonLayout);
 
@@ -143,6 +148,11 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
         startActivity(intent);
     }
 
+    private void sendFormsToOpenHds() {
+        Intent intent = new Intent(this, FormReviewActivity.class);
+        startActivity(intent);
+    }
+
     public void sendApprovedForms() {
 
         List<FormInstance> allFormInstances = OdkInstanceGateway.findInstancesByStatus(this.getContentResolver(), InstanceProviderAPI.STATUS_COMPLETE);
@@ -183,6 +193,8 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
                 searchDatabase();
             } else if (tag.equals(R.string.register_odk_form_definitions_label)) {
                 registerBundledForms();
+            } else if (tag.equals(R.string.send_forms_to_openhds_label)) {
+                sendFormsToOpenHds();
             } else if (tag.equals(R.string.send_finalized_forms_label)) {
                 sendApprovedForms();
             } else if (tag.equals(R.string.delete_recent_forms_label)) {

@@ -112,6 +112,32 @@ public class RepositoryUtils {
         return LIMIT + " " + maxResults + " " + OFFSET + " " + start;
     }
 
+    public static String buildOrderByStatement(String[] columnNames, boolean ascending) {
+        if (null == columnNames || 0 == columnNames.length) {
+            return null;
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(columnNames[0]);
+
+        if (1 == columnNames.length) {
+            return stringBuilder.toString();
+        }
+
+        for (int i = 1; i < columnNames.length; i++) {
+            stringBuilder.append(", ");
+            stringBuilder.append(columnNames[i]);
+        }
+
+        if (ascending) {
+            stringBuilder.append(" ASC");
+        } else {
+            stringBuilder.append(" DESC");
+        }
+
+        return stringBuilder.toString();
+    }
+
     public static String extractString(Cursor cursor, String columnName) {
         int columnIndex = cursor.getColumnIndex(columnName);
         if (columnIndex < 0) {

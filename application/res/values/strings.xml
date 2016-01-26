@@ -78,10 +78,12 @@
     <string name="supervisor_bad_credentials">Invalid supervisor credentials</string>
     <string name="preference_invalid_label">Invalid!</string>
     <string name="preference_invalid_warning">Invalid preference value</string>
-    <string name="send_finalized_forms_label">Send Forms</string>
+    <string name="send_finalized_forms_label">Send Forms using ODK</string>
     <string name="send_finalized_forms_description">Send Finished Forms to ODK Aggregate</string>
     <string name="register_odk_form_definitions_label">Register Forms</string>
-    <string name="register_odk_form_definitions_description">Register bundled form definitions with ODK Aggregate</string>
+    <string name="register_odk_form_definitions_description">Register bundled form definitions with ODK Collect</string>
+    <string name="send_forms_to_openhds_label">Send Forms to OpenHDS</string>
+    <string name="send_forms_to_openhds_description">Send Finished Forms to the OpenHDS server</string>
     <string name="delete_recent_forms_label">Delete Forms</string>
     <string name="delete_recent_forms_description">Delete Forms Created Since Last Sync</string>
     <string name="approve_recent_forms_label">Approve Forms</string>
@@ -299,5 +301,26 @@
     <string name="uuid">UUID</string>
     <string name="db_val_age_not_applicable">n/a</string>
     <string name="super_ojo">Super Ojo</string>
+
+
+    <!-- Form Review Labels-->
+    <string name="select_all_label">Select All</string>
+    <string name="select_none_label">Select None</string>
+    <string name="select_incomplete_label">Select Incomplete</string>
+    <string name="select_complete_label">Select Completed</string>
+    <string name="select_submitted_label">Select Submitted</string>
+    <string name="select_submission_failed_label">Select Failed</string>
+    <string name="show_submitted_label">Show Submitted?</string>
+    <string name="upload_selected_label">Upload</string>
+    <string name="mark_as_incomplete_label">Mark as Incomplete</string>
+    <string name="mark_as_complete_label">Mark as Completed</string>
+    <string name="mark_as_submitted_label">Skip</string>
+    <string name="form_instance_status_incomplete">Incomplete</string>
+    <string name="form_instance_status_completed">Completed</string>
+    <string name="form_instance_status_submitted">Submitted</string>
+    <string name="form_instance_status_submission_failed">Failed</string>
+    <string name="form_instance_status_unknown">Unknown</string>
+
+
 
 </resources>
