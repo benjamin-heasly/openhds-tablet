@@ -30,6 +30,24 @@
             android:text="@string/select_none_label"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <CheckBox
+            android:id="@+id/show_submitted_check"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/show_submitted_label"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/select_incomplete_button"
             style="?android:attr/buttonBarButtonStyle"
@@ -48,24 +66,6 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/select_complete_label"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/show_submitted_check"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/show_submitted_label"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
@@ -95,17 +95,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/upload_selected_button"
-            android:background="@drawable/press_selector_light_blue_white"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/upload_selected_label"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Button
             android:id="@+id/mark_as_incomplete_button"
@@ -138,6 +127,17 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/mark_as_submitted_label"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/upload_selected_button"
+            android:background="@drawable/press_selector_light_blue_white"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/upload_selected_label"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>

@@ -1,10 +1,12 @@
 package org.openhds.mobile.activity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TableLayout;
@@ -22,8 +24,10 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
@@ -54,11 +58,13 @@ public class FormReviewActivity extends Activity {
 
     private CheckBox showSubmittedCheckBox;
     private AtomicBoolean showSubmitted = new AtomicBoolean(false);
+    private List<FormInstance> formInstances;
 
-    private Map<FormInstance, Boolean> formSelections;
-    private Map<FormInstance, String> formErrors;
+    private Set<String> formSelections = new HashSet<>();
+    private Map<FormInstance, String> formErrors = new HashMap<>();
 
     private static final Map<String, Integer> formStatusLabels = new HashMap<>();
+
     static {
         formStatusLabels.put(InstanceProviderAPI.STATUS_COMPLETE, R.string.form_instance_status_completed);
         formStatusLabels.put(InstanceProviderAPI.STATUS_INCOMPLETE, R.string.form_instance_status_incomplete);
@@ -78,32 +84,164 @@ public class FormReviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_review_activity);
 
+        // toggle whether to show submitted instances
         showSubmittedCheckBox = (CheckBox) findViewById(R.id.show_submitted_check);
         showSubmittedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 showSubmitted.set(b);
+                refreshFormSummary();
             }
         });
+
+        // select all forms
+        Button selectAllButton = (Button) findViewById(R.id.select_all_button);
+        selectAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectFormsByStatus(null);
+            }
+        });
+
+        // select no forms
+        Button selectNoneButton = (Button) findViewById(R.id.select_none_button);
+        selectNoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                formSelections.clear();
+                refreshFormSummary();
+            }
+        });
+
+        // select all completed forms
+        Button selectCompletedButton = (Button) findViewById(R.id.select_complete_button);
+        selectCompletedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectFormsByStatus(InstanceProviderAPI.STATUS_COMPLETE);
+            }
+        });
+
+        // select all incomplete forms
+        Button selectIncompleteButton = (Button) findViewById(R.id.select_incomplete_button);
+        selectIncompleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectFormsByStatus(InstanceProviderAPI.STATUS_INCOMPLETE);
+            }
+        });
+
+        // select all submitted forms
+        Button selectSubmittedButton = (Button) findViewById(R.id.select_submitted_button);
+        selectSubmittedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectFormsByStatus(InstanceProviderAPI.STATUS_SUBMITTED);
+            }
+        });
+
+        // select all errored forms
+        Button selectFailedButton = (Button) findViewById(R.id.select_submission_failed_button);
+        selectFailedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectFormsByStatus(InstanceProviderAPI.STATUS_SUBMISSION_FAILED);
+            }
+        });
+
+        // mark selected forms as incomplete
+        Button markAsIncompleteButton = (Button) findViewById(R.id.mark_as_incomplete_button);
+        markAsIncompleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSelectedFormsStatus(InstanceProviderAPI.STATUS_INCOMPLETE);
+            }
+        });
+
+        // mark selected forms as completed
+        Button markAsCompleteButton = (Button) findViewById(R.id.mark_as_complete_button);
+        markAsCompleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSelectedFormsStatus(InstanceProviderAPI.STATUS_COMPLETE);
+            }
+        });
+
+        // mark selected forms as submitted
+        Button markAsSubmittedButton = (Button) findViewById(R.id.mark_as_submitted_button);
+        markAsSubmittedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateSelectedFormsStatus(InstanceProviderAPI.STATUS_SUBMITTED);
+            }
+        });
+    }
+
+    // *add* forms with the given status to the current selection
+    private void selectFormsByStatus(String status) {
+        if (null == formInstances) {
+            return;
+        }
+
+        for (FormInstance formInstance : formInstances) {
+            // don't select forms when they're hidden
+            if (!showSubmitted.get() && InstanceProviderAPI.STATUS_SUBMITTED.equals(formInstance.getStatus())) {
+                continue;
+            }
+
+            if (null == status || status.equals(formInstance.getStatus())) {
+                formSelections.add(formInstance.getUri());
+            }
+        }
+
+        refreshFormSummary();
+    }
+
+    // update status for each selected form
+    private void updateSelectedFormsStatus(String status) {
+        if (null == formSelections || null == status) {
+            return;
+        }
+
+        ContentResolver contentResolver = getContentResolver();
+        for (String uri : formSelections) {
+            OdkInstanceGateway.updateInstanceStatus(contentResolver, uri, status);
+        }
+
+        // re-query to make sure the update was persisted
+        refreshFormList();
+        refreshFormSummary();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        refreshFormList();
         refreshFormSummary();
         refreshControls();
     }
 
     // query for fresh data, discard volatile selections etc.
-    private void refreshFormSummary() {
+    private void refreshFormList() {
         // move to async task?
-        List<FormInstance> formInstances = OdkInstanceGateway.findAllInstances(getContentResolver(), formInstanceOrderBy);
+        formInstances = OdkInstanceGateway.findAllInstances(getContentResolver(), formInstanceOrderBy);
+    }
 
-        LayoutInflater layoutInflater = getLayoutInflater();
+    // query for fresh data, discard volatile selections etc.
+    private void refreshFormSummary() {
         TableLayout tableLayout = (TableLayout) findViewById(R.id.form_instance_summary_table);
+        LayoutInflater layoutInflater = getLayoutInflater();
         tableLayout.removeAllViews();
-        for (FormInstance formInstance: formInstances) {
+
+        if (null == formInstances) {
+            return;
+        }
+
+        for (FormInstance formInstance : formInstances) {
             TableRow tableRow = (TableRow) layoutInflater.inflate(R.layout.form_review_row, tableLayout, false);
+            if (!showSubmitted.get() && InstanceProviderAPI.STATUS_SUBMITTED.equals(formInstance.getStatus())) {
+                continue;
+            }
             setUpTableRow(tableRow, formInstance);
             tableLayout.addView(tableRow);
         }
@@ -136,7 +274,7 @@ public class FormReviewActivity extends Activity {
             });
         }
 
-        // show the date in a long for for current locale
+        // show the date in a long for current locale
         TextView dateText = (TextView) tableRow.findViewById(R.id.form_instance_date);
         long formMilliseconds = Long.parseLong(formInstance.getLastStatusChangeDate());
         Date formDate = new Date(formMilliseconds);
@@ -147,8 +285,20 @@ public class FormReviewActivity extends Activity {
         Integer statusId = formStatusLabels.get(formInstance.getStatus());
         statusText.setText(null == statusId ? R.string.form_instance_status_unknown : statusId);
 
-        // no attempt to remember previous checked state
+        // show the current checked state
         CheckBox selectedCheckBox = (CheckBox) tableRow.findViewById(R.id.form_instance_selected);
-        selectedCheckBox.setChecked(false);
+        selectedCheckBox.setChecked(formSelections.contains(formInstance.getUri()));
+
+        // allow toggling of the checked state
+        selectedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    formSelections.add(formInstance.getUri());
+                } else {
+                    formSelections.remove(formInstance.getUri());
+                }
+            }
+        });
     }
 }
