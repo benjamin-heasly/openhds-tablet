@@ -1,6 +1,7 @@
 package org.openhds.mobile.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class FormReviewActivity extends Activity {
     private List<FormInstance> formInstances;
 
     private Set<String> formSelections = new HashSet<>();
-    private Map<FormInstance, String> formErrors = new HashMap<>();
+    private Map<String, String> formErrors = new HashMap<>();
 
     private static final Map<String, Integer> formStatusLabels = new HashMap<>();
 
@@ -276,14 +277,20 @@ public class FormReviewActivity extends Activity {
 
         // show the date in a long for current locale
         TextView dateText = (TextView) tableRow.findViewById(R.id.form_instance_date);
-        long formMilliseconds = Long.parseLong(formInstance.getLastStatusChangeDate());
-        Date formDate = new Date(formMilliseconds);
-        dateText.setText(DateFormat.getDateTimeInstance().format(formDate));
+        dateText.setText(milliStringToDateString(formInstance.getLastStatusChangeDate()));
 
         // look up localized status label
         TextView statusText = (TextView) tableRow.findViewById(R.id.form_instance_status);
         Integer statusId = formStatusLabels.get(formInstance.getStatus());
         statusText.setText(null == statusId ? R.string.form_instance_status_unknown : statusId);
+
+        // disclose error message from server, if any
+        statusText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                raiseErrorDialog(formInstance);
+            }
+        });
 
         // show the current checked state
         CheckBox selectedCheckBox = (CheckBox) tableRow.findViewById(R.id.form_instance_selected);
@@ -300,5 +307,32 @@ public class FormReviewActivity extends Activity {
                 }
             }
         });
+    }
+
+    private String milliStringToDateString(String millis) {
+        try {
+            long milliseconds = Long.parseLong(millis);
+            Date formDate = new Date(milliseconds);
+            return DateFormat.getDateTimeInstance().format(formDate);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    private void raiseErrorDialog(FormInstance formInstance) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final String title = formInstance.getDisplayName()
+                + "\n"
+                + milliStringToDateString(formInstance.getLastStatusChangeDate());
+        builder.setTitle(title);
+
+        builder.setCancelable(true);
+
+        String errorMessage = formErrors.get(formInstance.getUri());
+        builder.setMessage(null == errorMessage ? "" : errorMessage);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
