@@ -1,41 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/supervisor_main_activity"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:tag="portrait" >
+    android:id="@+id/supervisor_main_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:tag="portrait" >
 
 
     <LinearLayout
-            android:layout_height="0px"
-            android:layout_width="match_parent"
-            android:layout_weight="5">
+        android:id="@+id/supervisor_activity_options"
+        android:layout_height="0px"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:background="@drawable/gray_middle_column_drawable"
+        android:padding="15dp"/>
 
-        <LinearLayout
-                android:id="@+id/supervisor_activity_options"
-                android:layout_weight="3"
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:baselineAligned="false"
-                android:orientation="vertical"
-                android:background="@drawable/gray_middle_column_drawable"
-                android:padding="15dp"/>
-
-        <FrameLayout
-                android:id="@+id/supervisor_edit_form_container"
-                android:layout_weight="3"
-                android:layout_width="0px"
-                android:layout_height="match_parent"
-                android:padding="15dp"/>
-
-    </LinearLayout>
 
     <FrameLayout
-            android:id="@+id/supervisor_auxiliary_container"
-            android:layout_weight="4"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:padding="15dp"/>
+        android:id="@+id/supervisor_auxiliary_container"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:padding="15dp"/>
 
 </LinearLayout>

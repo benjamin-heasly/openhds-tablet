@@ -1,7 +1,6 @@
 package org.openhds.mobile.activity;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +14,6 @@ import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.forms.odk.InstanceProviderAPI;
 import org.openhds.mobile.forms.odk.OdkInstanceGateway;
-import org.openhds.mobile.fragment.ChecklistFragment;
-import org.openhds.mobile.fragment.DeleteWarningDialogFragment;
-import org.openhds.mobile.fragment.DeleteWarningDialogListener;
 import org.openhds.mobile.fragment.LoginPreferenceFragment;
 import org.openhds.mobile.fragment.SyncDatabaseFragment;
 import org.openhds.mobile.repository.search.FormSearchPluginModule;
@@ -25,7 +21,6 @@ import org.openhds.mobile.repository.search.SearchUtils;
 import org.openhds.mobile.task.odk.FormsToOdkTask;
 import org.openhds.mobile.utilities.EncryptionHelper;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,13 +28,10 @@ import static org.openhds.mobile.utilities.LayoutUtils.makeButton;
 import static org.openhds.mobile.utilities.MessageUtils.showLongToast;
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
-public class SupervisorMainActivity extends Activity implements DeleteWarningDialogListener {
+public class SupervisorMainActivity extends Activity {
 
-    private static final String CHECKLIST_FRAGMENT_TAG = "checklistFragment";
     private static final String SYNC_FRAGMENT_TAG = "syncDatabaseFragment";
     private static final String PREFERENCE_FRAGMENT_TAG = "preferenceFragment";
-
-    private ChecklistFragment checklistFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,36 +68,18 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
                 buttonClickListener,
                 supervisorButtonLayout);
 
-        makeButton(this,
-                R.string.delete_recent_forms_description,
-                R.string.delete_recent_forms_label,
-                R.string.delete_recent_forms_label,
-                buttonClickListener,
-                supervisorButtonLayout);
-
-        makeButton(this,
-                R.string.approve_recent_forms_description,
-                R.string.approve_recent_forms_label,
-                R.string.approve_recent_forms_label,
-                buttonClickListener,
-                supervisorButtonLayout);
-
         SyncDatabaseFragment syncDatabaseFragment;
         PreferenceFragment preferenceFragment;
         if (null == savedInstanceState) {
-            checklistFragment = new ChecklistFragment();
             syncDatabaseFragment = new SyncDatabaseFragment();
             syncDatabaseFragment.setRetainInstance(true);
             preferenceFragment = new LoginPreferenceFragment();
             getFragmentManager()
                     .beginTransaction()
-                    .add(R.id.supervisor_edit_form_container, checklistFragment, CHECKLIST_FRAGMENT_TAG)
                     .add(R.id.supervisor_auxiliary_container, syncDatabaseFragment, SYNC_FRAGMENT_TAG)
                     .add(R.id.supervisor_activity_options, preferenceFragment, PREFERENCE_FRAGMENT_TAG)
                     .commit();
 
-        } else {
-            checklistFragment = (ChecklistFragment) getFragmentManager().findFragmentByTag(CHECKLIST_FRAGMENT_TAG);
         }
     }
 
@@ -113,7 +87,6 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
     protected void onResume() {
         super.onResume();
         encryptAllForms();
-        checklistFragment.resetCurrentMode();
     }
 
     private void encryptAllForms() {
@@ -150,41 +123,16 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
 
     private void sendFormsToOpenHds() {
         Intent intent = new Intent(this, FormReviewActivity.class);
-        // forward username and password
+        // forward username and password to next activity
         intent.putExtras(getIntent().getExtras());
         startActivity(intent);
     }
 
     public void sendApprovedForms() {
-
         List<FormInstance> allFormInstances = OdkInstanceGateway.findInstancesByStatus(this.getContentResolver(), InstanceProviderAPI.STATUS_COMPLETE);
         EncryptionHelper.decryptFiles(FormInstance.toListOfFiles(allFormInstances), this);
-        for (FormInstance instance : allFormInstances) {
-            File instanceFile = new File(instance.getFilePath());
-            if (OdkInstanceGateway.instanceNeedsReview(getContentResolver(), instance)) {
-                OdkInstanceGateway.updateInstanceStatus(getContentResolver(), instance.getUri(), InstanceProviderAPI.STATUS_INCOMPLETE);
-                EncryptionHelper.encryptFile(instanceFile, this);
-            }
-        }
         showShortToast(this, R.string.launching_odk_collect);
         startActivity(new Intent(Intent.ACTION_EDIT));
-    }
-
-    public void createWarningDialog() {
-        DeleteWarningDialogFragment warning = new DeleteWarningDialogFragment();
-        warning.show(getFragmentManager(), "DeleteWarningDialogFragment");
-    }
-
-    public void onDialogPositiveClick(DialogFragment dialogFragment) {
-
-        checklistFragment.processDeleteRequest(false);
-
-    }
-
-    public void onDialogNegativeClick(DialogFragment dialogFragment) {
-
-        //do nothing?
-
     }
 
     private class ButtonClickListener implements OnClickListener {
@@ -199,10 +147,6 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
                 sendFormsToOpenHds();
             } else if (tag.equals(R.string.send_finalized_forms_label)) {
                 sendApprovedForms();
-            } else if (tag.equals(R.string.delete_recent_forms_label)) {
-                checklistFragment.setMode(ChecklistFragment.DELETE_MODE);
-            } else if (tag.equals(R.string.approve_recent_forms_label)) {
-                checklistFragment.setMode(ChecklistFragment.APPROVE_MODE);
             }
         }
     }

@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.openhds.mobile.R;
-import org.openhds.mobile.activity.SupervisorMainActivity;
 import org.openhds.mobile.adapter.ChecklistAdapter;
 import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.forms.odk.InstanceProviderAPI;
@@ -158,16 +157,12 @@ public class ChecklistFragment extends Fragment {
 
     public void processDeleteRequest(boolean showDialog) {
 
-        if (showDialog) {
-            ((SupervisorMainActivity)getActivity()).createWarningDialog();
-        } else {
-            List<FormInstance> formsToDelete = adapter.getCheckedForms();
-            deleteForms(formsToDelete);
+        List<FormInstance> formsToDelete = adapter.getCheckedForms();
+        deleteForms(formsToDelete);
 
-            List<FormInstance> allForms = adapter.getFormInstanceList();
-            allForms.removeAll(formsToDelete);
-            adapter.resetFormInstanceList(allForms);
-        }
+        List<FormInstance> allForms = adapter.getFormInstanceList();
+        allForms.removeAll(formsToDelete);
+        adapter.resetFormInstanceList(allForms);
     }
 
     private void processApproveSelectedRequest() {
