@@ -28,6 +28,8 @@ public class FormBehaviour {
     public static final String FOLLOW_UP_FORM_ID_ELEMENT_NAME = "formId";
     public static final String FOLLOW_UP_FILTER_ELEMENT_NAME = "filter";
     public static final String SEARCH_ELEMENT_NAME = "search";
+    public static final String SUBMISSION_REL_ELEMENT_NAME = "submissionRel";
+    public static final String SUBMISSION_SUBPATH_ELEMENT_NAME = "submissionSubpath";
 
     private final FormDefinition formDefinition;
 
@@ -36,6 +38,8 @@ public class FormBehaviour {
     private final List<String> consumers = new ArrayList<>();
     private final Map<String, FormContent> followUpFilters = new HashMap<>();
     private FormContent searches;
+    private String submissionRel;
+    private String submissionSubPath;
 
     public FormBehaviour(FormDefinition formDefinition) {
         this.formDefinition = formDefinition;
@@ -61,6 +65,8 @@ public class FormBehaviour {
             parseConsumers(metaElement);
             parseFollowUps(metaElement);
             parseSearches(metaElement);
+            parseSubmissionRel(metaElement);
+            parseSubmissionSubpath(metaElement);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,6 +118,20 @@ public class FormBehaviour {
     private void parseSearches(Element metaElement) throws Exception {
         Element searchesElement = getChildIgnoreNamespace(metaElement, SEARCH_ELEMENT_NAME);
         searches = null == searchesElement ? null : FormContent.readFormContent(searchesElement);
+    }
+
+    private void parseSubmissionRel(Element metaElement) {
+        Element relElement = getChildIgnoreNamespace(metaElement, SUBMISSION_REL_ELEMENT_NAME);
+        if (null != relElement) {
+            submissionRel = relElement.getText().trim();
+        }
+    }
+
+    private void parseSubmissionSubpath(Element metaElement) {
+        Element subpathElement = getChildIgnoreNamespace(metaElement, SUBMISSION_SUBPATH_ELEMENT_NAME);
+        if (null != subpathElement) {
+            submissionSubPath = subpathElement.getText().trim();
+        }
     }
 
     private Element getDescendantIgnoreNamespace(Element element, String name) {
@@ -195,4 +215,11 @@ public class FormBehaviour {
         return searchPluginModules;
     }
 
+    public String getSubmissionRel() {
+        return submissionRel;
+    }
+
+    public String getSubmissionSubPath() {
+        return submissionSubPath;
+    }
 }

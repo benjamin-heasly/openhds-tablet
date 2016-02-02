@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -15,14 +16,23 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.openhds.mobile.R;
+import org.openhds.mobile.forms.FormBehaviour;
 import org.openhds.mobile.forms.FormInstance;
 import org.openhds.mobile.forms.odk.InstanceProviderAPI;
 import org.openhds.mobile.forms.odk.OdkInstanceGateway;
+import org.openhds.mobile.links.Link;
+import org.openhds.mobile.links.ResourceLinkRegistry;
 import org.openhds.mobile.repository.RepositoryUtils;
+import org.openhds.mobile.task.http.HttpTask;
+import org.openhds.mobile.task.http.HttpTaskRequest;
+import org.openhds.mobile.task.http.HttpTaskResponse;
 import org.openhds.mobile.utilities.EncryptionHelper;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,12 +67,15 @@ import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
  */
 public class FormReviewActivity extends Activity {
 
+    private String username;
+    private String password;
+
     private CheckBox showSubmittedCheckBox;
     private AtomicBoolean showSubmitted = new AtomicBoolean(false);
     private List<FormInstance> formInstances;
 
     private Set<String> formSelections = new HashSet<>();
-    private Map<String, String> formErrors = new HashMap<>();
+    private Map<String, String> submissionResponses = new HashMap<>();
 
     private static final Map<String, Integer> formStatusLabels = new HashMap<>();
 
@@ -84,6 +97,9 @@ public class FormReviewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_review_activity);
+
+        username = (String) getIntent().getExtras().get(OpeningActivity.USERNAME_KEY);
+        password = (String) getIntent().getExtras().get(OpeningActivity.PASSWORD_KEY);
 
         // toggle whether to show submitted instances
         showSubmittedCheckBox = (CheckBox) findViewById(R.id.show_submitted_check);
@@ -174,6 +190,15 @@ public class FormReviewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 updateSelectedFormsStatus(InstanceProviderAPI.STATUS_SUBMITTED);
+            }
+        });
+
+        // upload selected forms to OpenHDS
+        Button uploadFormsButton = (Button) findViewById(R.id.upload_selected_button);
+        uploadFormsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadSelectedForms();
             }
         });
     }
@@ -284,11 +309,14 @@ public class FormReviewActivity extends Activity {
         Integer statusId = formStatusLabels.get(formInstance.getStatus());
         statusText.setText(null == statusId ? R.string.form_instance_status_unknown : statusId);
 
-        // disclose error message from server, if any
+        // disclose response from server, if any
+        if (submissionResponses.containsKey(formInstance.getUri())) {
+            statusText.setTextColor(R.color.Blue);
+        }
         statusText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                raiseErrorDialog(formInstance);
+                raiseMessageDialog(formInstance);
             }
         });
 
@@ -319,7 +347,7 @@ public class FormReviewActivity extends Activity {
         }
     }
 
-    private void raiseErrorDialog(FormInstance formInstance) {
+    private void raiseMessageDialog(FormInstance formInstance) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         final String title = formInstance.getDisplayName()
@@ -329,14 +357,115 @@ public class FormReviewActivity extends Activity {
 
         builder.setCancelable(true);
 
-        String errorMessage = formErrors.get(formInstance.getUri());
-        builder.setMessage(null == errorMessage ? "" : errorMessage);
+        String message = submissionResponses.get(formInstance.getUri());
+        builder.setMessage(null == message ? "" : message);
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
     private void uploadSelectedForms() {
+        List<HttpTaskRequest> httpTaskRequests = new ArrayList<>();
 
+        for (String instanceUri: formSelections) {
+            FormInstance formInstance = getFormInstance(instanceUri);
+            if (null == formInstance) {
+                continue;
+            }
+
+            String submissionUrl = buildSubmissionUrl(formInstance);
+            if (null == submissionUrl) {
+                continue;
+            }
+
+            HttpTaskRequest httpTaskRequest = buildHttpTaskRequest(formInstance, submissionUrl);
+            if (null == httpTaskRequest) {
+                continue;
+            }
+
+            httpTaskRequests.add(httpTaskRequest);
+        }
+
+        if (httpTaskRequests.isEmpty()) {
+            return;
+        }
+
+        // save responses to view in alert dialog when clicked
+        HttpTask httpTask = new HttpTask(new SubmissionResponseHandler(), true);
+        httpTask.execute(httpTaskRequests.toArray(new HttpTaskRequest[httpTaskRequests.size()]));
+    }
+
+    private FormInstance getFormInstance(String instanceUri) {
+        if (null == instanceUri) {
+            return null;
+        }
+
+        for (FormInstance formInstance : formInstances) {
+            if (instanceUri.equals(formInstance.getUri())) {
+                return formInstance;
+            }
+        }
+        return null;
+    }
+
+    private String buildSubmissionUrl(FormInstance formInstance) {
+        // which resource do we send this instance to?
+        FormBehaviour formBehavior = OdkInstanceGateway.findFormBehavior(getContentResolver(), formInstance);
+        if (null == formBehavior || null == formBehavior.getSubmissionRel()) {
+            return null;
+        }
+
+        // what is the Url of that resource?
+        Link submissionLink = ResourceLinkRegistry.getLink(formBehavior.getSubmissionRel());
+        if (null == submissionLink) {
+            return null;
+        }
+
+        // add a subpath if any
+        return submissionLink.buildUrlWithSubpath(formBehavior.getSubmissionSubPath());
+    }
+
+    private HttpTaskRequest buildHttpTaskRequest(FormInstance formInstance, String url) {
+        FileInputStream fileInputStream;
+        try {
+            EncryptionHelper.decryptFile(new File(formInstance.getFilePath()), this);
+            fileInputStream = new FileInputStream(formInstance.getFilePath());
+        } catch (FileNotFoundException ex) {
+            Log.e(FormReviewActivity.class.getSimpleName(), "buildHttpTaskRequest: ", ex);
+            return null;
+        }
+
+        return new HttpTaskRequest(url,
+                "application/xml",
+                username,
+                password,
+                "POST",
+                "application/xml",
+                fileInputStream,
+                formInstance);
+    }
+
+    private class SubmissionResponseHandler implements HttpTask.HttpTaskResponseHandler {
+        @Override
+        public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse) {
+            // encrypt the file after reading
+            FormInstance formInstance = (FormInstance) httpTaskResponse.getRequestTag();
+            EncryptionHelper.encryptFile(new File(formInstance.getFilePath()), FormReviewActivity.this);
+
+            // combine task status message with server response body
+            String response = httpTaskResponse.getHttpStatus()
+                    + "\n"
+                    + httpTaskResponse.getMessage()
+                    + "\n\n"
+                    + httpTaskResponse.getResponse();
+            submissionResponses.put(formInstance.getUri(), response);
+
+            // tell ODK how the submission went
+            String instanceStatus = httpTaskResponse.isSuccess() ? InstanceProviderAPI.STATUS_SUBMITTED : InstanceProviderAPI.STATUS_SUBMISSION_FAILED;
+            OdkInstanceGateway.updateInstanceStatus(getContentResolver(), formInstance.getUri(), instanceStatus);
+            formInstance.setStatus(instanceStatus);
+
+            refreshFormSummary();
+        }
     }
 }

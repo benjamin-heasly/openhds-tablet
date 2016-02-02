@@ -77,7 +77,9 @@ public class HttpTaskTest  extends AndroidTestCase {
                 "text/plain",
                 new ByteArrayInputStream(TEST_POST_BODY.getBytes("UTF-8")),
                 "tag");
-        HttpTask httpTask = new HttpTask(new ResponseHandler());
+
+        // let the task consume the response stream into a string
+        HttpTask httpTask = new HttpTask(new ResponseHandler(), true);
         httpTask.execute(httpTaskRequest);
 
         // wait for the task to complete
@@ -88,16 +90,9 @@ public class HttpTaskTest  extends AndroidTestCase {
         assertNotNull(httpTaskResponse);
         assertTrue(httpTaskResponse.isSuccess());
         assertEquals("tag", httpTaskResponse.getRequestTag());
-        InputStream inputStream = httpTaskResponse.getInputStream();
-        assertNotNull(inputStream);
-        assertTrue(inputStream.available() > 0);
-
-        // scan the whole input stream into a string
-        Scanner scanner = new java.util.Scanner(inputStream).useDelimiter("\\A");
-        String response = scanner.next();
-        inputStream.close();
 
         // make sure the response contains some expected content
+        String response = httpTaskResponse.getResponse();
         assertTrue(response.contains(TEST_POST_BODY));
     }
 

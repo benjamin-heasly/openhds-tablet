@@ -73,6 +73,10 @@ public class FormMetadataTest extends AndroidTestCase {
         assertTrue(pluginFieldNames.contains("motherUuid"));
         assertTrue(pluginFieldNames.contains("fatherUuid"));
         assertTrue(pluginFieldNames.contains("locationUuid"));
+
+        // submission rel and subpath
+        assertEquals("myRel", formBehaviour.getSubmissionRel());
+        assertEquals("mySubpath", formBehaviour.getSubmissionSubPath());
     }
 
     public void testParseNoMetadata() throws Exception {

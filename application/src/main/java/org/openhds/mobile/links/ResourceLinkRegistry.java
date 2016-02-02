@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Home-level HATEOAS links from OpenHDS server and tablet-side interpretation of the rels.
+ * Home-level HATEOAS links from OpenHDS server (which are populated at run-time),
+ * and tablet-side interpretations of the rels (which are populated here, statically).
  */
 public class ResourceLinkRegistry {
 

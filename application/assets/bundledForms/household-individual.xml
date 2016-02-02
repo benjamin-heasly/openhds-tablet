@@ -26,6 +26,8 @@
                                 <father>Individual's Father</father>
                             </IndividualGateway>
                         </search>
+                        <submissionRel>individuals</submissionRel>
+                        <submissionSubpath>household</submissionSubpath>
                     </meta>
 
                     <registrationVersion>101</registrationVersion>

@@ -2,6 +2,7 @@ package org.openhds.mobile.task.http;
 
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.common.io.ByteStreams;
 
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Scanner;
 
 /**
  * Carry out an HttpTaskRequest.
@@ -26,7 +28,9 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, HttpTaskResponse, Void>
     public static final String MESSAGE_BAD_URL = "Bad URL";
     public static final String MESSAGE_SERVER_ERROR = "Server error";
 
-    private HttpTaskResponseHandler httpTaskResponseHandler;
+    private final HttpTaskResponseHandler httpTaskResponseHandler;
+    private final boolean consumeResponse;
+
 
     // A handler type to receive response status code and response body input stream.
     public interface HttpTaskResponseHandler {
@@ -36,6 +40,13 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, HttpTaskResponse, Void>
     // Require a handler to receive http results.
     public HttpTask(HttpTaskResponseHandler httpTaskResponseHandler) {
         this.httpTaskResponseHandler = httpTaskResponseHandler;
+        this.consumeResponse = false;
+    }
+
+    // Require a handler to receive http results, specify whether to read the response.
+    public HttpTask(HttpTaskResponseHandler httpTaskResponseHandler, boolean consumeResponse) {
+        this.httpTaskResponseHandler = httpTaskResponseHandler;
+        this.consumeResponse = consumeResponse;
     }
 
     @Override
@@ -105,25 +116,47 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, HttpTaskResponse, Void>
                 is.close();
             }
 
-            responseStream = urlConnection.getInputStream();
             statusCode = urlConnection.getResponseCode();
+            responseStream = urlConnection.getInputStream();
 
         } catch (Exception e) {
-            return new HttpTaskResponse(false, e.getClass().getSimpleName() + ": " + e.getMessage(), 0, null, httpTaskRequest.getTag());
+            if (null != urlConnection) {
+                responseStream = urlConnection.getErrorStream();
+            }
+            return buildResponse(false, e.getClass().getSimpleName() + ": " + e.getMessage(), statusCode, responseStream, httpTaskRequest.getTag());
         }
 
         if (HttpStatus.SC_OK == statusCode
                 || HttpStatus.SC_CREATED == statusCode
                 || HttpStatus.SC_ACCEPTED == statusCode
                 || HttpStatus.SC_NO_CONTENT == statusCode) {
-            return new HttpTaskResponse(true, MESSAGE_SUCCESS, statusCode, responseStream, httpTaskRequest.getTag());
+            return buildResponse(true, MESSAGE_SUCCESS, statusCode, responseStream, httpTaskRequest.getTag());
         }
 
         if (statusCode < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-            return new HttpTaskResponse(false, MESSAGE_CLIENT_ERROR, statusCode, responseStream, httpTaskRequest.getTag());
+            return buildResponse(false, MESSAGE_CLIENT_ERROR, statusCode, responseStream, httpTaskRequest.getTag());
         }
 
-        return new HttpTaskResponse(false, MESSAGE_SERVER_ERROR, statusCode, responseStream, httpTaskRequest.getTag());
+        return buildResponse(false, MESSAGE_SERVER_ERROR, statusCode, responseStream, httpTaskRequest.getTag());
     }
 
+    private HttpTaskResponse buildResponse(boolean isSuccess, String message, int httpStatus, InputStream inputStream, Object requestTag) {
+
+        if (consumeResponse) {
+            // read the response off the network into a string
+            String responseBody;
+            try {
+                Scanner scanner = new java.util.Scanner(inputStream).useDelimiter("\\A");
+                responseBody = scanner.next();
+                inputStream.close();
+            } catch (Exception ex) {
+                Log.e(HttpTask.class.getSimpleName(), "buildResponse: ", ex);
+                responseBody = "";
+            }
+            return new HttpTaskResponse(isSuccess, message, httpStatus, responseBody, requestTag);
+        }
+
+        // leave the response body on the network, to be read in another task
+        return new HttpTaskResponse(isSuccess, message, httpStatus, inputStream, requestTag);
+    }
 }

@@ -11,6 +11,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
+import org.openhds.mobile.forms.FormBehaviour;
 import org.openhds.mobile.forms.FormContent;
 import org.openhds.mobile.forms.FormDefinition;
 import org.openhds.mobile.forms.FormInstance;
@@ -185,6 +186,21 @@ public class OdkInstanceGateway {
         }
 
         return findByUri(contentResolver, existingUri);
+    }
+
+    public static FormBehaviour findFormBehavior(ContentResolver contentResolver, FormInstance formInstance) {
+        FormDefinition formDefinition = OdkFormGateway.findRegisteredFormById(contentResolver, formInstance.getFormId());
+        if (null == formDefinition) {
+            return null;
+        }
+
+        FormBehaviour formBehaviour = new FormBehaviour((formDefinition));
+        if (!formBehaviour.parseMetadata()) {
+            return null;
+        }
+
+        formInstance.setFormBehaviour(formBehaviour);
+        return formBehaviour;
     }
 
     public static FormInstance instantiateFormDefinition(FormDefinition formDefinition) {

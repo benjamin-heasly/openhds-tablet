@@ -46,6 +46,10 @@
                             </LocationGateway>
                         </search>
 
+                        <!-- where to POST instances -->
+                        <submissionRel>myRel</submissionRel>
+                        <submissionSubpath>mySubpath</submissionSubpath>
+
                     </meta>
 
                     <collectionDateTime />

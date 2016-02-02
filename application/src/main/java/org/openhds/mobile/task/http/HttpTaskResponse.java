@@ -15,6 +15,7 @@ public class HttpTaskResponse {
     private final String message;
     private final int httpStatus;
     private final InputStream inputStream;
+    private final String response;
     private final Object requestTag;
 
     public HttpTaskResponse(boolean isSuccess, String message, int httpStatus, InputStream inputStream, Object requestTag) {
@@ -22,6 +23,16 @@ public class HttpTaskResponse {
         this.message = message;
         this.httpStatus = httpStatus;
         this.inputStream = inputStream;
+        this.response = null;
+        this.requestTag = requestTag;
+    }
+
+    public HttpTaskResponse(boolean isSuccess, String message, int httpStatus, String response, Object requestTag) {
+        this.isSuccess = isSuccess;
+        this.message = message;
+        this.httpStatus = httpStatus;
+        this.inputStream = null;
+        this.response = response;
         this.requestTag = requestTag;
     }
 
@@ -39,6 +50,10 @@ public class HttpTaskResponse {
 
     public InputStream getInputStream() {
         return inputStream;
+    }
+
+    public String getResponse() {
+        return response;
     }
 
     public Object getRequestTag() {

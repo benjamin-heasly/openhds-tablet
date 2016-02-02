@@ -48,6 +48,13 @@ public class Link {
         return url;
     }
 
+    public String buildUrlWithSubpath(String subpath) {
+        if (null == subpath || subpath.trim().isEmpty()) {
+            return url;
+        }
+        return url + "/" + subpath;
+    }
+
     public String buildUrlWithParameters(Map<String, String> params) {
         if (null == params) {
             return url;

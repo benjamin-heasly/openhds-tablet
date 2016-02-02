@@ -14,6 +14,7 @@
                         <instanceID />
                         <consumer>location</consumer>
                         <displayLevel>location,individual,bottom</displayLevel>
+                        <submissionRel>locations</submissionRel>
                     </meta>
 
                     <registrationVersion>101</registrationVersion>

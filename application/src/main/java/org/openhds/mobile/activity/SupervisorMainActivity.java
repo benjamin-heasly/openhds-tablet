@@ -150,6 +150,8 @@ public class SupervisorMainActivity extends Activity implements DeleteWarningDia
 
     private void sendFormsToOpenHds() {
         Intent intent = new Intent(this, FormReviewActivity.class);
+        // forward username and password
+        intent.putExtras(getIntent().getExtras());
         startActivity(intent);
     }
 
