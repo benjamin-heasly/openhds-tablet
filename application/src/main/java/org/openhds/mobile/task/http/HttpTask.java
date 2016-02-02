@@ -3,9 +3,12 @@ package org.openhds.mobile.task.http;
 import android.os.AsyncTask;
 import android.util.Base64;
 
+import com.google.common.io.ByteStreams;
+
 import org.apache.http.HttpStatus;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -62,24 +65,45 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, HttpTaskResponse, Void>
     }
 
     /**
-     HTTP requests are now issued by HttpURLConnection, the recommended method for android > 2.3
-     URLs with the 'https' scheme return the HttpsURLConnection subclass automatically.
+     * HTTP requests are now issued by HttpURLConnection, the recommended method for android > 2.3
+     * URLs with the 'https' scheme return the HttpsURLConnection subclass automatically.
      */
     private HttpTaskResponse performRequest(HttpTaskRequest httpTaskRequest) {
         String rawCredentials = httpTaskRequest.getUserName() + ":" + httpTaskRequest.getPassword();
         String basicAuthHeader = "Basic " + Base64.encodeToString(rawCredentials.getBytes(), Base64.DEFAULT);
 
-        HttpURLConnection urlConnection;
+        HttpURLConnection urlConnection = null;
         InputStream responseStream = null;
         int statusCode = 0;
         try {
             URL url = new URL(httpTaskRequest.getUrl());
             urlConnection = (HttpURLConnection) url.openConnection();
+
+            if (httpTaskRequest.getMethod() != null) {
+                urlConnection.setRequestMethod(httpTaskRequest.getMethod());
+            }
+
+            if (httpTaskRequest.getContentType() != null) {
+                urlConnection.setRequestProperty("Content-Type", httpTaskRequest.getContentType());
+            }
+
             if (httpTaskRequest.getAccept() != null) {
                 urlConnection.setRequestProperty("Accept", httpTaskRequest.getAccept());
             }
 
             urlConnection.setRequestProperty("Authorization", basicAuthHeader);
+
+            // copy request stream to connection
+            if (httpTaskRequest.getBody() != null) {
+                urlConnection.setDoOutput(true);
+                urlConnection.setUseCaches(false);
+                urlConnection.setChunkedStreamingMode(0);
+
+                OutputStream os = urlConnection.getOutputStream();
+                ByteStreams.copy(httpTaskRequest.getBody(), os);
+                os.close();
+            }
+
             responseStream = urlConnection.getInputStream();
             statusCode = urlConnection.getResponseCode();
 
@@ -87,7 +111,10 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, HttpTaskResponse, Void>
             return new HttpTaskResponse(false, e.getClass().getSimpleName() + ": " + e.getMessage(), 0, null);
         }
 
-        if (HttpStatus.SC_OK == statusCode) {
+        if (HttpStatus.SC_OK == statusCode
+                || HttpStatus.SC_CREATED == statusCode
+                || HttpStatus.SC_ACCEPTED == statusCode
+                || HttpStatus.SC_NO_CONTENT == statusCode) {
             return new HttpTaskResponse(true, MESSAGE_SUCCESS, statusCode, responseStream);
         }
 

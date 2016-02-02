@@ -134,8 +134,7 @@ public class SyncDatabaseHelper {
         cancel();
 
         Link link = ResourceLinkRegistry.getLink(relInterpretation.getResourceRel());
-        HttpTaskRequest getLinkRequest = new HttpTaskRequest(relInterpretation.getLabel(),
-                link.getUrl(),
+        HttpTaskRequest getLinkRequest = new HttpTaskRequest(link.getUrl(),
                 linkMediaType,
                 username,
                 password);
@@ -180,8 +179,7 @@ public class SyncDatabaseHelper {
     }
 
     private void getData(Link link) {
-        HttpTaskRequest getDataRequest = new HttpTaskRequest(relInterpretation.getLabel(),
-                link.buildUrlWithParameters(dataQueryParameters),
+        HttpTaskRequest getDataRequest = new HttpTaskRequest(link.buildUrlWithParameters(dataQueryParameters),
                 dataMediaType,
                 username,
                 password);

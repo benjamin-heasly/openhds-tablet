@@ -70,7 +70,6 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
 
     private void authenticateSupervisor() {
         HttpTaskRequest httpTaskRequest = new HttpTaskRequest(
-                R.string.login_btn,
                 getLoginUrl(),
                 "application/hal+json",
                 username,

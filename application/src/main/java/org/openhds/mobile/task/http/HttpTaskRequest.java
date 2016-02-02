@@ -1,33 +1,44 @@
 package org.openhds.mobile.task.http;
 
+import java.io.InputStream;
+
 /**
  * Url and credentials for an HTTP request.
- *
- * For now, just enough info to support GET requests.  This could
- * be extended, though, maybe with an optional output stream to
- * represent the request body.
  *
  * Pass an HttpTaskRequest to an HttpTask to make it go.
  *
  * BSH
  */
 public class HttpTaskRequest {
-    private final int titleId;
     private final String url;
     private final String userName;
     private final String password;
     private final String accept;
 
-    public HttpTaskRequest(int titleId, String url, String accept, String userName, String password) {
-        this.titleId = titleId;
+    private final String method;
+    private final String contentType;
+    private final InputStream body;
+
+    // Just enough for at GET request
+    public HttpTaskRequest(String url, String accept, String userName, String password) {
         this.url = url;
         this.accept = accept;
         this.userName = userName;
         this.password = password;
+        this.method = null;
+        this.contentType = null;
+        this.body = null;
     }
 
-    public int getTitleId() {
-        return titleId;
+    // General request
+    public HttpTaskRequest(String url, String accept, String userName, String password, String method, String contentType, InputStream body) {
+        this.url = url;
+        this.userName = userName;
+        this.password = password;
+        this.accept = accept;
+        this.method = method;
+        this.contentType = contentType;
+        this.body = body;
     }
 
     public String getUrl() {
@@ -44,5 +55,17 @@ public class HttpTaskRequest {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public InputStream getBody() {
+        return body;
     }
 }
