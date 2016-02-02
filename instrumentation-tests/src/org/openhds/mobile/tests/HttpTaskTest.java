@@ -69,8 +69,14 @@ public class HttpTaskTest  extends AndroidTestCase {
         // start a task to POST to the httpbin service
         httpTaskResponse = null;
         final String testUrl = TEST_POST_URL;
-        HttpTaskRequest httpTaskRequest = new HttpTaskRequest(testUrl, null, "", "",
-                "POST", "text/plain", new ByteArrayInputStream(TEST_POST_BODY.getBytes("UTF-8")));
+        HttpTaskRequest httpTaskRequest = new HttpTaskRequest(testUrl,
+                null,
+                "",
+                "",
+                "POST",
+                "text/plain",
+                new ByteArrayInputStream(TEST_POST_BODY.getBytes("UTF-8")),
+                "tag");
         HttpTask httpTask = new HttpTask(new ResponseHandler());
         httpTask.execute(httpTaskRequest);
 
@@ -81,6 +87,7 @@ public class HttpTaskTest  extends AndroidTestCase {
         // make sure we got a response
         assertNotNull(httpTaskResponse);
         assertTrue(httpTaskResponse.isSuccess());
+        assertEquals("tag", httpTaskResponse.getRequestTag());
         InputStream inputStream = httpTaskResponse.getInputStream();
         assertNotNull(inputStream);
         assertTrue(inputStream.available() > 0);

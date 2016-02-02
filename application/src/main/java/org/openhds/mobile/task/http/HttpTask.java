@@ -41,7 +41,6 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, HttpTaskResponse, Void>
     @Override
     protected Void doInBackground(HttpTaskRequest... httpTaskRequests) {
         if (null == httpTaskRequests) {
-            publishProgress(new HttpTaskResponse(false, MESSAGE_NO_REQUEST, 0, null));
             return null;
         }
 
@@ -99,30 +98,32 @@ public class HttpTask extends AsyncTask<HttpTaskRequest, HttpTaskResponse, Void>
                 urlConnection.setUseCaches(false);
                 urlConnection.setChunkedStreamingMode(0);
 
+                InputStream is = httpTaskRequest.getBody();
                 OutputStream os = urlConnection.getOutputStream();
-                ByteStreams.copy(httpTaskRequest.getBody(), os);
+                ByteStreams.copy(is, os);
                 os.close();
+                is.close();
             }
 
             responseStream = urlConnection.getInputStream();
             statusCode = urlConnection.getResponseCode();
 
         } catch (Exception e) {
-            return new HttpTaskResponse(false, e.getClass().getSimpleName() + ": " + e.getMessage(), 0, null);
+            return new HttpTaskResponse(false, e.getClass().getSimpleName() + ": " + e.getMessage(), 0, null, httpTaskRequest.getTag());
         }
 
         if (HttpStatus.SC_OK == statusCode
                 || HttpStatus.SC_CREATED == statusCode
                 || HttpStatus.SC_ACCEPTED == statusCode
                 || HttpStatus.SC_NO_CONTENT == statusCode) {
-            return new HttpTaskResponse(true, MESSAGE_SUCCESS, statusCode, responseStream);
+            return new HttpTaskResponse(true, MESSAGE_SUCCESS, statusCode, responseStream, httpTaskRequest.getTag());
         }
 
         if (statusCode < HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-            return new HttpTaskResponse(false, MESSAGE_CLIENT_ERROR, statusCode, responseStream);
+            return new HttpTaskResponse(false, MESSAGE_CLIENT_ERROR, statusCode, responseStream, httpTaskRequest.getTag());
         }
 
-        return new HttpTaskResponse(false, MESSAGE_SERVER_ERROR, statusCode, responseStream);
+        return new HttpTaskResponse(false, MESSAGE_SERVER_ERROR, statusCode, responseStream, httpTaskRequest.getTag());
     }
 
 }

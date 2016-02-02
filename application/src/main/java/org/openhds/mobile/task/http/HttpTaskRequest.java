@@ -19,6 +19,8 @@ public class HttpTaskRequest {
     private final String contentType;
     private final InputStream body;
 
+    private final Object tag;
+
     // Just enough for at GET request
     public HttpTaskRequest(String url, String accept, String userName, String password) {
         this.url = url;
@@ -28,10 +30,11 @@ public class HttpTaskRequest {
         this.method = null;
         this.contentType = null;
         this.body = null;
+        this.tag = null;
     }
 
     // General request
-    public HttpTaskRequest(String url, String accept, String userName, String password, String method, String contentType, InputStream body) {
+    public HttpTaskRequest(String url, String accept, String userName, String password, String method, String contentType, InputStream body, Object tag) {
         this.url = url;
         this.userName = userName;
         this.password = password;
@@ -39,6 +42,7 @@ public class HttpTaskRequest {
         this.method = method;
         this.contentType = contentType;
         this.body = body;
+        this.tag = tag;
     }
 
     public String getUrl() {
@@ -67,5 +71,9 @@ public class HttpTaskRequest {
 
     public InputStream getBody() {
         return body;
+    }
+
+    public Object getTag() {
+        return tag;
     }
 }
