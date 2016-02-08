@@ -106,16 +106,8 @@
     <string name="house_of_prefix">House of</string>
 
     <!-- Server URLs and Paths -->
-    <string name="default_openhds_server_url">https://arcane-lake-8447.herokuapp.com</string>
-    <string name="supervisor_login_url"></string>
-    <string name="sync_field_workers_path">/api/rest/fieldworkers</string>
-    <string name="sync_individuals_path">/api/rest/individuals/cached</string>
-    <string name="sync_location_hierarchies_path">/api/rest/locationhierarchies</string>
-    <string name="sync_locations_path">/api/rest/locations/cached</string>
-    <string name="sync_memberships_path">/api/rest/memberships/cached</string>
-    <string name="sync_relationships_path">/api/rest/relationships/cached</string>
-    <string name="sync_social_groups_path">/api/rest/socialgroups/cached</string>
-    <string name="sync_visits_path">/api/rest/visits/cached</string>
+    <string name="default_openhds_server_url">http://10.0.2.2:8080</string>
+    <string name="supervisor_login_path" />
 
     <!-- Details Fragment Values -->
     <string name="toggle_fragment_button_show_details">Show Details</string>
@@ -180,7 +172,8 @@
     <string name="sync_database_description">Download data from the server</string>
     <string name="sync_database_choose_min_date">Sync data since when?</string>
     <string name="sync_database_column_sync">Sync</string>
-    <string name="sync_database_column_date">Date Range</string>
+    <string name="sync_database_column_date_first">First</string>
+    <string name="sync_database_column_date_last">Last</string>
     <string name="sync_database_column_count">Count</string>
     <string name="sync_database_button_sync">Sync</string>
     <string name="sync_database_button_min">min</string>

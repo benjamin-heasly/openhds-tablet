@@ -7,6 +7,7 @@
         android:id="@+id/sync_button"
         android:layout_column="1"
         android:padding="6dip"
+        android:layout_height="wrap_content"
         android:text="@string/sync_database_button_sync"
         android:gravity="left|center_vertical"
         android:layout_gravity="center_vertical"
@@ -34,29 +35,27 @@
             android:text="20000"
             android:textColor="@color/Red"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_column="3">
+    <TextView
+        android:id="@+id/min_date"
+        android:layout_column="3"
+        android:padding="4dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="2015-01-01T00:00:00.000[UTC]"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+id/min_date"
-            android:padding="4dip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:text="2015-01-01T00:00:00.000[UTC]"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <TextView
-            android:id="@+id/max_date"
-            android:padding="4dip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:text="2015-01-01T00:00:00.000[UTC]"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/max_date"
+        android:layout_column="4"
+        android:padding="4dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="2015-01-01T00:00:00.000[UTC]"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </TableRow>

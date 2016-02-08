@@ -64,7 +64,7 @@ public class SupervisorLoginFragment extends Fragment implements OnClickListener
     }
 
     private String getLoginUrl() {
-        String path = getResourceString(getActivity(), R.string.supervisor_login_url);
+        String path = getResourceString(getActivity(), R.string.supervisor_login_path);
         return buildServerUrl(getActivity(), path);
     }
 

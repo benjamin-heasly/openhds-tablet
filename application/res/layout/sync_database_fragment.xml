@@ -58,10 +58,17 @@
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
                     <TextView
-                        android:id="@+id/date_column_header"
+                        android:id="@+id/date_column__first_header"
                         android:layout_column="3"
                         android:padding="2dp"
-                        android:text="@string/sync_database_column_date"
+                        android:text="@string/sync_database_column_date_first"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/date_column_last_header"
+                        android:layout_column="4"
+                        android:padding="2dp"
+                        android:text="@string/sync_database_column_date_last"
                         android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 </TableRow>
