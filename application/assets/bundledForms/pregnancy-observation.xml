@@ -29,9 +29,12 @@
                         <pregnancyDate />
                     </pregnancyObservation>
 
-                    <motherUuid/>
-                    <individualUuid/>
-                    <locationUuid/>
+                    <motherUuid />
+                    <individualUuid />
+                    <locationUuid />
+
+                    <rawPregnancyDate />
+                    <rawExpectedDeliveryDate />
                 </data>
             </instance>
 
@@ -73,16 +76,28 @@
                     </text>
 
                     <text id="/data/pregnancyObservation/expectedDeliveryDate:label">
-                        <value>Expected Delivery Date</value>
+                        <value>Formatted Delivery Date</value>
                     </text>
                     <text id="/data/pregnancyObservation/expectedDeliveryDate:hint">
                         <value />
                     </text>
+                    <text id="/data/rawExpectedDeliveryDate:label">
+                        <value>Expected Delivery Date</value>
+                    </text>
+                    <text id="/data/rawExpectedDeliveryDate:hint">
+                        <value />
+                    </text>
 
                     <text id="/data/pregnancyObservation/pregnancyDate:label">
-                        <value>Pregnancy Date</value>
+                        <value>Formatted Date</value>
                     </text>
                     <text id="/data/pregnancyObservation/pregnancyDate:hint">
+                        <value />
+                    </text>
+                    <text id="/data/rawPregnancyDate:label">
+                        <value>Pregnancy Date</value>
+                    </text>
+                    <text id="/data/rawPregnancyDate:hint">
                         <value />
                     </text>
                 </translation>
@@ -101,8 +116,18 @@
             <bind nodeset="/data/motherUuid" readonly="true()" type="string" />
             <bind nodeset="/data/pregnancyObservation/uuid" readonly="true()" type="string" />
 
-            <bind nodeset="/data/pregnancyObservation/expectedDeliveryDate" type="date" />
-            <bind nodeset="/data/pregnancyObservation/pregnancyDate" type="date" />
+            <bind calculate="format-date-time(/data/rawExpectedDeliveryDate, '%Y-%m-%dT00:00:00.000Z[UTC]')"
+                nodeset="/data/pregnancyObservation/expectedDeliveryDate"
+                readonly="true()"
+                type="string" />
+            <bind calculate="format-date-time(/data/rawPregnancyDate, '%Y-%m-%dT00:00:00.000Z[UTC]')"
+                nodeset="/data/pregnancyObservation/pregnancyDate"
+                readonly="true()"
+                type="string" />
+
+            <!-- openhds-rest wants 2016-02-08T17:34:17.975Z[UTC] -->
+            <bind nodeset="/data/rawExpectedDeliveryDate" required="true()" type="date" />
+            <bind nodeset="/data/rawPregnancyDate" required="true()" type="date" />
 
         </model>
 
@@ -132,13 +157,13 @@
             </input>
         </group>
         <group appearance="field-list">
-            <input appearance="no-calendar" ref="/data/pregnancyObservation/expectedDeliveryDate">
-                <label ref="jr:itext('/data/pregnancyObservation/expectedDeliveryDate:label')" />
-                <hint ref="jr:itext('/data/pregnancyObservation/expectedDeliveryDate:hint')" />
+            <input appearance="no-calendar" ref="/data/rawExpectedDeliveryDate">
+                <label ref="jr:itext('/data/rawExpectedDeliveryDate:label')" />
+                <hint ref="jr:itext('/data/rawExpectedDeliveryDate:hint')" />
             </input>
-            <input appearance="no-calendar" ref="/data/pregnancyObservation/pregnancyDate">
-                <label ref="jr:itext('/data/pregnancyObservation/pregnancyDate:label')" />
-                <hint ref="jr:itext('/data/pregnancyObservation/pregnancyDate:hint')" />
+            <input appearance="no-calendar" ref="/data/rawPregnancyDate">
+                <label ref="jr:itext('/data/rawPregnancyDate:label')" />
+                <hint ref="jr:itext('/data/rawPregnancyDate:hint')" />
             </input>
         </group>
     </h:body>

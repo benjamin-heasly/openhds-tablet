@@ -58,6 +58,8 @@
 
                     <isPregnant />
 
+                    <rawDateOfBirth />
+
                 </data>
             </instance>
 
@@ -202,8 +204,14 @@
                         <value />
                     </text>
 
-                    <text id="/data/individual/dateOfBirth:label">
+                    <text id="/data/rawDateOfBirth:label">
                         <value>Individual's Birth Date</value>
+                    </text>
+                    <text id="/data/rawDateOfBirth:hint">
+                        <value />
+                    </text>
+                    <text id="/data/individual/dateOfBirth:label">
+                        <value>Formatted Date of Birth</value>
                     </text>
                     <text id="/data/individual/dateOfBirth:hint">
                         <value />
@@ -260,7 +268,11 @@
             <bind nodeset="/data/individual/firstName" required="true()" type="string" />
             <bind nodeset="/data/individual/middleName" type="string" />
             <bind nodeset="/data/individual/lastName" required="true()" type="string" />
-            <bind nodeset="/data/individual/dateOfBirth" required="true()" type="date" />
+
+            <!-- openhds-rest wants 2016-02-08T17:34:17.975Z[UTC] -->
+            <bind nodeset="/data/individual/dateOfBirth" readonly="true()" type="string"
+                calculate="format-date-time(/data/rawDateOfBirth, '%Y-%m-%dT00:00:00.000Z[UTC]')" />
+            <bind nodeset="/data/rawDateOfBirth" required="true()" type="date" />
             <bind nodeset="/data/individual/gender" required="true()" type="select1" />
 
             <bind nodeset="/data/isPregnant" relevant="selected(/data/individual/gender, 'FEMALE')"
@@ -312,6 +324,10 @@
             </input>
         </group>
         <group appearance="field-list">
+            <input appearance="no-calendar" ref="/data/rawDateOfBirth">
+                <label ref="jr:itext('/data/rawDateOfBirth:label')" />
+                <hint ref="jr:itext('/data/rawDateOfBirth:hint')" />
+            </input>
             <input appearance="no-calendar" ref="/data/individual/dateOfBirth">
                 <label ref="jr:itext('/data/individual/dateOfBirth:label')" />
                 <hint ref="jr:itext('/data/individual/dateOfBirth:hint')" />
@@ -361,7 +377,7 @@
                 </item>
                 <item>
                     <label ref="jr:itext('/data/relationToHead:option7')" />
-                    <value>OPTHER_RELATIVE</value>
+                    <value>OTHER_RELATIVE</value>
                 </item>
                 <item>
                     <label ref="jr:itext('/data/relationToHead:option8')" />

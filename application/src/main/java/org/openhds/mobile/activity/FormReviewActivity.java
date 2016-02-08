@@ -448,11 +448,8 @@ public class FormReviewActivity extends Activity {
     private class SubmissionResponseHandler implements HttpTask.HttpTaskResponseHandler {
         @Override
         public void handleHttpTaskResponse(HttpTaskResponse httpTaskResponse) {
-            // encrypt the file after reading
-            FormInstance formInstance = (FormInstance) httpTaskResponse.getRequestTag();
-            EncryptionHelper.encryptFile(new File(formInstance.getFilePath()), FormReviewActivity.this);
-
             // combine task status message with server response body
+            FormInstance formInstance = (FormInstance) httpTaskResponse.getRequestTag();
             String response = httpTaskResponse.getHttpStatus()
                     + "\n"
                     + httpTaskResponse.getMessage()
