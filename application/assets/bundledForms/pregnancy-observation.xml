@@ -12,7 +12,7 @@
 
                     <meta>
                         <instanceID />
-                        <consumer>pregnancy-observation</consumer>
+                        <consumer>pregnancyObservation</consumer>
                         <displayLevel>bottom</displayLevel>
                         <submissionRel>pregnancyObservations</submissionRel>
                     </meta>

@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.openhds.mobile.utilities.MessageUtils.showShortToast;
 
@@ -518,7 +519,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         }
 
         // auto-fill form fields based on field worker and hierarchy navigation
-        FormContent navigationContent = buildNavigationContent();
+        FormContent navigationContent = buildNavigationContent(currentFormInstance.getFormBehaviour());
         if (null != previousContent) {
             navigationContent.addAll(previousContent);
         }
@@ -572,7 +573,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                     FormBehaviour formBehaviour = currentFormInstance.getFormBehaviour();
                     List<String> consumers = formBehaviour.getConsumers();
                     if (!consumers.isEmpty()) {
-                        FormContent entityContent = buildNavigationContent();
+                        FormContent entityContent = buildNavigationContent(formBehaviour);
                         for (String consumer : consumers) {
                             Gateway gateway = GatewayRegistry.getGatewayByEntityName(consumer);
                             if (null != gateway) {
@@ -601,6 +602,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
                                 } else {
                                     // roll previous content into the follow up form
                                     FormBehaviour followUpBehavior = new FormBehaviour(formDefinitions.get(0));
+                                    followUpBehavior.parseMetadata();
                                     launchForm(followUpBehavior, formContent);
                                 }
                             }
@@ -636,7 +638,7 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
         return currentSelection;
     }
 
-    private FormContent buildNavigationContent() {
+    private FormContent buildNavigationContent(FormBehaviour formBehaviour) {
         FormContent formContent = new FormContent();
 
         formContent.setContent(FormContent.TOP_LEVEL_ALIAS, "registrationDateTime", DateUtils.formatDateTimeIso(Calendar.getInstance()));
@@ -657,6 +659,16 @@ public class NavigateActivity extends Activity implements HierarchyNavigator {
             if (hierarchyPath.containsKey(level)) {
                 DataWrapper dataWrapper = hierarchyPath.get(level);
                 addContentAliases(formContent, dataWrapper);
+            }
+        }
+
+        // add a uuid, if needed, for records that will be consumed
+        // add it to the form before launching
+        // so that consuming the form instance or sending it to the server will be idempotent
+        for (String entityName : formBehaviour.getConsumers()) {
+            if (!formContent.hasContent(entityName, FormContent.UUID_FIELD_NAME)) {
+                String uuid = UUID.randomUUID().toString();
+                formContent.setContent(entityName, FormContent.UUID_FIELD_NAME, uuid);
             }
         }
 
